@@ -1,6 +1,6 @@
 # OllamaSharp 🦙
 
-OllamaSharp is a .NET binding for the Ollama API, making it easy to interact with Ollama using your favorite .NET languages.
+OllamaSharp is a .NET binding for the [Ollama API](https://github.com/jmorganca/ollama/blob/main/docs/api.md), making it easy to interact with Ollama using your favorite .NET languages.
 
 ## Features
 
