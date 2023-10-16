@@ -1,6 +1,4 @@
-# OllamaSharp
-
-Welcome to OllamaSharp! 🦙
+# OllamaSharp 🦙
 
 OllamaSharp is a .NET binding for the Ollama API, making it easy to interact with Ollama using your favorite .NET languages.
 
