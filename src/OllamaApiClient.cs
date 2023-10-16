@@ -7,7 +7,6 @@ using System.Text.Json;
 using System.Threading.Tasks;
 
 // https://github.com/jmorganca/ollama/blob/main/docs/api.md
-
 public class OllamaApiClient
 {
 	private readonly HttpClient _client;
@@ -160,6 +159,11 @@ public class OllamaApiClient
 			var streamedResponse = JsonSerializer.Deserialize<TLine>(line);
 			streamer.Stream(streamedResponse);
 		}
+	}
+
+	public async Task<ConversationContext> StreamCompletion(string prompt, string model, ConversationContext context, Action<GenerateCompletionResponseStream> streamer)
+	{
+		return await StreamCompletion(prompt, model, context, new ActionResponseStreamer<GenerateCompletionResponseStream>(streamer));
 	}
 
 	public async Task<ConversationContext> StreamCompletion(string prompt, string model, ConversationContext context, IResponseStreamer<GenerateCompletionResponseStream> streamer)
