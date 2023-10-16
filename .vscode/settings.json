@@ -1,0 +1,8 @@
+{
+    "python.analysis.extraPaths": [
+        "c:\\Users\\awaes_000\\.vscode\\extensions\\continue.continue-0.0.412-win32-x64"
+    ],
+    "python.autoComplete.extraPaths": [
+        "c:\\Users\\awaes_000\\.vscode\\extensions\\continue.continue-0.0.412-win32-x64"
+    ]
+}

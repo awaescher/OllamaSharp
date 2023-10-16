@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.002.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OllamaSharp", "src\OllamaSharp.csproj", "{0194817F-1B9C-4D44-8960-1A0DC92D9D22}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test", "test\Tests.csproj", "{1527F300-40C7-49EB-A6FD-D21B20BA5BC1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0194817F-1B9C-4D44-8960-1A0DC92D9D22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0194817F-1B9C-4D44-8960-1A0DC92D9D22}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0194817F-1B9C-4D44-8960-1A0DC92D9D22}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0194817F-1B9C-4D44-8960-1A0DC92D9D22}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1527F300-40C7-49EB-A6FD-D21B20BA5BC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1527F300-40C7-49EB-A6FD-D21B20BA5BC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1527F300-40C7-49EB-A6FD-D21B20BA5BC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1527F300-40C7-49EB-A6FD-D21B20BA5BC1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0414F037-5EC9-4433-81EF-1917D0405E79}
+	EndGlobalSection
+EndGlobal
