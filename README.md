@@ -23,7 +23,8 @@ var models = await ollama.ListLocalModels();
 
 // stream a completion and write to the console
 // keep reusing the context to keep the chat topic going
-var context = await ollama.StreamCompletion("How are you today?", "llama2", context, stream => Console.WriteLine(stream.Response));
+ConversationContext context = null;
+context = await ollama.StreamCompletion("How are you today?", "llama2", context, stream => Console.Write(stream.Response));
 
 // pull a model and report progress
 await ollama.PullModel("mistral", status => Console.WriteLine($"({status.Percent}%) {status.Status}"));
