@@ -12,7 +12,7 @@ public class OllamaApiClient
 	private readonly HttpClient _client;
 
 	public OllamaApiClient(Uri baseAddress)
-		: this(new HttpClient() { BaseAddress = baseAddress })
+		: this(new HttpClient() { BaseAddress = baseAddress , Timeout = TimeSpan.MaxValue})
 	{
 	}
 
