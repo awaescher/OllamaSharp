@@ -17,6 +17,6 @@ public class GenerateEmbeddingRequest
 
 public class GenerateEmbeddingResponse
 {
-	[JsonPropertyName("embeddings")]
-	public double[] Embeddings { get; set; }
+	[JsonPropertyName("embedding")]
+	public double[] Embedding { get; set; }
 }
