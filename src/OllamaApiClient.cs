@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
@@ -201,9 +202,9 @@ public class OllamaApiClient
 			Content = new StringContent(JsonSerializer.Serialize(generateRequest), Encoding.UTF8, "application/json")
 		};
 
-		var completionOption = generateRequest.Stream ? HttpCompletionOption.ResponseHeadersRead : HttpCompletionOption.ResponseContentRead;
+		var completion = generateRequest.Stream ? HttpCompletionOption.ResponseHeadersRead : HttpCompletionOption.ResponseContentRead;
 
-		using var response = await _client.SendAsync(request, completionOption);
+		using var response = await _client.SendAsync(request, completion);
 		response.EnsureSuccessStatusCode();
 
 		return await ProcessStreamedCompletionResponseAsync(response, streamer);
@@ -228,6 +229,58 @@ public class OllamaApiClient
 		}
 
 		return new ConversationContext(Array.Empty<long>());
+	}
+
+	public async Task<IEnumerable<Message>> Chat(ChatRequest chatRequest, Action<ChatResponseStream> streamer)
+	{
+		return await Chat(chatRequest, new ActionResponseStreamer<ChatResponseStream>(streamer));
+	}
+
+	public async Task<IEnumerable<Message>> Chat(ChatRequest chatRequest, IResponseStreamer<ChatResponseStream> streamer)
+	{
+		var request = new HttpRequestMessage(HttpMethod.Post, "/api/chat")
+		{
+			Content = new StringContent(JsonSerializer.Serialize(chatRequest), Encoding.UTF8, "application/json")
+		};
+
+		var completion = chatRequest.Stream ? HttpCompletionOption.ResponseHeadersRead : HttpCompletionOption.ResponseContentRead;
+
+		using var response = await _client.SendAsync(request, completion);
+		response.EnsureSuccessStatusCode();
+
+		return await ProcessStreamedChatResponseAsync(chatRequest, response, streamer);
+	}
+
+	private static async Task<IEnumerable<Message>> ProcessStreamedChatResponseAsync(ChatRequest chatRequest, HttpResponseMessage response, IResponseStreamer<ChatResponseStream> streamer)
+	{
+		using var stream = await response.Content.ReadAsStreamAsync();
+		using var reader = new StreamReader(stream);
+
+		string responseRole = null;
+		var responseContent = new StringBuilder();
+
+		while (!reader.EndOfStream)
+		{
+			string line = await reader.ReadLineAsync();
+			var streamedResponse = JsonSerializer.Deserialize<ChatResponseStream>(line);
+
+			// keep the streamed content to build the last message
+			// to return the list of messages
+			responseRole ??= streamedResponse?.Message?.Role;
+			responseContent.Append(streamedResponse?.Message?.Content ?? "");
+
+			streamer.Stream(streamedResponse);
+
+			if (streamedResponse?.Done ?? false)
+			{
+				var doneResponse = JsonSerializer.Deserialize<ChatDoneResponseStream>(line);
+				var messages = chatRequest.Messages.ToList();
+				messages.Add(new Message{ Content = responseContent.ToString(), Role = responseRole });
+				return messages;
+			}
+		}
+
+		return Array.Empty<Message>();
 	}
 }
 

@@ -18,7 +18,7 @@ public class CreateModelRequest
 	public string Path { get; set; }
 
 	/// <summary>
-	/// If false the response will be be returned as a single response object, rather than a stream of objects (optional)
+	/// If false the response will be returned as a single response object, rather than a stream of objects (optional)
 	/// </summary>
 	[JsonPropertyName("stream")]
 	public bool Stream { get; set; }

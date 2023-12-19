@@ -1,7 +1,7 @@
 ﻿static string ReadInput()
 {
 	var color = Console.ForegroundColor;
-	Console.ForegroundColor = ConsoleColor.White;
+	Console.ForegroundColor = ConsoleColor.Green;
 
 	try
 	{
@@ -16,8 +16,21 @@
 
 Console.ForegroundColor = ConsoleColor.Gray;
 
-var uri = new Uri("http://localhost:11434");
+Console.WriteLine($"Enter the Ollama machine name or endpoint url");
+Console.WriteLine($"(leave empty for default port on localhost)");
 
+var input = ReadInput();
+
+if (string.IsNullOrWhiteSpace(input))
+	input = "http://localhost:11434";
+
+if (!input.StartsWith("http"))
+	input = "http://" + input;
+
+if (input.IndexOf(':', 5) < 0)
+	input += ":11434";	
+
+var uri = new Uri(input);
 Console.WriteLine($"Connecting to {uri} ...");
 
 var ollama = new OllamaApiClient(uri);
@@ -30,11 +43,21 @@ var ollama = new OllamaApiClient(uri);
 //await ollama.PushModel("mattw/pygmalion:latest", status => Console.WriteLine(status.Status));
 //await ollama.CreateModel("dude", "no file here", status => Console.WriteLine(status.Status));
 
+/* use images
+var imageBytes = await File.ReadAllBytesAsync("myimage.jpg");
+await ollama.GenerateCompletion(new GenerateCompletionRequest 
+{
+	Model = "llava:13b",		// you'll need a multimodal model
+	Prompt = "What do you see?",
+	Images = new string[] { Convert.ToBase64String(imageBytes) }
+}, new ConsoleStreamer());
+*/
+
 Console.WriteLine("Loading models ...");
 
 var models = await ollama.ListLocalModels();
 
-var streamer = new ConsoleStreamer();
+var streamer = new ConsoleChatStreamer();
 
 string prompt;
 ConversationContext context = null;
@@ -55,9 +78,9 @@ if (models.Any())
 		var userModelInput = ReadInput();
 		if (!string.IsNullOrEmpty(userModelInput))
 		{
-			var chosen = models.FirstOrDefault(m => m.Name.Equals(userModelInput.Trim(), StringComparison.OrdinalIgnoreCase));
+			var chosen = models.FirstOrDefault(m => m.Name.Contains(userModelInput.Trim(), StringComparison.OrdinalIgnoreCase));
 			if (chosen is object)
-				model = userModelInput;
+				model = chosen.Name;
 			else
 				Console.WriteLine($"Model {userModelInput} not found");
 		}
@@ -65,17 +88,20 @@ if (models.Any())
 
 	Console.WriteLine($"You are talking to {model} now.");
 
+	var messages = new List<Message>();
+
 	do
 	{
 		prompt = ReadInput();
 
+		messages.Add(new Message { Role = "user", Content = prompt });
+
+		var chatRequest = new ChatRequest();
+		chatRequest.Model = model;
+		chatRequest.Messages = messages.ToArray();
+		chatRequest.Stream = true;
 		streamer.Start();
-		
-		// stream
-		context = await ollama.StreamCompletion(prompt, model, context, streamer);
-		// get
-		var rc = await ollama.GetCompletion(prompt, model, context);
-		
+		messages = (await ollama.Chat(chatRequest, streamer)).ToList();
 		streamer.Stop();
 
 		Console.WriteLine();
@@ -86,11 +112,11 @@ else
 	Console.WriteLine("No models available.");
 }
 
-public class ConsoleStreamer : IResponseStreamer<GenerateCompletionResponseStream>
+public class ConsoleChatStreamer : IResponseStreamer<ChatResponseStream>
 {
-	public void Stream(GenerateCompletionResponseStream stream)
+	public void Stream(ChatResponseStream stream)
 	{
-		Console.Write(stream.Response);
+		Console.Write(stream.Message?.Content ?? "");
 	}
 
 	public void Start()
