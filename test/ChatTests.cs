@@ -1,5 +1,7 @@
 using FluentAssertions;
 using NUnit.Framework;
+using OllamaSharp;
+using OllamaSharp.Models;
 
 namespace Tests;
 

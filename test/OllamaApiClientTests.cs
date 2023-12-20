@@ -2,6 +2,8 @@ using FluentAssertions;
 using Moq;
 using Moq.Protected;
 using NUnit.Framework;
+using OllamaSharp;
+using OllamaSharp.Models;
 using System.Net;
 using System.Text;
 using System.Text.Json;

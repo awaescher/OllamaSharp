@@ -1,4 +1,8 @@
-﻿namespace Tests;
+﻿using OllamaSharp;
+using OllamaSharp.Models;
+using OllamaSharp.Streamer;
+
+namespace Tests;
 
 public class TestOllamaApiClient : IOllamaApiClient
 {
