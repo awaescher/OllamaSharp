@@ -8,28 +8,40 @@ using System.Text.Json;
 using System.Threading.Tasks;
 
 // https://github.com/jmorganca/ollama/blob/main/docs/api.md
-public class OllamaApiClient
+public class OllamaApiClient : IOllamaApiClient
 {
+	public class Configuration
+	{
+		public Uri Uri { get; set; }
+
+		public string Model { get; set; }
+	}
+
 	private readonly HttpClient _client;
 
-	public OllamaApiClient(Uri baseAddress)
-		: this(new HttpClient() { BaseAddress = baseAddress })
+	public Configuration Config { get; }
+
+	public string SelectedModel { get; set; }
+
+	public OllamaApiClient(string uriString, string defaultModel = "")
+		: this(new Uri(uriString), defaultModel)
 	{
 	}
 
-	public OllamaApiClient(HttpClient client)
+	public OllamaApiClient(Uri uri, string defaultModel = "")
+		: this(new Configuration { Uri = uri, Model = defaultModel })
+	{
+	}
+
+	public OllamaApiClient(Configuration config)
+		: this(new HttpClient() { BaseAddress = config.Uri }, config.Model)
+	{
+	}
+
+	public OllamaApiClient(HttpClient client, string defaultModel = "")
 	{
 		_client = client ?? throw new ArgumentNullException(nameof(client));
-	}
-
-	public async Task CreateModel(string name, string path, Action<CreateStatus> streamer)
-	{
-		await CreateModel(name, path, new ActionResponseStreamer<CreateStatus>(streamer));
-	}
-
-	public async Task CreateModel(string name, string path, IResponseStreamer<CreateStatus> streamer)
-	{
-		await CreateModel(new CreateModelRequest { Name = name, Path = path, Stream = true }, streamer);
+		SelectedModel = defaultModel;
 	}
 
 	public async Task CreateModel(CreateModelRequest request, IResponseStreamer<CreateStatus> streamer)
@@ -59,24 +71,9 @@ public class OllamaApiClient
 		return await PostAsync<ShowModelRequest, ShowModelResponse>("/api/show", new ShowModelRequest { Name = model });
 	}
 
-	public async Task CopyModel(string source, string destination)
-	{
-		await CopyModel(new CopyModelRequest { Source = source, Destination = destination });
-	}
-
 	public async Task CopyModel(CopyModelRequest request)
 	{
 		await PostAsync("/api/copy", request);
-	}
-
-	public async Task PullModel(string model, Action<PullStatus> streamer)
-	{
-		await PullModel(model, new ActionResponseStreamer<PullStatus>(streamer));
-	}
-
-	public async Task PullModel(string model, IResponseStreamer<PullStatus> streamer)
-	{
-		await PullModel(new PullModelRequest { Name = model }, streamer);
 	}
 
 	public async Task PullModel(PullModelRequest request, IResponseStreamer<PullStatus> streamer)
@@ -84,29 +81,56 @@ public class OllamaApiClient
 		await StreamPostAsync("/api/pull", request, streamer);
 	}
 
-	public async Task PushModel(string name, Action<PushStatus> streamer)
-	{
-		await PushModel(name, new ActionResponseStreamer<PushStatus>(streamer));
-	}
-
-	public async Task PushModel(string name, IResponseStreamer<PushStatus> streamer)
-	{
-		await PushModel(new PushRequest { Name = name, Stream = true }, streamer);
-	}
-
 	public async Task PushModel(PushRequest request, IResponseStreamer<PushStatus> streamer)
 	{
 		await StreamPostAsync("/api/push", request, streamer);
 	}
 
-	public async Task<GenerateEmbeddingResponse> GenerateEmbeddings(string model, string prompt)
-	{
-		return await GenerateEmbeddings(new GenerateEmbeddingRequest { Model = model, Prompt = prompt });
-	}
-
 	public async Task<GenerateEmbeddingResponse> GenerateEmbeddings(GenerateEmbeddingRequest request)
 	{
 		return await PostAsync<GenerateEmbeddingRequest, GenerateEmbeddingResponse>("/api/embeddings", request);
+	}
+
+	public async Task<ConversationContext> StreamCompletion(GenerateCompletionRequest request, IResponseStreamer<GenerateCompletionResponseStream> streamer)
+	{
+		return await GenerateCompletion(request, streamer);
+	}
+
+	public async Task<ConversationContextWithResponse> GetCompletion(GenerateCompletionRequest request)
+	{
+		var builder = new StringBuilder();
+		var result = await GenerateCompletion(request, new ActionResponseStreamer<GenerateCompletionResponseStream>(status => builder.Append(status.Response)));
+		return new ConversationContextWithResponse(builder.ToString(), result.Context);
+	}
+
+	public async Task<IEnumerable<Message>> SendChat(ChatRequest chatRequest, IResponseStreamer<ChatResponseStream> streamer)
+	{
+		var request = new HttpRequestMessage(HttpMethod.Post, "/api/chat")
+		{
+			Content = new StringContent(JsonSerializer.Serialize(chatRequest), Encoding.UTF8, "application/json")
+		};
+
+		var completion = chatRequest.Stream ? HttpCompletionOption.ResponseHeadersRead : HttpCompletionOption.ResponseContentRead;
+
+		using var response = await _client.SendAsync(request, completion);
+		response.EnsureSuccessStatusCode();
+
+		return await ProcessStreamedChatResponseAsync(chatRequest, response, streamer);
+	}
+
+	private async Task<ConversationContext> GenerateCompletion(GenerateCompletionRequest generateRequest, IResponseStreamer<GenerateCompletionResponseStream> streamer)
+	{
+		var request = new HttpRequestMessage(HttpMethod.Post, "/api/generate")
+		{
+			Content = new StringContent(JsonSerializer.Serialize(generateRequest), Encoding.UTF8, "application/json")
+		};
+
+		var completion = generateRequest.Stream ? HttpCompletionOption.ResponseHeadersRead : HttpCompletionOption.ResponseContentRead;
+
+		using var response = await _client.SendAsync(request, completion);
+		response.EnsureSuccessStatusCode();
+
+		return await ProcessStreamedCompletionResponseAsync(response, streamer);
 	}
 
 	private async Task<TResponse> GetAsync<TResponse>(string endpoint)
@@ -162,54 +186,6 @@ public class OllamaApiClient
 		}
 	}
 
-	public async Task<ConversationContext> StreamCompletion(string prompt, string model, ConversationContext context, Action<GenerateCompletionResponseStream> streamer)
-	{
-		return await StreamCompletion(prompt, model, context, new ActionResponseStreamer<GenerateCompletionResponseStream>(streamer));
-	}
-
-	public async Task<ConversationContext> StreamCompletion(string prompt, string model, ConversationContext context, IResponseStreamer<GenerateCompletionResponseStream> streamer)
-	{
-		var generateRequest = new GenerateCompletionRequest
-		{
-			Prompt = prompt,
-			Model = model,
-			Stream = true,
-			Context = context?.Context ?? Array.Empty<long>()
-		};
-
-		return await GenerateCompletion(generateRequest, streamer);
-	}
-
-	public async Task<ConversationContextWithResponse> GetCompletion(string prompt, string model, ConversationContext context)
-	{
-		var generateRequest = new GenerateCompletionRequest
-		{
-			Prompt = prompt,
-			Model = model,
-			Stream = false,
-			Context = context?.Context ?? Array.Empty<long>()
-		};
-
-		var builder = new StringBuilder();
-		var result = await GenerateCompletion(generateRequest, new ActionResponseStreamer<GenerateCompletionResponseStream>(status => builder.Append(status.Response)));
-		return new ConversationContextWithResponse(builder.ToString(), result.Context);
-	}
-
-	public async Task<ConversationContext> GenerateCompletion(GenerateCompletionRequest generateRequest, IResponseStreamer<GenerateCompletionResponseStream> streamer)
-	{
-		var request = new HttpRequestMessage(HttpMethod.Post, "/api/generate")
-		{
-			Content = new StringContent(JsonSerializer.Serialize(generateRequest), Encoding.UTF8, "application/json")
-		};
-
-		var completion = generateRequest.Stream ? HttpCompletionOption.ResponseHeadersRead : HttpCompletionOption.ResponseContentRead;
-
-		using var response = await _client.SendAsync(request, completion);
-		response.EnsureSuccessStatusCode();
-
-		return await ProcessStreamedCompletionResponseAsync(response, streamer);
-	}
-
 	private static async Task<ConversationContext> ProcessStreamedCompletionResponseAsync(HttpResponseMessage response, IResponseStreamer<GenerateCompletionResponseStream> streamer)
 	{
 		using var stream = await response.Content.ReadAsStreamAsync();
@@ -229,26 +205,6 @@ public class OllamaApiClient
 		}
 
 		return new ConversationContext(Array.Empty<long>());
-	}
-
-	public async Task<IEnumerable<Message>> Chat(ChatRequest chatRequest, Action<ChatResponseStream> streamer)
-	{
-		return await Chat(chatRequest, new ActionResponseStreamer<ChatResponseStream>(streamer));
-	}
-
-	public async Task<IEnumerable<Message>> Chat(ChatRequest chatRequest, IResponseStreamer<ChatResponseStream> streamer)
-	{
-		var request = new HttpRequestMessage(HttpMethod.Post, "/api/chat")
-		{
-			Content = new StringContent(JsonSerializer.Serialize(chatRequest), Encoding.UTF8, "application/json")
-		};
-
-		var completion = chatRequest.Stream ? HttpCompletionOption.ResponseHeadersRead : HttpCompletionOption.ResponseContentRead;
-
-		using var response = await _client.SendAsync(request, completion);
-		response.EnsureSuccessStatusCode();
-
-		return await ProcessStreamedChatResponseAsync(chatRequest, response, streamer);
 	}
 
 	private static async Task<IEnumerable<Message>> ProcessStreamedChatResponseAsync(ChatRequest chatRequest, HttpResponseMessage response, IResponseStreamer<ChatResponseStream> streamer)
@@ -275,7 +231,7 @@ public class OllamaApiClient
 			{
 				var doneResponse = JsonSerializer.Deserialize<ChatDoneResponseStream>(line);
 				var messages = chatRequest.Messages.ToList();
-				messages.Add(new Message{ Content = responseContent.ToString(), Role = responseRole });
+				messages.Add(new Message { Content = responseContent.ToString(), Role = responseRole });
 				return messages;
 			}
 		}

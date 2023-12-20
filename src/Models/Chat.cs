@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text.Json.Serialization;
 
@@ -16,7 +17,7 @@ public class ChatRequest
 	/// The messages of the chat, this can be used to keep a chat memory
 	/// </summary>
 	[JsonPropertyName("messages")]
-	public Message[] Messages { get; set; }
+	public IEnumerable<Message> Messages { get; set; }
 
 	/// <summary>
 	/// Additional model parameters listed in the documentation for the Modelfile such as temperature

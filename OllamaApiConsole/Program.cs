@@ -16,24 +16,24 @@
 
 Console.ForegroundColor = ConsoleColor.Gray;
 
-Console.WriteLine($"Enter the Ollama machine name or endpoint url");
-Console.WriteLine($"(leave empty for default port on localhost)");
+Console.WriteLine("Enter the Ollama machine name or endpoint url");
+Console.WriteLine("(leave empty for default port on localhost)");
 
-var input = ReadInput();
+var url = ReadInput();
 
-if (string.IsNullOrWhiteSpace(input))
-	input = "http://localhost:11434";
+if (string.IsNullOrWhiteSpace(url))
+	url = "http://localhost:11434";
 
-if (!input.StartsWith("http"))
-	input = "http://" + input;
+if (!url.StartsWith("http"))
+	url = "http://" + url;
 
-if (input.IndexOf(':', 5) < 0)
-	input += ":11434";	
+if (url.IndexOf(':', 5) < 0)
+	url += ":11434";
 
-var uri = new Uri(input);
+var uri = new Uri(url);
 Console.WriteLine($"Connecting to {uri} ...");
 
-var ollama = new OllamaApiClient(uri);
+var ollama = new OllamaApiClient(url, "mistral");
 
 //var info = await ollama.ShowModelInformation("codellama");
 //await ollama.PullModel("mistral", status => Console.WriteLine($"({status.Percent}%) {status.Status}"));
@@ -60,7 +60,6 @@ var models = await ollama.ListLocalModels();
 var streamer = new ConsoleChatStreamer();
 
 string prompt;
-ConversationContext context = null;
 
 if (models.Any())
 {
@@ -88,20 +87,16 @@ if (models.Any())
 
 	Console.WriteLine($"You are talking to {model} now.");
 
-	var messages = new List<Message>();
+	ollama.SelectedModel = model;
+
+	var chat = ollama.Chat(streamer);
 
 	do
 	{
 		prompt = ReadInput();
 
-		messages.Add(new Message { Role = "user", Content = prompt });
-
-		var chatRequest = new ChatRequest();
-		chatRequest.Model = model;
-		chatRequest.Messages = messages.ToArray();
-		chatRequest.Stream = true;
 		streamer.Start();
-		messages = (await ollama.Chat(chatRequest, streamer)).ToList();
+		await chat.Send(prompt);
 		streamer.Stop();
 
 		Console.WriteLine();

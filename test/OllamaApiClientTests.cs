@@ -51,7 +51,7 @@ public class OllamaApiClientTests
 			await writer.FinishCompletionStreamResponse("blue.", context: new int[] { 1, 2, 3 });
 			stream.Seek(0, SeekOrigin.Begin);
 
-			var context = await _client.GetCompletion("prompt", "model", null);
+			var context = await _client.GetCompletion("prompt", null);
 
 			context.Response.Should().Be("The sky is blue.");
 			context.Context.Should().BeEquivalentTo(new int[] { 1, 2, 3 });
@@ -80,14 +80,14 @@ public class OllamaApiClientTests
 			stream.Seek(0, SeekOrigin.Begin);
 
 			var builder = new StringBuilder();
-			var context = await _client.StreamCompletion("prompt", "model", null, s => builder.Append(s.Response));
+			var context = await _client.StreamCompletion("prompt", null, s => builder.Append(s.Response));
 
 			builder.ToString().Should().Be("The sky is blue.");
 			context.Context.Should().BeEquivalentTo(new int[] { 1, 2, 3 });
 		}
 	}
 
-	public class ChatMethod : OllamaApiClientTests
+	public class SendChatMethod : OllamaApiClientTests
 	{
 		[Test]
 		public async Task Streams_Response_Message_Chunks()
@@ -120,7 +120,7 @@ public class OllamaApiClientTests
 				}
 			};
 
-			var messages = (await _client.Chat(chat, s => builder.Append(s.Message))).ToArray();
+			var messages = (await _client.SendChat(chat, s => builder.Append(s.Message))).ToArray();
 
 			messages.Length.Should().Be(4);
 
