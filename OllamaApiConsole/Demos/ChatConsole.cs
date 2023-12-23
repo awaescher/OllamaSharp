@@ -20,7 +20,7 @@ public class ChatConsole : OllamaConsole
 		if (!string.IsNullOrEmpty(Ollama.SelectedModel))
 		{
 			AnsiConsole.MarkupLine($"You are talking to [blue]{Ollama.SelectedModel}[/] now.");
-			AnsiConsole.MarkupLine("[gray]Type 'exit' to leave the chat.[/]");
+			AnsiConsole.MarkupLine("[gray]Type \"[red]exit[/]\" to leave the chat.[/]");
 
 			var chat = Ollama.Chat(stream => AnsiConsole.MarkupInterpolated($"[cyan]{stream.Message?.Content ?? ""}[/]"));
 			string message;

@@ -41,7 +41,7 @@ do
 	}
 	catch (Exception ex)
 	{
-		AnsiConsole.MarkupLineInterpolated($"[red]{ex.Message}[/]");
+		AnsiConsole.MarkupLineInterpolated($"[red]{Markup.Escape(ex.Message)}[/]");
 		AnsiConsole.WriteLine();
 	}
 } while (!connected);
@@ -57,7 +57,7 @@ do
 				new SelectionPrompt<string>()
 					.PageSize(10)
 					.Title("What demo do you want to run?")
-					.AddChoices(["Chat", "Model manager", "Exit"]));
+					.AddChoices(["Chat", "Image chat", "Model manager", "Exit"]));
 
 	AnsiConsole.Clear();
 
@@ -69,6 +69,10 @@ do
 				await new ChatConsole(ollama).Run();
 				break;
 
+			case "Image chat":
+				await new ImageChatConsole(ollama).Run();
+				break;
+
 			case "Model manager":
 				await new ModelManagerConsole(ollama).Run();
 				break;
@@ -77,19 +81,7 @@ do
 	catch (Exception ex)
 	{
 		AnsiConsole.MarkupLineInterpolated($"An error occurred. Press [blue]{"[Return]"}[/] to start over.");
-		AnsiConsole.MarkupLineInterpolated($"[red]{ex.Message}[/]");
+		AnsiConsole.MarkupLineInterpolated($"[red]{Markup.Escape(ex.Message)}[/]");
 		Console.ReadLine();
 	}
 } while (demo != "Exit");
-
-
-
-/* use images
-var imageBytes = await File.ReadAllBytesAsync("myimage.jpg");
-await ollama.GenerateCompletion(new GenerateCompletionRequest 
-{
-	Model = "llava:13b",		// you'll need a multimodal model
-	Prompt = "What do you see?",
-	Images = new string[] { Convert.ToBase64String(imageBytes) }
-}, new ConsoleStreamer());
-*/

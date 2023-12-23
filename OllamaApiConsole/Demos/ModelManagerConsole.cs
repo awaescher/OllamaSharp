@@ -119,7 +119,7 @@ public class ModelManagerConsole : OllamaConsole
 	{
 		var models = await Ollama.ListLocalModels();
 		foreach (var model in models.OrderBy(m => m.Name))
-			AnsiConsole.MarkupLineInterpolated($"[cyan] {model.Name}[/]");
+			AnsiConsole.MarkupLineInterpolated($"[cyan]{model.Name}[/]");
 	}
 
 	private async Task PullModel()

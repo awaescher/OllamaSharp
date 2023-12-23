@@ -44,13 +44,16 @@ public abstract class OllamaConsole
 		return input.EndsWith('-') ? input.Substring(0, input.Length - 1) : input;
 	}
 
-	protected async Task<string> SelectModel(string prompt)
+	protected async Task<string> SelectModel(string prompt, string additionalInformation = "")
 	{
 		const string back = "..";
 
 		var models = await Ollama.ListLocalModels();
 		var modelsWithBackChoice = models.OrderBy(m => m.Name).Select(m => m.Name).ToList();
 		modelsWithBackChoice.Insert(0, back);
+
+		if (!string.IsNullOrEmpty(additionalInformation))
+			AnsiConsole.MarkupLine(additionalInformation);
 
 		var answer = AnsiConsole.Prompt(
 				new SelectionPrompt<string>()

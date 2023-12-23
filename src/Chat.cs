@@ -30,11 +30,11 @@ namespace OllamaSharp
 			Streamer = streamer ?? throw new ArgumentNullException(nameof(streamer));
 		}
 
-		public Task<IEnumerable<Message>> Send(string message) => SendAs("user", message);
+		public Task<IEnumerable<Message>> Send(string message, IEnumerable<string> imagesAsBase64 = null) => SendAs("user", message, imagesAsBase64);
 
-		public async Task<IEnumerable<Message>> SendAs(string role, string message)
+		public async Task<IEnumerable<Message>> SendAs(string role, string message, IEnumerable<string> imagesAsBase64 = null)
 		{
-			_messages.Add(new Message { Role = role, Content = message });
+			_messages.Add(new Message { Role = role, Content = message, Images = imagesAsBase64?.ToArray() });
 
 			var request = new ChatRequest
 			{
