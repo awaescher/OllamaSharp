@@ -1,105 +1,87 @@
-﻿static string ReadInput()
+﻿using OllamaSharp;
+using Spectre.Console;
+using System.Runtime.CompilerServices;
+
+Console.ResetColor();
+
+AnsiConsole.Write(new Rule("OllamaSharp Api Console").LeftJustified());
+AnsiConsole.WriteLine();
+
+OllamaApiClient ollama;
+var connected = false;
+
+do
 {
-	var color = Console.ForegroundColor;
-	Console.ForegroundColor = ConsoleColor.White;
+	AnsiConsole.MarkupLine("Enter the Ollama [blue]machine name[/] or [blue]endpoint url[/]");
+	AnsiConsole.MarkupLine("[gray]Leave empty for default port on localhost[/]");
+
+	var url = OllamaConsole.ReadInput();
+
+	if (string.IsNullOrWhiteSpace(url))
+		url = "http://localhost:11434";
+
+	if (!url.StartsWith("http"))
+		url = "http://" + url;
+
+	if (url.IndexOf(':', 5) < 0)
+		url += ":11434";
+
+	var uri = new Uri(url);
+	Console.WriteLine($"Connecting to {uri} ...");
+
+	ollama = new OllamaApiClient(url);
 
 	try
 	{
-		Console.Write("> ");
-		return Console.ReadLine();
+		var models = await ollama.ListLocalModels();
+		if (!models.Any())
+			AnsiConsole.MarkupLineInterpolated($"[yellow]Your Ollama instance does not provide any models :([/]");
+
+		connected = true;
 	}
-	finally
+	catch (Exception ex)
 	{
-		Console.ForegroundColor = color;
+		AnsiConsole.MarkupLineInterpolated($"[red]{Markup.Escape(ex.Message)}[/]");
+		AnsiConsole.WriteLine();
 	}
-}
+} while (!connected);
 
-Console.ForegroundColor = ConsoleColor.Gray;
 
-var uri = new Uri("http://localhost:11434");
+string demo;
 
-Console.WriteLine($"Connecting to {uri} ...");
-
-var ollama = new OllamaApiClient(uri);
-
-//var info = await ollama.ShowModelInformation("codellama");
-//await ollama.PullModel("mistral", status => Console.WriteLine($"({status.Percent}%) {status.Status}"));
-//await ollama.CopyModel("codellama", "dude");
-//await ollama.GenerateEmbeddings("dude", "You are C3PO");
-//await ollama.DeleteModel("dude");
-//await ollama.PushModel("mattw/pygmalion:latest", status => Console.WriteLine(status.Status));
-//await ollama.CreateModel("dude", "no file here", status => Console.WriteLine(status.Status));
-
-Console.WriteLine("Loading models ...");
-
-var models = await ollama.ListLocalModels();
-
-var streamer = new ConsoleStreamer();
-
-string prompt;
-ConversationContext context = null;
-
-if (models.Any())
+do
 {
-	Console.Clear();
+	AnsiConsole.Clear();
 
-	var model = models.First().Name;
+	demo = AnsiConsole.Prompt(
+				new SelectionPrompt<string>()
+					.PageSize(10)
+					.Title("What demo do you want to run?")
+					.AddChoices(["Chat", "Image chat", "Model manager", "Exit"]));
 
-	if (models.Count() > 1)
+	AnsiConsole.Clear();
+
+	try
 	{
-		Console.WriteLine("Which model do you want to use?");
-		Console.WriteLine("(press Enter to use the first one)");
-		foreach (var m in models)
-			Console.WriteLine("  " + m.Name);
-
-		var userModelInput = ReadInput();
-		if (!string.IsNullOrEmpty(userModelInput))
+		switch (demo)
 		{
-			var chosen = models.FirstOrDefault(m => m.Name.Equals(userModelInput.Trim(), StringComparison.OrdinalIgnoreCase));
-			if (chosen is object)
-				model = userModelInput;
-			else
-				Console.WriteLine($"Model {userModelInput} not found");
+			case "Chat":
+				await new ChatConsole(ollama).Run();
+				break;
+
+			case "Image chat":
+				await new ImageChatConsole(ollama).Run();
+				break;
+
+			case "Model manager":
+				await new ModelManagerConsole(ollama).Run();
+				break;
 		}
 	}
-
-	Console.WriteLine($"You are talking to {model} now.");
-
-	do
+	catch (Exception ex)
 	{
-		prompt = ReadInput();
-
-		streamer.Start();
-		
-		// stream
-		context = await ollama.StreamCompletion(prompt, model, context, streamer);
-		// get
-		var rc = await ollama.GetCompletion(prompt, model, context);
-		
-		streamer.Stop();
-
-		Console.WriteLine();
-	} while (!string.IsNullOrEmpty(prompt));
-}
-else
-{
-	Console.WriteLine("No models available.");
-}
-
-public class ConsoleStreamer : IResponseStreamer<GenerateCompletionResponseStream>
-{
-	public void Stream(GenerateCompletionResponseStream stream)
-	{
-		Console.Write(stream.Response);
+		AnsiConsole.MarkupLineInterpolated($"An error occurred. Press [blue]{"[Return]"}[/] to start over.");
+		AnsiConsole.MarkupLineInterpolated($"[red]{Markup.Escape(ex.Message)}[/]");
+		Console.ReadLine();
 	}
-
-	public void Start()
-	{
-		Console.ForegroundColor = ConsoleColor.Cyan;
-	}
-
-	public void Stop()
-	{
-		Console.ForegroundColor = ConsoleColor.White;
-	}
-}
+} while (demo != "Exit");
