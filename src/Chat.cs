@@ -19,6 +19,11 @@ namespace OllamaSharp
 
 		public IResponseStreamer<ChatResponseStream> Streamer { get; }
 
+		public Chat(IOllamaApiClient client, Action<ChatResponseStream> streamer)
+			: this(client, new ActionResponseStreamer<ChatResponseStream>(streamer))
+		{
+		}
+
 		public Chat(IOllamaApiClient client, IResponseStreamer<ChatResponseStream> streamer)
 		{
 			Client = client ?? throw new ArgumentNullException(nameof(client));

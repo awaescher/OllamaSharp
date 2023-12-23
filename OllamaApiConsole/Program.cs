@@ -1,47 +1,88 @@
-﻿static string ReadInput()
+﻿using OllamaSharp;
+using Spectre.Console;
+using System.Runtime.CompilerServices;
+
+Console.ResetColor();
+
+AnsiConsole.Write(new Rule("OllamaSharp Api Console").LeftJustified());
+AnsiConsole.WriteLine();
+
+OllamaApiClient ollama;
+var connected = false;
+
+do
 {
-	var color = Console.ForegroundColor;
-	Console.ForegroundColor = ConsoleColor.Green;
+	AnsiConsole.MarkupLine("Enter the Ollama [blue]machine name[/] or [blue]endpoint url[/]");
+	AnsiConsole.MarkupLine("[gray]Leave empty for default port on localhost[/]");
+
+	var url = OllamaConsole.ReadInput();
+
+	if (string.IsNullOrWhiteSpace(url))
+		url = "http://localhost:11434";
+
+	if (!url.StartsWith("http"))
+		url = "http://" + url;
+
+	if (url.IndexOf(':', 5) < 0)
+		url += ":11434";
+
+	var uri = new Uri(url);
+	Console.WriteLine($"Connecting to {uri} ...");
+
+	ollama = new OllamaApiClient(url);
 
 	try
 	{
-		Console.Write("> ");
-		return Console.ReadLine();
+		var models = await ollama.ListLocalModels();
+		if (!models.Any())
+			AnsiConsole.MarkupLineInterpolated($"[yellow]Your Ollama instance does not provide any models :([/]");
+
+		connected = true;
 	}
-	finally
+	catch (Exception ex)
 	{
-		Console.ForegroundColor = color;
+		AnsiConsole.MarkupLineInterpolated($"[red]{ex.Message}[/]");
+		AnsiConsole.WriteLine();
 	}
-}
+} while (!connected);
 
-Console.ForegroundColor = ConsoleColor.Gray;
 
-Console.WriteLine("Enter the Ollama machine name or endpoint url");
-Console.WriteLine("(leave empty for default port on localhost)");
+string demo;
 
-var url = ReadInput();
+do
+{
+	AnsiConsole.Clear();
 
-if (string.IsNullOrWhiteSpace(url))
-	url = "http://localhost:11434";
+	demo = AnsiConsole.Prompt(
+				new SelectionPrompt<string>()
+					.PageSize(10)
+					.Title("What demo do you want to run?")
+					.AddChoices(["Chat", "Model manager", "Exit"]));
 
-if (!url.StartsWith("http"))
-	url = "http://" + url;
+	AnsiConsole.Clear();
 
-if (url.IndexOf(':', 5) < 0)
-	url += ":11434";
+	try
+	{
+		switch (demo)
+		{
+			case "Chat":
+				await new ChatConsole(ollama).Run();
+				break;
 
-var uri = new Uri(url);
-Console.WriteLine($"Connecting to {uri} ...");
+			case "Model manager":
+				await new ModelManagerConsole(ollama).Run();
+				break;
+		}
+	}
+	catch (Exception ex)
+	{
+		AnsiConsole.MarkupLineInterpolated($"An error occurred. Press [blue]{"[Return]"}[/] to start over.");
+		AnsiConsole.MarkupLineInterpolated($"[red]{ex.Message}[/]");
+		Console.ReadLine();
+	}
+} while (demo != "Exit");
 
-var ollama = new OllamaApiClient(url, "mistral");
 
-//var info = await ollama.ShowModelInformation("codellama");
-//await ollama.PullModel("mistral", status => Console.WriteLine($"({status.Percent}%) {status.Status}"));
-//await ollama.CopyModel("codellama", "dude");
-//await ollama.GenerateEmbeddings("dude", "You are C3PO");
-//await ollama.DeleteModel("dude");
-//await ollama.PushModel("mattw/pygmalion:latest", status => Console.WriteLine(status.Status));
-//await ollama.CreateModel("dude", "no file here", status => Console.WriteLine(status.Status));
 
 /* use images
 var imageBytes = await File.ReadAllBytesAsync("myimage.jpg");
@@ -52,75 +93,3 @@ await ollama.GenerateCompletion(new GenerateCompletionRequest
 	Images = new string[] { Convert.ToBase64String(imageBytes) }
 }, new ConsoleStreamer());
 */
-
-Console.WriteLine("Loading models ...");
-
-var models = await ollama.ListLocalModels();
-
-var streamer = new ConsoleChatStreamer();
-
-string prompt;
-
-if (models.Any())
-{
-	Console.Clear();
-
-	var model = models.First().Name;
-
-	if (models.Count() > 1)
-	{
-		Console.WriteLine("Which model do you want to use?");
-		Console.WriteLine("(press Enter to use the first one)");
-		foreach (var m in models)
-			Console.WriteLine("  " + m.Name);
-
-		var userModelInput = ReadInput();
-		if (!string.IsNullOrEmpty(userModelInput))
-		{
-			var chosen = models.FirstOrDefault(m => m.Name.Contains(userModelInput.Trim(), StringComparison.OrdinalIgnoreCase));
-			if (chosen is object)
-				model = chosen.Name;
-			else
-				Console.WriteLine($"Model {userModelInput} not found");
-		}
-	}
-
-	Console.WriteLine($"You are talking to {model} now.");
-
-	ollama.SelectedModel = model;
-
-	var chat = ollama.Chat(streamer);
-
-	do
-	{
-		prompt = ReadInput();
-
-		streamer.Start();
-		await chat.Send(prompt);
-		streamer.Stop();
-
-		Console.WriteLine();
-	} while (!string.IsNullOrEmpty(prompt));
-}
-else
-{
-	Console.WriteLine("No models available.");
-}
-
-public class ConsoleChatStreamer : IResponseStreamer<ChatResponseStream>
-{
-	public void Stream(ChatResponseStream stream)
-	{
-		Console.Write(stream.Message?.Content ?? "");
-	}
-
-	public void Start()
-	{
-		Console.ForegroundColor = ConsoleColor.Cyan;
-	}
-
-	public void Stop()
-	{
-		Console.ForegroundColor = ConsoleColor.White;
-	}
-}

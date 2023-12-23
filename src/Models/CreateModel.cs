@@ -14,7 +14,13 @@ namespace OllamaSharp.Models
 		public string Name { get; set; }
 
 		/// <summary>
-		/// Path to the Modelfile
+		/// Contents of the Modelfile
+		/// </summary>
+		[JsonPropertyName("modelfile")]
+		public string ModelFileContent { get; set; }
+
+		/// <summary>
+		/// Path to the Modelfile (optional)
 		/// </summary>
 		[JsonPropertyName("path")]
 		public string Path { get; set; }

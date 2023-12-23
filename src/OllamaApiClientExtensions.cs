@@ -28,14 +28,24 @@ namespace OllamaSharp
 			await client.CopyModel(new CopyModelRequest { Source = source, Destination = destination });
 		}
 
-		public static async Task CreateModel(this IOllamaApiClient client, string name, string path, Action<CreateStatus> streamer)
+		public static async Task CreateModel(this IOllamaApiClient client, string name, string modelFileContent, Action<CreateStatus> streamer)
 		{
-			await client.CreateModel(name, path, new ActionResponseStreamer<CreateStatus>(streamer));
+			await client.CreateModel(name, modelFileContent, new ActionResponseStreamer<CreateStatus>(streamer));
 		}
 
-		public static async Task CreateModel(this IOllamaApiClient client, string name, string path, IResponseStreamer<CreateStatus> streamer)
+		public static async Task CreateModel(this IOllamaApiClient client, string name, string modelFileContent, IResponseStreamer<CreateStatus> streamer)
 		{
-			await client.CreateModel(new CreateModelRequest { Name = name, Path = path, Stream = true }, streamer);
+			await client.CreateModel(new CreateModelRequest { Name = name, ModelFileContent = modelFileContent, Stream = true }, streamer);
+		}
+
+		public static async Task CreateModel(this IOllamaApiClient client, string name, string modelFileContent, string path, Action<CreateStatus> streamer)
+		{
+			await client.CreateModel(new CreateModelRequest { Name = name, ModelFileContent = modelFileContent, Path = path, Stream = true }, new ActionResponseStreamer<CreateStatus>(streamer));
+		}
+
+		public static async Task CreateModel(this IOllamaApiClient client, string name, string modelFileContent, string path, IResponseStreamer<CreateStatus> streamer)
+		{
+			await client.CreateModel(new CreateModelRequest { Name = name, ModelFileContent = modelFileContent, Path = path, Stream = true }, streamer);
 		}
 
 		public static async Task PullModel(this IOllamaApiClient client, string model, Action<PullStatus> streamer)
