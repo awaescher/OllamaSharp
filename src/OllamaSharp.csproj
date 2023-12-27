@@ -14,7 +14,7 @@
 		<RepositoryUrl>https://github.com/awaescher/OllamaSharp</RepositoryUrl>
 		<PackageTags>ollama;ollama-api;api;llm</PackageTags>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
-		<Version>1.0.3</Version>
+		<Version>1.0.4</Version>
 	</PropertyGroup>
 
 	<ItemGroup>
