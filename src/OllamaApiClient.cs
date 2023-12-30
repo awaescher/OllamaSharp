@@ -1,4 +1,4 @@
-﻿using OllamaSharp.Models;
+﻿﻿using OllamaSharp.Models;
 using OllamaSharp.Streamer;
 using System;
 using System.Collections.Generic;
@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using OllamaSharp.Models.Chat;
 
 namespace OllamaSharp
 {
@@ -216,17 +217,18 @@ namespace OllamaSharp
 			using var stream = await response.Content.ReadAsStreamAsync();
 			using var reader = new StreamReader(stream);
 
-			string responseRole = null;
+			ChatRole? responseRole = null;
 			var responseContent = new StringBuilder();
 
 			while (!reader.EndOfStream)
 			{
 				string line = await reader.ReadLineAsync();
+
 				var streamedResponse = JsonSerializer.Deserialize<ChatResponseStream>(line);
 
 				// keep the streamed content to build the last message
 				// to return the list of messages
-				responseRole ??= streamedResponse?.Message?.Role;
+				responseRole = streamedResponse?.Message?.Role;
 				responseContent.Append(streamedResponse?.Message?.Content ?? "");
 
 				streamer.Stream(streamedResponse);
