@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text.Json.Serialization;
+using OllamaSharp.Models.Chat.Options;
 
 namespace OllamaSharp.Models
 {
@@ -22,10 +23,11 @@ namespace OllamaSharp.Models
 		public IEnumerable<Message> Messages { get; set; }
 
 		/// <summary>
-		/// Additional model parameters listed in the documentation for the Modelfile such as temperature
+		/// Additional model parameters listed in the documentation for the Modelfile such as temperature.
+		/// This is not the property that will get used in the request
+		/// Instead, when a request is being send, all of the fields in here are being serialized, and then put into a private field, which intern will be used. 
 		/// </summary>
-		[JsonPropertyName("options")]
-		public string Options { get; set; }
+		public ChatCompletionOptions Options { get; set; }
 
 		/// <summary>
 		/// The full prompt or prompt template (overrides what is defined in the Modelfile)
