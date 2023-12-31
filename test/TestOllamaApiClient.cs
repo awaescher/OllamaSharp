@@ -1,12 +1,13 @@
-﻿using OllamaSharp;
+﻿﻿using OllamaSharp;
 using OllamaSharp.Models;
+using OllamaSharp.Models.Chat;
 using OllamaSharp.Streamer;
 
 namespace Tests;
 
 public class TestOllamaApiClient : IOllamaApiClient
 {
-	private string _role;
+	private ChatRole _role;
 	private string _answer;
 
 	public string SelectedModel { get; set; }
@@ -85,7 +86,7 @@ public class TestOllamaApiClient : IOllamaApiClient
 		throw new NotImplementedException();
 	}
 
-	internal void DefineChatResponse(string role, string answer)
+	internal void DefineChatResponse(ChatRole role, string answer)
 	{
 		_role = role;
 		_answer = answer;

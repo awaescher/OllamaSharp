@@ -2,6 +2,7 @@
 using OllamaSharp.Streamer;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using OllamaSharp.Models.Chat;
 
 namespace OllamaSharp
 {

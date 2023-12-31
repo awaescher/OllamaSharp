@@ -7,6 +7,7 @@ using OllamaSharp.Models;
 using System.Net;
 using System.Text;
 using System.Text.Json;
+using OllamaSharp.Models.Chat;
 
 namespace Tests;
 
@@ -104,9 +105,9 @@ public class OllamaApiClientTests
 
 			await using var writer = new StreamWriter(stream, leaveOpen: true);
 			writer.AutoFlush = true;
-			await writer.WriteChatStreamResponse("Leave ", "assistant");
-			await writer.WriteChatStreamResponse("me ", "assistant");
-			await writer.FinishChatStreamResponse("alone.", "assistant");
+			await writer.WriteChatStreamResponse("Leave ", ChatRole.Assistant);
+			await writer.WriteChatStreamResponse("me ", ChatRole.Assistant);
+			await writer.FinishChatStreamResponse("alone.", ChatRole.Assistant);
 			stream.Seek(0, SeekOrigin.Begin);
 
 			var builder = new StringBuilder();
@@ -116,9 +117,9 @@ public class OllamaApiClientTests
 				Model = "model",
 				Messages = new Message[]
 				{
-					new() { Role = "user", Content = "Why?" },
-					new() { Role = "assistant", Content = "Because!" },
-					new() { Role = "user", Content = "And where?" },
+					new() { Role = ChatRole.User, Content = "Why?" },
+					new() { Role = ChatRole.Assistant, Content = "Because!" },
+					new() { Role = ChatRole.User, Content = "And where?" },
 				}
 			};
 
@@ -126,16 +127,16 @@ public class OllamaApiClientTests
 
 			messages.Length.Should().Be(4);
 
-			messages[0].Role.Should().Be("user");
+			messages[0].Role.Should().Be(ChatRole.User);
 			messages[0].Content.Should().Be("Why?");
 
-			messages[1].Role.Should().Be("assistant");
+			messages[1].Role.Should().Be(ChatRole.Assistant);
 			messages[1].Content.Should().Be("Because!");
 
-			messages[2].Role.Should().Be("user");
+			messages[2].Role.Should().Be(ChatRole.User);
 			messages[2].Content.Should().Be("And where?");
 
-			messages[3].Role.Should().Be("assistant");
+			messages[3].Role.Should().Be(ChatRole.Assistant);
 			messages[3].Content.Should().Be("Leave me alone.");
 		}
 	}
@@ -215,15 +216,15 @@ public static class WriterExtensions
 		await writer.WriteLineAsync(JsonSerializer.Serialize(json));
 	}
 
-	public static async Task WriteChatStreamResponse(this StreamWriter writer, string content, string role)
+	public static async Task WriteChatStreamResponse(this StreamWriter writer, string content, ChatRole role)
 	{
 		var json = new { message = new { content, role }, role, done = false };
 		await writer.WriteLineAsync(JsonSerializer.Serialize(json));
 	}
 
-	public static async Task FinishChatStreamResponse(this StreamWriter writer, string content, string role)
+	public static async Task FinishChatStreamResponse(this StreamWriter writer, string content, ChatRole role)
 	{
-		var json = new { message = new { content, role }, role, done = true };
+		var json = new { message = new { content, role = role.ToString() }, role = role.ToString(), done = true };
 		await writer.WriteLineAsync(JsonSerializer.Serialize(json));
 	}
 }

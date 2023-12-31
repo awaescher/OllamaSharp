@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using OllamaSharp.Models.Chat;
 
 namespace OllamaSharp
 {
@@ -32,7 +33,7 @@ namespace OllamaSharp
 
 		public Task<IEnumerable<Message>> Send(string message, IEnumerable<string> imagesAsBase64 = null) => SendAs("user", message, imagesAsBase64);
 
-		public async Task<IEnumerable<Message>> SendAs(string role, string message, IEnumerable<string> imagesAsBase64 = null)
+		public async Task<IEnumerable<Message>> SendAs(ChatRole role, string message, IEnumerable<string> imagesAsBase64 = null)
 		{
 			_messages.Add(new Message { Role = role, Content = message, Images = imagesAsBase64?.ToArray() });
 
