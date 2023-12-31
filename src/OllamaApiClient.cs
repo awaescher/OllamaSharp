@@ -237,7 +237,7 @@ namespace OllamaSharp
 				{
 					var doneResponse = JsonSerializer.Deserialize<ChatDoneResponseStream>(line);
 					var messages = chatRequest.Messages.ToList();
-					messages.Add(new Message { Content = responseContent.ToString(), Role = responseRole });
+					messages.Add(new Message(responseRole, responseContent.ToString()));
 					return messages;
 				}
 			}
