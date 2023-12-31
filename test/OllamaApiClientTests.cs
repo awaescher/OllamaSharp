@@ -117,9 +117,9 @@ public class OllamaApiClientTests
 				Model = "model",
 				Messages = new Message[]
 				{
-					new() { Role = ChatRole.User, Content = "Why?" },
-					new() { Role = ChatRole.Assistant, Content = "Because!" },
-					new() { Role = ChatRole.User, Content = "And where?" },
+					new(ChatRole.User, "Why?"),
+					new(ChatRole.Assistant, "Because!"),
+					new(ChatRole.User, "And where?"),
 				}
 			};
 

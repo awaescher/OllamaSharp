@@ -59,7 +59,7 @@ public class TestOllamaApiClient : IOllamaApiClient
 
 	public async Task<IEnumerable<Message>> SendChat(ChatRequest chatRequest, Action<ChatResponseStream> streamer)
 	{
-		var message = new Message { Content = _answer, Role = _role };
+		var message = new Message(_role, _answer);
 		streamer(new ChatResponseStream { Done = true, Message = message, CreatedAt = DateTime.UtcNow.ToString(), Model = chatRequest.Model });
 
 		await Task.Yield();
@@ -71,7 +71,7 @@ public class TestOllamaApiClient : IOllamaApiClient
 
 	public async Task<IEnumerable<Message>> SendChat(ChatRequest chatRequest, IResponseStreamer<ChatResponseStream> streamer)
 	{
-		var message = new Message { Content = _answer, Role = _role };
+		var message = new Message(_role, _answer);
 		streamer.Stream(new ChatResponseStream { Done = true, Message = message, CreatedAt = DateTime.UtcNow.ToString(), Model = chatRequest.Model });
 
 		await Task.Yield();

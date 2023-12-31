@@ -18,7 +18,7 @@ namespace OllamaSharp.Models.Chat
 		/// The messages of the chat, this can be used to keep a chat memory
 		/// </summary>
 		[JsonPropertyName("messages")]
-		public IEnumerable<Message> Messages { get; set; }
+		public IList<Message> Messages { get; set; }
 
 		/// <summary>
 		/// Additional model parameters listed in the documentation for the Modelfile such as temperature

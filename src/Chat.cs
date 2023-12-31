@@ -35,11 +35,11 @@ namespace OllamaSharp
 
 		public async Task<IEnumerable<Message>> SendAs(ChatRole role, string message, IEnumerable<string> imagesAsBase64 = null)
 		{
-			_messages.Add(new Message { Role = role, Content = message, Images = imagesAsBase64?.ToArray() });
+			_messages.Add(new Message(role, message, imagesAsBase64?.ToArray()));
 
 			var request = new ChatRequest
 			{
-				Messages = Messages,
+				Messages = Messages.ToList(),
 				Model = Client.SelectedModel,
 				Stream = true
 			};

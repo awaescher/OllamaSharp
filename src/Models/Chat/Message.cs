@@ -6,6 +6,30 @@ namespace OllamaSharp.Models.Chat
 	[DebuggerDisplay("{Role}: {Content}")]
 	public class Message
 	{
+		public Message(ChatRole role, string content, string[] images)
+		{
+			Role = role;
+			Content = content;
+			Images = images;
+		}
+		
+		public Message(ChatRole role, string[] images)
+		{
+			Role = role;
+			Images = images;
+		}
+
+		public Message(ChatRole? role, string content)
+		{
+			Role = role;
+			Content = content;
+		}
+
+		// We need this for json deserialization
+		public Message()
+		{
+		}
+
 		/// <summary>
 		/// The role of the message, either system, user or assistant
 		/// </summary>
