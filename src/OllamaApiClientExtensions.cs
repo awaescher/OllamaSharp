@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using OllamaSharp.Models.Chat;
+using System.Threading;
 
 namespace OllamaSharp
 {
@@ -51,10 +52,11 @@ namespace OllamaSharp
 		/// The streamer that receives parts of the answer as they are streamed by the Ollama endpoint.
 		/// Can be used to update the user interface while the answer is still being generated.
 		/// </param>
+		/// <param name="cancellationToken">The token to cancel the operation with</param>
 		/// <returns>List of the returned messages including the previous context</returns>
-		public static async Task<IEnumerable<Message>> SendChat(this IOllamaApiClient client, ChatRequest chatRequest, Action<ChatResponseStream> streamer)
+		public static async Task<IEnumerable<Message>> SendChat(this IOllamaApiClient client, ChatRequest chatRequest, Action<ChatResponseStream> streamer, CancellationToken cancellationToken = default)
 		{
-			return await client.SendChat(chatRequest, new ActionResponseStreamer<ChatResponseStream>(streamer));
+			return await client.SendChat(chatRequest, new ActionResponseStreamer<ChatResponseStream>(streamer), cancellationToken);
 		}
 
 		/// <summary>
@@ -62,9 +64,10 @@ namespace OllamaSharp
 		/// </summary>
 		/// <param name="source">The name of the existing model to copy</param>
 		/// <param name="destination">The name the copied model should get</param>
-		public static async Task CopyModel(this IOllamaApiClient client, string source, string destination)
+		/// <param name="cancellationToken">The token to cancel the operation with</param>
+		public static async Task CopyModel(this IOllamaApiClient client, string source, string destination, CancellationToken cancellationToken = default)
 		{
-			await client.CopyModel(new CopyModelRequest { Source = source, Destination = destination });
+			await client.CopyModel(new CopyModelRequest { Source = source, Destination = destination }, cancellationToken);
 		}
 
 		/// <summary>
@@ -79,9 +82,10 @@ namespace OllamaSharp
 		/// The streamer that receives status updates as they are streamed by the Ollama endpoint.
 		/// Can be used to update the user interface while the operation is running.
 		/// </param>
-		public static async Task CreateModel(this IOllamaApiClient client, string name, string modelFileContent, Action<CreateStatus> streamer)
+		/// <param name="cancellationToken">The token to cancel the operation with</param>
+		public static async Task CreateModel(this IOllamaApiClient client, string name, string modelFileContent, Action<CreateStatus> streamer, CancellationToken cancellationToken = default)
 		{
-			await client.CreateModel(name, modelFileContent, new ActionResponseStreamer<CreateStatus>(streamer));
+			await client.CreateModel(name, modelFileContent, new ActionResponseStreamer<CreateStatus>(streamer), cancellationToken);
 		}
 
 		/// <summary>
@@ -96,27 +100,10 @@ namespace OllamaSharp
 		/// The streamer that receives status updates as they are streamed by the Ollama endpoint.
 		/// Can be used to update the user interface while the operation is running.
 		/// </param>
-		public static async Task CreateModel(this IOllamaApiClient client, string name, string modelFileContent, IResponseStreamer<CreateStatus> streamer)
+		/// <param name="cancellationToken">The token to cancel the operation with</param>
+		public static async Task CreateModel(this IOllamaApiClient client, string name, string modelFileContent, IResponseStreamer<CreateStatus> streamer, CancellationToken cancellationToken = default)
 		{
-			await client.CreateModel(new CreateModelRequest { Name = name, ModelFileContent = modelFileContent, Stream = true }, streamer);
-		}
-
-		/// <summary>
-		/// Sends a request to the /api/create endpoint to create a model
-		/// </summary>
-		/// <param name="name">The name for the new model</param>
-		/// <param name="modelFileContent">
-		/// The file content for the model file the new model should be built with.
-		/// See https://github.com/jmorganca/ollama/blob/main/docs/modelfile.md
-		/// </param>
-		/// <param name="path">The name path to the model file</param>
-		/// <param name="streamer">
-		/// The streamer that receives status updates as they are streamed by the Ollama endpoint.
-		/// Can be used to update the user interface while the operation is running.
-		/// </param>
-		public static async Task CreateModel(this IOllamaApiClient client, string name, string modelFileContent, string path, Action<CreateStatus> streamer)
-		{
-			await client.CreateModel(new CreateModelRequest { Name = name, ModelFileContent = modelFileContent, Path = path, Stream = true }, new ActionResponseStreamer<CreateStatus>(streamer));
+			await client.CreateModel(new CreateModelRequest { Name = name, ModelFileContent = modelFileContent, Stream = true }, streamer, cancellationToken);
 		}
 
 		/// <summary>
@@ -132,9 +119,35 @@ namespace OllamaSharp
 		/// The streamer that receives status updates as they are streamed by the Ollama endpoint.
 		/// Can be used to update the user interface while the operation is running.
 		/// </param>
-		public static async Task CreateModel(this IOllamaApiClient client, string name, string modelFileContent, string path, IResponseStreamer<CreateStatus> streamer)
+		/// <param name="cancellationToken">The token to cancel the operation with</param>
+		public static async Task CreateModel(this IOllamaApiClient client, string name, string modelFileContent, string path, Action<CreateStatus> streamer, CancellationToken cancellationToken = default)
 		{
-			await client.CreateModel(new CreateModelRequest { Name = name, ModelFileContent = modelFileContent, Path = path, Stream = true }, streamer);
+			await client.CreateModel(new CreateModelRequest
+			{
+				Name = name,
+				ModelFileContent = modelFileContent,
+				Path = path,
+				Stream = true
+			}, new ActionResponseStreamer<CreateStatus>(streamer), cancellationToken);
+		}
+
+		/// <summary>
+		/// Sends a request to the /api/create endpoint to create a model
+		/// </summary>
+		/// <param name="name">The name for the new model</param>
+		/// <param name="modelFileContent">
+		/// The file content for the model file the new model should be built with.
+		/// See https://github.com/jmorganca/ollama/blob/main/docs/modelfile.md
+		/// </param>
+		/// <param name="path">The name path to the model file</param>
+		/// <param name="streamer">
+		/// The streamer that receives status updates as they are streamed by the Ollama endpoint.
+		/// Can be used to update the user interface while the operation is running.
+		/// </param>
+		/// <param name="cancellationToken">The token to cancel the operation with</param>
+		public static async Task CreateModel(this IOllamaApiClient client, string name, string modelFileContent, string path, IResponseStreamer<CreateStatus> streamer, CancellationToken cancellationToken = default)
+		{
+			await client.CreateModel(new CreateModelRequest { Name = name, ModelFileContent = modelFileContent, Path = path, Stream = true }, streamer, cancellationToken);
 		}
 
 		/// <summary>
@@ -145,9 +158,10 @@ namespace OllamaSharp
 		/// The streamer that receives status updates as they are streamed by the Ollama endpoint.
 		/// Can be used to update the user interface while the operation is running.
 		/// </param>
-		public static async Task PullModel(this IOllamaApiClient client, string model, Action<PullStatus> streamer)
+		/// <param name="cancellationToken">The token to cancel the operation with</param>
+		public static async Task PullModel(this IOllamaApiClient client, string model, Action<PullStatus> streamer, CancellationToken cancellationToken = default)
 		{
-			await client.PullModel(model, new ActionResponseStreamer<PullStatus>(streamer));
+			await client.PullModel(model, new ActionResponseStreamer<PullStatus>(streamer), cancellationToken);
 		}
 
 		/// <summary>
@@ -158,9 +172,10 @@ namespace OllamaSharp
 		/// The streamer that receives status updates as they are streamed by the Ollama endpoint.
 		/// Can be used to update the user interface while the operation is running.
 		/// </param>
-		public static async Task PullModel(this IOllamaApiClient client, string model, IResponseStreamer<PullStatus> streamer)
+		/// <param name="cancellationToken">The token to cancel the operation with</param>
+		public static async Task PullModel(this IOllamaApiClient client, string model, IResponseStreamer<PullStatus> streamer, CancellationToken cancellationToken = default)
 		{
-			await client.PullModel(new PullModelRequest { Name = model }, streamer);
+			await client.PullModel(new PullModelRequest { Name = model }, streamer, cancellationToken);
 		}
 
 		/// <summary>
@@ -171,9 +186,10 @@ namespace OllamaSharp
 		/// The streamer that receives status updates as they are streamed by the Ollama endpoint.
 		/// Can be used to update the user interface while the operation is running.
 		/// </param>
-		public static async Task PushModel(this IOllamaApiClient client, string name, Action<PushStatus> streamer)
+		/// <param name="cancellationToken">The token to cancel the operation with</param>
+		public static async Task PushModel(this IOllamaApiClient client, string name, Action<PushStatus> streamer, CancellationToken cancellationToken = default)
 		{
-			await client.PushModel(name, new ActionResponseStreamer<PushStatus>(streamer));
+			await client.PushModel(name, new ActionResponseStreamer<PushStatus>(streamer), cancellationToken);
 		}
 
 		/// <summary>
@@ -184,18 +200,20 @@ namespace OllamaSharp
 		/// The streamer that receives status updates as they are streamed by the Ollama endpoint.
 		/// Can be used to update the user interface while the operation is running.
 		/// </param>
-		public static async Task PushModel(this IOllamaApiClient client, string name, IResponseStreamer<PushStatus> streamer)
+		/// <param name="cancellationToken">The token to cancel the operation with</param>
+		public static async Task PushModel(this IOllamaApiClient client, string name, IResponseStreamer<PushStatus> streamer, CancellationToken cancellationToken = default)
 		{
-			await client.PushModel(new PushRequest { Name = name, Stream = true }, streamer);
+			await client.PushModel(new PushRequest { Name = name, Stream = true }, streamer, cancellationToken);
 		}
 
 		/// <summary>
 		/// Sends a request to the /api/embeddings endpoint to generate embeddings for the currently selected model
 		/// </summary>
 		/// <param name="prompt">The prompt to generate embeddings for</param>
-		public static async Task<GenerateEmbeddingResponse> GenerateEmbeddings(this IOllamaApiClient client, string prompt)
+		/// <param name="cancellationToken">The token to cancel the operation with</param>
+		public static async Task<GenerateEmbeddingResponse> GenerateEmbeddings(this IOllamaApiClient client, string prompt, CancellationToken cancellationToken = default)
 		{
-			return await client.GenerateEmbeddings(new GenerateEmbeddingRequest { Model = client.SelectedModel, Prompt = prompt });
+			return await client.GenerateEmbeddings(new GenerateEmbeddingRequest { Model = client.SelectedModel, Prompt = prompt }, cancellationToken);
 		}
 
 		/// <summary>
@@ -206,11 +224,12 @@ namespace OllamaSharp
 		/// The context that keeps the conversation for a chat-like history.
 		/// Should reuse the result from earlier calls if these calls belong together. Can be null initially.
 		/// </param>
+		/// <param name="cancellationToken">The token to cancel the operation with</param>
 		/// <returns>
 		/// A context object that holds the conversation history.
 		/// Should be reused for further calls to this method to keep a chat going.
 		/// </returns>
-		public static async Task<ConversationContextWithResponse> GetCompletion(this IOllamaApiClient client, string prompt, ConversationContext context)
+		public static async Task<ConversationContextWithResponse> GetCompletion(this IOllamaApiClient client, string prompt, ConversationContext context, CancellationToken cancellationToken = default)
 		{
 			var request = new GenerateCompletionRequest
 			{
@@ -220,7 +239,7 @@ namespace OllamaSharp
 				Context = context?.Context ?? Array.Empty<long>()
 			};
 
-			return await client.GetCompletion(request);
+			return await client.GetCompletion(request, cancellationToken);
 		}
 
 		/// <summary>
@@ -236,11 +255,12 @@ namespace OllamaSharp
 		/// The streamer that receives parts of the answer as they are streamed by the Ollama endpoint.
 		/// Can be used to update the user interface while the answer is still being generated.
 		/// </param>
+		/// <param name="cancellationToken">The token to cancel the operation with</param>
 		/// <returns>
 		/// A context object that holds the conversation history.
 		/// Should be reused for further calls to this method to keep a chat going.
 		/// </returns>
-		public static async Task<ConversationContext> StreamCompletion(this IOllamaApiClient client, string prompt, ConversationContext context, Action<GenerateCompletionResponseStream> streamer)
+		public static async Task<ConversationContext> StreamCompletion(this IOllamaApiClient client, string prompt, ConversationContext context, Action<GenerateCompletionResponseStream> streamer, CancellationToken cancellationToken = default)
 		{
 			var request = new GenerateCompletionRequest
 			{
@@ -250,7 +270,7 @@ namespace OllamaSharp
 				Context = context?.Context ?? Array.Empty<long>()
 			};
 
-			return await client.StreamCompletion(request, new ActionResponseStreamer<GenerateCompletionResponseStream>(streamer));
+			return await client.StreamCompletion(request, new ActionResponseStreamer<GenerateCompletionResponseStream>(streamer), cancellationToken);
 		}
 	}
 }

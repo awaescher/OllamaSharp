@@ -9,6 +9,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using OllamaSharp.Models.Chat;
+using System.Threading;
 
 namespace OllamaSharp
 {
@@ -49,66 +50,66 @@ namespace OllamaSharp
 			SelectedModel = defaultModel;
 		}
 
-		public async Task CreateModel(CreateModelRequest request, IResponseStreamer<CreateStatus> streamer)
+		public async Task CreateModel(CreateModelRequest request, IResponseStreamer<CreateStatus> streamer, CancellationToken cancellationToken = default)
 		{
-			await StreamPostAsync("/api/create", request, streamer);
+			await StreamPostAsync("/api/create", request, streamer, cancellationToken);
 		}
 
-		public async Task DeleteModel(string model)
+		public async Task DeleteModel(string model, CancellationToken cancellationToken = default)
 		{
 			var request = new HttpRequestMessage(HttpMethod.Delete, "/api/delete")
 			{
 				Content = new StringContent(JsonSerializer.Serialize(new DeleteModelRequest { Name = model }), Encoding.UTF8, "application/json")
 			};
 
-			using var response = await _client.SendAsync(request);
+			using var response = await _client.SendAsync(request, cancellationToken);
 			response.EnsureSuccessStatusCode();
 		}
 
-		public async Task<IEnumerable<Model>> ListLocalModels()
+		public async Task<IEnumerable<Model>> ListLocalModels(CancellationToken cancellationToken = default)
 		{
-			var data = await GetAsync<ListModelsResponse>("/api/tags");
+			var data = await GetAsync<ListModelsResponse>("/api/tags", cancellationToken);
 			return data.Models;
 		}
 
-		public async Task<ShowModelResponse> ShowModelInformation(string model)
+		public async Task<ShowModelResponse> ShowModelInformation(string model, CancellationToken cancellationToken = default)
 		{
-			return await PostAsync<ShowModelRequest, ShowModelResponse>("/api/show", new ShowModelRequest { Name = model });
+			return await PostAsync<ShowModelRequest, ShowModelResponse>("/api/show", new ShowModelRequest { Name = model }, cancellationToken);
 		}
 
-		public async Task CopyModel(CopyModelRequest request)
+		public async Task CopyModel(CopyModelRequest request, CancellationToken cancellationToken = default)
 		{
-			await PostAsync("/api/copy", request);
+			await PostAsync("/api/copy", request, cancellationToken);
 		}
 
-		public async Task PullModel(PullModelRequest request, IResponseStreamer<PullStatus> streamer)
+		public async Task PullModel(PullModelRequest request, IResponseStreamer<PullStatus> streamer, CancellationToken cancellationToken = default)
 		{
-			await StreamPostAsync("/api/pull", request, streamer);
+			await StreamPostAsync("/api/pull", request, streamer, cancellationToken);
 		}
 
-		public async Task PushModel(PushRequest request, IResponseStreamer<PushStatus> streamer)
+		public async Task PushModel(PushRequest request, IResponseStreamer<PushStatus> streamer, CancellationToken cancellationToken = default)
 		{
-			await StreamPostAsync("/api/push", request, streamer);
+			await StreamPostAsync("/api/push", request, streamer, cancellationToken);
 		}
 
-		public async Task<GenerateEmbeddingResponse> GenerateEmbeddings(GenerateEmbeddingRequest request)
+		public async Task<GenerateEmbeddingResponse> GenerateEmbeddings(GenerateEmbeddingRequest request, CancellationToken cancellationToken = default)
 		{
-			return await PostAsync<GenerateEmbeddingRequest, GenerateEmbeddingResponse>("/api/embeddings", request);
+			return await PostAsync<GenerateEmbeddingRequest, GenerateEmbeddingResponse>("/api/embeddings", request, cancellationToken);
 		}
 
-		public async Task<ConversationContext> StreamCompletion(GenerateCompletionRequest request, IResponseStreamer<GenerateCompletionResponseStream> streamer)
+		public async Task<ConversationContext> StreamCompletion(GenerateCompletionRequest request, IResponseStreamer<GenerateCompletionResponseStream> streamer, CancellationToken cancellationToken = default)
 		{
-			return await GenerateCompletion(request, streamer);
+			return await GenerateCompletion(request, streamer, cancellationToken);
 		}
 
-		public async Task<ConversationContextWithResponse> GetCompletion(GenerateCompletionRequest request)
+		public async Task<ConversationContextWithResponse> GetCompletion(GenerateCompletionRequest request, CancellationToken cancellationToken = default)
 		{
 			var builder = new StringBuilder();
-			var result = await GenerateCompletion(request, new ActionResponseStreamer<GenerateCompletionResponseStream>(status => builder.Append(status.Response)));
+			var result = await GenerateCompletion(request, new ActionResponseStreamer<GenerateCompletionResponseStream>(status => builder.Append(status.Response)), cancellationToken);
 			return new ConversationContextWithResponse(builder.ToString(), result.Context);
 		}
 
-		public async Task<IEnumerable<Message>> SendChat(ChatRequest chatRequest, IResponseStreamer<ChatResponseStream> streamer)
+		public async Task<IEnumerable<Message>> SendChat(ChatRequest chatRequest, IResponseStreamer<ChatResponseStream> streamer, CancellationToken cancellationToken = default)
 		{
 			var request = new HttpRequestMessage(HttpMethod.Post, "/api/chat")
 			{
@@ -117,13 +118,13 @@ namespace OllamaSharp
 
 			var completion = chatRequest.Stream ? HttpCompletionOption.ResponseHeadersRead : HttpCompletionOption.ResponseContentRead;
 
-			using var response = await _client.SendAsync(request, completion);
+			using var response = await _client.SendAsync(request, completion, cancellationToken);
 			response.EnsureSuccessStatusCode();
 
-			return await ProcessStreamedChatResponseAsync(chatRequest, response, streamer);
+			return await ProcessStreamedChatResponseAsync(chatRequest, response, streamer, cancellationToken);
 		}
 
-		private async Task<ConversationContext> GenerateCompletion(GenerateCompletionRequest generateRequest, IResponseStreamer<GenerateCompletionResponseStream> streamer)
+		private async Task<ConversationContext> GenerateCompletion(GenerateCompletionRequest generateRequest, IResponseStreamer<GenerateCompletionResponseStream> streamer, CancellationToken cancellationToken)
 		{
 			var request = new HttpRequestMessage(HttpMethod.Post, "/api/generate")
 			{
@@ -132,58 +133,58 @@ namespace OllamaSharp
 
 			var completion = generateRequest.Stream ? HttpCompletionOption.ResponseHeadersRead : HttpCompletionOption.ResponseContentRead;
 
-			using var response = await _client.SendAsync(request, completion);
+			using var response = await _client.SendAsync(request, completion, cancellationToken);
 			response.EnsureSuccessStatusCode();
 
-			return await ProcessStreamedCompletionResponseAsync(response, streamer);
+			return await ProcessStreamedCompletionResponseAsync(response, streamer, cancellationToken);
 		}
 
-		private async Task<TResponse> GetAsync<TResponse>(string endpoint)
+		private async Task<TResponse> GetAsync<TResponse>(string endpoint, CancellationToken cancellationToken)
 		{
-			var response = await _client.GetAsync(endpoint);
+			var response = await _client.GetAsync(endpoint, cancellationToken);
 			response.EnsureSuccessStatusCode();
 
-			var responseBody = await response.Content.ReadAsStringAsync();
+			var responseBody = await response.Content.ReadAsStringAsync(cancellationToken);
 			return JsonSerializer.Deserialize<TResponse>(responseBody);
 		}
 
-		private async Task PostAsync<TRequest>(string endpoint, TRequest request)
+		private async Task PostAsync<TRequest>(string endpoint, TRequest request, CancellationToken cancellationToken)
 		{
 			var content = new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json");
-			var response = await _client.PostAsync(endpoint, content);
+			var response = await _client.PostAsync(endpoint, content, cancellationToken);
 			response.EnsureSuccessStatusCode();
 		}
 
-		private async Task<TResponse> PostAsync<TRequest, TResponse>(string endpoint, TRequest request)
+		private async Task<TResponse> PostAsync<TRequest, TResponse>(string endpoint, TRequest request, CancellationToken cancellationToken)
 		{
 			var content = new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json");
-			var response = await _client.PostAsync(endpoint, content);
+			var response = await _client.PostAsync(endpoint, content, cancellationToken);
 			response.EnsureSuccessStatusCode();
 
-			var responseBody = await response.Content.ReadAsStringAsync();
+			var responseBody = await response.Content.ReadAsStringAsync(cancellationToken);
 
 			return JsonSerializer.Deserialize<TResponse>(responseBody);
 		}
 
-		private async Task StreamPostAsync<TRequest, TResponse>(string endpoint, TRequest requestModel, IResponseStreamer<TResponse> streamer)
+		private async Task StreamPostAsync<TRequest, TResponse>(string endpoint, TRequest requestModel, IResponseStreamer<TResponse> streamer, CancellationToken cancellationToken)
 		{
 			var request = new HttpRequestMessage(HttpMethod.Post, endpoint)
 			{
 				Content = new StringContent(JsonSerializer.Serialize(requestModel), Encoding.UTF8, "application/json")
 			};
 
-			using var response = await _client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
+			using var response = await _client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
 			response.EnsureSuccessStatusCode();
 
-			await ProcessStreamedResponseAsync(response, streamer);
+			await ProcessStreamedResponseAsync(response, streamer, cancellationToken);
 		}
 
-		private static async Task ProcessStreamedResponseAsync<TLine>(HttpResponseMessage response, IResponseStreamer<TLine> streamer)
+		private static async Task ProcessStreamedResponseAsync<TLine>(HttpResponseMessage response, IResponseStreamer<TLine> streamer, CancellationToken cancellationToken)
 		{
-			using var stream = await response.Content.ReadAsStreamAsync();
+			using var stream = await response.Content.ReadAsStreamAsync(cancellationToken);
 			using var reader = new StreamReader(stream);
 
-			while (!reader.EndOfStream)
+			while (!reader.EndOfStream && !cancellationToken.IsCancellationRequested)
 			{
 				string line = await reader.ReadLineAsync();
 				var streamedResponse = JsonSerializer.Deserialize<TLine>(line);
@@ -191,12 +192,12 @@ namespace OllamaSharp
 			}
 		}
 
-		private static async Task<ConversationContext> ProcessStreamedCompletionResponseAsync(HttpResponseMessage response, IResponseStreamer<GenerateCompletionResponseStream> streamer)
+		private static async Task<ConversationContext> ProcessStreamedCompletionResponseAsync(HttpResponseMessage response, IResponseStreamer<GenerateCompletionResponseStream> streamer, CancellationToken cancellationToken)
 		{
-			using var stream = await response.Content.ReadAsStreamAsync();
+			using var stream = await response.Content.ReadAsStreamAsync(cancellationToken);
 			using var reader = new StreamReader(stream);
 
-			while (!reader.EndOfStream)
+			while (!reader.EndOfStream && !cancellationToken.IsCancellationRequested)
 			{
 				string line = await reader.ReadLineAsync();
 				var streamedResponse = JsonSerializer.Deserialize<GenerateCompletionResponseStream>(line);
@@ -212,15 +213,15 @@ namespace OllamaSharp
 			return new ConversationContext(Array.Empty<long>());
 		}
 
-		private static async Task<IEnumerable<Message>> ProcessStreamedChatResponseAsync(ChatRequest chatRequest, HttpResponseMessage response, IResponseStreamer<ChatResponseStream> streamer)
+		private static async Task<IEnumerable<Message>> ProcessStreamedChatResponseAsync(ChatRequest chatRequest, HttpResponseMessage response, IResponseStreamer<ChatResponseStream> streamer, CancellationToken cancellationToken)
 		{
-			using var stream = await response.Content.ReadAsStreamAsync();
+			using var stream = await response.Content.ReadAsStreamAsync(cancellationToken);
 			using var reader = new StreamReader(stream);
 
 			ChatRole? responseRole = null;
 			var responseContent = new StringBuilder();
 
-			while (!reader.EndOfStream)
+			while (!reader.EndOfStream && !cancellationToken.IsCancellationRequested)
 			{
 				string line = await reader.ReadLineAsync();
 
