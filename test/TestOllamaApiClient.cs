@@ -1,4 +1,4 @@
-﻿﻿using OllamaSharp;
+﻿using OllamaSharp;
 using OllamaSharp.Models;
 using OllamaSharp.Models.Chat;
 using OllamaSharp.Streamer;

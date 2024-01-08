@@ -1,4 +1,4 @@
-﻿﻿using OllamaSharp.Models;
+﻿using OllamaSharp.Models;
 using OllamaSharp.Streamer;
 using System;
 using System.Collections.Generic;

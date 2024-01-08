@@ -12,7 +12,7 @@ namespace OllamaSharp.Models.Chat
 			Content = content;
 			Images = images;
 		}
-		
+
 		public Message(ChatRole role, string[] images)
 		{
 			Role = role;

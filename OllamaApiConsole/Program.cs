@@ -1,6 +1,5 @@
 ﻿using OllamaSharp;
 using Spectre.Console;
-using System.Runtime.CompilerServices;
 
 Console.ResetColor();
 
