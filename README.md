@@ -42,6 +42,12 @@ while (true)
 }
 ```
 
+## Api Console
+
+This project ships a full-featured demo console for all endpoints the Ollama API is exposing. It can be used to manage the Ollama host remotely and chat with the models directly from your terminal.
+
+![Api Console Demo](/docs/demo.gif)
+
 ## Credits
 
 Icon and name were reused from the amazing [Ollama project](https://github.com/jmorganca/ollama).
