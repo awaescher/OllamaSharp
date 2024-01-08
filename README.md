@@ -64,9 +64,9 @@ while (true)
 
 This project ships a full-featured demo console for all endpoints the Ollama API is exposing.
 
-This is not only a great [resource to learn](/OllamaApiConsole/Demos) about OllamaSharp, it can also be used to manage and chat with the Ollama host remotely. [Image chat](/docs/imagechat.png) is supported for multi modal models.
+This is not only a great [resource to learn](/OllamaApiConsole/Demos) about OllamaSharp, it can also be used to manage and chat with the Ollama host remotely. [Image chat](https://github.com/awaescher/OllamaSharp/blob/main/docs/imagechat.png) is supported for multi modal models.
 
-![Api Console Demo](/docs/demo.gif)
+![Api Console Demo](https://github.com/awaescher/OllamaSharp/blob/main/docs/demo.gif)
 
 ## Credits
 
