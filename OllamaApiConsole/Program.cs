@@ -12,7 +12,6 @@ var connected = false;
 do
 {
 	AnsiConsole.MarkupLine("Enter the Ollama [blue]machine name[/] or [blue]endpoint url[/]");
-	AnsiConsole.MarkupLine("[gray]Leave empty for default port on localhost[/]");
 
 	var url = OllamaConsole.ReadInput();
 
