@@ -2,6 +2,7 @@
 using OllamaSharp.Models;
 using OllamaSharp.Models.Chat;
 using OllamaSharp.Streamer;
+using System.Threading;
 
 namespace Tests;
 
@@ -12,52 +13,52 @@ public class TestOllamaApiClient : IOllamaApiClient
 
 	public string SelectedModel { get; set; }
 
-	public Task CopyModel(CopyModelRequest request)
+	public Task CopyModel(CopyModelRequest request, CancellationToken cancellationToken)
 	{
 		throw new NotImplementedException();
 	}
 
-	public Task CreateModel(CreateModelRequest request, IResponseStreamer<CreateStatus> streamer)
+	public Task CreateModel(CreateModelRequest request, IResponseStreamer<CreateStatus> streamer, CancellationToken cancellationToken)
 	{
 		throw new NotImplementedException();
 	}
 
-	public Task DeleteModel(string model)
+	public Task DeleteModel(string model, CancellationToken cancellationToken)
 	{
 		throw new NotImplementedException();
 	}
 
-	public Task<GenerateEmbeddingResponse> GenerateEmbeddings(GenerateEmbeddingRequest request)
+	public Task<GenerateEmbeddingResponse> GenerateEmbeddings(GenerateEmbeddingRequest request, CancellationToken cancellationToken)
 	{
 		throw new NotImplementedException();
 	}
 
-	public Task<ConversationContextWithResponse> GetCompletion(GenerateCompletionRequest request)
+	public Task<ConversationContextWithResponse> GetCompletion(GenerateCompletionRequest request, CancellationToken cancellationToken)
 	{
 		throw new NotImplementedException();
 	}
 
-	public Task<IEnumerable<Model>> ListLocalModels()
+	public Task<IEnumerable<Model>> ListLocalModels(CancellationToken cancellationToken)
 	{
 		throw new NotImplementedException();
 	}
 
-	public Task PullModel(PullModelRequest request, IResponseStreamer<PullStatus> streamer)
+	public Task PullModel(PullModelRequest request, IResponseStreamer<PullStatus> streamer, CancellationToken cancellationToken)
 	{
 		throw new NotImplementedException();
 	}
 
-	public Task PushModel(PushRequest request, IResponseStreamer<PushStatus> streamer)
+	public Task PushModel(PushRequest request, IResponseStreamer<PushStatus> streamer, CancellationToken cancellationToken)
 	{
 		throw new NotImplementedException();
 	}
 
-	public Task<ShowModelResponse> ShowModelInformation(string model)
+	public Task<ShowModelResponse> ShowModelInformation(string model, CancellationToken cancellationToken)
 	{
 		throw new NotImplementedException();
 	}
 
-	public async Task<IEnumerable<Message>> SendChat(ChatRequest chatRequest, Action<ChatResponseStream> streamer)
+	public async Task<IEnumerable<Message>> SendChat(ChatRequest chatRequest, Action<ChatResponseStream> streamer, CancellationToken cancellationToken)
 	{
 		var message = new Message(_role, _answer);
 		streamer(new ChatResponseStream { Done = true, Message = message, CreatedAt = DateTime.UtcNow.ToString(), Model = chatRequest.Model });
@@ -69,7 +70,7 @@ public class TestOllamaApiClient : IOllamaApiClient
 		return messages;
 	}
 
-	public async Task<IEnumerable<Message>> SendChat(ChatRequest chatRequest, IResponseStreamer<ChatResponseStream> streamer)
+	public async Task<IEnumerable<Message>> SendChat(ChatRequest chatRequest, IResponseStreamer<ChatResponseStream> streamer, CancellationToken cancellationToken)
 	{
 		var message = new Message(_role, _answer);
 		streamer.Stream(new ChatResponseStream { Done = true, Message = message, CreatedAt = DateTime.UtcNow.ToString(), Model = chatRequest.Model });
@@ -81,7 +82,7 @@ public class TestOllamaApiClient : IOllamaApiClient
 		return messages;
 	}
 
-	public Task<ConversationContext> StreamCompletion(GenerateCompletionRequest request, IResponseStreamer<GenerateCompletionResponseStream> streamer)
+	public Task<ConversationContext> StreamCompletion(GenerateCompletionRequest request, IResponseStreamer<GenerateCompletionResponseStream> streamer, CancellationToken cancellationToken)
 	{
 		throw new NotImplementedException();
 	}

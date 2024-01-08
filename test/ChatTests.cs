@@ -20,7 +20,7 @@ public class ChatTests
 			_ollama.DefineChatResponse("assistant", "hi!");
 
 			var chat = new Chat(_ollama, answer => answerFromAssistant = answer);
-			await chat.Send("henlo");
+			await chat.Send("henlo", CancellationToken.None);
 
 			answerFromAssistant.Message.Role.Should().Be(ChatRole.Assistant);
 			answerFromAssistant.Message.Content.Should().Be("hi!");
@@ -30,7 +30,7 @@ public class ChatTests
 		public async Task Sends_Messages_As_User()
 		{
 			var chat = new Chat(_ollama, _ => { });
-			var history = (await chat.Send("henlo")).ToArray();
+			var history = (await chat.Send("henlo", CancellationToken.None)).ToArray();
 
 			history[0].Role.Should().Be(ChatRole.User);
 			history[0].Content.Should().Be("henlo");
@@ -42,7 +42,7 @@ public class ChatTests
 			_ollama.DefineChatResponse(ChatRole.Assistant, "hi!");
 
 			var chat = new Chat(_ollama, _ => { });
-			var history = (await chat.Send("henlo")).ToArray();
+			var history = (await chat.Send("henlo", CancellationToken.None)).ToArray();
 
 			history.Length.Should().Be(2);
 			history[0].Role.Should().Be(ChatRole.User);
@@ -60,7 +60,7 @@ public class ChatTests
 			_ollama.DefineChatResponse(ChatRole.Assistant, "hi system!");
 
 			var chat = new Chat(_ollama, _ => { });
-			var history = (await chat.SendAs(ChatRole.System, "henlo hooman")).ToArray();
+			var history = (await chat.SendAs(ChatRole.System, "henlo hooman", CancellationToken.None)).ToArray();
 
 			history.Length.Should().Be(2);
 			history[0].Role.Should().Be(ChatRole.System);
