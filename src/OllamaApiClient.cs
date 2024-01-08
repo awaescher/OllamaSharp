@@ -229,7 +229,7 @@ namespace OllamaSharp
 
 				// keep the streamed content to build the last message
 				// to return the list of messages
-				responseRole = streamedResponse?.Message?.Role;
+				responseRole ??= streamedResponse?.Message?.Role;
 				responseContent.Append(streamedResponse?.Message?.Content ?? "");
 
 				streamer.Stream(streamedResponse);
