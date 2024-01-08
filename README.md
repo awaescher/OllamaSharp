@@ -8,7 +8,7 @@ OllamaSharp is a .NET binding for the [Ollama API](https://github.com/jmorganca/
 - API endpoint coverage: Support for all Ollama API endpoints including chats, embeddings, listing models, pulling and creating new models, and more.
 - Real-time streaming: Stream responses directly to your application.
 - Progress reporting: Get real-time progress feedback on tasks like model pulling.
-- [API Console](api-console): A ready-to-use API console to chat and manage your Ollama host remotely
+- [API Console](#-api-console): A ready-to-use API console to chat and manage your Ollama host remotely
 
 ## Usage
 
