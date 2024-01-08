@@ -18,6 +18,9 @@ Here's a simple example to get you started:
 var uri = new Uri("http://localhost:11434");
 var ollama = new OllamaApiClient(uri);
 
+// select a model which should be used for further operations
+ollama.SelectedModel = "llama2";
+
 // list all local models
 var models = await ollama.ListLocalModels();
 
@@ -27,12 +30,10 @@ await ollama.PullModel("mistral", status => Console.WriteLine($"({status.Percent
 // stream a completion and write to the console
 // keep reusing the context to keep the chat topic going
 ConversationContext context = null;
-context = await ollama.StreamCompletion("How are you today?", "llama2", context, stream => Console.Write(stream.Response));
+context = await ollama.StreamCompletion("How are you today?", context, stream => Console.Write(stream.Response));
 
-// build an interactive full-featured chat with a few lines
-// of code with the /chat api from Ollama 0.1.14
-// messages including their roles will automatically be tracked
-// within the chat object
+// build an interactive full-featured chat with a few lines of code with the /chat api from Ollama 0.1.14
+// messages including their roles will automatically be tracked within the chat object
 var chat = ollama.Chat(stream => Console.WriteLine(stream.Message?.Content ?? ""));
 while (true)
 {
