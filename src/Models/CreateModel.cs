@@ -15,6 +15,7 @@ namespace OllamaSharp.Models
 
 		/// <summary>
 		/// Contents of the Modelfile
+		/// See https://github.com/jmorganca/ollama/blob/main/docs/modelfile.md
 		/// </summary>
 		[JsonPropertyName("modelfile")]
 		public string ModelFileContent { get; set; }
