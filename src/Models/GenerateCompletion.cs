@@ -23,31 +23,50 @@ namespace OllamaSharp.Models
 		/// Additional model parameters listed in the documentation for the Modelfile such as temperature
 		/// </summary>
 		[JsonPropertyName("options")]
-		public string Options { get; set; }
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+		public RequestOptions Options { get; set; }
 
 		/// <summary>
 		/// Base64-encoded images (for multimodal models such as llava)
 		/// </summary>
 		[JsonPropertyName("images")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string[] Images { get; set; }
 
 		/// <summary>
 		/// System prompt to (overrides what is defined in the Modelfile)
 		/// </summary>
 		[JsonPropertyName("system")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string System { get; set; }
 
 		/// <summary>
 		/// The full prompt or prompt template (overrides what is defined in the Modelfile)
 		/// </summary>
 		[JsonPropertyName("template")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string Template { get; set; }
 
 		/// <summary>
 		/// The context parameter returned from a previous request to /generate, this can be used to keep a short conversational memory
 		/// </summary>
 		[JsonPropertyName("context")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public long[] Context { get; set; }
+
+		/// <summary>
+		/// Gets or sets the KeepAlive property, which decides how long a given model should stay loaded.
+		/// </summary>
+		[JsonPropertyName("keep_alive")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+		public string KeepAlive { get; set; }
+
+		/// <summary>
+		/// The format to return a response in. Currently only accepts "json" or null.
+		/// </summary>
+		[JsonPropertyName("format")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+		public string Format { get; set; }
 
 		/// <summary>
 		/// If false the response will be returned as a single response object, rather than a stream of objects

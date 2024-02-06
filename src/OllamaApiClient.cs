@@ -52,12 +52,12 @@ namespace OllamaSharp
 
 		public async Task CreateModel(CreateModelRequest request, IResponseStreamer<CreateStatus> streamer, CancellationToken cancellationToken = default)
 		{
-			await StreamPostAsync("/api/create", request, streamer, cancellationToken);
+			await StreamPostAsync("api/create", request, streamer, cancellationToken);
 		}
 
 		public async Task DeleteModel(string model, CancellationToken cancellationToken = default)
 		{
-			var request = new HttpRequestMessage(HttpMethod.Delete, "/api/delete")
+			var request = new HttpRequestMessage(HttpMethod.Delete, "api/delete")
 			{
 				Content = new StringContent(JsonSerializer.Serialize(new DeleteModelRequest { Name = model }), Encoding.UTF8, "application/json")
 			};
@@ -68,33 +68,33 @@ namespace OllamaSharp
 
 		public async Task<IEnumerable<Model>> ListLocalModels(CancellationToken cancellationToken = default)
 		{
-			var data = await GetAsync<ListModelsResponse>("/api/tags", cancellationToken);
+			var data = await GetAsync<ListModelsResponse>("api/tags", cancellationToken);
 			return data.Models;
 		}
 
 		public async Task<ShowModelResponse> ShowModelInformation(string model, CancellationToken cancellationToken = default)
 		{
-			return await PostAsync<ShowModelRequest, ShowModelResponse>("/api/show", new ShowModelRequest { Name = model }, cancellationToken);
+			return await PostAsync<ShowModelRequest, ShowModelResponse>("api/show", new ShowModelRequest { Name = model }, cancellationToken);
 		}
 
 		public async Task CopyModel(CopyModelRequest request, CancellationToken cancellationToken = default)
 		{
-			await PostAsync("/api/copy", request, cancellationToken);
+			await PostAsync("api/copy", request, cancellationToken);
 		}
 
 		public async Task PullModel(PullModelRequest request, IResponseStreamer<PullStatus> streamer, CancellationToken cancellationToken = default)
 		{
-			await StreamPostAsync("/api/pull", request, streamer, cancellationToken);
+			await StreamPostAsync("api/pull", request, streamer, cancellationToken);
 		}
 
 		public async Task PushModel(PushRequest request, IResponseStreamer<PushStatus> streamer, CancellationToken cancellationToken = default)
 		{
-			await StreamPostAsync("/api/push", request, streamer, cancellationToken);
+			await StreamPostAsync("api/push", request, streamer, cancellationToken);
 		}
 
 		public async Task<GenerateEmbeddingResponse> GenerateEmbeddings(GenerateEmbeddingRequest request, CancellationToken cancellationToken = default)
 		{
-			return await PostAsync<GenerateEmbeddingRequest, GenerateEmbeddingResponse>("/api/embeddings", request, cancellationToken);
+			return await PostAsync<GenerateEmbeddingRequest, GenerateEmbeddingResponse>("api/embeddings", request, cancellationToken);
 		}
 
 		public async Task<ConversationContext> StreamCompletion(GenerateCompletionRequest request, IResponseStreamer<GenerateCompletionResponseStream> streamer, CancellationToken cancellationToken = default)
@@ -111,7 +111,7 @@ namespace OllamaSharp
 
 		public async Task<IEnumerable<Message>> SendChat(ChatRequest chatRequest, IResponseStreamer<ChatResponseStream> streamer, CancellationToken cancellationToken = default)
 		{
-			var request = new HttpRequestMessage(HttpMethod.Post, "/api/chat")
+			var request = new HttpRequestMessage(HttpMethod.Post, "api/chat")
 			{
 				Content = new StringContent(JsonSerializer.Serialize(chatRequest), Encoding.UTF8, "application/json")
 			};
@@ -126,7 +126,7 @@ namespace OllamaSharp
 
 		private async Task<ConversationContext> GenerateCompletion(GenerateCompletionRequest generateRequest, IResponseStreamer<GenerateCompletionResponseStream> streamer, CancellationToken cancellationToken)
 		{
-			var request = new HttpRequestMessage(HttpMethod.Post, "/api/generate")
+			var request = new HttpRequestMessage(HttpMethod.Post, "api/generate")
 			{
 				Content = new StringContent(JsonSerializer.Serialize(generateRequest), Encoding.UTF8, "application/json")
 			};
