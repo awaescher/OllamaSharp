@@ -1,14 +1,14 @@
-﻿using System.Text.Json.Serialization;
+﻿#nullable enable
 
-#nullable enable
+using System.Text.Json.Serialization;
 
-namespace OllamaSharp.Models.Chat.Options
+namespace OllamaSharp.Models
 {
 	// I don't see why we would need a ctor for so many properties, so I will just not add it...
 	/// <summary>
 	/// The configuration information used for a chat completions request.
 	/// </summary>
-	public partial class ChatCompletionOptions
+	public partial class RequestOptions
 	{
 		/// <summary>
 		/// Enable Mirostat sampling for controlling perplexity. (default: 0, 0 = disabled, 1 = Mirostat, 2 = Mirostat 2.0)
