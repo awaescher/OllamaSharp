@@ -127,6 +127,6 @@ namespace OllamaSharp.Models
 		/// </summary>
 		[JsonPropertyName("top_p")]
 		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-		public int? TopP { get; set; }
+		public float? TopP { get; set; }
 	}
 }
