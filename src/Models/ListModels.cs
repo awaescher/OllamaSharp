@@ -44,7 +44,7 @@ namespace OllamaSharp.Models
         public string Family { get; set; }
 
         [JsonPropertyName("families")]
-        public string[] Families { get; set; }
+        public string[]? Families { get; set; }
 
         [JsonPropertyName("parameter_size")]
         public string ParameterSize { get; set; }
