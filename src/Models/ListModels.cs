@@ -27,5 +27,29 @@ namespace OllamaSharp.Models
 
 		[JsonPropertyName("digest")]
 		public string Digest { get; set; }
-	}
+
+        [JsonPropertyName("details")]
+        public Details Details { get; set; }
+    }
+
+    public class Details
+    {
+        [JsonPropertyName("parent_model")]
+        public string ParentModel { get; set; }
+
+        [JsonPropertyName("format")]
+        public string Format { get; set; }
+
+        [JsonPropertyName("family")]
+        public string Family { get; set; }
+
+        [JsonPropertyName("families")]
+        public string[] Families { get; set; }
+
+        [JsonPropertyName("parameter_size")]
+        public string ParameterSize { get; set; }
+
+        [JsonPropertyName("quantization_level")]
+        public string QuantizationLevel { get; set; }
+    }
 }
