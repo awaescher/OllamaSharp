@@ -15,13 +15,14 @@ public class ChatTests
 		[Test]
 		public async Task Sends_Assistant_Answer_To_Streamer()
 		{
-			ChatResponseStream answerFromAssistant = null;
+			ChatResponseStream? answerFromAssistant = null;
 
 			_ollama.DefineChatResponse("assistant", "hi!");
 
 			var chat = new Chat(_ollama, answer => answerFromAssistant = answer);
 			await chat.Send("henlo", CancellationToken.None);
 
+			answerFromAssistant.Should().NotBeNull();
 			answerFromAssistant.Message.Role.Should().Be(ChatRole.Assistant);
 			answerFromAssistant.Message.Content.Should().Be("hi!");
 		}

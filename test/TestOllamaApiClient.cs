@@ -9,9 +9,9 @@ namespace Tests;
 public class TestOllamaApiClient : IOllamaApiClient
 {
 	private ChatRole _role;
-	private string _answer;
+	private string _answer = string.Empty;
 
-	public string SelectedModel { get; set; }
+	public string SelectedModel { get; set; } = string.Empty;
 
 	public Task CopyModel(CopyModelRequest request, CancellationToken cancellationToken)
 	{
