@@ -144,7 +144,7 @@ namespace OllamaSharp
 			var response = await _client.GetAsync(endpoint, cancellationToken);
 			response.EnsureSuccessStatusCode();
 
-			var responseBody = await response.Content.ReadAsStringAsync(cancellationToken);
+			var responseBody = await response.Content.ReadAsStringAsync();
 			return JsonSerializer.Deserialize<TResponse>(responseBody);
 		}
 
@@ -161,7 +161,7 @@ namespace OllamaSharp
 			var response = await _client.PostAsync(endpoint, content, cancellationToken);
 			response.EnsureSuccessStatusCode();
 
-			var responseBody = await response.Content.ReadAsStringAsync(cancellationToken);
+			var responseBody = await response.Content.ReadAsStringAsync();
 
 			return JsonSerializer.Deserialize<TResponse>(responseBody);
 		}
@@ -181,7 +181,7 @@ namespace OllamaSharp
 
 		private static async Task ProcessStreamedResponseAsync<TLine>(HttpResponseMessage response, IResponseStreamer<TLine> streamer, CancellationToken cancellationToken)
 		{
-			using var stream = await response.Content.ReadAsStreamAsync(cancellationToken);
+			using var stream = await response.Content.ReadAsStreamAsync();
 			using var reader = new StreamReader(stream);
 
 			while (!reader.EndOfStream && !cancellationToken.IsCancellationRequested)
@@ -194,7 +194,7 @@ namespace OllamaSharp
 
 		private static async Task<ConversationContext> ProcessStreamedCompletionResponseAsync(HttpResponseMessage response, IResponseStreamer<GenerateCompletionResponseStream> streamer, CancellationToken cancellationToken)
 		{
-			using var stream = await response.Content.ReadAsStreamAsync(cancellationToken);
+			using var stream = await response.Content.ReadAsStreamAsync();
 			using var reader = new StreamReader(stream);
 
 			while (!reader.EndOfStream && !cancellationToken.IsCancellationRequested)
@@ -215,7 +215,7 @@ namespace OllamaSharp
 
 		private static async Task<IEnumerable<Message>> ProcessStreamedChatResponseAsync(ChatRequest chatRequest, HttpResponseMessage response, IResponseStreamer<ChatResponseStream> streamer, CancellationToken cancellationToken)
 		{
-			using var stream = await response.Content.ReadAsStreamAsync(cancellationToken);
+			using var stream = await response.Content.ReadAsStreamAsync();
 			using var reader = new StreamReader(stream);
 
 			ChatRole? responseRole = null;
