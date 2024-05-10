@@ -14,7 +14,7 @@ namespace Tests;
 public class OllamaApiClientTests
 {
 	private OllamaApiClient _client;
-	private HttpResponseMessage _response;
+	private HttpResponseMessage? _response;
 
 	[OneTimeSetUp]
 	public void Setup()

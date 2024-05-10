@@ -128,9 +128,9 @@ public class ModelManagerConsole : OllamaConsole
 
 		await AnsiConsole.Progress().StartAsync(async context =>
 		{
-			ProgressTask task = null;
+			ProgressTask? task = null;
 			await Ollama.PullModel(pullModel, status => UpdateProgressTaskByStatus(context, ref task, status));
-			task.StopTask();
+			task?.StopTask();
 		});
 	}
 
@@ -140,7 +140,7 @@ public class ModelManagerConsole : OllamaConsole
 		await Ollama.PushModel("mattw/pygmalion:latest", status => AnsiConsole.MarkupLineInterpolated($"{status.Status}"));
 	}
 
-	private void UpdateProgressTaskByStatus(ProgressContext context, ref ProgressTask task, PullStatus status)
+	private void UpdateProgressTaskByStatus(ProgressContext context, ref ProgressTask? task, PullStatus status)
 	{
 		if (status.Status != task?.Description)
 		{
