@@ -92,4 +92,6 @@ public class TestOllamaApiClient : IOllamaApiClient
 		_role = role;
 		_answer = answer;
 	}
+
+	public Task<bool> IsRunning(CancellationToken cancellationToken = default) => Task.FromResult(true);
 }
