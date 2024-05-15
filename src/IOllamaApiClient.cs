@@ -120,5 +120,11 @@ namespace OllamaSharp
 		/// Should be reused for further calls to this method to keep a chat going.
 		/// </returns>
 		Task<ConversationContext> StreamCompletion(GenerateCompletionRequest request, IResponseStreamer<GenerateCompletionResponseStream> streamer, CancellationToken cancellationToken = default);
+
+		/// <summary>
+		/// Sends a query to check whether the Ollama api is running or not
+		/// </summary>
+		/// <param name="cancellationToken">The token to cancel the operation with</param>
+		Task<bool> IsRunning(CancellationToken cancellationToken = default);
 	}
 }
