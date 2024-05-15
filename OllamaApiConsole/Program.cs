@@ -6,7 +6,7 @@ Console.ResetColor();
 AnsiConsole.Write(new Rule("OllamaSharp Api Console").LeftJustified());
 AnsiConsole.WriteLine();
 
-OllamaApiClient ollama;
+OllamaApiClient ollama = null;
 var connected = false;
 
 do
@@ -27,15 +27,14 @@ do
 	var uri = new Uri(url);
 	Console.WriteLine($"Connecting to {uri} ...");
 
-	ollama = new OllamaApiClient(url);
-
 	try
 	{
+		ollama = new OllamaApiClient(url);
+		connected = await ollama.IsRunning();
+
 		var models = await ollama.ListLocalModels();
 		if (!models.Any())
 			AnsiConsole.MarkupLineInterpolated($"[yellow]Your Ollama instance does not provide any models :([/]");
-
-		connected = true;
 	}
 	catch (Exception ex)
 	{
@@ -43,7 +42,6 @@ do
 		AnsiConsole.WriteLine();
 	}
 } while (!connected);
-
 
 string demo;
 
