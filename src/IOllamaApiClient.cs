@@ -75,16 +75,22 @@ namespace OllamaSharp
 		/// <param name="cancellationToken">The token to cancel the operation with</param>
 		Task<IEnumerable<Model>> ListLocalModels(CancellationToken cancellationToken = default);
 
-		/// <summary>
-		/// Sends a request to the /api/pull endpoint to pull a new model
-		/// </summary>
-		/// <param name="request">The request parameters</param>
-		/// <param name="streamer">
-		/// The streamer that receives status updates as they are streamed by the Ollama endpoint.
-		/// Can be used to update the user interface while the operation is running.
-		/// </param>
-		/// <param name="cancellationToken">The token to cancel the operation with</param>
-		Task PullModel(PullModelRequest request, IResponseStreamer<PullStatus> streamer, CancellationToken cancellationToken = default);
+        /// <summary>
+        /// Sends a request to the /api/ps endpoint to get the running models
+        /// </summary>
+        /// <param name="cancellationToken">The token to cancel the operation with</param>
+        Task<IEnumerable<RunningModel>> ListRunningModels(CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Sends a request to the /api/pull endpoint to pull a new model
+        /// </summary>
+        /// <param name="request">The request parameters</param>
+        /// <param name="streamer">
+        /// The streamer that receives status updates as they are streamed by the Ollama endpoint.
+        /// Can be used to update the user interface while the operation is running.
+        /// </param>
+        /// <param name="cancellationToken">The token to cancel the operation with</param>
+        Task PullModel(PullModelRequest request, IResponseStreamer<PullStatus> streamer, CancellationToken cancellationToken = default);
 
 		/// <summary>
 		/// Sends a request to the /api/push endpoint to push a new model
