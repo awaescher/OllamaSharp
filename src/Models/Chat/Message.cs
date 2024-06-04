@@ -6,7 +6,7 @@ namespace OllamaSharp.Models.Chat;
 [DebuggerDisplay("{Role}: {Content}")]
 public class Message
 {
-	public Message(ChatRole role, string content, string[] images)
+	public Message(ChatRole role, string content, string[]? images)
 	{
 		Role = role;
 		Content = content;
@@ -40,11 +40,11 @@ public class Message
 	/// The content of the message
 	/// </summary>
 	[JsonPropertyName("content")]
-	public string Content { get; set; }
+	public string? Content { get; set; }
 
 	/// <summary>
 	/// Base64-encoded images (for multimodal models such as llava)
 	/// </summary>
 	[JsonPropertyName("images")]
-	public string[] Images { get; set; }
+	public string[]? Images { get; set; }
 }
