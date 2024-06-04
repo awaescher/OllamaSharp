@@ -33,6 +33,38 @@ public class OllamaApiClientTests
 		_client = new OllamaApiClient(httpClient);
 	}
 
+	public class CreateModelMethod : OllamaApiClientTests
+	{
+		[Test]
+		public async Task Streams_Status_Updates()
+		{
+			await using var stream = new MemoryStream();
+
+			_response = new HttpResponseMessage
+			{
+				StatusCode = HttpStatusCode.OK,
+				Content = new StreamContent(stream)
+			};
+
+			await using var writer = new StreamWriter(stream, leaveOpen: true);
+			writer.AutoFlush = true;
+			await writer.WriteLineAsync("{\"status\": \"Creating model\"}");
+			await writer.WriteLineAsync("{\"status\": \"Downloading model\"}");
+			await writer.WriteLineAsync("{\"status\": \"Model created\"}");
+			stream.Seek(0, SeekOrigin.Begin);
+
+			var builder = new StringBuilder();
+			var modelStream = _client.CreateModel(
+				new CreateModelRequest(),
+				CancellationToken.None);
+
+			await foreach (var status in modelStream)
+				builder.Append(status?.Status);
+
+			builder.ToString().Should().Be("Creating modelDownloading modelModel created");
+		}
+	}
+
 	public class GetCompletionMethod : OllamaApiClientTests
 	{
 		[Test]
@@ -88,6 +120,40 @@ public class OllamaApiClientTests
 			builder.ToString().Should().Be("The sky is blue.");
 			context.Context.Should().BeEquivalentTo(new int[] { 1, 2, 3 });
 		}
+		
+		[Test]
+		public async Task Streams_Response_Chunks_As_AsyncEnumerable()
+		{
+			await using var stream = new MemoryStream();
+
+			_response = new HttpResponseMessage
+			{
+				StatusCode = HttpStatusCode.OK,
+				Content = new StreamContent(stream)
+			};
+
+			await using var writer = new StreamWriter(stream, leaveOpen: true);
+			writer.AutoFlush = true;
+			await writer.WriteCompletionStreamResponse("The ");
+			await writer.WriteCompletionStreamResponse("sky ");
+			await writer.WriteCompletionStreamResponse("is ");
+			await writer.FinishCompletionStreamResponse("blue.", context: [1, 2, 3]);
+			stream.Seek(0, SeekOrigin.Begin);
+
+			var builder = new StringBuilder();
+			var completionStream = _client.StreamCompletion("prompt", null, CancellationToken.None);
+			GenerateCompletionDoneResponseStream? final = null;
+			await foreach(var response in completionStream)
+			{
+				builder.Append(response?.Response);
+				if (response?.Done ?? false) final = (GenerateCompletionDoneResponseStream) response;
+			}
+
+			builder.ToString().Should().Be("The sky is blue.");
+			final.Should().NotBeNull();
+			final.Context.Should().NotBeNull();
+			final.Context.Should().BeEquivalentTo(new[] { 1, 2, 3 });
+		}
 	}
 
 	public class SendChatMethod : OllamaApiClientTests
@@ -124,7 +190,7 @@ public class OllamaApiClientTests
 			};
 
 			var messages = (await _client.SendChat(chat, s => builder.Append(s.Message), CancellationToken.None)).ToArray();
-
+			
 			messages.Length.Should().Be(4);
 
 			messages[0].Role.Should().Be(ChatRole.User);
@@ -140,6 +206,59 @@ public class OllamaApiClientTests
 			messages[3].Content.Should().Be("Leave me alone.");
 		}
 	}
+
+	public class StreamChatMethod : OllamaApiClientTests
+	{
+		[Test]
+		public async Task Streams_Response_Message_Chunks()
+		{
+			await using var stream = new MemoryStream();
+
+			_response = new HttpResponseMessage
+			{
+				StatusCode = HttpStatusCode.OK,
+				Content = new StreamContent(stream)
+			};
+
+			await using var writer = new StreamWriter(stream, leaveOpen: true);
+			writer.AutoFlush = true;
+			await writer.WriteChatStreamResponse("Leave ", ChatRole.Assistant);
+			await writer.WriteChatStreamResponse("me ", ChatRole.Assistant);
+			await writer.FinishChatStreamResponse("alone.", ChatRole.Assistant);
+			stream.Seek(0, SeekOrigin.Begin);
+
+			var chat = new ChatRequest
+			{
+				Model = "model",
+				Messages = new Message[]
+				{
+					new(ChatRole.User, "Why?"),
+					new(ChatRole.Assistant, "Because!"),
+					new(ChatRole.User, "And where?"),
+				}
+			};
+
+			var chatStream = _client.StreamChat(chat, CancellationToken.None);
+			var builder = new StringBuilder();
+			var responses = new List<Message?>();
+
+			await foreach (var response in chatStream)
+			{
+				builder.Append(response?.Message.Content);
+				responses.Add(response?.Message);
+			}
+			
+			var chatResponse = builder.ToString();
+			
+			chatResponse.Should().BeEquivalentTo("Leave me alone.");
+
+			responses.Should().HaveCount(3);
+			responses[0].Role.Should().Be(ChatRole.Assistant);
+			responses[1].Role.Should().Be(ChatRole.Assistant);
+			responses[2].Role.Should().Be(ChatRole.Assistant);
+		}
+	}
+
 
 	public class ListLocalModelsAsyncMethod : OllamaApiClientTests
 	{

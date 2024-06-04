@@ -35,17 +35,39 @@ var models = await ollama.ListLocalModels();
 
 ### Pulling a model and reporting progress
 
+#### Callback Syntax
 ```csharp
 await ollama.PullModel("mistral", status => Console.WriteLine($"({status.Percent}%) {status.Status}"));
 ```
 
+#### IAsyncEnumerable Syntax
+```csharp
+await foreach (var status in ollama.PullModel("mistral"))
+{
+    Console.WriteLine($"({status.Percent}%) {status.Status}");
+}
+```
+
 ### Streaming a completion directly into the console
 
+#### Callback Syntax
 ```csharp
 // keep reusing the context to keep the chat topic going
 ConversationContext context = null;
 context = await ollama.StreamCompletion("How are you today?", context, stream => Console.Write(stream.Response));
 ```
+
+#### IAsyncEnumerable Syntax
+```csharp
+// keep reusing the context to keep the chat topic going
+ConversationContext context = null;
+await foreach (var stream in ollama.StreamCompletion("How are you today?", context))
+{
+    Console.Write(stream.Response);
+    context = stream.Context;
+}
+```
+
 
 ### Building interactive chats
 
