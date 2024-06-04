@@ -59,7 +59,7 @@ namespace OllamaSharp
 		{
 			var request = new HttpRequestMessage(HttpMethod.Delete, "api/delete")
 			{
-				Content = new StringContent(JsonSerializer.Serialize(new DeleteModelRequest { Name = model }), Encoding.UTF8, "application/json")
+				Content = new StringContent(JsonSerializer.Serialize(new DeleteModelRequest { Model = model }), Encoding.UTF8, "application/json")
 			};
 
 			using var response = await _client.SendAsync(request, cancellationToken);
@@ -81,7 +81,7 @@ namespace OllamaSharp
 
         public async Task<ShowModelResponse> ShowModelInformation(string model, CancellationToken cancellationToken = default)
 		{
-			return await PostAsync<ShowModelRequest, ShowModelResponse>("api/show", new ShowModelRequest { Name = model }, cancellationToken);
+			return await PostAsync<ShowModelRequest, ShowModelResponse>("api/show", new ShowModelRequest { Model = model }, cancellationToken);
 		}
 
 		public async Task CopyModel(CopyModelRequest request, CancellationToken cancellationToken = default)
