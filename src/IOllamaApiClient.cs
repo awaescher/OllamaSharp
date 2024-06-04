@@ -31,6 +31,16 @@ namespace OllamaSharp
 		Task<IEnumerable<Message>> SendChat(ChatRequest chatRequest, IResponseStreamer<ChatResponseStream> streamer, CancellationToken cancellationToken = default);
 
 		/// <summary>
+		/// Sends a request to the /api/chat endpoint and streams the response of the chat.
+		/// </summary>
+		/// <param name="chatRequest">The request to send to Ollama</param>
+		/// <param name="cancellationToken">The token to cancel the operation with</param>
+		/// <returns>
+		/// An asynchronous enumerable that yields ChatResponseStream. Each item represents a message in the chat response stream.
+		/// Returns null when the stream is completed.</returns>
+		IAsyncEnumerable<ChatResponseStream?> StreamChat(ChatRequest chatRequest, [EnumeratorCancellation] CancellationToken cancellationToken = default);
+		
+		/// <summary>
 		/// Sends a request to the /api/copy endpoint to copy a model
 		/// </summary>
 		/// <param name="request">The parameters required to copy a model</param>
