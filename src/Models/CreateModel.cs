@@ -1,19 +1,27 @@
-﻿using System.Text.Json.Serialization;
+﻿using System;
+using System.Text.Json.Serialization;
 
 namespace OllamaSharp.Models
 {
     /// <summary>
     /// https://github.com/jmorganca/ollama/blob/main/docs/api.md#create-a-model
     /// </summary>
-
+    
     [JsonUnmappedMemberHandling(JsonUnmappedMemberHandling.Skip)]
     public class CreateModelRequest
     {
         /// <summary>
         /// Name of the model to create
         /// </summary>
+        [JsonPropertyName("model")]
+        public string? Model { get; set; }
+
+        /// <summary>
+        /// Name of the model to create(Obsolete)
+        /// </summary>
+        [Obsolete("Name is deprecated, see Model")]
         [JsonPropertyName("name")]
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         /// <summary>
         /// Contents of the Modelfile
