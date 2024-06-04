@@ -171,7 +171,6 @@ namespace OllamaSharp
 		/// Ollama API based on the provided request.
 		/// </summary>
 		/// <param name="request">The request containing the parameters for the completion.</param>
-		/// <param name="streamer">The streamer that receives parts of the completion response as they are streamed by the Ollama endpoint.</param>
 		/// <param name="cancellationToken">The token to cancel the operation with.</param>
 		/// <returns>An asynchronous enumerable of completion response streams.</returns>
 		IAsyncEnumerable<GenerateCompletionResponseStream?> StreamCompletion(GenerateCompletionRequest request, [EnumeratorCancellation] CancellationToken cancellationToken = default);
