@@ -1,16 +1,15 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace OllamaSharp.Models
-{
-	/// <summary>
-	/// https://github.com/jmorganca/ollama/blob/main/docs/api.md#copy-a-model
-	/// </summary>
-	public class CopyModelRequest
-	{
-		[JsonPropertyName("source")]
-		public string Source { get; set; }
+namespace OllamaSharp.Models;
 
-		[JsonPropertyName("destination")]
-		public string Destination { get; set; }
-	}
+/// <summary>
+/// https://github.com/jmorganca/ollama/blob/main/docs/api.md#copy-a-model
+/// </summary>
+public class CopyModelRequest
+{
+	[JsonPropertyName("source")]
+	public string Source { get; set; }
+
+	[JsonPropertyName("destination")]
+	public string Destination { get; set; }
 }
