@@ -1,18 +1,22 @@
-﻿using System.Text.Json.Serialization;
+﻿using System;
+using System.Text.Json.Serialization;
 
 namespace OllamaSharp.Models
 {
-	/// <summary>
-	/// https://github.com/jmorganca/ollama/blob/main/docs/api.md#pull-a-model
-	/// </summary>
-	public class PullModelRequest
-	{
-		[JsonPropertyName("name")]
-		public string Name { get; set; }
+    /// <summary>
+    /// https://github.com/jmorganca/ollama/blob/main/docs/api.md#pull-a-model
+    /// </summary>
 
-		[JsonPropertyName("insecure")]
-		public bool Insecure { get; set; }
-	}
+    [Obsolete("Name is deprecated, see Model")]
+    public class PullModelRequest
+	{
+        [Obsolete("Name is deprecated, see Model")]
+        [JsonPropertyName("name")]
+        public string? Name { get; set; }
+
+        [JsonPropertyName("model")]
+        public string? Model { get; set; }
+    }
 
 	public class PullStatus
 	{

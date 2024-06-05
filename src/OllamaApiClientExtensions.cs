@@ -103,7 +103,7 @@ namespace OllamaSharp
 		/// <param name="cancellationToken">The token to cancel the operation with</param>
 		public static async Task CreateModel(this IOllamaApiClient client, string name, string modelFileContent, IResponseStreamer<CreateStatus> streamer, CancellationToken cancellationToken = default)
 		{
-			await client.CreateModel(new CreateModelRequest { Name = name, ModelFileContent = modelFileContent, Stream = true }, streamer, cancellationToken);
+			await client.CreateModel(new CreateModelRequest { Model = name, ModelFileContent = modelFileContent, Stream = true }, streamer, cancellationToken);
 		}
 
 		/// <summary>
@@ -124,7 +124,7 @@ namespace OllamaSharp
 		{
 			await client.CreateModel(new CreateModelRequest
 			{
-				Name = name,
+				Model = name,
 				ModelFileContent = modelFileContent,
 				Path = path,
 				Stream = true
@@ -147,7 +147,7 @@ namespace OllamaSharp
 		/// <param name="cancellationToken">The token to cancel the operation with</param>
 		public static async Task CreateModel(this IOllamaApiClient client, string name, string modelFileContent, string path, IResponseStreamer<CreateStatus> streamer, CancellationToken cancellationToken = default)
 		{
-			await client.CreateModel(new CreateModelRequest { Name = name, ModelFileContent = modelFileContent, Path = path, Stream = true }, streamer, cancellationToken);
+			await client.CreateModel(new CreateModelRequest { Model = name, ModelFileContent = modelFileContent, Path = path, Stream = true }, streamer, cancellationToken);
 		}
 
 		/// <summary>
@@ -175,7 +175,7 @@ namespace OllamaSharp
 		/// <param name="cancellationToken">The token to cancel the operation with</param>
 		public static async Task PullModel(this IOllamaApiClient client, string model, IResponseStreamer<PullStatus> streamer, CancellationToken cancellationToken = default)
 		{
-			await client.PullModel(new PullModelRequest { Name = model }, streamer, cancellationToken);
+			await client.PullModel(new PullModelRequest { Model = model }, streamer, cancellationToken);
 		}
 
 		/// <summary>
@@ -203,7 +203,7 @@ namespace OllamaSharp
 		/// <param name="cancellationToken">The token to cancel the operation with</param>
 		public static async Task PushModel(this IOllamaApiClient client, string name, IResponseStreamer<PushStatus> streamer, CancellationToken cancellationToken = default)
 		{
-			await client.PushModel(new PushRequest { Name = name, Stream = true }, streamer, cancellationToken);
+			await client.PushModel(new PushRequest { Model = name, Stream = true }, streamer, cancellationToken);
 		}
 
 		/// <summary>
