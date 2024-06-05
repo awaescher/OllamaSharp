@@ -1,12 +1,12 @@
+using System.Net;
+using System.Text;
+using System.Text.Json;
 using FluentAssertions;
 using Moq;
 using Moq.Protected;
 using NUnit.Framework;
 using OllamaSharp;
 using OllamaSharp.Models;
-using System.Net;
-using System.Text;
-using System.Text.Json;
 using OllamaSharp.Models.Chat;
 
 namespace Tests;
@@ -23,7 +23,7 @@ public class OllamaApiClientTests
 
 		mockHandler
 			.Protected()
-			.Setup<Task<HttpResponseMessage>>(
+			.Setup<Task<HttpResponseMessage?>>(
 				"SendAsync",
 				ItExpr.Is<HttpRequestMessage>(_ => true),
 				ItExpr.IsAny<CancellationToken>())
@@ -115,12 +115,12 @@ public class OllamaApiClientTests
 			stream.Seek(0, SeekOrigin.Begin);
 
 			var builder = new StringBuilder();
-			var context = await _client.StreamCompletion("prompt", null, s => builder.Append(s.Response), CancellationToken.None);
+			var context = await _client.StreamCompletion("prompt", null, s => builder.Append(s?.Response), CancellationToken.None);
 
 			builder.ToString().Should().Be("The sky is blue.");
 			context.Context.Should().BeEquivalentTo(new int[] { 1, 2, 3 });
 		}
-		
+
 		[Test]
 		public async Task Streams_Response_Chunks_As_AsyncEnumerable()
 		{
@@ -142,11 +142,12 @@ public class OllamaApiClientTests
 
 			var builder = new StringBuilder();
 			var completionStream = _client.StreamCompletion("prompt", null, CancellationToken.None);
-			GenerateCompletionDoneResponseStream? final = null;
-			await foreach(var response in completionStream)
+			GenerateCompletionDoneResponseStream? final = null!;
+			await foreach (var response in completionStream)
 			{
 				builder.Append(response?.Response);
-				if (response?.Done ?? false) final = (GenerateCompletionDoneResponseStream) response;
+				if (response?.Done ?? false)
+					final = (GenerateCompletionDoneResponseStream)response;
 			}
 
 			builder.ToString().Should().Be("The sky is blue.");
@@ -189,8 +190,8 @@ public class OllamaApiClientTests
 				}
 			};
 
-			var messages = (await _client.SendChat(chat, s => builder.Append(s.Message), CancellationToken.None)).ToArray();
-			
+			var messages = (await _client.SendChat(chat, s => builder.Append(s?.Message), CancellationToken.None)).ToArray();
+
 			messages.Length.Should().Be(4);
 
 			messages[0].Role.Should().Be(ChatRole.User);
@@ -247,15 +248,15 @@ public class OllamaApiClientTests
 				builder.Append(response?.Message.Content);
 				responses.Add(response?.Message);
 			}
-			
+
 			var chatResponse = builder.ToString();
-			
+
 			chatResponse.Should().BeEquivalentTo("Leave me alone.");
 
 			responses.Should().HaveCount(3);
-			responses[0].Role.Should().Be(ChatRole.Assistant);
-			responses[1].Role.Should().Be(ChatRole.Assistant);
-			responses[2].Role.Should().Be(ChatRole.Assistant);
+			responses[0]!.Role.Should().Be(ChatRole.Assistant);
+			responses[1]!.Role.Should().Be(ChatRole.Assistant);
+			responses[2]!.Role.Should().Be(ChatRole.Assistant);
 		}
 	}
 
@@ -300,7 +301,7 @@ public class OllamaApiClientTests
 			info.Parameters.Should().StartWith("stop");
 			info.Template.Should().StartWith("[INST]");
 		}
-		
+
 		[Test]
 		public async Task Returns_Deserialized_Model_WithSystem()
 		{

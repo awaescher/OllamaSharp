@@ -1,19 +1,30 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
-namespace OllamaSharp.Models.Chat
+namespace OllamaSharp.Models.Chat;
+
+public class ChatResponseStream
 {
-	public class ChatResponseStream
-	{
-		[JsonPropertyName("model")]
-		public string Model { get; set; }
+	/// <summary>
+	/// The model that generated the response
+	/// </summary>
+	[JsonPropertyName("model")]
+	public string Model { get; set; } = null!;
 
-		[JsonPropertyName("created_at")]
-		public string CreatedAt { get; set; }
+	/// <summary>
+	/// The time the response was generated
+	/// </summary>
+	[JsonPropertyName("created_at")]
+	public string CreatedAt { get; set; } = null!;
 
-		[JsonPropertyName("message")]
-		public Message Message { get; set; }
+	/// <summary>
+	/// The message returned by the model
+	/// </summary>
+	[JsonPropertyName("message")]
+	public Message Message { get; set; } = null!;
 
-		[JsonPropertyName("done")]
-		public bool Done { get; set; }
-	}
+	/// <summary>
+	/// Whether the response is complete
+	/// </summary>
+	[JsonPropertyName("done")]
+	public bool Done { get; set; }
 }

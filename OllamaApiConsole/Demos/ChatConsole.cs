@@ -1,6 +1,4 @@
-﻿using OllamaSharp;
-using OllamaSharp.Models;
-using OllamaSharp.Streamer;
+using OllamaSharp;
 using Spectre.Console;
 
 public class ChatConsole : OllamaConsole
@@ -22,7 +20,7 @@ public class ChatConsole : OllamaConsole
 			AnsiConsole.MarkupLine($"You are talking to [blue]{Ollama.SelectedModel}[/] now.");
 			AnsiConsole.MarkupLine("[gray]Type \"[red]exit[/]\" to leave the chat.[/]");
 
-			var chat = Ollama.Chat(stream => AnsiConsole.MarkupInterpolated($"[cyan]{stream.Message?.Content ?? ""}[/]"));
+			var chat = Ollama.Chat(stream => AnsiConsole.MarkupInterpolated($"[cyan]{stream?.Message.Content ?? ""}[/]"));
 			string message;
 
 			do

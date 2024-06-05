@@ -1,7 +1,6 @@
 using FluentAssertions;
 using NUnit.Framework;
 using OllamaSharp;
-using OllamaSharp.Models;
 using OllamaSharp.Models.Chat;
 
 namespace Tests;
@@ -15,7 +14,7 @@ public class ChatTests
 		[Test]
 		public async Task Sends_Assistant_Answer_To_Streamer()
 		{
-			ChatResponseStream? answerFromAssistant = null;
+			ChatResponseStream? answerFromAssistant = null!;
 
 			_ollama.DefineChatResponse("assistant", "hi!");
 

@@ -1,9 +1,6 @@
-﻿using OllamaSharp;
-using OllamaSharp.Models;
-using OllamaSharp.Streamer;
-using Spectre.Console;
-using System.Text;
 using System.Text.RegularExpressions;
+using OllamaSharp;
+using Spectre.Console;
 
 public class ImageChatConsole : OllamaConsole
 {
@@ -26,7 +23,7 @@ public class ImageChatConsole : OllamaConsole
 			AnsiConsole.MarkupLine("[gray]To send an image, enter its filename in curly braces,[/]");
 			AnsiConsole.MarkupLine("[gray]like this {c:/image.jpg}[/]");
 
-			var chat = Ollama.Chat(stream => AnsiConsole.MarkupInterpolated($"[cyan]{stream.Message?.Content ?? ""}[/]"));
+			var chat = Ollama.Chat(stream => AnsiConsole.MarkupInterpolated($"[cyan]{stream?.Message.Content ?? ""}[/]"));
 			string message;
 
 			do

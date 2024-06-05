@@ -1,6 +1,5 @@
-﻿using OllamaSharp;
+using OllamaSharp;
 using OllamaSharp.Models;
-using OllamaSharp.Streamer;
 using Spectre.Console;
 
 public class ModelManagerConsole : OllamaConsole
@@ -140,15 +139,15 @@ public class ModelManagerConsole : OllamaConsole
 		await Ollama.PushModel("mattw/pygmalion:latest", status => AnsiConsole.MarkupLineInterpolated($"{status.Status}"));
 	}
 
-	private void UpdateProgressTaskByStatus(ProgressContext context, ref ProgressTask? task, PullStatus status)
+	private void UpdateProgressTaskByStatus(ProgressContext context, ref ProgressTask? task, PullModelResponse modelResponse)
 	{
-		if (status.Status != task?.Description)
+		if (modelResponse.Status != task?.Description)
 		{
 			task?.StopTask();
-			task = context.AddTask(status.Status);
+			task = context.AddTask(modelResponse.Status);
 		}
 
-		task.Increment(status.Percent - task.Value);
+		task.Increment(modelResponse.Percent - task.Value);
 	}
 
 	public static class PropertyConsoleRenderer
