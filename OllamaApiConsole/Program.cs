@@ -6,7 +6,7 @@ Console.ResetColor();
 AnsiConsole.Write(new Rule("OllamaSharp Api Console").LeftJustified());
 AnsiConsole.WriteLine();
 
-OllamaApiClient ollama = null;
+OllamaApiClient? ollama = null;
 var connected = false;
 
 do
@@ -62,15 +62,15 @@ do
 		switch (demo)
 		{
 			case "Chat":
-				await new ChatConsole(ollama).Run();
+				await new ChatConsole(ollama!).Run();
 				break;
 
 			case "Image chat":
-				await new ImageChatConsole(ollama).Run();
+				await new ImageChatConsole(ollama!).Run();
 				break;
 
 			case "Model manager":
-				await new ModelManagerConsole(ollama).Run();
+				await new ModelManagerConsole(ollama!).Run();
 				break;
 		}
 	}

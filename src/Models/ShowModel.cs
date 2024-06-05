@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace OllamaSharp.Models;
@@ -7,31 +6,25 @@ namespace OllamaSharp.Models;
 /// <summary>
 /// https://github.com/jmorganca/ollama/blob/main/docs/api.md#show-model-information
 /// </summary>
+[JsonUnmappedMemberHandling(JsonUnmappedMemberHandling.Skip)]
 public class ShowModelRequest
 {
     /// <summary>
-    /// https://github.com/jmorganca/ollama/blob/main/docs/api.md#show-model-information
+    ///  The name of the model to show
     /// </summary>
+    [JsonPropertyName("model")]
+    public string? Model { get; set; }
 
-    [JsonUnmappedMemberHandling(JsonUnmappedMemberHandling.Skip)]
-    public class ShowModelRequest
-	{
-        /// <summary>
-        ///  The name of the model to show
-        /// </summary>
-        [JsonPropertyName("model")]
-        public string? Model { get; set; }
+    /// <summary>
+    ///  The name of the model to show(Obsolete)
+    /// </summary>
+    [Obsolete("Name is deprecated, see Model")]
+    [JsonPropertyName("name")]
+    public string? Name { get; set; }
+}
 
-        /// <summary>
-        ///  The name of the model to show(Obsolete)
-        /// </summary>
-        [Obsolete("Name is deprecated, see Model")]
-        [JsonPropertyName("name")]
-        public string? Name { get; set; }
-    }
-
-	public class ShowModelResponse
-	{
+public class ShowModelResponse
+{
     /// <summary>
     /// The license for the model
     /// </summary>
