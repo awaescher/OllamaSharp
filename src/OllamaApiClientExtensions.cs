@@ -54,9 +54,9 @@ namespace OllamaSharp
 		/// </param>
 		/// <param name="cancellationToken">The token to cancel the operation with</param>
 		/// <returns>List of the returned messages including the previous context</returns>
-		public static async Task<IEnumerable<Message>> SendChat(this IOllamaApiClient client, ChatRequest chatRequest, Action<ChatResponseStream> streamer, CancellationToken cancellationToken = default)
+		public static async Task<IEnumerable<Message>> SendChat(this IOllamaApiClient client, ChatRequest chatRequest, Action<ChatResponseStream?> streamer, CancellationToken cancellationToken = default)
 		{
-			return await client.SendChat(chatRequest, new ActionResponseStreamer<ChatResponseStream>(streamer), cancellationToken);
+			return await client.SendChat(chatRequest, new ActionResponseStreamer<ChatResponseStream?>(streamer), cancellationToken);
 		}
 
 		/// <summary>
@@ -271,6 +271,24 @@ namespace OllamaSharp
 			};
 
 			return await client.StreamCompletion(request, new ActionResponseStreamer<GenerateCompletionResponseStream>(streamer), cancellationToken);
+		}
+
+		public static IAsyncEnumerable<GenerateCompletionResponseStream?>
+			StreamCompletion(
+				this IOllamaApiClient client,
+				string prompt,
+				ConversationContext context,
+				CancellationToken cancellationToken = default)
+		{
+			var request = new GenerateCompletionRequest
+			{
+				Prompt = prompt,
+				Model = client.SelectedModel,
+				Stream = true,
+				Context = context?.Context ?? Array.Empty<long>()
+			};
+			
+			return client.StreamCompletion(request, cancellationToken);
 		}
 	}
 }

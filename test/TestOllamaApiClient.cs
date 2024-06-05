@@ -98,4 +98,28 @@ public class TestOllamaApiClient : IOllamaApiClient
 	}
 
 	public Task<bool> IsRunning(CancellationToken cancellationToken = default) => Task.FromResult(true);
+	public IAsyncEnumerable<CreateStatus?> CreateModel(CreateModelRequest request, CancellationToken cancellationToken = default)
+	{
+		throw new NotImplementedException();
+	}
+
+	public IAsyncEnumerable<PullStatus?> PullModel(PullModelRequest request, CancellationToken cancellationToken = default)
+	{
+		throw new NotImplementedException();
+	}
+
+	public IAsyncEnumerable<PushStatus?> PushModel(PushRequest request, CancellationToken cancellationToken = default)
+	{
+		throw new NotImplementedException();
+	}
+
+	public IAsyncEnumerable<GenerateCompletionResponseStream?> StreamCompletion(GenerateCompletionRequest request, CancellationToken cancellationToken = default)
+	{
+		throw new NotImplementedException();
+	}
+
+	public IAsyncEnumerable<ChatResponseStream?> StreamChat(ChatRequest chatRequest, CancellationToken cancellationToken = default)
+	{
+		throw new NotImplementedException();
+	}
 }
