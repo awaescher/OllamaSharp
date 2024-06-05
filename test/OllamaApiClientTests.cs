@@ -23,7 +23,7 @@ public class OllamaApiClientTests
 
 		mockHandler
 			.Protected()
-			.Setup<Task<HttpResponseMessage>>(
+			.Setup<Task<HttpResponseMessage?>>(
 				"SendAsync",
 				ItExpr.Is<HttpRequestMessage>(_ => true),
 				ItExpr.IsAny<CancellationToken>())
@@ -115,7 +115,7 @@ public class OllamaApiClientTests
 			stream.Seek(0, SeekOrigin.Begin);
 
 			var builder = new StringBuilder();
-			var context = await _client.StreamCompletion("prompt", null, s => builder.Append(s.Response), CancellationToken.None);
+			var context = await _client.StreamCompletion("prompt", null, s => builder.Append(s?.Response), CancellationToken.None);
 
 			builder.ToString().Should().Be("The sky is blue.");
 			context.Context.Should().BeEquivalentTo(new int[] { 1, 2, 3 });
@@ -142,7 +142,7 @@ public class OllamaApiClientTests
 
 			var builder = new StringBuilder();
 			var completionStream = _client.StreamCompletion("prompt", null, CancellationToken.None);
-			GenerateCompletionDoneResponseStream? final = null;
+			GenerateCompletionDoneResponseStream? final = null!;
 			await foreach(var response in completionStream)
 			{
 				builder.Append(response?.Response);
@@ -189,7 +189,7 @@ public class OllamaApiClientTests
 				}
 			};
 
-			var messages = (await _client.SendChat(chat, s => builder.Append(s.Message), CancellationToken.None)).ToArray();
+			var messages = (await _client.SendChat(chat, s => builder.Append(s?.Message), CancellationToken.None)).ToArray();
 			
 			messages.Length.Should().Be(4);
 
@@ -253,9 +253,9 @@ public class OllamaApiClientTests
 			chatResponse.Should().BeEquivalentTo("Leave me alone.");
 
 			responses.Should().HaveCount(3);
-			responses[0].Role.Should().Be(ChatRole.Assistant);
-			responses[1].Role.Should().Be(ChatRole.Assistant);
-			responses[2].Role.Should().Be(ChatRole.Assistant);
+			responses[0]!.Role.Should().Be(ChatRole.Assistant);
+			responses[1]!.Role.Should().Be(ChatRole.Assistant);
+			responses[2]!.Role.Should().Be(ChatRole.Assistant);
 		}
 	}
 

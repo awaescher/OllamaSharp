@@ -26,7 +26,7 @@ public class ImageChatConsole : OllamaConsole
 			AnsiConsole.MarkupLine("[gray]To send an image, enter its filename in curly braces,[/]");
 			AnsiConsole.MarkupLine("[gray]like this {c:/image.jpg}[/]");
 
-			var chat = Ollama.Chat(stream => AnsiConsole.MarkupInterpolated($"[cyan]{stream.Message?.Content ?? ""}[/]"));
+			var chat = Ollama.Chat(stream => AnsiConsole.MarkupInterpolated($"[cyan]{stream?.Message.Content ?? ""}[/]"));
 			string message;
 
 			do
