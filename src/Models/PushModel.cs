@@ -12,7 +12,7 @@ public class PushRequest
 	/// Name of the model to push in the form of <namespace>/<model>:<tag>
 	/// </summary>
 	[JsonPropertyName("name")]
-	public string Name { get; set; }
+	public string Name { get; set; } = null!;
 
 	/// <summary>
 	/// Whether to push the model insecurely

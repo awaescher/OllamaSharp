@@ -32,7 +32,7 @@ public interface IOllamaApiClient
 	/// <returns>List of the returned messages including the previous context</returns>
 	Task<IEnumerable<Message>> SendChat(
 	    ChatRequest chatRequest,
-	    IResponseStreamer<ChatResponseStream> streamer,
+	    IResponseStreamer<ChatResponseStream?> streamer,
 	    CancellationToken cancellationToken = default);
 
 	/// <summary>
@@ -217,9 +217,7 @@ public interface IOllamaApiClient
 	/// </returns>
 	Task<ConversationContext> StreamCompletion(
 	    GenerateCompletionRequest request,
-	    IResponseStreamer
-
-<GenerateCompletionResponseStream> streamer,
+	    IResponseStreamer<GenerateCompletionResponseStream?> streamer,
 	    CancellationToken cancellationToken = default);
 
 	/// <summary>

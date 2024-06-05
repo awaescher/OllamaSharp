@@ -69,24 +69,24 @@ public class TestOllamaApiClient : IOllamaApiClient
 
 		await Task.Yield();
 
-		var messages = chatRequest.Messages.ToList();
+		var messages = chatRequest.Messages!.ToList();
 		messages.Add(message);
 		return messages;
 	}
 
-	public async Task<IEnumerable<Message>> SendChat(ChatRequest chatRequest, IResponseStreamer<ChatResponseStream> streamer, CancellationToken cancellationToken)
+	public async Task<IEnumerable<Message>> SendChat(ChatRequest chatRequest, IResponseStreamer<ChatResponseStream?> streamer, CancellationToken cancellationToken)
 	{
 		var message = new Message(_role, _answer);
 		streamer.Stream(new ChatResponseStream { Done = true, Message = message, CreatedAt = DateTime.UtcNow.ToString(), Model = chatRequest.Model });
 
 		await Task.Yield();
 
-		var messages = chatRequest.Messages.ToList();
+		var messages = chatRequest.Messages!.ToList();
 		messages.Add(message);
 		return messages;
 	}
 
-	public Task<ConversationContext> StreamCompletion(GenerateCompletionRequest request, IResponseStreamer<GenerateCompletionResponseStream> streamer, CancellationToken cancellationToken)
+	public Task<ConversationContext> StreamCompletion(GenerateCompletionRequest request, IResponseStreamer<GenerateCompletionResponseStream?> streamer, CancellationToken cancellationToken)
 	{
 		throw new NotImplementedException();
 	}

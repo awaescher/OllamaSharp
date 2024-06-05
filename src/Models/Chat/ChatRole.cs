@@ -17,7 +17,7 @@ public readonly struct ChatRole : IEquatable<ChatRole>
 
 	/// <summary> Initializes a new instance of <see cref="ChatRole"/>. </summary>
 	/// <exception cref="ArgumentNullException"> <paramref name="role"/> is null. </exception>
-	public ChatRole(string role)
+	public ChatRole(string? role)
 	{
 		_value = role ?? throw new ArgumentNullException(nameof(role));
 	}

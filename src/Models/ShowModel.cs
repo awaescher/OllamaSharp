@@ -11,7 +11,7 @@ public class ShowModelRequest
     /// The name of the model to show information about
     /// </summary>
     [JsonPropertyName("name")]
-    public string Name { get; set; }
+    public string Name { get; set; } = null!;
 }
 
 /// <summary>

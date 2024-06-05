@@ -14,7 +14,7 @@ public class ChatRoleConverter : JsonConverter<ChatRole>
 		Type typeToConvert,
 		JsonSerializerOptions options)
 	{
-		string value = reader.GetString();
+		var value = reader.GetString();
 		return new ChatRole(value);
 	}
 
