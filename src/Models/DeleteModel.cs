@@ -7,6 +7,9 @@ namespace OllamaSharp.Models;
 /// </summary>
 public class DeleteModelRequest
 {
+	/// <summary>
+	/// Model name to delete.
+	/// </summary>
 	[JsonPropertyName("name")]
-	public string Name { get; set; }
+	public string Name { get; set; } = null!;
 }

@@ -3,6 +3,9 @@ using System.Text.Json.Serialization;
 
 namespace OllamaSharp.Models.Chat;
 
+/// <summary>
+/// Represents a message in a chat
+/// </summary>
 [DebuggerDisplay("{Role}: {Content}")]
 public class Message
 {

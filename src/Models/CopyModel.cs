@@ -7,9 +7,15 @@ namespace OllamaSharp.Models;
 /// </summary>
 public class CopyModelRequest
 {
+	/// <summary>
+	/// The source model name
+	/// </summary>
 	[JsonPropertyName("source")]
-	public string Source { get; set; }
+	public string Source { get; set; } = null!;
 
+	/// <summary>
+	/// The destination model name
+	/// </summary>
 	[JsonPropertyName("destination")]
-	public string Destination { get; set; }
+	public string Destination { get; set; } = null!;
 }

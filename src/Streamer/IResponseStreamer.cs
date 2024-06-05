@@ -1,6 +1,6 @@
 namespace OllamaSharp.Streamer;
 
-public interface IResponseStreamer<T>
+public interface IResponseStreamer<in T>
 {
 	void Stream(T stream);
 }
