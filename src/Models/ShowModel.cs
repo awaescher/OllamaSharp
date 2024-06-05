@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace OllamaSharp.Models;
 
@@ -8,52 +7,51 @@ namespace OllamaSharp.Models;
 /// </summary>
 public class ShowModelRequest
 {
-	/// <summary>
-	/// The name of the model to show
-	/// </summary>
-	[JsonPropertyName("name")]
-	public string Name { get; set; }
+    /// <summary>
+    /// The name of the model to show information about
+    /// </summary>
+    [JsonPropertyName("name")]
+    public string Name { get; set; }
 }
 
+/// <summary>
+/// The response from the /api/show endpoint
+/// </summary>
 public class ShowModelResponse
 {
-	[JsonPropertyName("license")] 
-	public string? License { get; set; } 
+    /// <summary>
+    /// The license for the model
+    /// </summary>
+    [JsonPropertyName("license")]
+    public string? License { get; set; }
 
-	[JsonPropertyName("modelfile")] 
-	public string? Modelfile { get; set; } 
+    /// <summary>
+    /// The Modelfile for the model
+    /// </summary>
+    [JsonPropertyName("modelfile")]
+    public string? Modelfile { get; set; }
 
-	[JsonPropertyName("parameters")] 
-	public string? Parameters { get; set; }
+    /// <summary>
+    /// The parameters for the model
+    /// </summary>
+    [JsonPropertyName("parameters")]
+    public string? Parameters { get; set; }
 
-	[JsonPropertyName("template")]
-	public string? Template { get; set; } 
+    /// <summary>
+    /// The template for the model
+    /// </summary>
+    [JsonPropertyName("template")]
+    public string? Template { get; set; }
 
-	[JsonPropertyName("system")]
-	public string? System { get; set; } 
+    /// <summary>
+    /// The system prompt for the model
+    /// </summary>
+    [JsonPropertyName("system")]
+    public string? System { get; set; }
 
-	[JsonPropertyName("details")]
-	public ShowModelResponseDetails Details { get; set; } = null!;
-}
-	
-	
-public class ShowModelResponseDetails
-{
-	[JsonPropertyName("parent_model")]
-	public string? ParentModel { get; set; }
-
-	[JsonPropertyName("format")]
-	public string Format { get; set; }  = null!;
-
-	[JsonPropertyName("family")]
-	public string Family { get; set; }  = null!;
-
-	[JsonPropertyName("families")]
-	public List<string>? Families { get; set; } 
-
-	[JsonPropertyName("parameter_size")]
-	public string ParameterSize { get; set; } = null!;
-
-	[JsonPropertyName("quantization_level")]
-	public string QuantizationLevel { get; set; } = null!;
+    /// <summary>
+    /// Additional details about the model
+    /// </summary>
+    [JsonPropertyName("details")]
+    public Details Details { get; set; } = null!;
 }
