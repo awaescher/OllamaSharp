@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
 namespace OllamaSharp.Models.Chat;
 
@@ -13,7 +13,7 @@ public class ChatDoneResponseStream : ChatResponseStream
 	/// </summary>
 	[JsonPropertyName("total_duration")]
 	public long TotalDuration { get; set; }
-	
+
 	/// <summary>
 	/// The time spent in nanoseconds loading the model
 	/// </summary>

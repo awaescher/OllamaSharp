@@ -1,4 +1,4 @@
-﻿using OllamaSharp;
+using OllamaSharp;
 using Spectre.Console;
 
 public class ChatConsole : OllamaConsole

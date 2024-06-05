@@ -134,7 +134,7 @@ public class GenerateCompletionDoneResponseStream : GenerateCompletionResponseSt
 	/// The time spent generating the response
 	/// </summary>
 	[JsonPropertyName("total_duration")]
-	public long TotalDuration { get; set; } 
+	public long TotalDuration { get; set; }
 
 	/// <summary>
 	/// The time spent in nanoseconds loading the model

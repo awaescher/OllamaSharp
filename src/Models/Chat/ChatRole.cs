@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel;
 using System.Text.Json.Serialization;
 using OllamaSharp.Models.Chat.Converter;
@@ -28,24 +28,24 @@ public readonly struct ChatRole : IEquatable<ChatRole>
 		_value = null!;
 	}
 
-	private const string SystemValue = "system";
-	private const string AssistantValue = "assistant";
-	private const string UserValue = "user";
+	private const string SYSTEM_VALUE = "system";
+	private const string ASSISTANT_VALUE = "assistant";
+	private const string USER_VALUE = "user";
 
 	/// <summary>
 	/// The role that instructs or sets the behavior of the assistant.
 	/// </summary>
-	public static ChatRole System { get; } = new(SystemValue);
+	public static ChatRole System { get; } = new(SYSTEM_VALUE);
 
 	/// <summary>
 	/// The role that provides responses to system-instructed, user-prompted input.
 	/// </summary>
-	public static ChatRole Assistant { get; } = new(AssistantValue);
+	public static ChatRole Assistant { get; } = new(ASSISTANT_VALUE);
 
 	/// <summary>
 	/// The role that provides input for chat completions.
 	/// </summary>
-	public static ChatRole User { get; } = new(UserValue);
+	public static ChatRole User { get; } = new(USER_VALUE);
 
 	/// <summary>
 	/// Determines if two <see cref="ChatRole"/> values are the same.

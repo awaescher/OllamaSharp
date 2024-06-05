@@ -1,9 +1,6 @@
-﻿using OllamaSharp;
-using OllamaSharp.Models;
-using OllamaSharp.Streamer;
-using Spectre.Console;
-using System.Text;
 using System.Text.RegularExpressions;
+using OllamaSharp;
+using Spectre.Console;
 
 public class ImageChatConsole : OllamaConsole
 {

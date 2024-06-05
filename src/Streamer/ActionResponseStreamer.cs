@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace OllamaSharp.Streamer;
 
@@ -26,9 +26,9 @@ public class ActionResponseStreamer<T> : IResponseStreamer<T>
 	/// </exception>
 	public ActionResponseStreamer(Action<T> responseHandler)
 	{
-		ResponseHandler = responseHandler ?? 
-		                  throw new ArgumentNullException(
-			                  nameof(responseHandler));
+		ResponseHandler = responseHandler ??
+						  throw new ArgumentNullException(
+							  nameof(responseHandler));
 	}
 
 	/// <summary>

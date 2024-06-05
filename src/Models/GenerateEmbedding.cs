@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
 namespace OllamaSharp.Models;
 
@@ -25,7 +25,7 @@ public class GenerateEmbeddingRequest
 	/// </summary>
 	[JsonPropertyName("options")]
 	public RequestOptions? Options { get; set; }
-	
+
 	/// <summary>
 	/// Gets or sets the KeepAlive property, which decides how long a given
 	/// model should stay loaded.

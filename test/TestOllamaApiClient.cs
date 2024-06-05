@@ -1,8 +1,7 @@
-﻿using OllamaSharp;
+using OllamaSharp;
 using OllamaSharp.Models;
 using OllamaSharp.Models.Chat;
 using OllamaSharp.Streamer;
-using System.Threading;
 
 namespace Tests;
 
@@ -42,12 +41,12 @@ public class TestOllamaApiClient : IOllamaApiClient
 	{
 		throw new NotImplementedException();
 	}
-    public Task<IEnumerable<RunningModel>> ListRunningModels(CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
-    }
+	public Task<IEnumerable<RunningModel>> ListRunningModels(CancellationToken cancellationToken)
+	{
+		throw new NotImplementedException();
+	}
 
-    public Task PullModel(PullModelRequest request, IResponseStreamer<PullModelResponse> streamer, CancellationToken cancellationToken)
+	public Task PullModel(PullModelRequest request, IResponseStreamer<PullModelResponse> streamer, CancellationToken cancellationToken)
 	{
 		throw new NotImplementedException();
 	}

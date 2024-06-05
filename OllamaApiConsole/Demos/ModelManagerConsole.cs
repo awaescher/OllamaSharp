@@ -1,6 +1,5 @@
-﻿using OllamaSharp;
+using OllamaSharp;
 using OllamaSharp.Models;
-using OllamaSharp.Streamer;
 using Spectre.Console;
 
 public class ModelManagerConsole : OllamaConsole

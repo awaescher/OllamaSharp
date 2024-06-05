@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.Text.Json.Serialization;
 
@@ -10,11 +10,11 @@ namespace OllamaSharp.Models;
 [JsonUnmappedMemberHandling(JsonUnmappedMemberHandling.Skip)]
 public class ListRunningModelsResponse
 {
-    /// <summary>
-    /// An array of running models.
-    /// </summary>
-    [JsonPropertyName("models")] 
-    public RunningModel[] RunningModels { get; set; } = null!;
+	/// <summary>
+	/// An array of running models.
+	/// </summary>
+	[JsonPropertyName("models")]
+	public RunningModel[] RunningModels { get; set; } = null!;
 }
 
 /// <summary>
@@ -24,13 +24,13 @@ public class ListRunningModelsResponse
 [DebuggerDisplay("{Name}")]
 public class RunningModel : Model
 {
-    /// <summary>
-    /// The amount of vram (in bytes) used by the model.
-    /// </summary>
-    [JsonPropertyName("size_vram")] public long SizeVRAM { get; set; }
+	/// <summary>
+	/// The amount of vram (in bytes) used by the model.
+	/// </summary>
+	[JsonPropertyName("size_vram")] public long SizeVRAM { get; set; }
 
-    /// <summary>
-    /// The time the model will be unloaded from memory.
-    /// </summary>
-    [JsonPropertyName("expires_at")] public DateTime ExpiresAt { get; set; }
+	/// <summary>
+	/// The time the model will be unloaded from memory.
+	/// </summary>
+	[JsonPropertyName("expires_at")] public DateTime ExpiresAt { get; set; }
 }

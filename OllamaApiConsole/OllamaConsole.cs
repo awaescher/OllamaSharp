@@ -1,4 +1,4 @@
-﻿using OllamaSharp;
+using OllamaSharp;
 using Spectre.Console;
 
 public abstract class OllamaConsole
@@ -46,11 +46,11 @@ public abstract class OllamaConsole
 
 	protected async Task<string> SelectModel(string prompt, string additionalInformation = "")
 	{
-		const string back = "..";
+		const string BACK = "..";
 
 		var models = await Ollama.ListLocalModels();
 		var modelsWithBackChoice = models.OrderBy(m => m.Name).Select(m => m.Name).ToList();
-		modelsWithBackChoice.Insert(0, back);
+		modelsWithBackChoice.Insert(0, BACK);
 
 		if (!string.IsNullOrEmpty(additionalInformation))
 			AnsiConsole.MarkupLine(additionalInformation);
@@ -61,6 +61,6 @@ public abstract class OllamaConsole
 					.Title(prompt)
 					.AddChoices(modelsWithBackChoice));
 
-		return answer == back ? "" : answer;
+		return answer == BACK ? "" : answer;
 	}
 }
