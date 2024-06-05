@@ -1,4 +1,3 @@
-using System;
 using System.Text.Json.Serialization;
 
 namespace OllamaSharp.Models;
@@ -8,13 +7,6 @@ namespace OllamaSharp.Models;
 /// </summary>
 public class PushModelRequest
 {
-	/// <summary>
-	/// Name of the model to push in the form of <namespace>/<model>:<tag> (Obsolete)
-	/// </summary>
-	[Obsolete("Name is deprecated, see Model")]
-	[JsonPropertyName("name")]
-	public string? Name { get; set; }
-
 	/// <summary>
 	/// Name of the model to push in the form of <namespace>/<model>:<tag> 
 	/// </summary>

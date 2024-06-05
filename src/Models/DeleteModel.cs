@@ -1,4 +1,3 @@
-using System;
 using System.Text.Json.Serialization;
 
 namespace OllamaSharp.Models;
@@ -9,9 +8,6 @@ namespace OllamaSharp.Models;
 [JsonUnmappedMemberHandling(JsonUnmappedMemberHandling.Skip)]
 public class DeleteModelRequest
 {
-	[Obsolete("Name is deprecated, see Model")]
-	[JsonPropertyName("name")]
-	public string? Name { get; set; }
-
-	[JsonPropertyName("model")] public string? Model { get; set; }
+	[JsonPropertyName("model")]
+	public string? Model { get; set; }
 }

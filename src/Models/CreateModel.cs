@@ -1,4 +1,3 @@
-using System;
 using System.Text.Json.Serialization;
 
 namespace OllamaSharp.Models;
@@ -14,13 +13,6 @@ public class CreateModelRequest
 	/// </summary>
 	[JsonPropertyName("model")]
 	public string? Model { get; set; }
-
-	/// <summary>
-	/// Name of the model to create(Obsolete)
-	/// </summary>
-	[Obsolete("Name is deprecated, see Model")]
-	[JsonPropertyName("name")]
-	public string? Name { get; set; }
 
 	/// <summary>
 	/// Contents of the Modelfile

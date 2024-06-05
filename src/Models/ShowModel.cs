@@ -1,4 +1,3 @@
-using System;
 using System.Text.Json.Serialization;
 
 namespace OllamaSharp.Models;
@@ -14,13 +13,6 @@ public class ShowModelRequest
 	/// </summary>
 	[JsonPropertyName("model")]
 	public string? Model { get; set; }
-
-	/// <summary>
-	///  The name of the model to show(Obsolete)
-	/// </summary>
-	[Obsolete("Name is deprecated, see Model")]
-	[JsonPropertyName("name")]
-	public string? Name { get; set; }
 }
 
 public class ShowModelResponse
