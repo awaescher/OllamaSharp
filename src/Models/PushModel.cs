@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+using System;
+using System.Text.Json.Serialization;
 
 namespace OllamaSharp.Models;
 
@@ -11,14 +12,23 @@ public class PushRequest
 	/// <summary>
 	/// Name of the model to push in the form of <namespace>/<model>:<tag>
 	/// </summary>
-	[JsonPropertyName("name")]
-	public string Name { get; set; } = null!;
+	public class PushRequest
+	{
+        /// <summary>
+        /// Name of the model to push in the form of <namespace>/<model>:<tag> (Obsolete)
+        /// </summary>
+        [Obsolete("Name is deprecated, see Model")]
+        [JsonPropertyName("name")]
+		public string? Name { get; set; }
 
-	/// <summary>
-	/// Whether to push the model insecurely
-	/// </summary>
-	[JsonPropertyName("insecure")]
-	public bool Insecure { get; set; }
+        /// <summary>
+        /// Name of the model to push in the form of <namespace>/<model>:<tag> 
+        /// </summary>
+        [JsonPropertyName("model")]
+        public string? Model { get; set; }
+
+        [JsonPropertyName("insecure")]
+		public bool Insecure { get; set; }
 
 	/// <summary>
 	/// Whether to stream the response
