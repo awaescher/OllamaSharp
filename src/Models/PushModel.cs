@@ -6,8 +6,7 @@ namespace OllamaSharp.Models;
 /// <summary>
 /// https://github.com/jmorganca/ollama/blob/main/docs/api.md#push-a-model
 /// </summary>
-// TODO: Rename to PushModelRequest or similar _____Request to match the other models
-public class PushRequest
+public class PushModelRequest
 {
     /// <summary>
     /// Name of the model to push in the form of <namespace>/<model>:<tag> (Obsolete)
@@ -34,7 +33,7 @@ public class PushRequest
 /// <summary>
 /// The response from the /api/push endpoint
 /// </summary>
-public class PushStatus
+public class PushModelResponse
 {
     /// <summary>
     /// The status of the push operation

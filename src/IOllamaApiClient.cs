@@ -71,7 +71,7 @@ public interface IOllamaApiClient
 	/// <param name="cancellationToken">The token to cancel the operation with</param>
 	Task CreateModel(
 	    CreateModelRequest request,
-	    IResponseStreamer<CreateStatus> streamer,
+	    IResponseStreamer<CreateModelResponse> streamer,
 	    CancellationToken cancellationToken = default);
 
 	/// <summary>
@@ -80,7 +80,7 @@ public interface IOllamaApiClient
 	/// <param name="request">The request object containing the model details</param>
 	/// <param name="cancellationToken">The token to cancel the operation with</param>
 	/// <returns>An asynchronous enumerable of the model creation status</returns>
-	IAsyncEnumerable<CreateStatus?> CreateModel(
+	IAsyncEnumerable<CreateModelResponse?> CreateModel(
 	    CreateModelRequest request,
 	    [EnumeratorCancellation] CancellationToken cancellationToken = default);
 
@@ -142,7 +142,7 @@ public interface IOllamaApiClient
 	/// <param name="cancellationToken">The token to cancel the operation with</param>
 	Task PullModel(
 	    PullModelRequest request,
-	    IResponseStreamer<PullStatus> streamer,
+	    IResponseStreamer<PullModelResponse> streamer,
 	    CancellationToken cancellationToken = default);
 
 	/// <summary>
@@ -155,14 +155,14 @@ public interface IOllamaApiClient
 	/// Async enumerable of PullStatus objects representing the status of the
 	/// model pull operation
 	/// </returns>
-	IAsyncEnumerable<PullStatus?> PullModel(
+	IAsyncEnumerable<PullModelResponse?> PullModel(
 	    PullModelRequest request,
 	    [EnumeratorCancellation] CancellationToken cancellationToken = default);
 
 	/// <summary>
 	/// Sends a request to the /api/push endpoint to push a new model
 	/// </summary>
-	/// <param name="request">The request parameters</param>
+	/// <param name="modelRequest">The request parameters</param>
 	/// <param name="streamer">
 	/// The streamer that receives status updates as they are streamed by the
 	/// Ollama endpoint. Can be used to update the user interface while the
@@ -170,22 +170,22 @@ public interface IOllamaApiClient
 	/// </param>
 	/// <param name="cancellationToken">The token to cancel the operation with</param>
 	Task PushModel(
-	    PushRequest request,
-	    IResponseStreamer<PushStatus> streamer,
+	    PushModelRequest modelRequest,
+	    IResponseStreamer<PushModelResponse> streamer,
 	    CancellationToken cancellationToken = default);
 
 	/// <summary>
 	/// Pushes a model to the Ollama API endpoint.
 	/// </summary>
-	/// <param name="request">The request containing the model information to
+	/// <param name="modelRequest">The request containing the model information to
 	/// push.</param>
 	/// <param name="cancellationToken">The token to cancel the operation with.</param>
 	/// <returns>
 	/// An asynchronous enumerable of push status updates. Use the enumerator
 	/// to retrieve the push status updates.
 	/// </returns>
-	IAsyncEnumerable<PushStatus?> PushModel(
-	    PushRequest request,
+	IAsyncEnumerable<PushModelResponse?> PushModel(
+	    PushModelRequest modelRequest,
 	    [EnumeratorCancellation] CancellationToken cancellationToken = default);
 
 	/// <summary>

@@ -99,12 +99,12 @@ public static class OllamaApiClientExtensions
         this IOllamaApiClient client,
         string name,
         string modelFileContent,
-        Action<CreateStatus> streamer,
+        Action<CreateModelResponse> streamer,
         CancellationToken cancellationToken = default) =>
         client.CreateModel(
             name,
             modelFileContent,
-            new ActionResponseStreamer<CreateStatus>(streamer),
+            new ActionResponseStreamer<CreateModelResponse>(streamer),
             cancellationToken);
 
     /// <summary>
@@ -125,7 +125,7 @@ public static class OllamaApiClientExtensions
         this IOllamaApiClient client,
         string name,
         string modelFileContent,
-        IResponseStreamer<CreateStatus> streamer,
+        IResponseStreamer<CreateModelResponse> streamer,
         CancellationToken cancellationToken = default) =>
         client.CreateModel(
             new CreateModelRequest
@@ -157,7 +157,7 @@ public static class OllamaApiClientExtensions
         string name,
         string modelFileContent,
         string path,
-        Action<CreateStatus> streamer,
+        Action<CreateModelResponse> streamer,
         CancellationToken cancellationToken = default) =>
         client.CreateModel(
             new CreateModelRequest
@@ -167,7 +167,7 @@ public static class OllamaApiClientExtensions
                 Path = path,
                 Stream = true
             },
-            new ActionResponseStreamer<CreateStatus>(streamer),
+            new ActionResponseStreamer<CreateModelResponse>(streamer),
             cancellationToken);
 
     /// <summary>
@@ -190,7 +190,7 @@ public static class OllamaApiClientExtensions
         string name, 
         string modelFileContent,
         string path, 
-        IResponseStreamer<CreateStatus> streamer, 
+        IResponseStreamer<CreateModelResponse> streamer, 
         CancellationToken cancellationToken = default) =>
         client.CreateModel(
             new CreateModelRequest
@@ -215,11 +215,11 @@ public static class OllamaApiClientExtensions
     public static Task PullModel(
         this IOllamaApiClient client, 
         string model, 
-        Action<PullStatus> streamer,
+        Action<PullModelResponse> streamer,
         CancellationToken cancellationToken = default) =>
         client.PullModel(
             model, 
-            new ActionResponseStreamer<PullStatus>(streamer), 
+            new ActionResponseStreamer<PullModelResponse>(streamer), 
             cancellationToken);
 
     /// <summary>
@@ -235,7 +235,7 @@ public static class OllamaApiClientExtensions
     public static Task PullModel(
         this IOllamaApiClient client, 
         string model,
-        IResponseStreamer<PullStatus> streamer, 
+        IResponseStreamer<PullModelResponse> streamer, 
         CancellationToken cancellationToken = default) =>
         client.PullModel(
             new PullModelRequest { Name = model }, 
@@ -255,11 +255,11 @@ public static class OllamaApiClientExtensions
     public static Task PushModel(
         this IOllamaApiClient client, 
         string name, 
-        Action<PushStatus> streamer,
+        Action<PushModelResponse> streamer,
         CancellationToken cancellationToken = default) =>
         client.PushModel(
             name, 
-            new ActionResponseStreamer<PushStatus>(streamer), 
+            new ActionResponseStreamer<PushModelResponse>(streamer), 
             cancellationToken);
 
     /// <summary>
@@ -275,10 +275,10 @@ public static class OllamaApiClientExtensions
     public static Task PushModel(
         this IOllamaApiClient client, 
         string name,
-        IResponseStreamer<PushStatus> streamer, 
+        IResponseStreamer<PushModelResponse> streamer, 
         CancellationToken cancellationToken = default) =>
         client.PushModel(
-            new PushRequest { Name = name, Stream = true }, 
+            new PushModelRequest { Name = name, Stream = true }, 
             streamer, 
             cancellationToken);
 

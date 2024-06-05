@@ -18,7 +18,7 @@ public class TestOllamaApiClient : IOllamaApiClient
 		throw new NotImplementedException();
 	}
 
-	public Task CreateModel(CreateModelRequest request, IResponseStreamer<CreateStatus> streamer, CancellationToken cancellationToken)
+	public Task CreateModel(CreateModelRequest request, IResponseStreamer<CreateModelResponse> streamer, CancellationToken cancellationToken)
 	{
 		throw new NotImplementedException();
 	}
@@ -47,12 +47,12 @@ public class TestOllamaApiClient : IOllamaApiClient
         throw new NotImplementedException();
     }
 
-    public Task PullModel(PullModelRequest request, IResponseStreamer<PullStatus> streamer, CancellationToken cancellationToken)
+    public Task PullModel(PullModelRequest request, IResponseStreamer<PullModelResponse> streamer, CancellationToken cancellationToken)
 	{
 		throw new NotImplementedException();
 	}
 
-	public Task PushModel(PushRequest request, IResponseStreamer<PushStatus> streamer, CancellationToken cancellationToken)
+	public Task PushModel(PushModelRequest modelRequest, IResponseStreamer<PushModelResponse> streamer, CancellationToken cancellationToken)
 	{
 		throw new NotImplementedException();
 	}
@@ -98,17 +98,17 @@ public class TestOllamaApiClient : IOllamaApiClient
 	}
 
 	public Task<bool> IsRunning(CancellationToken cancellationToken = default) => Task.FromResult(true);
-	public IAsyncEnumerable<CreateStatus?> CreateModel(CreateModelRequest request, CancellationToken cancellationToken = default)
+	public IAsyncEnumerable<CreateModelResponse?> CreateModel(CreateModelRequest request, CancellationToken cancellationToken = default)
 	{
 		throw new NotImplementedException();
 	}
 
-	public IAsyncEnumerable<PullStatus?> PullModel(PullModelRequest request, CancellationToken cancellationToken = default)
+	public IAsyncEnumerable<PullModelResponse?> PullModel(PullModelRequest request, CancellationToken cancellationToken = default)
 	{
 		throw new NotImplementedException();
 	}
 
-	public IAsyncEnumerable<PushStatus?> PushModel(PushRequest request, CancellationToken cancellationToken = default)
+	public IAsyncEnumerable<PushModelResponse?> PushModel(PushModelRequest modelRequest, CancellationToken cancellationToken = default)
 	{
 		throw new NotImplementedException();
 	}

@@ -25,7 +25,7 @@ public class PullModelRequest
 /// <summary>
 /// The streamed response from the /api/pull endpoint
 /// </summary>
-public class PullStatus
+public class PullModelResponse
 {
     /// <summary>
     /// The status of the pull operation

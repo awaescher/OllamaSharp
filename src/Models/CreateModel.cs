@@ -48,11 +48,10 @@ public class CreateModelRequest
     public string? Quantize { get; set; }
 }
 
-// TODO: Rename to CreateModelResponse or similar _____Response to match the other models
 /// <summary>
 /// Represents the response from the /api/create endpoint
 /// </summary>
-public class CreateStatus
+public class CreateModelResponse
 {
     /// <summary>
     /// Represents the status of a model creation.

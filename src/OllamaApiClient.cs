@@ -59,15 +59,15 @@ public class OllamaApiClient : IOllamaApiClient
 
     public Task CreateModel(
         CreateModelRequest request,
-        IResponseStreamer<CreateStatus> streamer,
+        IResponseStreamer<CreateModelResponse> streamer,
         CancellationToken cancellationToken = default) =>
         StreamPostAsync("api/create", request, streamer, cancellationToken);
 
-    public async IAsyncEnumerable<CreateStatus?> CreateModel(
+    public async IAsyncEnumerable<CreateModelResponse?> CreateModel(
         CreateModelRequest request,
         [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-        var stream = StreamPostAsync<CreateModelRequest, CreateStatus?>(
+        var stream = StreamPostAsync<CreateModelRequest, CreateModelResponse?>(
             "api/create", request, cancellationToken);
 
         await foreach (var result in stream)
@@ -121,15 +121,15 @@ public class OllamaApiClient : IOllamaApiClient
 
     public Task PullModel(
         PullModelRequest request,
-        IResponseStreamer<PullStatus> streamer,
+        IResponseStreamer<PullModelResponse> streamer,
         CancellationToken cancellationToken = default) =>
         StreamPostAsync("api/pull", request, streamer, cancellationToken);
 
-    public async IAsyncEnumerable<PullStatus?> PullModel(
+    public async IAsyncEnumerable<PullModelResponse?> PullModel(
         PullModelRequest request,
         [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-        var stream = StreamPostAsync<PullModelRequest, PullStatus?>(
+        var stream = StreamPostAsync<PullModelRequest, PullModelResponse?>(
             "api/pull", request, cancellationToken);
 
         await foreach (var result in stream)
@@ -137,17 +137,17 @@ public class OllamaApiClient : IOllamaApiClient
     }
 
     public Task PushModel(
-        PushRequest request,
-        IResponseStreamer<PushStatus> streamer,
+        PushModelRequest modelRequest,
+        IResponseStreamer<PushModelResponse> streamer,
         CancellationToken cancellationToken = default) =>
-        StreamPostAsync("api/push", request, streamer, cancellationToken);
+        StreamPostAsync("api/push", modelRequest, streamer, cancellationToken);
 
-    public async IAsyncEnumerable<PushStatus?> PushModel(
-        PushRequest request,
+    public async IAsyncEnumerable<PushModelResponse?> PushModel(
+        PushModelRequest modelRequest,
         [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-        var stream = StreamPostAsync<PushRequest, PushStatus?>(
-            "api/push", request, cancellationToken);
+        var stream = StreamPostAsync<PushModelRequest, PushModelResponse?>(
+            "api/push", modelRequest, cancellationToken);
 
         await foreach (var result in stream)
             yield return result;
@@ -309,8 +309,7 @@ public class OllamaApiClient : IOllamaApiClient
         response.EnsureSuccessStatusCode();
 
         var responseBody = await response.Content.ReadAsStringAsync();
-
-        // TODO: Determine if we should throw an exception if the response is null
+        
         return JsonSerializer.Deserialize<TResponse>(responseBody)!;
     }
 
