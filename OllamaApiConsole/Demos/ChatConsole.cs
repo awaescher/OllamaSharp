@@ -26,7 +26,7 @@ public class ChatConsole : OllamaConsole
 			do
 			{
 				AnsiConsole.WriteLine();
-				message = ReadInput();
+				message = ReadMultilineInput();
 
 				if (message.Equals("exit", StringComparison.OrdinalIgnoreCase))
 					break;
