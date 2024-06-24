@@ -50,17 +50,24 @@ public abstract class OllamaConsole
 
 		var models = await Ollama.ListLocalModels();
 		var modelsWithBackChoice = models.OrderBy(m => m.Name).Select(m => m.Name).ToList();
-		modelsWithBackChoice.Insert(0, BACK);
+		if (modelsWithBackChoice.Count == 1)
+		{
+			return modelsWithBackChoice.First();
+		}
+		else
+		{
+			modelsWithBackChoice.Insert(0, BACK);
 
-		if (!string.IsNullOrEmpty(additionalInformation))
-			AnsiConsole.MarkupLine(additionalInformation);
+			if (!string.IsNullOrEmpty(additionalInformation))
+				AnsiConsole.MarkupLine(additionalInformation);
 
-		var answer = AnsiConsole.Prompt(
-				new SelectionPrompt<string>()
-					.PageSize(10)
-					.Title(prompt)
-					.AddChoices(modelsWithBackChoice));
+			var answer = AnsiConsole.Prompt(
+					new SelectionPrompt<string>()
+						.PageSize(10)
+						.Title(prompt)
+						.AddChoices(modelsWithBackChoice));
 
-		return answer == BACK ? "" : answer;
+			return answer == BACK ? "" : answer;
+		}
 	}
 }
