@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace OllamaSharp.Models;
@@ -52,4 +53,28 @@ public class ShowModelResponse
 	/// </summary>
 	[JsonPropertyName("details")]
 	public Details Details { get; set; } = null!;
+
+	/// <summary>
+	/// Extra information about the model
+	/// </summary>
+	[JsonPropertyName("model_info")]
+	public ModelInfo Info { get; set; } = null!;
+}
+
+public class ModelInfo
+{
+	[JsonPropertyName("general.architecture")]
+	public string? Architecture { get; set; }
+
+	[JsonPropertyName("general.file_type")]
+	public int? FileType { get; set; }
+
+	[JsonPropertyName("general.parameter_count")]
+	public long? ParameterCount { get; set; }
+
+	[JsonPropertyName("general.quantization_version")]
+	public int? QuantizationVersion { get; set; }
+
+	[JsonExtensionData]
+	public IDictionary<string, object>? ExtraInfo { get; set; }
 }

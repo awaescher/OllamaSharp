@@ -324,6 +324,10 @@ public class OllamaApiClientTests
 			info.Details.Families.Should().BeNull();
 			info.Details.ParameterSize.Should().Be("7B");
 			info.Details.QuantizationLevel.Should().Be("Q4_0");
+			info.Info.Architecture.Should().Be("llama");
+			info.Info.QuantizationVersion.Should().Be(2);
+			info.Info.FileType.Should().Be(2);
+			info.Info.ExtraInfo.Should().NotBeNullOrEmpty();
 		}
 	}
 
