@@ -97,6 +97,12 @@ public class TestOllamaApiClient : IOllamaApiClient
 	}
 
 	public Task<bool> IsRunning(CancellationToken cancellationToken = default) => Task.FromResult(true);
+
+	public Task<Version> GetVersion(CancellationToken cancellationToken = default)
+	{
+		throw new NotImplementedException();
+	}
+
 	public IAsyncEnumerable<CreateModelResponse?> CreateModel(CreateModelRequest request, CancellationToken cancellationToken = default)
 	{
 		throw new NotImplementedException();

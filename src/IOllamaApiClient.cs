@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -236,4 +237,10 @@ public interface IOllamaApiClient
 	/// </summary>
 	/// <param name="cancellationToken">The token to cancel the operation with</param>
 	Task<bool> IsRunning(CancellationToken cancellationToken = default);
+
+	/// <summary>
+	/// Get the version of Ollama
+	/// </summary>
+	/// <param name="cancellationToken">The token to cancel the operation with</param>
+	Task<Version> GetVersion(CancellationToken cancellationToken = default);
 }

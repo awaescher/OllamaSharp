@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Threading;
 using System.Threading.Tasks;
 using OllamaSharp.Models;
@@ -247,6 +248,12 @@ public class OllamaApiClient : IOllamaApiClient
 		response.EnsureSuccessStatusCode();
 		var stringContent = await response.Content.ReadAsStringAsync();
 		return !string.IsNullOrWhiteSpace(stringContent);
+	}
+
+	public async Task<Version> GetVersion(CancellationToken cancellationToken = default)
+	{
+		var data = await GetAsync<JsonNode>("api/version", cancellationToken);
+		return Version.Parse(data["version"]?.ToString());
 	}
 
 	private async Task<ConversationContext> GenerateCompletion(
