@@ -27,9 +27,7 @@ public interface IOllamaApiClient
 	/// <param name="chatRequest">The request to send to Ollama</param>
 	/// <param name="cancellationToken">The token to cancel the operation with</param>
 	/// <returns>The returned message with metadata</returns>
-	Task<ChatResponse> Chat(
-		ChatRequest chatRequest,
-		CancellationToken cancellationToken = default);
+	Task<ChatResponse> Chat(ChatRequest chatRequest, CancellationToken cancellationToken = default);
 
 	/// <summary>
 	/// Sends a request to the /api/chat endpoint

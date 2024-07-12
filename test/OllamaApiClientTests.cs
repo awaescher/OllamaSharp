@@ -211,7 +211,7 @@ public class OllamaApiClientTests
 	public class ChatMethod : OllamaApiClientTests
 	{
 		[Test]
-		public async Task Receives_Response_MessageWithMetadata()
+		public async Task Receives_Response_Message_With_Metadata()
 		{
 			await using var stream = new MemoryStream();
 

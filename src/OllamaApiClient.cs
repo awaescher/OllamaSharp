@@ -15,37 +15,57 @@ using OllamaSharp.Streamer;
 
 namespace OllamaSharp;
 
-// https://github.com/jmorganca/ollama/blob/main/docs/api.md
+/// <summary>
+/// The default client to use the Ollama API conveniently
+/// https://github.com/jmorganca/ollama/blob/main/docs/api.md
+/// </summary>
 public class OllamaApiClient : IOllamaApiClient
 {
-	public class Configuration
-	{
-		public Uri Uri { get; set; } = null!;
-
-		public string Model { get; set; } = null!;
-	}
-
 	private readonly HttpClient _client;
 
+	/// <summary>
+	/// Gets the current configuration of the API client
+	/// </summary>
 	public Configuration Config { get; }
 
+	/// <inheritdoc />
 	public string SelectedModel { get; set; }
 
+	/// <summary>
+	/// Creates a new instace of the Ollama API client
+	/// </summary>
+	/// <param name="uriString">The uri of the Ollama API endpoint</param>
+	/// <param name="defaultModel">The default model that should be used with Ollama</param>
 	public OllamaApiClient(string uriString, string defaultModel = "")
 		: this(new Uri(uriString), defaultModel)
 	{
 	}
 
+	/// <summary>
+	/// Creates a new instace of the Ollama API client
+	/// </summary>
+	/// <param name="uri">The uri of the Ollama API endpoint</param>
+	/// <param name="defaultModel">The default model that should be used with Ollama</param>
 	public OllamaApiClient(Uri uri, string defaultModel = "")
 		: this(new Configuration { Uri = uri, Model = defaultModel })
 	{
 	}
 
+	/// <summary>
+	/// Creates a new instace of the Ollama API client
+	/// </summary>
+	/// <param name="config">The configuration for the Ollama API client</param>
 	public OllamaApiClient(Configuration config)
 		: this(new HttpClient() { BaseAddress = config.Uri }, config.Model)
 	{
 	}
 
+	/// <summary>
+	/// Creates a new instace of the Ollama API client
+	/// </summary>
+	/// <param name="client">The Http client to access the Ollama API with</param>
+	/// <param name="defaultModel">The default model that should be used with Ollama</param>
+	/// <exception cref="ArgumentNullException"></exception>
 	public OllamaApiClient(HttpClient client, string defaultModel = "")
 	{
 		_client = client ?? throw new ArgumentNullException(nameof(client));
@@ -57,9 +77,11 @@ public class OllamaApiClient : IOllamaApiClient
 		SelectedModel = defaultModel;
 	}
 
+	/// <inheritdoc />
 	public Task CreateModel(CreateModelRequest request, IResponseStreamer<CreateModelResponse> streamer, CancellationToken cancellationToken = default)
 	 => StreamPostAsync("api/create", request, streamer, cancellationToken);
 
+	/// <inheritdoc />
 	public async IAsyncEnumerable<CreateModelResponse?> CreateModel(CreateModelRequest request, [EnumeratorCancellation] CancellationToken cancellationToken = default)
 	{
 		var stream = StreamPostAsync<CreateModelRequest, CreateModelResponse?>("api/create", request, cancellationToken);
@@ -68,6 +90,7 @@ public class OllamaApiClient : IOllamaApiClient
 			yield return result;
 	}
 
+	/// <inheritdoc />
 	public async Task DeleteModel(string model, CancellationToken cancellationToken = default)
 	{
 		var request = new HttpRequestMessage(HttpMethod.Delete, "api/delete")
@@ -79,39 +102,46 @@ public class OllamaApiClient : IOllamaApiClient
 		response.EnsureSuccessStatusCode();
 	}
 
+	/// <inheritdoc />
 	public async Task<IEnumerable<Model>> ListLocalModels(CancellationToken cancellationToken = default)
 	{
 		var data = await GetAsync<ListModelsResponse>("api/tags", cancellationToken);
 		return data.Models;
 	}
 
+	/// <inheritdoc />
 	public async Task<IEnumerable<RunningModel>> ListRunningModels(CancellationToken cancellationToken = default)
 	{
 		var data = await GetAsync<ListRunningModelsResponse>("api/ps", cancellationToken);
 		return data.RunningModels;
 	}
 
+	/// <inheritdoc />
 	public Task<ShowModelResponse> ShowModelInformation(string model, CancellationToken cancellationToken = default)
 	 => PostAsync<ShowModelRequest, ShowModelResponse>("api/show", new ShowModelRequest { Model = model }, cancellationToken);
 
+	/// <inheritdoc />
 	public Task CopyModel(CopyModelRequest request, CancellationToken cancellationToken = default)
 	 => PostAsync("api/copy", request, cancellationToken);
 
+	/// <inheritdoc />
 	public Task PullModel(PullModelRequest request, IResponseStreamer<PullModelResponse> streamer, CancellationToken cancellationToken = default)
 	 => StreamPostAsync("api/pull", request, streamer, cancellationToken);
 
+	/// <inheritdoc />
 	public async IAsyncEnumerable<PullModelResponse?> PullModel(PullModelRequest request, [EnumeratorCancellation] CancellationToken cancellationToken = default)
 	{
-		var stream = StreamPostAsync<PullModelRequest, PullModelResponse?>(
-			"api/pull", request, cancellationToken);
+		var stream = StreamPostAsync<PullModelRequest, PullModelResponse?>("api/pull", request, cancellationToken);
 
 		await foreach (var result in stream)
 			yield return result;
 	}
 
+	/// <inheritdoc />
 	public Task PushModel(PushModelRequest modelRequest, IResponseStreamer<PushModelResponse> streamer, CancellationToken cancellationToken = default)
 	 => StreamPostAsync("api/push", modelRequest, streamer, cancellationToken);
 
+	/// <inheritdoc />
 	public async IAsyncEnumerable<PushModelResponse?> PushModel(PushModelRequest modelRequest, [EnumeratorCancellation] CancellationToken cancellationToken = default)
 	{
 		var stream = StreamPostAsync<PushModelRequest, PushModelResponse?>(
@@ -121,12 +151,15 @@ public class OllamaApiClient : IOllamaApiClient
 			yield return result;
 	}
 
+	/// <inheritdoc />
 	public Task<GenerateEmbeddingResponse> GenerateEmbeddings(GenerateEmbeddingRequest request, CancellationToken cancellationToken = default)
 	 => PostAsync<GenerateEmbeddingRequest, GenerateEmbeddingResponse>("api/embeddings", request, cancellationToken);
 
+	/// <inheritdoc />
 	public Task<ConversationContext> StreamCompletion(GenerateCompletionRequest request, IResponseStreamer<GenerateCompletionResponseStream?> streamer, CancellationToken cancellationToken = default)
 	 => GenerateCompletion(request, streamer, cancellationToken);
 
+	/// <inheritdoc />
 	public async IAsyncEnumerable<GenerateCompletionResponseStream?> StreamCompletion(GenerateCompletionRequest request, [EnumeratorCancellation] CancellationToken cancellationToken = default)
 	{
 		var stream = GenerateCompletion(request, cancellationToken);
@@ -135,6 +168,7 @@ public class OllamaApiClient : IOllamaApiClient
 			yield return result;
 	}
 
+	/// <inheritdoc />
 	public async Task<ConversationContextWithResponse> GetCompletion(GenerateCompletionRequest request, CancellationToken cancellationToken = default)
 	{
 		var builder = new StringBuilder();
@@ -144,23 +178,7 @@ public class OllamaApiClient : IOllamaApiClient
 		return new ConversationContextWithResponse(builder.ToString(), result.Context);
 	}
 
-	public async Task<IEnumerable<Message>> SendChat(ChatRequest chatRequest, IResponseStreamer<ChatResponseStream?> streamer, CancellationToken cancellationToken = default)
-	{
-		var request = new HttpRequestMessage(HttpMethod.Post, "api/chat")
-		{
-			Content = new StringContent(JsonSerializer.Serialize(chatRequest), Encoding.UTF8, "application/json")
-		};
-
-		var completion = chatRequest.Stream
-			? HttpCompletionOption.ResponseHeadersRead
-			: HttpCompletionOption.ResponseContentRead;
-
-		using var response = await _client.SendAsync(request, completion, cancellationToken);
-		response.EnsureSuccessStatusCode();
-
-		return await ProcessStreamedChatResponseAsync(chatRequest, response, streamer, cancellationToken);
-	}
-
+	/// <inheritdoc />
 	public async Task<ChatResponse> Chat(ChatRequest chatRequest, CancellationToken cancellationToken = default)
 	{
 		chatRequest.Stream = false;
@@ -179,6 +197,25 @@ public class OllamaApiClient : IOllamaApiClient
 		return await ProcessChatResponseAsync(response);
 	}
 
+	/// <inheritdoc />
+	public async Task<IEnumerable<Message>> SendChat(ChatRequest chatRequest, IResponseStreamer<ChatResponseStream?> streamer, CancellationToken cancellationToken = default)
+	{
+		var request = new HttpRequestMessage(HttpMethod.Post, "api/chat")
+		{
+			Content = new StringContent(JsonSerializer.Serialize(chatRequest), Encoding.UTF8, "application/json")
+		};
+
+		var completion = chatRequest.Stream
+			? HttpCompletionOption.ResponseHeadersRead
+			: HttpCompletionOption.ResponseContentRead;
+
+		using var response = await _client.SendAsync(request, completion, cancellationToken);
+		response.EnsureSuccessStatusCode();
+
+		return await ProcessStreamedChatResponseAsync(chatRequest, response, streamer, cancellationToken);
+	}
+
+	/// <inheritdoc />
 	public async IAsyncEnumerable<ChatResponseStream?> StreamChat(ChatRequest chatRequest, [EnumeratorCancellation] CancellationToken cancellationToken = default)
 	{
 		var request = new HttpRequestMessage(HttpMethod.Post, "api/chat")
@@ -200,6 +237,7 @@ public class OllamaApiClient : IOllamaApiClient
 			yield return result;
 	}
 
+	/// <inheritdoc />
 	public async Task<bool> IsRunning(CancellationToken cancellationToken = default)
 	{
 		var response = await _client.GetAsync("", cancellationToken); // without route returns "Ollama is running"
@@ -208,6 +246,7 @@ public class OllamaApiClient : IOllamaApiClient
 		return !string.IsNullOrWhiteSpace(stringContent);
 	}
 
+	/// <inheritdoc />
 	public async Task<Version> GetVersion(CancellationToken cancellationToken = default)
 	{
 		var data = await GetAsync<JsonNode>("api/version", cancellationToken);
@@ -424,6 +463,22 @@ public class OllamaApiClient : IOllamaApiClient
 			var line = await reader.ReadLineAsync();
 			yield return JsonSerializer.Deserialize<ChatResponseStream>(line);
 		}
+	}
+
+	/// <summary>
+	/// The configuration for the Ollama API client
+	/// </summary>
+	public class Configuration
+	{
+		/// <summary>
+		/// Gets or sets the uri of the Ollama API endpoint
+		/// </summary>
+		public Uri Uri { get; set; } = null!;
+
+		/// <summary>
+		/// Gets or sets the model that should be used
+		/// </summary>
+		public string Model { get; set; } = null!;
 	}
 }
 
