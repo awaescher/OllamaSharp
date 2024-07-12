@@ -15,7 +15,7 @@ public class ModelManagerConsole : OllamaConsole
 		AnsiConsole.WriteLine();
 
 		string command;
-		bool exit = false;
+		var exit = false;
 
 		do
 		{

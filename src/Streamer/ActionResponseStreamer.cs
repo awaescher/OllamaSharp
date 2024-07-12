@@ -26,17 +26,12 @@ public class ActionResponseStreamer<T> : IResponseStreamer<T>
 	/// </exception>
 	public ActionResponseStreamer(Action<T> responseHandler)
 	{
-		ResponseHandler = responseHandler ??
-						  throw new ArgumentNullException(
-							  nameof(responseHandler));
+		ResponseHandler = responseHandler ?? throw new ArgumentNullException(nameof(responseHandler));
 	}
 
 	/// <summary>
 	/// Streams the response by invoking the response handler action.
 	/// </summary>
 	/// <param name="stream">The response to be streamed.</param>
-	public void Stream(T stream)
-	{
-		ResponseHandler(stream);
-	}
+	public void Stream(T stream) => ResponseHandler(stream);
 }

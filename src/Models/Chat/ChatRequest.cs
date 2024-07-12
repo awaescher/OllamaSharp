@@ -21,24 +21,21 @@ public class ChatRequest
 	public IList<Message>? Messages { get; set; }
 
 	/// <summary>
-	/// Additional model parameters listed in the documentation for the
-	/// Modelfile such as temperature
+	/// Additional model parameters listed in the documentation for the Modelfile such as temperature
 	/// </summary>
 	[JsonPropertyName("options")]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public RequestOptions? Options { get; set; }
 
 	/// <summary>
-	/// The full prompt or prompt template (overrides what is defined in the
-	/// Modelfile)
+	/// The full prompt or prompt template (overrides what is defined in the Modelfile)
 	/// </summary>
 	[JsonPropertyName("template")]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public string? Template { get; set; }
 
 	/// <summary>
-	/// Gets or sets the KeepAlive property, which decides how long a given
-	/// model should stay loaded.
+	/// Gets or sets the KeepAlive property, which decides how long a given model should stay loaded.
 	/// </summary>
 	[JsonPropertyName("keep_alive")]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -52,8 +49,7 @@ public class ChatRequest
 	public string? Format { get; set; }
 
 	/// <summary>
-	/// If false the response will be returned as a single response object,
-	/// rather than a stream of objects
+	/// If false the response will be returned as a single response object rather than a stream of objects
 	/// </summary>
 	[JsonPropertyName("stream")]
 	public bool Stream { get; set; } = true;

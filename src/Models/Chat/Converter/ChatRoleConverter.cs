@@ -9,19 +9,13 @@ namespace OllamaSharp.Models.Chat.Converter;
 /// </summary>
 public class ChatRoleConverter : JsonConverter<ChatRole>
 {
-	public override ChatRole Read(
-		ref Utf8JsonReader reader,
-		Type typeToConvert,
-		JsonSerializerOptions options)
+	public override ChatRole Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
 	{
 		var value = reader.GetString();
 		return new ChatRole(value);
 	}
 
-	public override void Write(
-		Utf8JsonWriter writer,
-		ChatRole value,
-		JsonSerializerOptions options)
+	public override void Write(Utf8JsonWriter writer, ChatRole value, JsonSerializerOptions options)
 	{
 		writer.WriteStringValue(value.ToString());
 	}

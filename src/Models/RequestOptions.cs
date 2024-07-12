@@ -2,7 +2,6 @@ using System.Text.Json.Serialization;
 
 namespace OllamaSharp.Models;
 
-// I don't see why we would need a ctor for so many properties, so I will just not add it...
 /// <summary>
 /// The configuration information used for a chat completions request.
 /// </summary>
