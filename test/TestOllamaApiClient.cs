@@ -127,4 +127,9 @@ public class TestOllamaApiClient : IOllamaApiClient
 	{
 		throw new NotImplementedException();
 	}
+
+	public Task<ChatResponse> Chat(ChatRequest chatRequest, CancellationToken cancellationToken = default)
+	{
+		throw new NotImplementedException();
+	}
 }

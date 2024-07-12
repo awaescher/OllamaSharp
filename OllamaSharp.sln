@@ -7,7 +7,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OllamaSharp", "src\OllamaSh
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "test\Tests.csproj", "{1527F300-40C7-49EB-A6FD-D21B20BA5BC1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OllamaApiConsole", "OllamaApiConsole\OllamaApiConsole.csproj", "{81DCD129-2666-4846-8D3F-8682F6276289}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OllamaApiConsole", "OllamaApiConsole\OllamaApiConsole.csproj", "{81DCD129-2666-4846-8D3F-8682F6276289}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7B88E967-DA41-4A3F-80B9-AAAE0A7B471D}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

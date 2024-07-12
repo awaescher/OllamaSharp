@@ -215,6 +215,29 @@ public class OllamaApiClient : IOllamaApiClient
 			chatRequest, response, streamer, cancellationToken);
 	}
 
+	public async Task<ChatResponse> Chat(
+		ChatRequest chatRequest,
+		CancellationToken cancellationToken = default)
+	{
+		chatRequest.Stream = false;
+		var request = new HttpRequestMessage(HttpMethod.Post, "api/chat")
+		{
+			Content = new StringContent(
+				JsonSerializer.Serialize(chatRequest),
+				Encoding.UTF8,
+				"application/json")
+		};
+
+		var completion = chatRequest.Stream
+			? HttpCompletionOption.ResponseHeadersRead
+			: HttpCompletionOption.ResponseContentRead;
+
+		using var response = await _client.SendAsync(request, completion, cancellationToken);
+		response.EnsureSuccessStatusCode();
+
+		return await ProcessChatResponseAsync(response);
+	}
+
 	public async IAsyncEnumerable<ChatResponseStream?> StreamChat(
 		ChatRequest chatRequest,
 		[EnumeratorCancellation] CancellationToken cancellationToken = default)
@@ -372,8 +395,7 @@ public class OllamaApiClient : IOllamaApiClient
 		await ProcessStreamedResponseAsync(response, streamer, cancellationToken);
 	}
 
-	private async IAsyncEnumerable<TResponse?>
-		StreamPostAsync<TRequest, TResponse>(
+	private async IAsyncEnumerable<TResponse?> StreamPostAsync<TRequest, TResponse>(
 			string endpoint,
 			TRequest requestModel,
 			[EnumeratorCancellation] CancellationToken cancellationToken)
@@ -398,7 +420,6 @@ public class OllamaApiClient : IOllamaApiClient
 		await foreach (var result in stream)
 			yield return result;
 	}
-
 
 	private static async Task ProcessStreamedResponseAsync<TLine>(
 		HttpResponseMessage response,
@@ -454,8 +475,7 @@ public class OllamaApiClient : IOllamaApiClient
 		return new ConversationContext(Array.Empty<long>());
 	}
 
-	private static async IAsyncEnumerable<GenerateCompletionResponseStream?>
-		ProcessStreamedCompletionResponseAsync(
+	private static async IAsyncEnumerable<GenerateCompletionResponseStream?> ProcessStreamedCompletionResponseAsync(
 			HttpResponseMessage response,
 			[EnumeratorCancellation] CancellationToken cancellationToken)
 	{
@@ -473,8 +493,15 @@ public class OllamaApiClient : IOllamaApiClient
 		}
 	}
 
-	private static async Task<IEnumerable<Message>>
-		ProcessStreamedChatResponseAsync(
+	private static async Task<ChatResponse> ProcessChatResponseAsync(HttpResponseMessage response)
+	{
+		var responseBody = await response.Content.ReadAsStringAsync();
+		var chatResponse = JsonSerializer.Deserialize<ChatResponse>(responseBody);
+
+		return chatResponse!;
+	}
+
+	private static async Task<IEnumerable<Message>> ProcessStreamedChatResponseAsync(
 			ChatRequest chatRequest,
 			HttpResponseMessage response,
 			IResponseStreamer<ChatResponseStream?> streamer,
@@ -510,8 +537,7 @@ public class OllamaApiClient : IOllamaApiClient
 		return Array.Empty<Message>();
 	}
 
-	private static async IAsyncEnumerable<ChatResponseStream?>
-		ProcessStreamedChatResponseAsync(
+	private static async IAsyncEnumerable<ChatResponseStream?> ProcessStreamedChatResponseAsync(
 			HttpResponseMessage response,
 			[EnumeratorCancellation] CancellationToken cancellationToken)
 	{
