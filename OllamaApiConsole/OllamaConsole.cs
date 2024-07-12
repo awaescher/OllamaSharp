@@ -31,7 +31,7 @@ public abstract class OllamaConsole
 
 		AnsiConsole.MarkupLineInterpolated($"Type \"[red]-[/]\" and hit [red]{"[Return]"}[/] to submit.");
 
-		string input = "";
+		var input = "";
 
 		while (!input.TrimEnd().EndsWith('-'))
 		{

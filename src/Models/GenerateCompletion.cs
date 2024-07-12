@@ -42,8 +42,7 @@ public class GenerateCompletionRequest
 	public string? System { get; set; }
 
 	/// <summary>
-	/// The full prompt or prompt template (overrides what is defined in the
-	/// Modelfile)
+	/// The full prompt or prompt template (overrides what is defined in the Modelfile)
 	/// </summary>
 	[JsonPropertyName("template")]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -58,8 +57,7 @@ public class GenerateCompletionRequest
 	public long[]? Context { get; set; }
 
 	/// <summary>
-	/// Gets or sets the KeepAlive property, which decides how long a given
-	/// model should stay loaded.
+	/// Gets or sets the KeepAlive property, which decides how long a given model should stay loaded.
 	/// </summary>
 	[JsonPropertyName("keep_alive")]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -116,7 +114,6 @@ public class GenerateCompletionResponseStream
 	[JsonPropertyName("done")]
 	public bool Done { get; set; }
 }
-
 
 /// <summary>
 /// Represents the final response from the /api/generate endpoint

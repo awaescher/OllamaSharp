@@ -3,8 +3,7 @@ using System.Text.Json.Serialization;
 namespace OllamaSharp.Models.Chat;
 
 /// <summary>
-/// Represents the final message in a stream of responses from the /api/chat
-/// endpoint.
+/// Represents the final message in a stream of responses from the /api/chat endpoint.
 /// </summary>
 public class ChatDoneResponseStream : ChatResponseStream
 {

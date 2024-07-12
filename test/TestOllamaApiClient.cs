@@ -41,6 +41,7 @@ public class TestOllamaApiClient : IOllamaApiClient
 	{
 		throw new NotImplementedException();
 	}
+
 	public Task<IEnumerable<RunningModel>> ListRunningModels(CancellationToken cancellationToken)
 	{
 		throw new NotImplementedException();
