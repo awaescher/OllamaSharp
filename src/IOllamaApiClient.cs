@@ -24,6 +24,16 @@ public interface IOllamaApiClient
 	/// Sends a request to the /api/chat endpoint
 	/// </summary>
 	/// <param name="chatRequest">The request to send to Ollama</param>
+	/// <param name="cancellationToken">The token to cancel the operation with</param>
+	/// <returns>The returned message with metadata</returns>
+	Task<ChatResponse> Chat(
+		ChatRequest chatRequest,
+		CancellationToken cancellationToken = default);
+
+	/// <summary>
+	/// Sends a request to the /api/chat endpoint
+	/// </summary>
+	/// <param name="chatRequest">The request to send to Ollama</param>
 	/// <param name="streamer">
 	/// The streamer that receives parts of the answer as they are streamed
 	/// by the Ollama endpoint. Can be used to update the user interface while

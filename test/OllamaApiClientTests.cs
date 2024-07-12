@@ -208,6 +208,66 @@ public class OllamaApiClientTests
 		}
 	}
 
+	public class ChatMethod : OllamaApiClientTests
+	{
+		[Test]
+		public async Task Receives_Response_MessageWithMetadata()
+		{
+			await using var stream = new MemoryStream();
+
+			_response = new HttpResponseMessage
+			{
+				StatusCode = HttpStatusCode.OK,
+				Content = new StreamContent(stream)
+			};
+
+			await using var writer = new StreamWriter(stream, leaveOpen: true);
+			writer.AutoFlush = true;
+			await writer.WriteAsync(
+				"""
+				{
+				    "model": "llama2",
+				    "created_at": "2024-07-12T12:34:39.63897616Z",
+				    "message": {
+				        "role": "assistant",
+				        "content": "Test content."
+				    },
+				    "done_reason": "stop",
+				    "done": true,
+				    "total_duration": 137729492272,
+				    "load_duration": 133071702768,
+				    "prompt_eval_count": 26,
+				    "prompt_eval_duration": 35137000,
+				    "eval_count": 323,
+				    "eval_duration": 4575154000
+				}
+				""");
+			stream.Seek(0, SeekOrigin.Begin);
+
+			var chat = new ChatRequest
+			{
+				Model = "model",
+				Messages = [
+					new(ChatRole.User, "Why?"),
+					new(ChatRole.Assistant, "Because!"),
+					new(ChatRole.User, "And where?")]
+			};
+
+			var result = await _client.Chat(chat, CancellationToken.None);
+
+			result.Message.Role.Should().Be(ChatRole.Assistant);
+			result.Message.Content.Should().Be("Test content.");
+			result.Done.Should().BeTrue();
+			result.DoneReason.Should().Be("stop");
+			result.TotalDuration.Should().Be(137729492272);
+			result.LoadDuration.Should().Be(133071702768);
+			result.PromptEvalCount.Should().Be(26);
+			result.PromptEvalDuration.Should().Be(35137000);
+			result.EvalCount.Should().Be(323);
+			result.EvalDuration.Should().Be(4575154000);
+		}
+	}
+
 	public class StreamChatMethod : OllamaApiClientTests
 	{
 		[Test]
