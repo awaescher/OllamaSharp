@@ -5,10 +5,8 @@ using OllamaSharp.Models.Chat.Converter;
 
 namespace OllamaSharp.Models.Chat;
 
-/// <inheritdoc />
 /// <summary>
-/// A description of the intended purpose of a message within a chat
-/// completions interaction.
+/// A description of the intended purpose of a message within a chat completions interaction.
 /// </summary>
 [JsonConverter(typeof(ChatRoleConverter))]
 public readonly struct ChatRole : IEquatable<ChatRole>

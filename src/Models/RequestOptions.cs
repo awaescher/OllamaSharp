@@ -2,7 +2,6 @@ using System.Text.Json.Serialization;
 
 namespace OllamaSharp.Models;
 
-// I don't see why we would need a ctor for so many properties, so I will just not add it...
 /// <summary>
 /// The configuration information used for a chat completions request.
 /// </summary>
@@ -110,7 +109,7 @@ public partial class RequestOptions
 	/// </summary>
 	[JsonPropertyName("stop")]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-	public string? Stop { get; set; }
+	public string[]? Stop { get; set; }
 
 	/// <summary>
 	/// Tail free sampling is used to reduce the impact of less probable

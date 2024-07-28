@@ -2,11 +2,38 @@ using System.Text.Json.Serialization;
 
 namespace OllamaSharp.Models.Chat;
 
-/// <summary>
-/// Represents the final message in a stream of responses from the /api/chat endpoint.
-/// </summary>
-public class ChatDoneResponseStream : ChatResponseStream
+public class ChatResponse
 {
+	/// <summary>
+	/// The model that generated the response
+	/// </summary>
+	[JsonPropertyName("model")]
+	public string Model { get; set; } = null!;
+
+	/// <summary>
+	/// The time the response was generated
+	/// </summary>
+	[JsonPropertyName("created_at")]
+	public string CreatedAt { get; set; } = null!;
+
+	/// <summary>
+	/// The message returned by the model
+	/// </summary>
+	[JsonPropertyName("message")]
+	public Message Message { get; set; } = null!;
+
+	/// <summary>
+	/// Whether the response is complete
+	/// </summary>
+	[JsonPropertyName("done")]
+	public bool Done { get; set; }
+
+	/// <summary>
+	/// The reason for the completion of the chat
+	/// </summary>
+	[JsonPropertyName("done_reason")]
+	public string? DoneReason { get; set; }
+
 	/// <summary>
 	/// The time spent generating the response
 	/// </summary>
