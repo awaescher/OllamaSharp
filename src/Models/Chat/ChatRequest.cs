@@ -80,10 +80,22 @@ public class Function
 	public string? Description { get; set; }
 
 	[JsonPropertyName("parameters")]
-	public Dictionary<string, Parameter>? Parameters { get; set; }
+	public Parameters? Parameters { get; set; }
 }
 
-public class Parameter
+public class Parameters
+{
+	[JsonPropertyName("type")]
+	public string? Type { get; set; }
+
+	[JsonPropertyName("properties")]
+	public Dictionary<string, Properties>? Properties { get; set; }
+
+	[JsonPropertyName("required")]
+	public List<string>? Required { get; set; }
+}
+
+public class Properties
 {
 	[JsonPropertyName("type")]
 	public string? Type { get; set; }

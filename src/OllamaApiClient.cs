@@ -445,7 +445,10 @@ public class OllamaApiClient : IOllamaApiClient
 			if (streamedResponse?.Done ?? false)
 			{
 				var messages = chatRequest.Messages?.ToList() ?? new List<Message>();
-				messages.Add(new Message(responseRole, responseContent.ToString()));
+				var message = new Message(responseRole, responseContent.ToString());
+				if (streamedResponse.Message.ToolCalls?.Any() ?? false)
+					message.ToolCalls = streamedResponse.Message.ToolCalls.ToList();
+				messages.Add(message);
 				return messages;
 			}
 		}
