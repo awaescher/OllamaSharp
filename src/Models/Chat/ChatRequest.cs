@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
+using static OllamaSharp.Models.Chat.Message;
 
 namespace OllamaSharp.Models.Chat;
 
@@ -53,4 +54,43 @@ public class ChatRequest
 	/// </summary>
 	[JsonPropertyName("stream")]
 	public bool Stream { get; set; } = true;
+
+	/// <summary>
+	/// Tools for the model to use if supported. Requires stream to be set to false.
+	/// </summary>
+	[JsonPropertyName("tools")]
+	public List<Tool>? Tools { get; set; }
+}
+
+public class Tool
+{
+	[JsonPropertyName("type")]
+	public string? Type { get; set; }
+
+	[JsonPropertyName("function")]
+	public Function? Function { get; set; }
+}
+
+public class Function
+{
+	[JsonPropertyName("name")]
+	public string? Name { get; set; }
+
+	[JsonPropertyName("description")]
+	public string? Description { get; set; }
+
+	[JsonPropertyName("parameters")]
+	public Dictionary<string, Parameter>? Parameters { get; set; }
+}
+
+public class Parameter
+{
+	[JsonPropertyName("type")]
+	public string? Type { get; set; }
+
+	[JsonPropertyName("description")]
+	public string? Description { get; set; }
+
+	[JsonPropertyName("enum")]
+	public List<string>? Enum { get; set; }
 }
