@@ -53,7 +53,7 @@ public class Message
 	public string[]? Images { get; set; }
 
 	/// <summary>
-	/// The tool calls made by the model (for models that support function calls, such as llama3.1)
+	/// A list of tools the model wants to use (for models that support function calls, such as llama3.1)
 	/// </summary>
 	[JsonPropertyName("tool_calls")]
 	public List<ToolCall>? ToolCalls { get; set; }
