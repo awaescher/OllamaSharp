@@ -27,4 +27,13 @@ public class ChatResponseStream
 	/// </summary>
 	[JsonPropertyName("done")]
 	public bool Done { get; set; }
+
+
+	/// <summary>
+	/// The reason the response is complete
+	/// </summary>
+	[JsonPropertyName("done_reason")]
+	public bool DoneReason { get; set; }
+
+
 }

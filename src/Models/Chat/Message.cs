@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text.Json.Serialization;
 
@@ -50,4 +51,25 @@ public class Message
 	/// </summary>
 	[JsonPropertyName("images")]
 	public string[]? Images { get; set; }
+
+	/// <summary>
+	/// The tool calls made by the model (for models that support function calls, such as llama3.1)
+	/// </summary>
+	[JsonPropertyName("tool_calls")]
+	public List<ToolCall>? ToolCalls { get; set; }
+
+	public class ToolCall
+	{
+		[JsonPropertyName("function")]
+		public Function? Function { get; set; }
+	}
+
+	public class Function
+	{
+		[JsonPropertyName("name")]
+		public string? Name { get; set; }
+
+		[JsonPropertyName("arguments")]
+		public Dictionary<string, string>? Arguments { get; set; }
+	}
 }
