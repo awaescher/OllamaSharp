@@ -29,6 +29,7 @@ public readonly struct ChatRole : IEquatable<ChatRole>
 	private const string SYSTEM_VALUE = "system";
 	private const string ASSISTANT_VALUE = "assistant";
 	private const string USER_VALUE = "user";
+	private const string TOOL_VALUE = "tool";
 
 	/// <summary>
 	/// The role that instructs or sets the behavior of the assistant.
@@ -44,6 +45,11 @@ public readonly struct ChatRole : IEquatable<ChatRole>
 	/// The role that provides input for chat completions.
 	/// </summary>
 	public static ChatRole User { get; } = new(USER_VALUE);
+
+	/// <summary>
+	/// The role that is used to input the result from an external tool.
+	/// </summary>
+	public static ChatRole Tool { get; } = new(TOOL_VALUE);
 
 	/// <summary>
 	/// Determines if two <see cref="ChatRole"/> values are the same.
