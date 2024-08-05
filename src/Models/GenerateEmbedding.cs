@@ -45,7 +45,7 @@ public class GenerateEmbeddingRequest
 }
 
 /// <summary>
-/// The response from the /api/embeddings endpoint
+/// The response from the /api/embed endpoint
 /// </summary>
 public class GenerateEmbeddingResponse
 {
