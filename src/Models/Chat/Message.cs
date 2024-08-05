@@ -56,7 +56,7 @@ public class Message
 	/// A list of tools the model wants to use (for models that support function calls, such as llama3.1)
 	/// </summary>
 	[JsonPropertyName("tool_calls")]
-	public List<ToolCall>? ToolCalls { get; set; }
+	public IEnumerable<ToolCall>? ToolCalls { get; set; }
 
 	public class ToolCall
 	{

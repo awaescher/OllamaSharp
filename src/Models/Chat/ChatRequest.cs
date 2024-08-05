@@ -19,7 +19,7 @@ public class ChatRequest
 	/// The messages of the chat, this can be used to keep a chat memory
 	/// </summary>
 	[JsonPropertyName("messages")]
-	public IList<Message>? Messages { get; set; }
+	public IEnumerable<Message>? Messages { get; set; }
 
 	/// <summary>
 	/// Additional model parameters listed in the documentation for the Modelfile such as temperature
@@ -59,7 +59,7 @@ public class ChatRequest
 	/// Tools for the model to use if supported. Requires stream to be set to false.
 	/// </summary>
 	[JsonPropertyName("tools")]
-	public List<Tool>? Tools { get; set; }
+	public IEnumerable<Tool>? Tools { get; set; }
 }
 
 public class Tool
@@ -92,7 +92,7 @@ public class Parameters
 	public Dictionary<string, Properties>? Properties { get; set; }
 
 	[JsonPropertyName("required")]
-	public List<string>? Required { get; set; }
+	public IEnumerable<string>? Required { get; set; }
 }
 
 public class Properties
@@ -104,5 +104,5 @@ public class Properties
 	public string? Description { get; set; }
 
 	[JsonPropertyName("enum")]
-	public List<string>? Enum { get; set; }
+	public IEnumerable<string>? Enum { get; set; }
 }
