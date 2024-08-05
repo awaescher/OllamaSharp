@@ -67,8 +67,7 @@ public class Chat
 	/// <param name="cancellationToken">The token to cancel the operation with</param>
 	public async Task<IEnumerable<Message>> SendAs(ChatRole role, string message, IEnumerable<string>? imagesAsBase64, CancellationToken cancellationToken = default)
 	{
-		_messages.Add(new Message(
-			role, message, imagesAsBase64?.ToArray()));
+		_messages.Add(new Message(role, message, imagesAsBase64?.ToArray()));
 
 		var request = new ChatRequest
 		{
@@ -77,9 +76,10 @@ public class Chat
 			Stream = true
 		};
 
-		var answer = await Client.SendChat(
-			request, Streamer, cancellationToken);
+		var answer = await Client.SendChat(request, Streamer, cancellationToken);
+
 		_messages = answer.ToList();
+
 		return Messages;
 	}
 }

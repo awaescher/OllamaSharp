@@ -444,12 +444,11 @@ public class OllamaApiClient : IOllamaApiClient
 
 			if (streamedResponse?.Done ?? false)
 			{
-				var messages = chatRequest.Messages?.ToList() ?? new List<Message>();
 				var message = new Message(responseRole, responseContent.ToString());
 				if (streamedResponse.Message.ToolCalls?.Any() ?? false)
 					message.ToolCalls = streamedResponse.Message.ToolCalls.ToList();
-				messages.Add(message);
-				return messages;
+
+				return (chatRequest.Messages ?? Array.Empty<Message>()).Union(new Message[] { message });
 			}
 		}
 
