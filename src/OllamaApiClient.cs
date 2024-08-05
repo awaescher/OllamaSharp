@@ -153,7 +153,7 @@ public class OllamaApiClient : IOllamaApiClient
 
 	/// <inheritdoc />
 	public Task<GenerateEmbeddingResponse> GenerateEmbeddings(GenerateEmbeddingRequest request, CancellationToken cancellationToken = default)
-	 => PostAsync<GenerateEmbeddingRequest, GenerateEmbeddingResponse>("api/embeddings", request, cancellationToken);
+	 => PostAsync<GenerateEmbeddingRequest, GenerateEmbeddingResponse>("api/embed", request, cancellationToken);
 
 	/// <inheritdoc />
 	public Task<ConversationContext> StreamCompletion(GenerateCompletionRequest request, IResponseStreamer<GenerateCompletionResponseStream?> streamer, CancellationToken cancellationToken = default)

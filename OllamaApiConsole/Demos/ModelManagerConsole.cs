@@ -100,7 +100,7 @@ public class ModelManagerConsole : OllamaConsole
 			var embedContent = ReadInput("Enter a string to to embed:");
 			Ollama.SelectedModel = embedModel;
 			var embedResponse = await Ollama.GenerateEmbeddings(embedContent);
-			AnsiConsole.MarkupLineInterpolated($"[cyan]{string.Join(", ", embedResponse.Embedding)}[/]");
+			AnsiConsole.MarkupLineInterpolated($"[cyan]{string.Join(", ", embedResponse.Embeddings.First())}[/]");
 		}
 	}
 

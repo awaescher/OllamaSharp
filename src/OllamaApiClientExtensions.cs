@@ -223,7 +223,7 @@ public static class OllamaApiClientExtensions
 		var request = new GenerateEmbeddingRequest
 		{
 			Model = client.SelectedModel,
-			Prompt = prompt
+			Input = { prompt }
 		};
 		return client.GenerateEmbeddings(request, cancellationToken);
 	}
