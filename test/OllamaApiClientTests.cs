@@ -399,13 +399,13 @@ public class OllamaApiClientTests
 			_response = new HttpResponseMessage
 			{
 				StatusCode = HttpStatusCode.OK,
-				Content = new StringContent("{\r\n  \"embedding\": [\r\n    0.5670403838157654, 0.009260174818336964, 0.23178744316101074, -0.2916173040866852, -0.8924556970596313  ]\r\n}")
+				Content = new StringContent("{\r\n  \"embeddings\": [[\r\n    0.5670403838157654, 0.009260174818336964, 0.23178744316101074, -0.2916173040866852, -0.8924556970596313  ]]\r\n}")
 			};
 
-			var info = await _client.GenerateEmbeddings(new GenerateEmbeddingRequest { Model = "", Prompt = "" }, CancellationToken.None);
+			var info = await _client.GenerateEmbeddings(new GenerateEmbeddingRequest { Model = "", Input = [""]}, CancellationToken.None);
 
-			info.Embedding.Should().HaveCount(5);
-			info.Embedding.First().Should().BeApproximately(0.567, precision: 0.01);
+			info.Embeddings.First().Should().HaveCount(5);
+			info.Embeddings.First().First().Should().BeApproximately(0.567, precision: 0.01);
 		}
 	}
 }

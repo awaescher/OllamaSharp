@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace OllamaSharp.Models;
@@ -16,8 +17,8 @@ public class GenerateEmbeddingRequest
 	/// <summary>
 	/// The text to generate embeddings for
 	/// </summary>
-	[JsonPropertyName("prompt")]
-	public string Prompt { get; set; } = null!;
+	[JsonPropertyName("input")]
+	public List<string> Input { get; set; } = null!;
 
 	/// <summary>
 	/// Additional model parameters listed in the documentation for the Modelfile
@@ -33,16 +34,42 @@ public class GenerateEmbeddingRequest
 	[JsonPropertyName("keep_alive")]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public string? KeepAlive { get; set; }
+
+	/// <summary>
+	/// Truncates the end of each input to fit within context length.
+	/// Returns error if false and context length is exceeded. Defaults to true
+	/// </summary>
+	[JsonPropertyName("truncate")]
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public bool? Truncate { get; set; }
 }
 
 /// <summary>
-/// The response from the /api/embeddings endpoint
+/// The response from the /api/embed endpoint
 /// </summary>
 public class GenerateEmbeddingResponse
 {
 	/// <summary>
 	/// An array of embeddings for the input text
 	/// </summary>
-	[JsonPropertyName("embedding")]
-	public double[] Embedding { get; set; } = null!;
+	[JsonPropertyName("embeddings")]
+	public List<double[]> Embeddings { get; set; } = null!;
+
+	/// <summary>
+	/// The time spent generating the response
+	/// </summary>
+	[JsonPropertyName("total_duration")]
+	public long? TotalDuration { get; set; }
+
+	/// <summary>
+	/// The time spent in nanoseconds loading the model
+	/// </summary>
+	[JsonPropertyName("load_duration")]
+	public long? LoadDuration { get; set; }
+
+	/// <summary>
+	/// The number of tokens in the input text
+	/// </summary>
+	[JsonPropertyName("prompt_eval_count")]
+	public int? PromptEvalCount { get; set; }
 }

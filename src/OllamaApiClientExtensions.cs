@@ -213,17 +213,17 @@ public static class OllamaApiClientExtensions
 	=> client.PushModel(new PushModelRequest { Model = name, Stream = true }, streamer, cancellationToken);
 
 	/// <summary>
-	/// Sends a request to the /api/embeddings endpoint to generate embeddings for the currently selected model
+	/// Sends a request to the /api/embed endpoint to generate embeddings for the currently selected model
 	/// </summary>
 	/// <param name="client">The client used to execute the command</param>
-	/// <param name="prompt">The prompt to generate embeddings for</param>
+	/// <param name="input">The input text to generate embeddings for</param>
 	/// <param name="cancellationToken">The token to cancel the operation with</param>
-	public static Task<GenerateEmbeddingResponse> GenerateEmbeddings(this IOllamaApiClient client, string prompt, CancellationToken cancellationToken = default)
+	public static Task<GenerateEmbeddingResponse> GenerateEmbeddings(this IOllamaApiClient client, string input, CancellationToken cancellationToken = default)
 	{
 		var request = new GenerateEmbeddingRequest
 		{
 			Model = client.SelectedModel,
-			Prompt = prompt
+			Input = new List<string> { input }
 		};
 		return client.GenerateEmbeddings(request, cancellationToken);
 	}

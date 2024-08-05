@@ -90,7 +90,7 @@ public interface IOllamaApiClient
 	Task DeleteModel(string model, CancellationToken cancellationToken = default);
 
 	/// <summary>
-	/// Sends a request to the /api/embeddings endpoint to generate embeddings
+	/// Sends a request to the /api/embed endpoint to generate embeddings
 	/// </summary>
 	/// <param name="request">The parameters to generate embeddings for</param>
 	/// <param name="cancellationToken">The token to cancel the operation with</param>
