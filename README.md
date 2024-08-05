@@ -92,3 +92,7 @@ This is not only a great [resource to learn](/OllamaApiConsole/Demos) about Olla
 ## Credits
 
 Icon and name were reused from the amazing [Ollama project](https://github.com/jmorganca/ollama).
+
+**I would like to thank all the contributors who take the time to improve OllamaSharp. First and foremost [mili-tan](https://github.com/mili-tan), who always keeps OllamaSharp in sync with the Ollama API. ❤**
+
+
