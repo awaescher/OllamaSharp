@@ -11,6 +11,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using OllamaSharp.Models;
 using OllamaSharp.Models.Chat;
+using OllamaSharp.Models.Exceptions;
 using OllamaSharp.Streamer;
 
 namespace OllamaSharp;
@@ -99,7 +100,8 @@ public class OllamaApiClient : IOllamaApiClient
 		};
 
 		using var response = await _client.SendAsync(request, cancellationToken);
-		response.EnsureSuccessStatusCode();
+
+		await EnsureSuccessStatusCode(response);
 	}
 
 	/// <inheritdoc />
@@ -192,7 +194,8 @@ public class OllamaApiClient : IOllamaApiClient
 			: HttpCompletionOption.ResponseContentRead;
 
 		using var response = await _client.SendAsync(request, completion, cancellationToken);
-		response.EnsureSuccessStatusCode();
+
+		await EnsureSuccessStatusCode(response);
 
 		return await ProcessChatResponseAsync(response);
 	}
@@ -210,7 +213,8 @@ public class OllamaApiClient : IOllamaApiClient
 			: HttpCompletionOption.ResponseContentRead;
 
 		using var response = await _client.SendAsync(request, completion, cancellationToken);
-		response.EnsureSuccessStatusCode();
+
+		await EnsureSuccessStatusCode(response);
 
 		return await ProcessStreamedChatResponseAsync(chatRequest, response, streamer, cancellationToken);
 	}
@@ -229,7 +233,7 @@ public class OllamaApiClient : IOllamaApiClient
 
 		using var response = await _client.SendAsync(request, completion, cancellationToken);
 
-		response.EnsureSuccessStatusCode();
+		await EnsureSuccessStatusCode(response);
 
 		var stream = ProcessStreamedChatResponseAsync(response, cancellationToken);
 
@@ -241,7 +245,7 @@ public class OllamaApiClient : IOllamaApiClient
 	public async Task<bool> IsRunning(CancellationToken cancellationToken = default)
 	{
 		var response = await _client.GetAsync("", cancellationToken); // without route returns "Ollama is running"
-		response.EnsureSuccessStatusCode();
+		await EnsureSuccessStatusCode(response);
 		var stringContent = await response.Content.ReadAsStringAsync();
 		return !string.IsNullOrWhiteSpace(stringContent);
 	}
@@ -265,7 +269,8 @@ public class OllamaApiClient : IOllamaApiClient
 			: HttpCompletionOption.ResponseContentRead;
 
 		using var response = await _client.SendAsync(request, completion, cancellationToken);
-		response.EnsureSuccessStatusCode();
+
+		await EnsureSuccessStatusCode(response);
 
 		return await ProcessStreamedCompletionResponseAsync(response, streamer, cancellationToken);
 	}
@@ -282,7 +287,8 @@ public class OllamaApiClient : IOllamaApiClient
 			: HttpCompletionOption.ResponseContentRead;
 
 		using var response = await _client.SendAsync(request, completion, cancellationToken);
-		response.EnsureSuccessStatusCode();
+
+		await EnsureSuccessStatusCode(response);
 
 		var stream = ProcessStreamedCompletionResponseAsync(response, cancellationToken);
 
@@ -293,7 +299,8 @@ public class OllamaApiClient : IOllamaApiClient
 	private async Task<TResponse> GetAsync<TResponse>(string endpoint, CancellationToken cancellationToken)
 	{
 		var response = await _client.GetAsync(endpoint, cancellationToken);
-		response.EnsureSuccessStatusCode();
+
+		await EnsureSuccessStatusCode(response);
 
 		var responseBody = await response.Content.ReadAsStringAsync();
 
@@ -304,14 +311,16 @@ public class OllamaApiClient : IOllamaApiClient
 	{
 		var content = new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json");
 		var response = await _client.PostAsync(endpoint, content, cancellationToken);
-		response.EnsureSuccessStatusCode();
+
+		await EnsureSuccessStatusCode(response);
 	}
 
 	private async Task<TResponse> PostAsync<TRequest, TResponse>(string endpoint, TRequest request, CancellationToken cancellationToken)
 	{
 		var content = new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json");
 		var response = await _client.PostAsync(endpoint, content, cancellationToken);
-		response.EnsureSuccessStatusCode();
+
+		await EnsureSuccessStatusCode(response);
 
 		var responseBody = await response.Content.ReadAsStringAsync();
 
@@ -326,7 +335,8 @@ public class OllamaApiClient : IOllamaApiClient
 		};
 
 		using var response = await _client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
-		response.EnsureSuccessStatusCode();
+
+		await EnsureSuccessStatusCode(response);
 
 		await ProcessStreamedResponseAsync(response, streamer, cancellationToken);
 	}
@@ -340,7 +350,7 @@ public class OllamaApiClient : IOllamaApiClient
 
 		using var response = await _client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
 
-		response.EnsureSuccessStatusCode();
+		await EnsureSuccessStatusCode(response);
 
 		var stream = ProcessStreamedResponseAsync<TResponse>(response, cancellationToken);
 
@@ -465,6 +475,25 @@ public class OllamaApiClient : IOllamaApiClient
 			var line = await reader.ReadLineAsync();
 			yield return JsonSerializer.Deserialize<ChatResponseStream>(line);
 		}
+	}
+
+	private async Task EnsureSuccessStatusCode(HttpResponseMessage response)
+	{
+		if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+		{
+			var body = await response.Content.ReadAsStringAsync() ?? string.Empty;
+
+			var errorElement = new JsonElement();
+			var couldParse = JsonDocument.Parse(body)?.RootElement.TryGetProperty("error", out errorElement) ?? false;
+			var errorString = (couldParse ? errorElement.GetString() : body) ?? string.Empty;
+
+			if (errorString.Contains("does not support tools"))
+				throw new ModelDoesNotSupportToolsException(errorString);
+
+			throw new OllamaException(errorString);
+		}
+
+		response.EnsureSuccessStatusCode();
 	}
 
 	/// <summary>

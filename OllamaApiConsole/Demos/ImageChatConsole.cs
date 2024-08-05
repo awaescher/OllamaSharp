@@ -85,8 +85,7 @@ public class ImageChatConsole : OllamaConsole
 						AnsiConsole.MarkupLineInterpolated($"[gray]{"The images were scaled down for the console only, the model gets full versions."}[/]");
 					AnsiConsole.WriteLine();
 
-
-					await chat.Send(message, imagesBase64);
+					await chat.Send(message, [], imagesBase64);
 				}
 				else
 				{

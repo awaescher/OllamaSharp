@@ -1,6 +1,6 @@
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text.Json.Serialization;
-using static OllamaSharp.Models.Chat.Message;
 
 namespace OllamaSharp.Models.Chat;
 
@@ -64,8 +64,10 @@ public class ChatRequest
 
 public class Tool
 {
+	[Browsable(false)]
+	[EditorBrowsable(EditorBrowsableState.Never)]
 	[JsonPropertyName("type")]
-	public string? Type { get; set; }
+	public string? Type { get; set; } = "function";
 
 	[JsonPropertyName("function")]
 	public Function? Function { get; set; }
@@ -86,7 +88,9 @@ public class Function
 public class Parameters
 {
 	[JsonPropertyName("type")]
-	public string? Type { get; set; }
+	[Browsable(false)]
+	[EditorBrowsable(EditorBrowsableState.Never)]
+	public string? Type { get; set; } = "object";
 
 	[JsonPropertyName("properties")]
 	public Dictionary<string, Properties>? Properties { get; set; }
