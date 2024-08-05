@@ -64,7 +64,6 @@ ConversationContext context = null;
 await foreach (var stream in ollama.StreamCompletion("How are you today?", context))
 {
     Console.Write(stream.Response);
-    context = stream.Context;
 }
 ```
 
