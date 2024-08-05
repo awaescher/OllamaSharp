@@ -53,7 +53,7 @@ do
 				new SelectionPrompt<string>()
 					.PageSize(10)
 					.Title("What demo do you want to run?")
-					.AddChoices(["Chat", "Image chat", "Model manager", "Exit"]));
+					.AddChoices("Chat", "Image chat", "Tool chat", "Model manager", "Exit"));
 
 	AnsiConsole.Clear();
 
@@ -69,6 +69,10 @@ do
 				await new ImageChatConsole(ollama!).Run();
 				break;
 
+			case "Tool chat":
+				await new ToolConsole(ollama!).Run();
+				break;
+
 			case "Model manager":
 				await new ModelManagerConsole(ollama!).Run();
 				break;
@@ -76,7 +80,7 @@ do
 	}
 	catch (Exception ex)
 	{
-		AnsiConsole.MarkupLineInterpolated($"An error occurred. Press [blue]{"[Return]"}[/] to start over.");
+		AnsiConsole.MarkupLine($"An error occurred. Press [blue][Return][/] to start over.");
 		AnsiConsole.MarkupLineInterpolated($"[red]{Markup.Escape(ex.Message)}[/]");
 		Console.ReadLine();
 	}
