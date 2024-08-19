@@ -31,6 +31,15 @@ public class Chat
 		Streamer = streamer ?? throw new ArgumentNullException(nameof(streamer));
 		Model = Client.SelectedModel;
 	}
+    
+    /// <summary>
+    /// Sets the message history
+    /// </summary>
+    /// <param name="messages">The message history</param>
+    public void SetMessages(List<Message> messages)
+    {
+	    _messages = messages;
+    }
 
 	/// <summary>
 	/// Sends a message to the currently selected model
