@@ -1,3 +1,4 @@
+using System.Text;
 using OllamaSharp;
 using Spectre.Console;
 
@@ -29,19 +30,17 @@ public abstract class OllamaConsole
 		if (!string.IsNullOrEmpty(additionalInformation))
 			AnsiConsole.MarkupLine(additionalInformation);
 
-		AnsiConsole.MarkupLineInterpolated($"Type \"[red]-[/]\" and hit [red]{"[Return]"}[/] to submit.");
-
+		var builder = new StringBuilder();
 		var input = "";
 
-		while (!input.TrimEnd().EndsWith('-'))
+		while (!string.IsNullOrEmpty(input) || builder.Length == 0)
 		{
 			AnsiConsole.Markup("[blue]> [/]");
-			input += Console.ReadLine() + Environment.NewLine;
+			input = Console.ReadLine();
+			builder.AppendLine(input);
 		}
 
-		input = input.TrimEnd();
-
-		return input.EndsWith('-') ? input.Substring(0, input.Length - 1) : input;
+		return builder.ToString().TrimEnd();
 	}
 
 	protected async Task<string> SelectModel(string prompt, string additionalInformation = "")

@@ -19,47 +19,69 @@ public class ToolConsole : OllamaConsole
 
 		if (!string.IsNullOrEmpty(Ollama.SelectedModel))
 		{
-			AnsiConsole.MarkupLineInterpolated($"You are talking to [blue]{Ollama.SelectedModel}[/] now.");
-			AnsiConsole.MarkupLineInterpolated($"When asked for the weather or the news for a given location, it will try to use a predefined tool.");
-			AnsiConsole.MarkupLineInterpolated($"If any tool is used, the intended usage information is printed.");
-			AnsiConsole.MarkupLine("[gray]Type \"[red]exit[/]\" to leave the chat.[/]");
-
-			var chat = Ollama.Chat(stream => AnsiConsole.MarkupInterpolated($"[cyan]{stream?.Message.Content ?? ""}[/]"));
-			string message;
+			var keepChatting = true;
+			var systemPrompt = ReadMultilineInput("Define a system prompt (optional)");
 
 			do
 			{
-				AnsiConsole.WriteLine();
-				message = ReadMultilineInput();
+				AnsiConsole.MarkupLine("");
+				AnsiConsole.MarkupLineInterpolated($"You are talking to [blue]{Ollama.SelectedModel}[/] now.");
+				AnsiConsole.MarkupLine("When asked for the weather or the news for a given location, it will try to use a predefined tool.");
+				AnsiConsole.MarkupLine("If any tool is used, the intended usage information is printed.");
+				AnsiConsole.MarkupLine("[gray]Submit your messages by hitting return twice.[/]");
+				AnsiConsole.MarkupLine("[gray]Type \"[red]/new[/]\" to start over.[/]");
+				AnsiConsole.MarkupLine("[gray]Type \"[red]/exit[/]\" to leave the chat.[/]");
 
-				if (message.Equals("exit", StringComparison.OrdinalIgnoreCase))
-					break;
+				var chat = Ollama.Chat(stream => AnsiConsole.MarkupInterpolated($"[cyan]{stream?.Message.Content ?? ""}[/]"));
 
-				try
+				if (!string.IsNullOrEmpty(systemPrompt))
+					chat.SetMessages([new Message { Role = ChatRole.System, Content = systemPrompt }]);
+
+				string message;
+
+				do
 				{
-					await chat.SendAs(ChatRole.User, message, GetTools());
-				}
-				catch (OllamaException ex)
-				{
-					AnsiConsole.MarkupLineInterpolated($"[red]{ex.Message}[/]");
-				}
+					AnsiConsole.WriteLine();
+					message = ReadMultilineInput();
 
-				var toolCalls = chat.Messages.LastOrDefault()?.ToolCalls ?? [];
-				if (toolCalls.Any())
-				{
-					AnsiConsole.MarkupLine("\n[purple]Tools used:[/]");
-
-					foreach (var tool in toolCalls.Where(t => t.Function != null))
+					if (message.Equals("/exit", StringComparison.OrdinalIgnoreCase))
 					{
-						AnsiConsole.MarkupLineInterpolated($"  - [purple]{tool.Function!.Name}[/]");
-
-						foreach (var argument in tool.Function.Arguments ?? [])
-							AnsiConsole.MarkupLineInterpolated($"    - [purple]{argument.Key}[/]: [purple]{argument.Value}[/]");
+						keepChatting = false;
+						break;
 					}
-				}
 
-				AnsiConsole.WriteLine();
-			} while (!string.IsNullOrEmpty(message));
+					if (message.Equals("/new", StringComparison.OrdinalIgnoreCase))
+					{
+						keepChatting = true;
+						break;
+					}
+
+					try
+					{
+						await chat.SendAs(ChatRole.User, message, GetTools());
+					}
+					catch (OllamaException ex)
+					{
+						AnsiConsole.MarkupLineInterpolated($"[red]{ex.Message}[/]");
+					}
+
+					var toolCalls = chat.Messages.LastOrDefault()?.ToolCalls ?? [];
+					if (toolCalls.Any())
+					{
+						AnsiConsole.MarkupLine("\n[purple]Tools used:[/]");
+
+						foreach (var tool in toolCalls.Where(t => t.Function != null))
+						{
+							AnsiConsole.MarkupLineInterpolated($"  - [purple]{tool.Function!.Name}[/]");
+
+							foreach (var argument in tool.Function.Arguments ?? [])
+								AnsiConsole.MarkupLineInterpolated($"    - [purple]{argument.Key}[/]: [purple]{argument.Value}[/]");
+						}
+					}
+
+					AnsiConsole.WriteLine();
+				} while (!string.IsNullOrEmpty(message));
+			} while (keepChatting);
 		}
 	}
 

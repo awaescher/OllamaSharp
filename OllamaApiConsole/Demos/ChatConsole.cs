@@ -1,4 +1,5 @@
 using OllamaSharp;
+using OllamaSharp.Models.Chat;
 using Spectre.Console;
 
 public class ChatConsole : OllamaConsole
@@ -15,26 +16,49 @@ public class ChatConsole : OllamaConsole
 
 		Ollama.SelectedModel = await SelectModel("Select a model you want to chat with:");
 
+
 		if (!string.IsNullOrEmpty(Ollama.SelectedModel))
 		{
-			AnsiConsole.MarkupLine($"You are talking to [blue]{Ollama.SelectedModel}[/] now.");
-			AnsiConsole.MarkupLine("[gray]Type \"[red]exit[/]\" to leave the chat.[/]");
-
-			var chat = Ollama.Chat(stream => AnsiConsole.MarkupInterpolated($"[cyan]{stream?.Message.Content ?? ""}[/]"));
-			string message;
+			var keepChatting = true;
+			var systemPrompt = ReadMultilineInput("Define a system prompt (optional)");
 
 			do
 			{
-				AnsiConsole.WriteLine();
-				message = ReadMultilineInput();
+				AnsiConsole.MarkupLine("");
+				AnsiConsole.MarkupLine($"You are talking to [blue]{Ollama.SelectedModel}[/] now.");
+				AnsiConsole.MarkupLine("[gray]Submit your messages by hitting return twice.[/]");
+				AnsiConsole.MarkupLine("[gray]Type \"[red]/new[/]\" to start over.[/]");
+				AnsiConsole.MarkupLine("[gray]Type \"[red]/exit[/]\" to leave the chat.[/]");
 
-				if (message.Equals("exit", StringComparison.OrdinalIgnoreCase))
-					break;
+				var chat = Ollama.Chat(stream => AnsiConsole.MarkupInterpolated($"[cyan]{stream?.Message.Content ?? ""}[/]"));
 
-				await chat.Send(message);
+				if (!string.IsNullOrEmpty(systemPrompt))
+					chat.SetMessages([new Message { Role = ChatRole.System, Content = systemPrompt }]);
 
-				AnsiConsole.WriteLine();
-			} while (!string.IsNullOrEmpty(message));
+				string message;
+
+				do
+				{
+					AnsiConsole.WriteLine();
+					message = ReadMultilineInput();
+
+					if (message.Equals("/exit", StringComparison.OrdinalIgnoreCase))
+					{
+						keepChatting = false;
+						break;
+					}
+
+					if (message.Equals("/new", StringComparison.OrdinalIgnoreCase))
+					{
+						keepChatting = true;
+						break;
+					}
+
+					await chat.Send(message);
+
+					AnsiConsole.WriteLine();
+				} while (!string.IsNullOrEmpty(message));
+			} while (keepChatting);
 		}
 	}
 }
