@@ -1,3 +1,5 @@
+using OllamaApiConsole;
+using OllamaApiConsole.Demos;
 using OllamaSharp;
 using Spectre.Console;
 
@@ -80,7 +82,7 @@ do
 	}
 	catch (Exception ex)
 	{
-		AnsiConsole.MarkupLine($"An error occurred. Press [blue][Return][/] to start over.");
+		AnsiConsole.MarkupLine("An error occurred. Press [blue]Return[/] to start over.");
 		AnsiConsole.MarkupLineInterpolated($"[red]{Markup.Escape(ex.Message)}[/]");
 		Console.ReadLine();
 	}

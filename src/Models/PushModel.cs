@@ -8,7 +8,7 @@ namespace OllamaSharp.Models;
 public class PushModelRequest
 {
 	/// <summary>
-	/// Name of the model to push in the form of <namespace>/<model>:<tag> 
+	/// Name of the model to push in the form of <namespace>/<model>:<tag>
 	/// </summary>
 	[JsonPropertyName("model")]
 	public string? Model { get; set; }

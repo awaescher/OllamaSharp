@@ -42,4 +42,10 @@ public class ChatDoneResponseStream : ChatResponseStream
 	/// </summary>
 	[JsonPropertyName("eval_duration")]
 	public long EvalDuration { get; set; }
+
+	/// <summary>
+	/// The reason for the completion of the chat
+	/// </summary>
+	[JsonPropertyName("done_reason")]
+	public string? DoneReason { get; set; }
 }

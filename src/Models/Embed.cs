@@ -6,7 +6,7 @@ namespace OllamaSharp.Models;
 /// <summary>
 /// https://github.com/jmorganca/ollama/blob/main/docs/api.md#generate-embeddings
 /// </summary>
-public class GenerateEmbeddingRequest
+public class EmbedRequest
 {
 	/// <summary>
 	/// The name of the model to generate embeddings from
@@ -47,7 +47,7 @@ public class GenerateEmbeddingRequest
 /// <summary>
 /// The response from the /api/embed endpoint
 /// </summary>
-public class GenerateEmbeddingResponse
+public class EmbedResponse
 {
 	/// <summary>
 	/// An array of embeddings for the input text

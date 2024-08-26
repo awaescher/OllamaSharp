@@ -2,13 +2,10 @@ using OllamaSharp;
 using OllamaSharp.Models;
 using Spectre.Console;
 
-public class ModelManagerConsole : OllamaConsole
-{
-	public ModelManagerConsole(IOllamaApiClient ollama)
-		: base(ollama)
-	{
-	}
+namespace OllamaApiConsole.Demos;
 
+public class ModelManagerConsole(IOllamaApiClient ollama) : OllamaConsole(ollama)
+{
 	public override async Task Run()
 	{
 		AnsiConsole.Write(new Rule("Chat demo").LeftJustified());
@@ -23,7 +20,7 @@ public class ModelManagerConsole : OllamaConsole
 				new SelectionPrompt<string>()
 					.PageSize(10)
 					.Title("What do you want to do?")
-					.AddChoices(["..", "Copy model", "Create model", "Delete model", "Generate embeddings", "Show model information", "List local models", "Pull model", "Push model"]));
+					.AddChoices("..", "Copy model", "Create model", "Delete model", "Generate embeddings", "Show model information", "List local models", "Pull model", "Push model"));
 
 			switch (command)
 			{
@@ -82,7 +79,8 @@ public class ModelManagerConsole : OllamaConsole
 	{
 		var createName = ReadInput("Enter a name for your new model:");
 		var createModelFileContent = ReadMultilineInput("Enter the contents for the model file:", "[gray]See [/][blue][link]https://ollama.ai/library[/][/][gray] for available models[/]");
-		await Ollama.CreateModel(createName, createModelFileContent, status => AnsiConsole.MarkupLineInterpolated($"{status.Status}"));
+		await foreach (var status in Ollama.CreateModel(createName, createModelFileContent))
+			AnsiConsole.MarkupLineInterpolated($"{status?.Status ?? ""}");
 	}
 
 	private async Task DeleteModel()
@@ -97,10 +95,10 @@ public class ModelManagerConsole : OllamaConsole
 		var embedModel = await SelectModel("Which model should be used to create embeddings?");
 		if (!string.IsNullOrEmpty(embedModel))
 		{
-			var embedContent = ReadInput("Enter a string to to embed:");
+			var embedContent = ReadMultilineInput("Enter a string to to embed:");
 			Ollama.SelectedModel = embedModel;
-			var embedResponse = await Ollama.GenerateEmbeddings(embedContent);
-			AnsiConsole.MarkupLineInterpolated($"[cyan]{string.Join(", ", embedResponse.Embeddings.First())}[/]");
+			var embedResponse = await Ollama.Embed(embedContent);
+			AnsiConsole.MarkupLineInterpolated($"[cyan]{string.Join(", ", embedResponse.Embeddings[0])}[/]");
 		}
 	}
 
@@ -109,7 +107,7 @@ public class ModelManagerConsole : OllamaConsole
 		var infoModel = await SelectModel("Which model do you want to retrieve information for?");
 		if (!string.IsNullOrEmpty(infoModel))
 		{
-			var infoResponse = await Ollama.ShowModelInformation(infoModel);
+			var infoResponse = await Ollama.ShowModel(infoModel);
 			PropertyConsoleRenderer.Render(infoResponse);
 		}
 	}
@@ -128,7 +126,8 @@ public class ModelManagerConsole : OllamaConsole
 		await AnsiConsole.Progress().StartAsync(async context =>
 		{
 			ProgressTask? task = null;
-			await Ollama.PullModel(pullModel, status => UpdateProgressTaskByStatus(context, ref task, status));
+			await foreach (var status in Ollama.PullModel(pullModel))
+				UpdateProgressTaskByStatus(context, ref task, status);
 			task?.StopTask();
 		});
 	}
@@ -136,11 +135,15 @@ public class ModelManagerConsole : OllamaConsole
 	private async Task PushModel()
 	{
 		var pushModel = ReadInput("Which model do you want to push?");
-		await Ollama.PushModel("mattw/pygmalion:latest", status => AnsiConsole.MarkupLineInterpolated($"{status.Status}"));
+		await foreach (var status in Ollama.PushModel(pushModel))
+			AnsiConsole.MarkupLineInterpolated($"{status?.Status ?? ""}");
 	}
 
-	private void UpdateProgressTaskByStatus(ProgressContext context, ref ProgressTask? task, PullModelResponse modelResponse)
+	private static void UpdateProgressTaskByStatus(ProgressContext context, ref ProgressTask? task, PullModelResponse? modelResponse)
 	{
+		if (modelResponse is null)
+			return;
+
 		if (modelResponse.Status != task?.Description)
 		{
 			task?.StopTask();

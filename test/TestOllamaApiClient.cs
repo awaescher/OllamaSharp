@@ -1,136 +1,101 @@
+using System.Runtime.CompilerServices;
 using OllamaSharp;
 using OllamaSharp.Models;
 using OllamaSharp.Models.Chat;
-using OllamaSharp.Streamer;
 
 namespace Tests;
 
+#pragma warning disable CS8424 // The EnumeratorCancellationAttribute will have no effect. The attribute is only effective on a parameter of type CancellationToken in an async-iterator method returning IAsyncEnumerable
+
 public class TestOllamaApiClient : IOllamaApiClient
 {
-	private ChatRole _role;
-	private string _answer = string.Empty;
+	private ChatResponseStream[] _expectedChatResponses = [];
+	private GenerateResponseStream[] _expectedGenerateResponses = [];
 
 	public string SelectedModel { get; set; } = string.Empty;
 
-	public Task CopyModel(CopyModelRequest request, CancellationToken cancellationToken)
+	internal void SetExpectedChatResponses(params ChatResponseStream[] responses)
+	{
+		_expectedChatResponses = responses;
+	}
+
+	internal void SetExpectedGenerateResponses(params GenerateResponseStream[] responses)
+	{
+		_expectedGenerateResponses = responses;
+	}
+
+	public async IAsyncEnumerable<ChatResponseStream?> Chat(ChatRequest chatRequest, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+	{
+		foreach (var response in _expectedChatResponses)
+		{
+			await Task.Yield();
+			yield return response;
+		}
+	}
+
+	public Task CopyModel(CopyModelRequest request, CancellationToken cancellationToken = default)
 	{
 		throw new NotImplementedException();
 	}
 
-	public Task CreateModel(CreateModelRequest request, IResponseStreamer<CreateModelResponse> streamer, CancellationToken cancellationToken)
+	public IAsyncEnumerable<CreateModelResponse?> CreateModel(CreateModelRequest request, [EnumeratorCancellation] CancellationToken cancellationToken = default)
 	{
 		throw new NotImplementedException();
 	}
 
-	public Task DeleteModel(string model, CancellationToken cancellationToken)
+	public Task DeleteModel(string model, CancellationToken cancellationToken = default)
 	{
 		throw new NotImplementedException();
 	}
 
-	public Task<GenerateEmbeddingResponse> GenerateEmbeddings(GenerateEmbeddingRequest request, CancellationToken cancellationToken)
+	public Task<EmbedResponse> Embed(EmbedRequest request, CancellationToken cancellationToken = default)
 	{
 		throw new NotImplementedException();
 	}
 
-	public Task<ConversationContextWithResponse> GetCompletion(GenerateCompletionRequest request, CancellationToken cancellationToken)
+	public async IAsyncEnumerable<GenerateResponseStream?> Generate(GenerateRequest request, [EnumeratorCancellation] CancellationToken cancellationToken = default)
 	{
-		throw new NotImplementedException();
+		foreach (var response in _expectedGenerateResponses)
+		{
+			await Task.Yield();
+			yield return response;
+		}
 	}
-
-	public Task<IEnumerable<Model>> ListLocalModels(CancellationToken cancellationToken)
-	{
-		throw new NotImplementedException();
-	}
-
-	public Task<IEnumerable<RunningModel>> ListRunningModels(CancellationToken cancellationToken)
-	{
-		throw new NotImplementedException();
-	}
-
-	public Task PullModel(PullModelRequest request, IResponseStreamer<PullModelResponse> streamer, CancellationToken cancellationToken)
-	{
-		throw new NotImplementedException();
-	}
-
-	public Task PushModel(PushModelRequest modelRequest, IResponseStreamer<PushModelResponse> streamer, CancellationToken cancellationToken)
-	{
-		throw new NotImplementedException();
-	}
-
-	public Task<ShowModelResponse> ShowModelInformation(string model, CancellationToken cancellationToken)
-	{
-		throw new NotImplementedException();
-	}
-
-	public async Task<IEnumerable<Message>> SendChat(ChatRequest chatRequest, Action<ChatResponseStream> streamer, CancellationToken cancellationToken)
-	{
-		var message = new Message(_role, _answer);
-		streamer(new ChatResponseStream { Done = true, Message = message, CreatedAt = DateTime.UtcNow.ToString(), Model = chatRequest.Model });
-
-		await Task.Yield();
-
-		var messages = chatRequest.Messages!.ToList();
-		messages.Add(message);
-		return messages;
-	}
-
-	public async Task<IEnumerable<Message>> SendChat(ChatRequest chatRequest, IResponseStreamer<ChatResponseStream?> streamer, CancellationToken cancellationToken)
-	{
-		var message = new Message(_role, _answer);
-		streamer.Stream(new ChatResponseStream { Done = true, Message = message, CreatedAt = DateTime.UtcNow.ToString(), Model = chatRequest.Model });
-
-		await Task.Yield();
-
-		var messages = chatRequest.Messages!.ToList();
-		messages.Add(message);
-		return messages;
-	}
-
-	public Task<ConversationContext> StreamCompletion(GenerateCompletionRequest request, IResponseStreamer<GenerateCompletionResponseStream?> streamer, CancellationToken cancellationToken)
-	{
-		throw new NotImplementedException();
-	}
-
-	internal void DefineChatResponse(ChatRole role, string answer)
-	{
-		_role = role;
-		_answer = answer;
-	}
-
-	public Task<bool> IsRunning(CancellationToken cancellationToken = default) => Task.FromResult(true);
 
 	public Task<Version> GetVersion(CancellationToken cancellationToken = default)
 	{
 		throw new NotImplementedException();
 	}
 
-	public IAsyncEnumerable<CreateModelResponse?> CreateModel(CreateModelRequest request, CancellationToken cancellationToken = default)
+	public Task<bool> IsRunning(CancellationToken cancellationToken = default)
 	{
 		throw new NotImplementedException();
 	}
 
-	public IAsyncEnumerable<PullModelResponse?> PullModel(PullModelRequest request, CancellationToken cancellationToken = default)
+	public Task<IEnumerable<Model>> ListLocalModels(CancellationToken cancellationToken = default)
 	{
 		throw new NotImplementedException();
 	}
 
-	public IAsyncEnumerable<PushModelResponse?> PushModel(PushModelRequest modelRequest, CancellationToken cancellationToken = default)
+	public Task<IEnumerable<RunningModel>> ListRunningModels(CancellationToken cancellationToken = default)
 	{
 		throw new NotImplementedException();
 	}
 
-	public IAsyncEnumerable<GenerateCompletionResponseStream?> StreamCompletion(GenerateCompletionRequest request, CancellationToken cancellationToken = default)
+	public IAsyncEnumerable<PullModelResponse?> PullModel(PullModelRequest request, [EnumeratorCancellation] CancellationToken cancellationToken = default)
 	{
 		throw new NotImplementedException();
 	}
 
-	public IAsyncEnumerable<ChatResponseStream?> StreamChat(ChatRequest chatRequest, CancellationToken cancellationToken = default)
+	public IAsyncEnumerable<PushModelResponse?> PushModel(PushModelRequest modelRequest, [EnumeratorCancellation] CancellationToken cancellationToken = default)
 	{
 		throw new NotImplementedException();
 	}
 
-	public Task<ChatResponse> Chat(ChatRequest chatRequest, CancellationToken cancellationToken = default)
+	public Task<ShowModelResponse> ShowModel(string model, CancellationToken cancellationToken = default)
 	{
 		throw new NotImplementedException();
 	}
+
+#pragma warning restore CS8424 // The EnumeratorCancellationAttribute will have no effect. The attribute is only effective on a parameter of type CancellationToken in an async-iterator method returning IAsyncEnumerable
 }

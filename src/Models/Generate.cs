@@ -5,7 +5,7 @@ namespace OllamaSharp.Models;
 /// <summary>
 /// https://github.com/jmorganca/ollama/blob/main/docs/api.md#generate-a-completion
 /// </summary>
-public class GenerateCompletionRequest
+public class GenerateRequest
 {
 	/// <summary>
 	/// The model name (required)
@@ -88,7 +88,7 @@ public class GenerateCompletionRequest
 /// <summary>
 /// The response from the /api/generate endpoint when streaming is enabled
 /// </summary>
-public class GenerateCompletionResponseStream
+public class GenerateResponseStream
 {
 	/// <summary>
 	/// The model that generated the response
@@ -118,7 +118,7 @@ public class GenerateCompletionResponseStream
 /// <summary>
 /// Represents the final response from the /api/generate endpoint
 /// </summary>
-public class GenerateCompletionDoneResponseStream : GenerateCompletionResponseStream
+public class GenerateDoneResponseStream : GenerateResponseStream
 {
 	/// <summary>
 	/// An encoding of the conversation used in this response, this can be

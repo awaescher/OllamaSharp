@@ -14,41 +14,38 @@ public class ChatTests
 		[Test]
 		public async Task Sends_Assistant_Answer_To_Streamer()
 		{
-			ChatResponseStream? answerFromAssistant = null!;
+			_ollama.SetExpectedChatResponses(
+				new ChatResponseStream { Message = CreateMessage(ChatRole.Assistant, "Hi hu") },
+				new ChatResponseStream { Message = CreateMessage(ChatRole.Assistant, "man, how") },
+				new ChatResponseStream { Message = CreateMessage(ChatRole.Assistant, " are you?") });
 
-			_ollama.DefineChatResponse("assistant", "hi!");
+			var chat = new Chat(_ollama);
+			var answer = await chat.Send("henlo", CancellationToken.None).StreamToEnd();
 
-			var chat = new Chat(_ollama, answer => answerFromAssistant = answer);
-			await chat.Send("henlo", CancellationToken.None);
+			answer.Should().Be("Hi human, how are you?");
 
-			answerFromAssistant.Should().NotBeNull();
-			answerFromAssistant.Message.Role.Should().Be(ChatRole.Assistant);
-			answerFromAssistant.Message.Content.Should().Be("hi!");
+			chat.Messages.Last().Role.Should().Be(ChatRole.Assistant);
+			chat.Messages.Last().Content.Should().Be("Hi human, how are you?");
+		}
+
+		[Test]
+		public async Task Sends_System_Prompt_Message()
+		{
+			var chat = new Chat(_ollama, "Speak like a pirate.");
+			await chat.Send("henlo", CancellationToken.None).StreamToEnd();
+
+			chat.Messages.First().Role.Should().Be(ChatRole.System);
+			chat.Messages.First().Content.Should().Be("Speak like a pirate.");
 		}
 
 		[Test]
 		public async Task Sends_Messages_As_User()
 		{
-			var chat = new Chat(_ollama, _ => { });
-			var history = (await chat.Send("henlo", CancellationToken.None)).ToArray();
+			var chat = new Chat(_ollama);
+			await chat.Send("henlo", CancellationToken.None).StreamToEnd();
 
-			history[0].Role.Should().Be(ChatRole.User);
-			history[0].Content.Should().Be("henlo");
-		}
-
-		[Test]
-		public async Task Returns_User_And_Assistant_Message_History()
-		{
-			_ollama.DefineChatResponse(ChatRole.Assistant, "hi!");
-
-			var chat = new Chat(_ollama, _ => { });
-			var history = (await chat.Send("henlo", CancellationToken.None)).ToArray();
-
-			history.Length.Should().Be(2);
-			history[0].Role.Should().Be(ChatRole.User);
-			history[0].Content.Should().Be("henlo");
-			history[1].Role.Should().Be(ChatRole.Assistant);
-			history[1].Content.Should().Be("hi!");
+			chat.Messages.First().Role.Should().Be(ChatRole.User);
+			chat.Messages.First().Content.Should().Be("henlo");
 		}
 	}
 
@@ -57,16 +54,37 @@ public class ChatTests
 		[Test]
 		public async Task Sends_Messages_As_Defined_Role()
 		{
-			_ollama.DefineChatResponse(ChatRole.Assistant, "hi system!");
+			_ollama.SetExpectedChatResponses(
+				new ChatResponseStream { Message = CreateMessage(ChatRole.Assistant, "Hi") },
+				new ChatResponseStream { Message = CreateMessage(ChatRole.Assistant, " tool.") });
 
-			var chat = new Chat(_ollama, _ => { });
-			var history = (await chat.SendAs(ChatRole.System, "henlo hooman", CancellationToken.None)).ToArray();
+			var chat = new Chat(_ollama);
+			await chat.SendAs(ChatRole.Tool, "Henlo assistant.", CancellationToken.None).StreamToEnd();
 
+			var history = chat.Messages.ToArray();
 			history.Length.Should().Be(2);
-			history[0].Role.Should().Be(ChatRole.System);
-			history[0].Content.Should().Be("henlo hooman");
+			history[0].Role.Should().Be(ChatRole.Tool);
+			history[0].Content.Should().Be("Henlo assistant.");
 			history[1].Role.Should().Be(ChatRole.Assistant);
-			history[1].Content.Should().Be("hi system!");
+			history[1].Content.Should().Be("Hi tool.");
 		}
 	}
+
+	public class SetMessagesMethod : ChatTests
+	{
+		[Test]
+		public void Replaces_Chat_History()
+		{
+			var chat = new Chat(_ollama);
+
+			chat.SetMessages([new Message { Content = "A", Role = ChatRole.System }]);
+			chat.Messages.Single().Content.Should().Be("A");
+
+			chat.SetMessages([new Message { Content = "B", Role = ChatRole.System }]);
+			chat.Messages.Single().Content.Should().Be("B");
+		}
+	}
+
+	protected static Message CreateMessage(ChatRole role, string content)
+			=> new() { Role = role, Content = content };
 }
