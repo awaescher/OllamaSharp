@@ -1,21 +1,16 @@
 using OllamaSharp;
-using OllamaSharp.Models.Chat;
 using Spectre.Console;
 
-public class ChatConsole : OllamaConsole
-{
-	public ChatConsole(IOllamaApiClient ollama)
-		: base(ollama)
-	{
-	}
+namespace OllamaApiConsole.Demos;
 
+public class ChatConsole(IOllamaApiClient ollama) : OllamaConsole(ollama)
+{
 	public override async Task Run()
 	{
 		AnsiConsole.Write(new Rule("Chat demo").LeftJustified());
 		AnsiConsole.WriteLine();
 
 		Ollama.SelectedModel = await SelectModel("Select a model you want to chat with:");
-
 
 		if (!string.IsNullOrEmpty(Ollama.SelectedModel))
 		{
@@ -30,10 +25,7 @@ public class ChatConsole : OllamaConsole
 				AnsiConsole.MarkupLine("[gray]Type \"[red]/new[/]\" to start over.[/]");
 				AnsiConsole.MarkupLine("[gray]Type \"[red]/exit[/]\" to leave the chat.[/]");
 
-				var chat = Ollama.Chat(stream => AnsiConsole.MarkupInterpolated($"[cyan]{stream?.Message.Content ?? ""}[/]"));
-
-				if (!string.IsNullOrEmpty(systemPrompt))
-					chat.SetMessages([new Message { Role = ChatRole.System, Content = systemPrompt }]);
+				var chat = new Chat(Ollama, systemPrompt);
 
 				string message;
 
@@ -54,7 +46,8 @@ public class ChatConsole : OllamaConsole
 						break;
 					}
 
-					await chat.Send(message);
+					await foreach (var answerToken in chat.Send(message))
+						AnsiConsole.MarkupInterpolated($"[cyan]{answerToken}[/]");
 
 					AnsiConsole.WriteLine();
 				} while (!string.IsNullOrEmpty(message));

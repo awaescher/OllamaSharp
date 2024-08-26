@@ -3,13 +3,10 @@ using OllamaSharp.Models.Chat;
 using OllamaSharp.Models.Exceptions;
 using Spectre.Console;
 
-public class ToolConsole : OllamaConsole
-{
-	public ToolConsole(IOllamaApiClient ollama)
-		: base(ollama)
-	{
-	}
+namespace OllamaApiConsole.Demos;
 
+public class ToolConsole(IOllamaApiClient ollama) : OllamaConsole(ollama)
+{
 	public override async Task Run()
 	{
 		AnsiConsole.Write(new Rule("Tool demo").LeftJustified());
@@ -32,10 +29,7 @@ public class ToolConsole : OllamaConsole
 				AnsiConsole.MarkupLine("[gray]Type \"[red]/new[/]\" to start over.[/]");
 				AnsiConsole.MarkupLine("[gray]Type \"[red]/exit[/]\" to leave the chat.[/]");
 
-				var chat = Ollama.Chat(stream => AnsiConsole.MarkupInterpolated($"[cyan]{stream?.Message.Content ?? ""}[/]"));
-
-				if (!string.IsNullOrEmpty(systemPrompt))
-					chat.SetMessages([new Message { Role = ChatRole.System, Content = systemPrompt }]);
+				var chat = new Chat(Ollama, systemPrompt);
 
 				string message;
 
@@ -58,7 +52,8 @@ public class ToolConsole : OllamaConsole
 
 					try
 					{
-						await chat.SendAs(ChatRole.User, message, GetTools());
+						await foreach (var answerToken in chat.Send(message, GetTools()))
+							AnsiConsole.MarkupInterpolated($"[cyan]{answerToken}[/]");
 					}
 					catch (OllamaException ex)
 					{
@@ -70,11 +65,11 @@ public class ToolConsole : OllamaConsole
 					{
 						AnsiConsole.MarkupLine("\n[purple]Tools used:[/]");
 
-						foreach (var tool in toolCalls.Where(t => t.Function != null))
+						foreach (var function in toolCalls.Where(t => t.Function != null).Select(t => t.Function))
 						{
-							AnsiConsole.MarkupLineInterpolated($"  - [purple]{tool.Function!.Name}[/]");
+							AnsiConsole.MarkupLineInterpolated($"  - [purple]{function!.Name}[/]");
 
-							foreach (var argument in tool.Function.Arguments ?? [])
+							foreach (var argument in function.Arguments ?? [])
 								AnsiConsole.MarkupLineInterpolated($"    - [purple]{argument.Key}[/]: [purple]{argument.Value}[/]");
 						}
 					}

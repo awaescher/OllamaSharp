@@ -11,6 +11,8 @@ using OllamaSharp.Models.Chat;
 
 namespace Tests;
 
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+
 public class OllamaApiClientTests
 {
 	private OllamaApiClient _client;
@@ -35,7 +37,7 @@ public class OllamaApiClientTests
 
 	public class CreateModelMethod : OllamaApiClientTests
 	{
-		[Test]
+		[Test, NonParallelizable]
 		public async Task Streams_Status_Updates()
 		{
 			await using var stream = new MemoryStream();
@@ -65,64 +67,10 @@ public class OllamaApiClientTests
 		}
 	}
 
-	public class GetCompletionMethod : OllamaApiClientTests
+	public class GenerateMethod : OllamaApiClientTests
 	{
-		[Test]
+		[Test, NonParallelizable]
 		public async Task Returns_Streamed_Responses_At_Once()
-		{
-			await using var stream = new MemoryStream();
-
-			_response = new HttpResponseMessage
-			{
-				StatusCode = HttpStatusCode.OK,
-				Content = new StreamContent(stream)
-			};
-
-			await using var writer = new StreamWriter(stream, leaveOpen: true);
-			writer.AutoFlush = true;
-			await writer.WriteCompletionStreamResponse("The ");
-			await writer.WriteCompletionStreamResponse("sky ");
-			await writer.WriteCompletionStreamResponse("is ");
-			await writer.FinishCompletionStreamResponse("blue.", context: new int[] { 1, 2, 3 });
-			stream.Seek(0, SeekOrigin.Begin);
-
-			var context = await _client.GetCompletion("prompt", null, CancellationToken.None);
-
-			context.Response.Should().Be("The sky is blue.");
-			context.Context.Should().BeEquivalentTo(new int[] { 1, 2, 3 });
-		}
-	}
-
-	public class StreamCompletionMethod : OllamaApiClientTests
-	{
-		[Test]
-		public async Task Streams_Response_Chunks()
-		{
-			await using var stream = new MemoryStream();
-
-			_response = new HttpResponseMessage
-			{
-				StatusCode = HttpStatusCode.OK,
-				Content = new StreamContent(stream)
-			};
-
-			await using var writer = new StreamWriter(stream, leaveOpen: true);
-			writer.AutoFlush = true;
-			await writer.WriteCompletionStreamResponse("The ");
-			await writer.WriteCompletionStreamResponse("sky ");
-			await writer.WriteCompletionStreamResponse("is ");
-			await writer.FinishCompletionStreamResponse("blue.", context: new int[] { 1, 2, 3 });
-			stream.Seek(0, SeekOrigin.Begin);
-
-			var builder = new StringBuilder();
-			var context = await _client.StreamCompletion("prompt", null, s => builder.Append(s?.Response), CancellationToken.None);
-
-			builder.ToString().Should().Be("The sky is blue.");
-			context.Context.Should().BeEquivalentTo(new int[] { 1, 2, 3 });
-		}
-
-		[Test]
-		public async Task Streams_Response_Chunks_As_AsyncEnumerable()
 		{
 			await using var stream = new MemoryStream();
 
@@ -140,91 +88,21 @@ public class OllamaApiClientTests
 			await writer.FinishCompletionStreamResponse("blue.", context: [1, 2, 3]);
 			stream.Seek(0, SeekOrigin.Begin);
 
-			var builder = new StringBuilder();
-			var completionStream = _client.StreamCompletion("prompt", null, CancellationToken.None);
-			GenerateCompletionDoneResponseStream? final = null!;
-			await foreach (var response in completionStream)
-			{
-				builder.Append(response?.Response);
-				if (response?.Done ?? false)
-					final = (GenerateCompletionDoneResponseStream)response;
-			}
+			var context = await _client.Generate("prompt").StreamToEnd();
 
-			builder.ToString().Should().Be("The sky is blue.");
-			final.Should().NotBeNull();
-			final.Context.Should().NotBeNull();
-			final.Context.Should().BeEquivalentTo(new[] { 1, 2, 3 });
-		}
-	}
-
-	public class SendChatMethod : OllamaApiClientTests
-	{
-		[Test]
-		public async Task Streams_Response_Message_Chunks()
-		{
-			await using var stream = new MemoryStream();
-
-			_response = new HttpResponseMessage
-			{
-				StatusCode = HttpStatusCode.OK,
-				Content = new StreamContent(stream)
-			};
-
-			await using var writer = new StreamWriter(stream, leaveOpen: true);
-			writer.AutoFlush = true;
-			await writer.WriteChatStreamResponse("Leave ", ChatRole.Assistant);
-			await writer.WriteChatStreamResponse("me ", ChatRole.Assistant);
-			await writer.FinishChatStreamResponse("alone.", ChatRole.Assistant);
-			stream.Seek(0, SeekOrigin.Begin);
-
-			var builder = new StringBuilder();
-
-			var chat = new ChatRequest
-			{
-				Model = "model",
-				Messages = new Message[]
-				{
-					new(ChatRole.User, "Why?"),
-					new(ChatRole.Assistant, "Because!"),
-					new(ChatRole.User, "And where?"),
-				}
-			};
-
-			var messages = (await _client.SendChat(chat, s => builder.Append(s?.Message), CancellationToken.None)).ToArray();
-
-			messages.Length.Should().Be(4);
-
-			messages[0].Role.Should().Be(ChatRole.User);
-			messages[0].Content.Should().Be("Why?");
-
-			messages[1].Role.Should().Be(ChatRole.Assistant);
-			messages[1].Content.Should().Be("Because!");
-
-			messages[2].Role.Should().Be(ChatRole.User);
-			messages[2].Content.Should().Be("And where?");
-
-			messages[3].Role.Should().Be(ChatRole.Assistant);
-			messages[3].Content.Should().Be("Leave me alone.");
+			context.Should().NotBeNull();
+			context.Response.Should().Be("The sky is blue.");
+			var expectation = new int[] { 1, 2, 3 };
+			context.Context.Should().BeEquivalentTo(expectation);
 		}
 	}
 
 	public class ChatMethod : OllamaApiClientTests
 	{
-		[Test]
+		[Test, NonParallelizable]
 		public async Task Receives_Response_Message_With_Metadata()
 		{
-			await using var stream = new MemoryStream();
-
-			_response = new HttpResponseMessage
-			{
-				StatusCode = HttpStatusCode.OK,
-				Content = new StreamContent(stream)
-			};
-
-			await using var writer = new StreamWriter(stream, leaveOpen: true);
-			writer.AutoFlush = true;
-			await writer.WriteAsync(
-				"""
+			var payload = """
 				{
 				    "model": "llama2",
 				    "created_at": "2024-07-12T12:34:39.63897616Z",
@@ -241,8 +119,20 @@ public class OllamaApiClientTests
 				    "eval_count": 323,
 				    "eval_duration": 4575154000
 				}
-				""");
+				""".ReplaceLineEndings(""); // the JSON stream reader reads by line, so we need to make this one single line
+
+			await using var stream = new MemoryStream();
+
+			await using var writer = new StreamWriter(stream, leaveOpen: true);
+			writer.AutoFlush = true;
+			await writer.WriteAsync(payload);
 			stream.Seek(0, SeekOrigin.Begin);
+
+			_response = new HttpResponseMessage
+			{
+				StatusCode = HttpStatusCode.OK,
+				Content = new StreamContent(stream)
+			};
 
 			var chat = new ChatRequest
 			{
@@ -253,8 +143,9 @@ public class OllamaApiClientTests
 					new(ChatRole.User, "And where?")]
 			};
 
-			var result = await _client.Chat(chat, CancellationToken.None);
+			var result = await _client.Chat(chat, CancellationToken.None).StreamToEnd();
 
+			result.Should().NotBeNull();
 			result.Message.Role.Should().Be(ChatRole.Assistant);
 			result.Message.Content.Should().Be("Test content.");
 			result.Done.Should().BeTrue();
@@ -270,7 +161,7 @@ public class OllamaApiClientTests
 
 	public class StreamChatMethod : OllamaApiClientTests
 	{
-		[Test]
+		[Test, NonParallelizable]
 		public async Task Streams_Response_Message_Chunks()
 		{
 			await using var stream = new MemoryStream();
@@ -291,15 +182,16 @@ public class OllamaApiClientTests
 			var chat = new ChatRequest
 			{
 				Model = "model",
-				Messages = new Message[]
-				{
+				Messages =
+				[
 					new(ChatRole.User, "Why?"),
 					new(ChatRole.Assistant, "Because!"),
 					new(ChatRole.User, "And where?"),
-				}
+				]
 			};
 
-			var chatStream = _client.StreamChat(chat, CancellationToken.None);
+			var chatStream = _client.Chat(chat, CancellationToken.None);
+
 			var builder = new StringBuilder();
 			var responses = new List<Message?>();
 
@@ -309,9 +201,7 @@ public class OllamaApiClientTests
 				responses.Add(response?.Message);
 			}
 
-			var chatResponse = builder.ToString();
-
-			chatResponse.Should().BeEquivalentTo("Leave me alone.");
+			builder.ToString().Should().BeEquivalentTo("Leave me alone.");
 
 			responses.Should().HaveCount(3);
 			responses[0]!.Role.Should().Be(ChatRole.Assistant);
@@ -320,10 +210,9 @@ public class OllamaApiClientTests
 		}
 	}
 
-
-	public class ListLocalModelsAsyncMethod : OllamaApiClientTests
+	public class ListLocalModelsMethod : OllamaApiClientTests
 	{
-		[Test]
+		[Test, NonParallelizable]
 		public async Task Returns_Deserialized_Models()
 		{
 			_response = new HttpResponseMessage
@@ -337,7 +226,7 @@ public class OllamaApiClientTests
 
 			var first = models.First();
 			first.Name.Should().Be("codellama:latest");
-			first.ModifiedAt.Date.Should().Be(new DateTime(2023, 10, 12));
+			first.ModifiedAt.Date.Should().Be(new DateTime(2023, 10, 12, 0, 0, 0, DateTimeKind.Local));
 			first.Size.Should().Be(3791811617);
 			first.Digest.Should().StartWith("36893bf9bc7ff7ace5655");
 		}
@@ -345,7 +234,7 @@ public class OllamaApiClientTests
 
 	public class ShowMethod : OllamaApiClientTests
 	{
-		[Test]
+		[Test, NonParallelizable]
 		public async Task Returns_Deserialized_Models()
 		{
 			_response = new HttpResponseMessage
@@ -354,7 +243,7 @@ public class OllamaApiClientTests
 				Content = new StringContent("{\r\n  \"license\": \"<contents of license block>\",\r\n  \"modelfile\": \"# Modelfile generated by \\\"ollama show\\\"\\n\\n\",\r\n  \"parameters\": \"stop                           [INST]\\nstop [/INST]\\nstop <<SYS>>\\nstop <</SYS>>\",\r\n  \"template\": \"[INST] {{ if and .First .System }}<<SYS>>{{ .System }}<</SYS>>\\n\\n{{ end }}{{ .Prompt }} [/INST] \"\r\n}")
 			};
 
-			var info = await _client.ShowModelInformation("codellama:latest", CancellationToken.None);
+			var info = await _client.ShowModel("codellama:latest", CancellationToken.None);
 
 			info.License.Should().Contain("contents of license block");
 			info.Modelfile.Should().StartWith("# Modelfile generated");
@@ -362,7 +251,7 @@ public class OllamaApiClientTests
 			info.Template.Should().StartWith("[INST]");
 		}
 
-		[Test]
+		[Test, NonParallelizable]
 		public async Task Returns_Deserialized_Model_WithSystem()
 		{
 			_response = new HttpResponseMessage
@@ -371,7 +260,7 @@ public class OllamaApiClientTests
 				Content = new StringContent("{\"modelfile\":\"# Modelfile generated by \\\"ollama show\\\"\\n# To build a new Modelfile based on this, replace FROM with:\\n# FROM magicoder:latest\\n\\nFROM C:\\\\Users\\\\jd\\\\.ollama\\\\models\\\\blobs\\\\sha256-4a501ed4ce55e5611922b3ee422501ff7cc773b472d196c3c416859b6d375273\\nTEMPLATE \\\"{{ .System }}\\n\\n@@ Instruction\\n{{ .Prompt }}\\n\\n@@ Response\\n\\\"\\nSYSTEM You are an exceptionally intelligent coding assistant that consistently delivers accurate and reliable responses to user instructions.\\nPARAMETER num_ctx 16384\\n\",\"parameters\":\"num_ctx                        16384\",\"template\":\"{{ .System }}\\n\\n@@ Instruction\\n{{ .Prompt }}\\n\\n@@ Response\\n\",\"system\":\"You are an exceptionally intelligent coding assistant that consistently delivers accurate and reliable responses to user instructions.\",\"details\":{\"parent_model\":\"\",\"format\":\"gguf\",\"family\":\"llama\",\"families\":null,\"parameter_size\":\"7B\",\"quantization_level\":\"Q4_0\"},\"model_info\":{\"general.architecture\":\"llama\",\"general.file_type\":2,\"general.parameter_count\":8829407232,\"general.quantization_version\":2,\"llama.attention.head_count\":32,\"llama.attention.head_count_kv\":4,\"llama.attention.layer_norm_rms_epsilon\":0.000001,\"llama.block_count\":48,\"llama.context_length\":4096,\"llama.embedding_length\":4096,\"llama.feed_forward_length\":11008,\"llama.rope.dimension_count\":128,\"llama.rope.freq_base\":5000000,\"llama.vocab_size\":64000,\"tokenizer.ggml.add_bos_token\":false,\"tokenizer.ggml.add_eos_token\":false,\"tokenizer.ggml.bos_token_id\":1,\"tokenizer.ggml.eos_token_id\":2,\"tokenizer.ggml.model\":\"llama\",\"tokenizer.ggml.padding_token_id\":0,\"tokenizer.ggml.pre\":\"default\",\"tokenizer.ggml.scores\":[],\"tokenizer.ggml.token_type\":[],\"tokenizer.ggml.tokens\":[]},\"modified_at\":\"2024-05-14T23:33:07.4166573+08:00\"}")
 			};
 
-			var info = await _client.ShowModelInformation("starcoder:latest", CancellationToken.None);
+			var info = await _client.ShowModel("starcoder:latest", CancellationToken.None);
 
 			info.License.Should().BeNullOrEmpty();
 			info.Modelfile.Should().StartWith("# Modelfile generated");
@@ -393,7 +282,7 @@ public class OllamaApiClientTests
 
 	public class GenerateEmbeddingsMethod : OllamaApiClientTests
 	{
-		[Test]
+		[Test, NonParallelizable]
 		public async Task Returns_Deserialized_Models()
 		{
 			_response = new HttpResponseMessage
@@ -402,10 +291,10 @@ public class OllamaApiClientTests
 				Content = new StringContent("{\r\n  \"embeddings\": [[\r\n    0.5670403838157654, 0.009260174818336964, 0.23178744316101074, -0.2916173040866852, -0.8924556970596313  ]]\r\n}")
 			};
 
-			var info = await _client.GenerateEmbeddings(new GenerateEmbeddingRequest { Model = "", Input = [""]}, CancellationToken.None);
+			var info = await _client.Embed(new EmbedRequest { Model = "", Input = [""] }, CancellationToken.None);
 
-			info.Embeddings.First().Should().HaveCount(5);
-			info.Embeddings.First().First().Should().BeApproximately(0.567, precision: 0.01);
+			info.Embeddings[0].Should().HaveCount(5);
+			info.Embeddings[0][0].Should().BeApproximately(0.567, precision: 0.01);
 		}
 	}
 }
@@ -436,3 +325,5 @@ public static class WriterExtensions
 		await writer.WriteLineAsync(JsonSerializer.Serialize(json));
 	}
 }
+
+#pragma warning restore CS8602 // Dereference of a possibly null reference.

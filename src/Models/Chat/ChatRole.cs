@@ -64,7 +64,7 @@ public readonly struct ChatRole : IEquatable<ChatRole>
 	/// <summary>
 	/// Converts a string to a <see cref="ChatRole"/>.
 	/// </summary>
-	public static implicit operator ChatRole(string value) => new ChatRole(value);
+	public static implicit operator ChatRole(string value) => new(value);
 
 	/// <inheritdoc />
 	[EditorBrowsable(EditorBrowsableState.Never)]

@@ -68,7 +68,7 @@ public class Details
 	public string Family { get; set; } = null!;
 
 	/// <summary>
-	/// Represents the model's families. 
+	/// Represents the model's families.
 	/// </summary>
 	[JsonPropertyName("families")]
 	public string[]? Families { get; set; }

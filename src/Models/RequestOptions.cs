@@ -146,7 +146,6 @@ public partial class RequestOptions
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public float? TopP { get; set; }
 
-
 	/// <summary>
 	/// Alternative to the top_p, and aims to ensure a balance of quality and variety.min_p represents the minimum
 	/// probability for a token to be considered, relative to the probability of the most likely token.For

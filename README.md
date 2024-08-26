@@ -24,7 +24,7 @@ var uri = new Uri("http://localhost:11434");
 var ollama = new OllamaApiClient(uri);
 
 // select a model which should be used for further operations
-ollama.SelectedModel = "llama2";
+ollama.SelectedModel = "llama3.1:8b";
 ```
 
 ### Listing all models that are available locally
@@ -35,50 +35,30 @@ var models = await ollama.ListLocalModels();
 
 ### Pulling a model and reporting progress
 
-#### Callback Syntax
 ```csharp
-await ollama.PullModel("mistral", status => Console.WriteLine($"({status.Percent}%) {status.Status}"));
+await foreach (var status in ollama.PullModel("llama3.1:405b"))
+    Console.WriteLine($"{status.Percent}% {status.Status}");
 ```
 
-#### IAsyncEnumerable Syntax
-```csharp
-await foreach (var status in ollama.PullModel("mistral"))
-{
-    Console.WriteLine($"({status.Percent}%) {status.Status}");
-}
-```
+### Generating a completion directly into the console
 
-### Streaming a completion directly into the console
-
-#### Callback Syntax
 ```csharp
-// keep reusing the context to keep the chat topic going
-ConversationContext context = null;
-context = await ollama.StreamCompletion("How are you today?", context, stream => Console.Write(stream.Response));
-```
-
-#### IAsyncEnumerable Syntax
-```csharp
-// keep reusing the context to keep the chat topic going
-ConversationContext context = null;
-await foreach (var stream in ollama.StreamCompletion("How are you today?", context))
-{
+await foreach (var stream in ollama.Generate("How are you today?"))
     Console.Write(stream.Response);
-}
 ```
-
 
 ### Building interactive chats
 
 ```csharp
-// uses the /chat api from Ollama 0.1.14
-// messages including their roles will automatically be tracked within the chat object
-var chat = ollama.Chat(stream => Console.WriteLine(stream.Message?.Content ?? ""));
+var chat = new Chat(ollama);
 while (true)
 {
     var message = Console.ReadLine();
-    await chat.Send(message);
+    await foreach (var answerToken in chat.Send(message))
+        Console.Write(answerToken);
 }
+// messages including their roles and tool calls will automatically be tracked within the chat object
+// and are accessible via the Messages property
 ```
 
 ## Api Console

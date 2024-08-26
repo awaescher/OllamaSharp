@@ -2,14 +2,11 @@ using System.Text;
 using OllamaSharp;
 using Spectre.Console;
 
-public abstract class OllamaConsole
-{
-	public OllamaConsole(IOllamaApiClient ollama)
-	{
-		Ollama = ollama ?? throw new ArgumentNullException(nameof(ollama));
-	}
+namespace OllamaApiConsole;
 
-	public IOllamaApiClient Ollama { get; }
+public abstract class OllamaConsole(IOllamaApiClient ollama)
+{
+	public IOllamaApiClient Ollama { get; } = ollama ?? throw new ArgumentNullException(nameof(ollama));
 
 	public abstract Task Run();
 
@@ -51,7 +48,7 @@ public abstract class OllamaConsole
 		var modelsWithBackChoice = models.OrderBy(m => m.Name).Select(m => m.Name).ToList();
 		if (modelsWithBackChoice.Count == 1)
 		{
-			return modelsWithBackChoice.First();
+			return modelsWithBackChoice[0];
 		}
 		else
 		{
