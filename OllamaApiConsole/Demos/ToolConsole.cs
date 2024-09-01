@@ -97,7 +97,7 @@ public class ToolConsole(IOllamaApiClient ollama) : OllamaConsole(ollama)
 						["location"] = new Properties { Type = "string", Description = "The location to get the weather for, e.g. San Francisco, CA" },
 						["format"] = new Properties { Type = "string", Description = "The format to return the weather in, e.g. 'celsius' or 'fahrenheit'", Enum = ["celsius", "fahrenheit"] },
 					},
-					Required = ["location", "fahrenheit"],
+					Required = ["location", "format"],
 				}
 			};
 			Type = "function";
