@@ -61,5 +61,5 @@ public class MessageBuilder
 	/// <summary>
 	/// Gets whether the message builder received message chunks yet
 	/// </summary>
-	public bool HasValue => _contentBuilder.Length > 0;
+	public bool HasValue => _contentBuilder.Length > 0 || ToolCalls.Count > 0;
 }
