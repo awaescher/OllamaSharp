@@ -27,6 +27,41 @@ public class ChatTests
 			chat.Messages.Last().Role.Should().Be(ChatRole.Assistant);
 			chat.Messages.Last().Content.Should().Be("Hi human, how are you?");
 		}
+		
+		[Test]
+		public async Task Sends_Assistant_ToolsCall_To_Streamer()
+		{
+			_ollama.SetExpectedChatResponses(
+				new ChatResponseStream
+				{
+					Message = new Message {
+						Role = ChatRole.Assistant,
+						Content = "",
+						ToolCalls = [
+							new Message.ToolCall
+							{
+								Function = new Message.Function
+								{
+									Name = "get_current_weather",
+									Arguments = new Dictionary<string, string>()
+									{
+										["format"] = "celsius",
+										["location"] = "Los Angeles, CA"
+									}
+								}
+								
+							}
+						]
+					}
+				});
+
+			var chat = new Chat(_ollama);
+			await chat.Send("How is the weather in LA?", CancellationToken.None).StreamToEnd();
+
+			chat.Messages.Last().Role.Should().Be(ChatRole.Assistant);
+			chat.Messages.Last().ToolCalls.Should().HaveCount(1);
+			chat.Messages.Last().ToolCalls!.ElementAt(0).Function!.Name.Should().Be("get_current_weather");
+		}
 
 		[Test]
 		public async Task Sends_System_Prompt_Message()

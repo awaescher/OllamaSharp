@@ -157,6 +157,107 @@ public class OllamaApiClientTests
 			result.EvalCount.Should().Be(323);
 			result.EvalDuration.Should().Be(4575154000);
 		}
+		
+		[Test, NonParallelizable]
+		public async Task Receives_Response_Message_With_ToolsCalls()
+		{
+			var payload = """
+				{
+				    "model": "llama3.1:latest",
+				    "created_at": "2024-09-01T16:12:28.639564938Z",
+				    "message": {
+				        "role": "assistant",
+				        "content": "",
+				        "tool_calls": [
+				            {
+				                "function": {
+				                    "name": "get_current_weather",
+				                    "arguments": {
+				                        "format": "celsius",
+				                        "location": "Los Angeles, CA"
+				                    }
+				                }
+				            }
+				        ]
+				    },
+				    "done_reason": "stop",
+				    "done": true,
+				    "total_duration": 24808639002,
+				    "load_duration": 5084890970,
+				    "prompt_eval_count": 311,
+				    "prompt_eval_duration": 15120086000,
+				    "eval_count": 28,
+				    "eval_duration": 4602334000
+				}
+				""".ReplaceLineEndings(""); // the JSON stream reader reads by line, so we need to make this one single line
+
+			await using var stream = new MemoryStream();
+
+			await using var writer = new StreamWriter(stream, leaveOpen: true);
+			writer.AutoFlush = true;
+			await writer.WriteAsync(payload);
+			stream.Seek(0, SeekOrigin.Begin);
+
+			_response = new HttpResponseMessage
+			{
+				StatusCode = HttpStatusCode.OK,
+				Content = new StreamContent(stream)
+			};
+
+			var chat = new ChatRequest
+			{
+				Model = "llama3.1:latest",
+				Messages = [
+					new(ChatRole.User, "How is the weather in LA?"),
+				],
+				Tools = [
+					new Tool
+					{
+						Function = new Function
+						{
+							Description = "Get the current weather for a location",
+							Name = "get_current_weather",
+							Parameters = new Parameters
+							{
+								Properties = new Dictionary<string, Properties>
+								{
+									["location"] = new()
+									{
+										Type = "string",
+										Description = "The location to get the weather for, e.g. San Francisco, CA"
+									},
+									["format"] = new()
+									{
+										Type = "string",
+										Description = "The format to return the weather in, e.g. 'celsius' or 'fahrenheit'",
+										Enum = ["celsius", "fahrenheit"]
+									},
+								},
+								Required = ["location", "format"],
+							}
+						},
+						Type = "function"
+					}
+				]
+			};
+
+			var result = await _client.Chat(chat, CancellationToken.None).StreamToEnd();
+
+			result.Should().NotBeNull();
+			result.Message.Role.Should().Be(ChatRole.Assistant);
+			result.Done.Should().BeTrue();
+			result.DoneReason.Should().Be("stop");
+			
+			result.Message.ToolCalls.Should().HaveCount(1);
+			
+			var toolsFunction = result.Message.ToolCalls!.ElementAt(0).Function;
+			toolsFunction.Name.Should().Be("get_current_weather");
+			toolsFunction.Arguments!.ElementAt(0).Key.Should().Be("format");
+			toolsFunction.Arguments!.ElementAt(0).Value.Should().Be("celsius");
+			
+			toolsFunction.Arguments!.ElementAt(1).Key.Should().Be("location");
+			toolsFunction.Arguments!.ElementAt(1).Value.Should().Be("Los Angeles, CA");
+		}
 	}
 
 	public class StreamChatMethod : OllamaApiClientTests
