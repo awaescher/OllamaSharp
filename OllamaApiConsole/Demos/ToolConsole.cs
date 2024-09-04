@@ -61,7 +61,7 @@ public class ToolConsole(IOllamaApiClient ollama) : OllamaConsole(ollama)
 						AnsiConsole.MarkupLineInterpolated($"[red]{ex.Message}[/]");
 					}
 
-					var toolCalls = chat.Messages.LastOrDefault()?.ToolCalls ?? [];
+					var toolCalls = chat.Messages.LastOrDefault()?.ToolCalls?.ToArray() ?? [];
 					if (toolCalls.Any())
 					{
 						AnsiConsole.MarkupLine("\n[purple]Tools used:[/]");
@@ -74,13 +74,11 @@ public class ToolConsole(IOllamaApiClient ollama) : OllamaConsole(ollama)
 							foreach (var argument in function.Arguments ?? [])
 								AnsiConsole.MarkupLineInterpolated($"      - [purple]{argument.Key}[/]: [purple]{argument.Value}[/]");
 
-							var fn = _availableFunctions[function!.Name!];
-							var parameters = MapParameters(fn.Method, function!.Arguments!);
-							var toolResult = fn.DynamicInvoke(parameters)?.ToString();
+							var result = FunctionHelper.ExecuteFunction(function);
+							AnsiConsole.MarkupLineInterpolated($"    - [purple]return value[/]: [purple]\"{result}\"[/]");
 							
-							AnsiConsole.MarkupLineInterpolated($"    - [purple]response[/]: [purple]{toolResult}[/]");
-							
-							await chat.SendAs(ChatRole.Tool, toolResult, GetTools()).StreamToEnd();
+							await foreach (var answerToken in chat.SendAs(ChatRole.Tool, result, GetTools()))
+								AnsiConsole.MarkupInterpolated($"[cyan]{answerToken}[/]");
 						}
 					}
 
@@ -90,18 +88,6 @@ public class ToolConsole(IOllamaApiClient ollama) : OllamaConsole(ollama)
 		}
 	}
 	
-	private static readonly Dictionary<string, Func<string, string, string>> _availableFunctions = new()
-	{
-		["get_current_weather"] = (location, format) =>
-		{
-			return "36";
-		},
-		["get_current_news"] = (location, category) =>
-		{
-			return $"In {location} there were heavy rains in the last days.";
-		}
-	};
-
 	private static IEnumerable<Tool> GetTools() => [new WeatherTool(), new NewsTool()];
 
 	private sealed class WeatherTool : Tool
@@ -116,8 +102,8 @@ public class ToolConsole(IOllamaApiClient ollama) : OllamaConsole(ollama)
 				{
 					Properties = new Dictionary<string, Properties>
 					{
-						["location"] = new Properties { Type = "string", Description = "The location to get the weather for, e.g. San Francisco, CA" },
-						["format"] = new Properties { Type = "string", Description = "The format to return the weather in, e.g. 'celsius' or 'fahrenheit'", Enum = ["celsius", "fahrenheit"] },
+						["location"] = new() { Type = "string", Description = "The location to get the weather for, e.g. San Francisco, CA" },
+						["format"] = new() { Type = "string", Description = "The format to return the weather in, e.g. 'celsius' or 'fahrenheit'", Enum = ["celsius", "fahrenheit"] },
 					},
 					Required = ["location", "format"],
 				}
@@ -138,8 +124,8 @@ public class ToolConsole(IOllamaApiClient ollama) : OllamaConsole(ollama)
 				{
 					Properties = new Dictionary<string, Properties>
 					{
-						["location"] = new Properties { Type = "string", Description = "The location to get the news for, e.g. San Francisco, CA" },
-						["category"] = new Properties { Type = "string", Description = "The optional category to filter the news, can be left empty to return all.", Enum = ["politics", "economy", "sports", "entertainment", "health", "technology", "science"] },
+						["location"] = new() { Type = "string", Description = "The location to get the news for, e.g. San Francisco, CA" },
+						["category"] = new() { Type = "string", Description = "The optional category to filter the news, can be left empty to return all.", Enum = ["politics", "economy", "sports", "entertainment", "health", "technology", "science"] },
 					},
 					Required = ["location"],
 				}
@@ -147,22 +133,51 @@ public class ToolConsole(IOllamaApiClient ollama) : OllamaConsole(ollama)
 			Type = "function";
 		}
 	}
-	
-	private static object[] MapParameters(MethodBase method, IDictionary<string, string> namedParameters)
+
+	private static class FunctionHelper
 	{
-		var paramNames = method.GetParameters().Select(p => p.Name).ToArray();
-		var parameters = new object[paramNames.Length];
-		
-		for (var i = 0; i < parameters.Length; ++i) 
-			parameters[i] = Type.Missing;
-		
-		foreach (var (paramName, value) in namedParameters)
+		public static string ExecuteFunction(Message.Function function)
 		{
-			var paramIndex = Array.IndexOf(paramNames, paramName);
-			if (paramIndex >= 0)
-				parameters[paramIndex] = value;
+			var toolFunction = _availableFunctions[function.Name!];
+			var parameters = MapParameters(toolFunction.Method, function.Arguments!);
+			return toolFunction.DynamicInvoke(parameters)?.ToString()!;
 		}
 		
-		return parameters;
+		private static readonly Dictionary<string, Func<string, string?, string>> _availableFunctions = new()
+		{
+			["get_current_weather"] = (location, format) =>
+			{
+				var (temperature, unit) = format switch
+				{
+					"fahrenheit" => (Random.Shared.Next(23, 104), "°F"),
+					_ => (Random.Shared.Next(-5, 40), "°C"),
+				};
+				
+				return $"{temperature} {unit} in {location}";
+			},
+			["get_current_news"] = (location, category) =>
+			{
+				category = string.IsNullOrEmpty(category) ? "all" : category;
+				return $"Could not find news for {location} (category: {category}).";
+			}
+		};
+		
+		private static object[] MapParameters(MethodBase method, IDictionary<string, string> namedParameters)
+		{
+			var paramNames = method.GetParameters().Select(p => p.Name).ToArray();
+			var parameters = new object[paramNames.Length];
+			
+			for (var i = 0; i < parameters.Length; ++i) 
+				parameters[i] = Type.Missing;
+			
+			foreach (var (paramName, value) in namedParameters)
+			{
+				var paramIndex = Array.IndexOf(paramNames, paramName);
+				if (paramIndex >= 0)
+					parameters[paramIndex] = value;
+			}
+			
+			return parameters;
+		}
 	}
 }
