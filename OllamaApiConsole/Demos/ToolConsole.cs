@@ -1,3 +1,4 @@
+using System.Reflection;
 using OllamaSharp;
 using OllamaSharp.Models.Chat;
 using OllamaSharp.Models.Exceptions;
@@ -69,8 +70,17 @@ public class ToolConsole(IOllamaApiClient ollama) : OllamaConsole(ollama)
 						{
 							AnsiConsole.MarkupLineInterpolated($"  - [purple]{function!.Name}[/]");
 
+							AnsiConsole.MarkupLineInterpolated($"    - [purple]parameters[/]");
 							foreach (var argument in function.Arguments ?? [])
-								AnsiConsole.MarkupLineInterpolated($"    - [purple]{argument.Key}[/]: [purple]{argument.Value}[/]");
+								AnsiConsole.MarkupLineInterpolated($"      - [purple]{argument.Key}[/]: [purple]{argument.Value}[/]");
+
+							var fn = _availableFunctions[function!.Name!];
+							var parameters = MapParameters(fn.Method, function!.Arguments!);
+							var toolResult = fn.DynamicInvoke(parameters)?.ToString();
+							
+							AnsiConsole.MarkupLineInterpolated($"    - [purple]response[/]: [purple]{toolResult}[/]");
+							
+							await chat.SendAs(ChatRole.Tool, toolResult, GetTools()).StreamToEnd();
 						}
 					}
 
@@ -79,6 +89,18 @@ public class ToolConsole(IOllamaApiClient ollama) : OllamaConsole(ollama)
 			} while (keepChatting);
 		}
 	}
+	
+	private static readonly Dictionary<string, Func<string, string, string>> _availableFunctions = new()
+	{
+		["get_current_weather"] = (location, format) =>
+		{
+			return "36";
+		},
+		["get_current_news"] = (location, category) =>
+		{
+			return $"In {location} there were heavy rains in the last days.";
+		}
+	};
 
 	private static IEnumerable<Tool> GetTools() => [new WeatherTool(), new NewsTool()];
 
@@ -124,5 +146,23 @@ public class ToolConsole(IOllamaApiClient ollama) : OllamaConsole(ollama)
 			};
 			Type = "function";
 		}
+	}
+	
+	private static object[] MapParameters(MethodBase method, IDictionary<string, string> namedParameters)
+	{
+		var paramNames = method.GetParameters().Select(p => p.Name).ToArray();
+		var parameters = new object[paramNames.Length];
+		
+		for (var i = 0; i < parameters.Length; ++i) 
+			parameters[i] = Type.Missing;
+		
+		foreach (var (paramName, value) in namedParameters)
+		{
+			var paramIndex = Array.IndexOf(paramNames, paramName);
+			if (paramIndex >= 0)
+				parameters[paramIndex] = value;
+		}
+		
+		return parameters;
 	}
 }
