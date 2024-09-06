@@ -5,7 +5,7 @@ namespace OllamaSharp.Models;
 /// <summary>
 /// The configuration information used for a chat completions request.
 /// </summary>
-public partial class RequestOptions
+public class RequestOptions
 {
 	/// <summary>
 	/// Enable Mirostat sampling for controlling perplexity.

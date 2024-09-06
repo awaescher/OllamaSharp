@@ -8,6 +8,9 @@ namespace OllamaSharp.Models;
 [JsonUnmappedMemberHandling(JsonUnmappedMemberHandling.Skip)]
 public class DeleteModelRequest
 {
+	/// <summary>
+	/// The name of the model to delete
+	/// </summary>
 	[JsonPropertyName("model")]
 	public string? Model { get; set; }
 }
