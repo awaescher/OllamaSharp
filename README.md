@@ -12,13 +12,13 @@ OllamaSharp is a .NET binding for the [Ollama API](https://github.com/jmorganca/
 - API endpoint coverage: Support for all Ollama API endpoints including chats, embeddings, listing models, pulling and creating new models, and more.
 - Real-time streaming: Stream responses directly to your application.
 - Progress reporting: Get real-time progress feedback on tasks like model pulling.
-- [API Console](#api-console): A ready-to-use API console to chat and manage your Ollama host remotely
+- Support for [images](https://ollama.com/blog/vision-models) and [tools (function calling)](https://ollama.com/blog/tool-support)
 
 ## Usage
 
 OllamaSharp wraps every Ollama API endpoint in awaitable methods that fully support response streaming.
 
-The follow list shows a few examples to get a glimpse on how easy it is to use. The list is not complete.
+The following list shows a few examples to get a glimpse on how easy it is to use. The list is not complete.
 
 ### Initializing
 
@@ -64,14 +64,6 @@ while (true)
 // messages including their roles and tool calls will automatically be tracked within the chat object
 // and are accessible via the Messages property
 ```
-
-## Api Console
-
-This project ships a full-featured demo console for all endpoints the Ollama API is exposing.
-
-This is not only a great [resource to learn](/OllamaApiConsole/Demos) about OllamaSharp, it can also be used to manage and chat with the Ollama host remotely. [Image chat](https://github.com/awaescher/OllamaSharp/blob/main/docs/imagechat.png) is supported for multi modal models.
-
-![Api Console Demo](https://github.com/awaescher/OllamaSharp/blob/main/docs/demo.gif)
 
 ## Credits
 
