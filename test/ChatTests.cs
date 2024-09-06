@@ -27,14 +27,15 @@ public class ChatTests
 			chat.Messages.Last().Role.Should().Be(ChatRole.Assistant);
 			chat.Messages.Last().Content.Should().Be("Hi human, how are you?");
 		}
-		
+
 		[Test]
 		public async Task Sends_Assistant_ToolsCall_To_Streamer()
 		{
 			_ollama.SetExpectedChatResponses(
 				new ChatResponseStream
 				{
-					Message = new Message {
+					Message = new Message
+					{
 						Role = ChatRole.Assistant,
 						Content = "",
 						ToolCalls = [
@@ -49,7 +50,7 @@ public class ChatTests
 										["location"] = "Los Angeles, CA"
 									}
 								}
-								
+
 							}
 						]
 					}
