@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using OllamaSharp.Models;
 using OllamaSharp.Models.Chat;
 
 namespace OllamaSharp;
@@ -26,6 +27,8 @@ public class Chat
 	/// Gets or sets the AI model to chat with
 	/// </summary>
 	public string Model { get; set; }
+	
+	public RequestOptions? Options { get; set; }
 
 	/// <summary>
 	/// Creates a new chat instance
@@ -97,7 +100,8 @@ public class Chat
 			Messages = Messages,
 			Model = Model,
 			Stream = !hasTools, // cannot stream if tools should be used
-			Tools = tools
+			Tools = tools,
+			Options = Options
 		};
 
 		var messageBuilder = new MessageBuilder();
