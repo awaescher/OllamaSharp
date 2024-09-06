@@ -157,7 +157,7 @@ public class OllamaApiClientTests
 			result.EvalCount.Should().Be(323);
 			result.EvalDuration.Should().Be(4575154000);
 		}
-		
+
 		[Test, NonParallelizable]
 		public async Task Receives_Response_Message_With_ToolsCalls()
 		{
@@ -247,14 +247,14 @@ public class OllamaApiClientTests
 			result.Message.Role.Should().Be(ChatRole.Assistant);
 			result.Done.Should().BeTrue();
 			result.DoneReason.Should().Be("stop");
-			
+
 			result.Message.ToolCalls.Should().HaveCount(1);
-			
+
 			var toolsFunction = result.Message.ToolCalls!.ElementAt(0).Function;
 			toolsFunction.Name.Should().Be("get_current_weather");
 			toolsFunction.Arguments!.ElementAt(0).Key.Should().Be("format");
 			toolsFunction.Arguments!.ElementAt(0).Value.Should().Be("celsius");
-			
+
 			toolsFunction.Arguments!.ElementAt(1).Key.Should().Be("location");
 			toolsFunction.Arguments!.ElementAt(1).Value.Should().Be("Los Angeles, CA");
 		}

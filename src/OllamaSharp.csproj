@@ -5,16 +5,17 @@
 		<Nullable>enable</Nullable>
 		<LangVersion>10</LangVersion>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-		<Title>API bindings for Ollama</Title>
+		<Title>OllamaSharp</Title>
 		<Copyright>Andreas Wäscher</Copyright>
+		<Authors>Andreas Wäscher, Milkey Tan, Jerrett Davis</Authors>
 		<PackageIcon>Ollama.png</PackageIcon>
 		<Description>
-			This project adds bindings to the Ollama API to include offline LLMs into your .NET apps
+			The easiest way to use the Ollama API in .NET
 		</Description>
 		<PackageProjectUrl>https://github.com/awaescher/OllamaSharp</PackageProjectUrl>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<RepositoryUrl>https://github.com/awaescher/OllamaSharp</RepositoryUrl>
-		<PackageTags>ollama;ollama-api;api;llm</PackageTags>
+		<PackageTags>ollama;ollama-api;api;llm;openai;ai;localllama;llama;streaming;gpt;llamacpp</PackageTags>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 		<Version>1.1.1</Version>
 	</PropertyGroup>

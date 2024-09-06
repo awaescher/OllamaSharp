@@ -13,7 +13,11 @@ public class PushModelRequest
 	[JsonPropertyName("model")]
 	public string? Model { get; set; }
 
-	[JsonPropertyName("insecure")] public bool Insecure { get; set; }
+	/// <summary>
+	/// Allow insecure connections to the library. Only use this if you are pulling from your own library during development.
+	/// </summary>
+	[JsonPropertyName("insecure")]
+	public bool Insecure { get; set; }
 
 	/// <summary>
 	/// Whether to stream the response
