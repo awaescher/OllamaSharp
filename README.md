@@ -4,7 +4,7 @@
 
 # OllamaSharp 🦙
 
-OllamaSharp provides .NET bindings for the [Ollama API](https://github.com/jmorganca/ollama/blob/main/docs/api.md), making it easy to interact with Ollama locally or on another machine using your favorite .NET languages.
+OllamaSharp provides .NET bindings for the [Ollama API](https://github.com/jmorganca/ollama/blob/main/docs/api.md), simplifying interaction with Ollama both locally and remotely.
 
 ## Features
 
