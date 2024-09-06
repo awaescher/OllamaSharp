@@ -4,15 +4,15 @@
 
 # OllamaSharp 🦙
 
-OllamaSharp is a .NET binding for the [Ollama API](https://github.com/jmorganca/ollama/blob/main/docs/api.md), making it easy to interact with Ollama using your favorite .NET languages.
+OllamaSharp provides .NET bindings for the [Ollama API](https://github.com/jmorganca/ollama/blob/main/docs/api.md), making it easy to interact with Ollama locally or on another machine using your favorite .NET languages.
 
 ## Features
 
-- Intuitive API client: Set up and interact with Ollama in just a few lines of code.
+- Ease of use: Interact with Ollama in just a few lines of code.
 - API endpoint coverage: Support for all Ollama API endpoints including chats, embeddings, listing models, pulling and creating new models, and more.
 - Real-time streaming: Stream responses directly to your application.
 - Progress reporting: Get real-time progress feedback on tasks like model pulling.
-- Support for [images](https://ollama.com/blog/vision-models) and [tools (function calling)](https://ollama.com/blog/tool-support)
+- Support for [vision models](https://ollama.com/blog/vision-models) and [tools (function calling)](https://ollama.com/blog/tool-support).
 
 ## Usage
 
