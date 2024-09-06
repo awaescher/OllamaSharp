@@ -4,6 +4,7 @@ using System.IO;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading;
@@ -21,6 +22,7 @@ namespace OllamaSharp;
 public class OllamaApiClient : IOllamaApiClient
 {
 	private readonly HttpClient _client;
+	private readonly JsonSerializerOptions _serializerOptions = new() { Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping };
 
 	/// <summary>
 	/// Gets the current configuration of the API client
@@ -88,7 +90,7 @@ public class OllamaApiClient : IOllamaApiClient
 	{
 		var request = new HttpRequestMessage(HttpMethod.Delete, "api/delete")
 		{
-			Content = new StringContent(JsonSerializer.Serialize(new DeleteModelRequest { Model = model }), Encoding.UTF8, "application/json")
+			Content = new StringContent(JsonSerializer.Serialize(new DeleteModelRequest { Model = model }, _serializerOptions), Encoding.UTF8, "application/json")
 		};
 
 		using var response = await _client.SendAsync(request, cancellationToken);
@@ -151,7 +153,7 @@ public class OllamaApiClient : IOllamaApiClient
 	{
 		var request = new HttpRequestMessage(HttpMethod.Post, "api/chat")
 		{
-			Content = new StringContent(JsonSerializer.Serialize(chatRequest), Encoding.UTF8, "application/json")
+			Content = new StringContent(JsonSerializer.Serialize(chatRequest, _serializerOptions), Encoding.UTF8, "application/json")
 		};
 
 		var completion = chatRequest.Stream
@@ -186,7 +188,7 @@ public class OllamaApiClient : IOllamaApiClient
 	{
 		var request = new HttpRequestMessage(HttpMethod.Post, "api/generate")
 		{
-			Content = new StringContent(JsonSerializer.Serialize(generateRequest), Encoding.UTF8, "application/json")
+			Content = new StringContent(JsonSerializer.Serialize(generateRequest, _serializerOptions), Encoding.UTF8, "application/json")
 		};
 
 		var completion = generateRequest.Stream
@@ -214,7 +216,7 @@ public class OllamaApiClient : IOllamaApiClient
 
 	private async Task PostAsync<TRequest>(string endpoint, TRequest request, CancellationToken cancellationToken)
 	{
-		var content = new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json");
+		var content = new StringContent(JsonSerializer.Serialize(request, _serializerOptions), Encoding.UTF8, "application/json");
 		var response = await _client.PostAsync(endpoint, content, cancellationToken);
 
 		await EnsureSuccessStatusCode(response);
@@ -222,7 +224,7 @@ public class OllamaApiClient : IOllamaApiClient
 
 	private async Task<TResponse> PostAsync<TRequest, TResponse>(string endpoint, TRequest request, CancellationToken cancellationToken)
 	{
-		var content = new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json");
+		var content = new StringContent(JsonSerializer.Serialize(request, _serializerOptions), Encoding.UTF8, "application/json");
 		var response = await _client.PostAsync(endpoint, content, cancellationToken);
 
 		await EnsureSuccessStatusCode(response);
@@ -236,7 +238,7 @@ public class OllamaApiClient : IOllamaApiClient
 	{
 		var request = new HttpRequestMessage(HttpMethod.Post, endpoint)
 		{
-			Content = new StringContent(JsonSerializer.Serialize(requestModel), Encoding.UTF8, "application/json")
+			Content = new StringContent(JsonSerializer.Serialize(requestModel, _serializerOptions), Encoding.UTF8, "application/json")
 		};
 
 		using var response = await _client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
