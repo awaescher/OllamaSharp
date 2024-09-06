@@ -1,6 +1,6 @@
-<div align="center">
+<p align="center">
  <img alt="ollama" height="200px" src="https://github.com/awaescher/OllamaSharp/blob/main/Ollama.png">
-</div>
+</p>
 
 # OllamaSharp 🦙
 
