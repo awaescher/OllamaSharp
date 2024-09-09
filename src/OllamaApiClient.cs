@@ -25,6 +25,11 @@ public class OllamaApiClient : IOllamaApiClient
 	/// Gets the serializer options for outgoing web requests like Post or Delete
 	/// </summary>
 	public JsonSerializerOptions OutgoingJsonSerializerOptions { get; } = new() { Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping };
+	
+	/// <summary>
+	/// Gets the serializer options used for deserializing http responses.
+	/// </summary>
+	public JsonSerializerOptions IncomingJsonSerializerOptions { get; } = new();
 
 	private readonly HttpClient _client;
 
@@ -168,7 +173,7 @@ public class OllamaApiClient : IOllamaApiClient
 
 		await EnsureSuccessStatusCode(response);
 
-		await foreach (var result in ProcessStreamedChatResponseAsync(response, cancellationToken))
+		await foreach (var result in ProcessStreamedChatResponseAsync(response, cancellationToken, OutgoingJsonSerializerOptions))
 			yield return result;
 	}
 
@@ -203,7 +208,7 @@ public class OllamaApiClient : IOllamaApiClient
 
 		await EnsureSuccessStatusCode(response);
 
-		await foreach (var result in ProcessStreamedCompletionResponseAsync(response, cancellationToken))
+		await foreach (var result in ProcessStreamedCompletionResponseAsync(response, cancellationToken, IncomingJsonSerializerOptions))
 			yield return result;
 	}
 
@@ -215,7 +220,7 @@ public class OllamaApiClient : IOllamaApiClient
 
 		var responseBody = await response.Content.ReadAsStringAsync();
 
-		return JsonSerializer.Deserialize<TResponse>(responseBody)!;
+		return JsonSerializer.Deserialize<TResponse>(responseBody, IncomingJsonSerializerOptions)!;
 	}
 
 	private async Task PostAsync<TRequest>(string endpoint, TRequest request, CancellationToken cancellationToken)
@@ -235,7 +240,7 @@ public class OllamaApiClient : IOllamaApiClient
 
 		var responseBody = await response.Content.ReadAsStringAsync();
 
-		return JsonSerializer.Deserialize<TResponse>(responseBody)!;
+		return JsonSerializer.Deserialize<TResponse>(responseBody, IncomingJsonSerializerOptions)!;
 	}
 
 	private async IAsyncEnumerable<TResponse?> StreamPostAsync<TRequest, TResponse>(string endpoint, TRequest requestModel, [EnumeratorCancellation] CancellationToken cancellationToken)
@@ -249,11 +254,11 @@ public class OllamaApiClient : IOllamaApiClient
 
 		await EnsureSuccessStatusCode(response);
 
-		await foreach (var result in ProcessStreamedResponseAsync<TResponse>(response, cancellationToken))
+		await foreach (var result in ProcessStreamedResponseAsync<TResponse>(response, cancellationToken, IncomingJsonSerializerOptions))
 			yield return result;
 	}
 
-	private static async IAsyncEnumerable<TLine?> ProcessStreamedResponseAsync<TLine>(HttpResponseMessage response, [EnumeratorCancellation] CancellationToken cancellationToken)
+	private static async IAsyncEnumerable<TLine?> ProcessStreamedResponseAsync<TLine>(HttpResponseMessage response, [EnumeratorCancellation] CancellationToken cancellationToken, JsonSerializerOptions? options = default)
 	{
 		var stream = await response.Content.ReadAsStreamAsync();
 		using var reader = new StreamReader(stream);
@@ -261,11 +266,11 @@ public class OllamaApiClient : IOllamaApiClient
 		while (!reader.EndOfStream && !cancellationToken.IsCancellationRequested)
 		{
 			var line = await reader.ReadLineAsync();
-			yield return JsonSerializer.Deserialize<TLine?>(line);
+			yield return JsonSerializer.Deserialize<TLine?>(line, options);
 		}
 	}
 
-	private static async IAsyncEnumerable<GenerateResponseStream?> ProcessStreamedCompletionResponseAsync(HttpResponseMessage response, [EnumeratorCancellation] CancellationToken cancellationToken)
+	private static async IAsyncEnumerable<GenerateResponseStream?> ProcessStreamedCompletionResponseAsync(HttpResponseMessage response, [EnumeratorCancellation] CancellationToken cancellationToken, JsonSerializerOptions? options = default)
 	{
 		using var stream = await response.Content.ReadAsStreamAsync();
 		using var reader = new StreamReader(stream);
@@ -273,15 +278,15 @@ public class OllamaApiClient : IOllamaApiClient
 		while (!reader.EndOfStream && !cancellationToken.IsCancellationRequested)
 		{
 			var line = await reader.ReadLineAsync();
-			var streamedResponse = JsonSerializer.Deserialize<GenerateResponseStream>(line);
+			var streamedResponse = JsonSerializer.Deserialize<GenerateResponseStream>(line, options);
 
 			yield return streamedResponse?.Done ?? false
-				? JsonSerializer.Deserialize<GenerateDoneResponseStream>(line)!
+				? JsonSerializer.Deserialize<GenerateDoneResponseStream>(line, options)!
 				: streamedResponse;
 		}
 	}
 
-	private static async IAsyncEnumerable<ChatResponseStream?> ProcessStreamedChatResponseAsync(HttpResponseMessage response, [EnumeratorCancellation] CancellationToken cancellationToken)
+	private static async IAsyncEnumerable<ChatResponseStream?> ProcessStreamedChatResponseAsync(HttpResponseMessage response, [EnumeratorCancellation] CancellationToken cancellationToken, JsonSerializerOptions? options = default)
 	{
 		using var stream = await response.Content.ReadAsStreamAsync();
 		using var reader = new StreamReader(stream);
@@ -289,10 +294,10 @@ public class OllamaApiClient : IOllamaApiClient
 		while (!reader.EndOfStream && !cancellationToken.IsCancellationRequested)
 		{
 			var line = await reader.ReadLineAsync();
-			var streamedResponse = JsonSerializer.Deserialize<ChatResponseStream>(line);
+			var streamedResponse = JsonSerializer.Deserialize<ChatResponseStream>(line, options);
 
 			yield return streamedResponse?.Done ?? false
-				? JsonSerializer.Deserialize<ChatDoneResponseStream>(line)!
+				? JsonSerializer.Deserialize<ChatDoneResponseStream>(line, options)!
 				: streamedResponse;
 		}
 	}
