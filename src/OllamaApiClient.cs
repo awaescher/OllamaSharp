@@ -173,7 +173,7 @@ public class OllamaApiClient : IOllamaApiClient
 
 		await EnsureSuccessStatusCode(response);
 
-		await foreach (var result in ProcessStreamedChatResponseAsync(response, cancellationToken, OutgoingJsonSerializerOptions))
+		await foreach (var result in ProcessStreamedChatResponseAsync(response, cancellationToken, IncomingJsonSerializerOptions))
 			yield return result;
 	}
 
