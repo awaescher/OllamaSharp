@@ -173,7 +173,7 @@ public class OllamaApiClient : IOllamaApiClient
 
 		await EnsureSuccessStatusCode(response);
 
-		await foreach (var result in ProcessStreamedChatResponseAsync(response, cancellationToken, IncomingJsonSerializerOptions))
+		await foreach (var result in ProcessStreamedChatResponseAsync(response, cancellationToken))
 			yield return result;
 	}
 
@@ -208,7 +208,7 @@ public class OllamaApiClient : IOllamaApiClient
 
 		await EnsureSuccessStatusCode(response);
 
-		await foreach (var result in ProcessStreamedCompletionResponseAsync(response, cancellationToken, IncomingJsonSerializerOptions))
+		await foreach (var result in ProcessStreamedCompletionResponseAsync(response, cancellationToken))
 			yield return result;
 	}
 
@@ -254,11 +254,11 @@ public class OllamaApiClient : IOllamaApiClient
 
 		await EnsureSuccessStatusCode(response);
 
-		await foreach (var result in ProcessStreamedResponseAsync<TResponse>(response, cancellationToken, IncomingJsonSerializerOptions))
+		await foreach (var result in ProcessStreamedResponseAsync<TResponse>(response, cancellationToken))
 			yield return result;
 	}
 
-	private static async IAsyncEnumerable<TLine?> ProcessStreamedResponseAsync<TLine>(HttpResponseMessage response, [EnumeratorCancellation] CancellationToken cancellationToken, JsonSerializerOptions? options = default)
+	private async IAsyncEnumerable<TLine?> ProcessStreamedResponseAsync<TLine>(HttpResponseMessage response, [EnumeratorCancellation] CancellationToken cancellationToken)
 	{
 		var stream = await response.Content.ReadAsStreamAsync();
 		using var reader = new StreamReader(stream);
@@ -266,11 +266,11 @@ public class OllamaApiClient : IOllamaApiClient
 		while (!reader.EndOfStream && !cancellationToken.IsCancellationRequested)
 		{
 			var line = await reader.ReadLineAsync();
-			yield return JsonSerializer.Deserialize<TLine?>(line, options);
+			yield return JsonSerializer.Deserialize<TLine?>(line, IncomingJsonSerializerOptions);
 		}
 	}
 
-	private static async IAsyncEnumerable<GenerateResponseStream?> ProcessStreamedCompletionResponseAsync(HttpResponseMessage response, [EnumeratorCancellation] CancellationToken cancellationToken, JsonSerializerOptions? options = default)
+	private async IAsyncEnumerable<GenerateResponseStream?> ProcessStreamedCompletionResponseAsync(HttpResponseMessage response, [EnumeratorCancellation] CancellationToken cancellationToken)
 	{
 		using var stream = await response.Content.ReadAsStreamAsync();
 		using var reader = new StreamReader(stream);
@@ -278,15 +278,15 @@ public class OllamaApiClient : IOllamaApiClient
 		while (!reader.EndOfStream && !cancellationToken.IsCancellationRequested)
 		{
 			var line = await reader.ReadLineAsync();
-			var streamedResponse = JsonSerializer.Deserialize<GenerateResponseStream>(line, options);
+			var streamedResponse = JsonSerializer.Deserialize<GenerateResponseStream>(line, IncomingJsonSerializerOptions);
 
 			yield return streamedResponse?.Done ?? false
-				? JsonSerializer.Deserialize<GenerateDoneResponseStream>(line, options)!
+				? JsonSerializer.Deserialize<GenerateDoneResponseStream>(line, IncomingJsonSerializerOptions)!
 				: streamedResponse;
 		}
 	}
 
-	private static async IAsyncEnumerable<ChatResponseStream?> ProcessStreamedChatResponseAsync(HttpResponseMessage response, [EnumeratorCancellation] CancellationToken cancellationToken, JsonSerializerOptions? options = default)
+	private async IAsyncEnumerable<ChatResponseStream?> ProcessStreamedChatResponseAsync(HttpResponseMessage response, [EnumeratorCancellation] CancellationToken cancellationToken)
 	{
 		using var stream = await response.Content.ReadAsStreamAsync();
 		using var reader = new StreamReader(stream);
@@ -294,10 +294,10 @@ public class OllamaApiClient : IOllamaApiClient
 		while (!reader.EndOfStream && !cancellationToken.IsCancellationRequested)
 		{
 			var line = await reader.ReadLineAsync();
-			var streamedResponse = JsonSerializer.Deserialize<ChatResponseStream>(line, options);
+			var streamedResponse = JsonSerializer.Deserialize<ChatResponseStream>(line, IncomingJsonSerializerOptions);
 
 			yield return streamedResponse?.Done ?? false
-				? JsonSerializer.Deserialize<ChatDoneResponseStream>(line, options)!
+				? JsonSerializer.Deserialize<ChatDoneResponseStream>(line, IncomingJsonSerializerOptions)!
 				: streamedResponse;
 		}
 	}
