@@ -42,7 +42,7 @@ public class OllamaApiClient : IOllamaApiClient
 	public string SelectedModel { get; set; }
 
 	/// <summary>
-	/// Creates a new instace of the Ollama API client
+	/// Creates a new instance of the Ollama API client
 	/// </summary>
 	/// <param name="uriString">The uri of the Ollama API endpoint</param>
 	/// <param name="defaultModel">The default model that should be used with Ollama</param>
@@ -52,7 +52,7 @@ public class OllamaApiClient : IOllamaApiClient
 	}
 
 	/// <summary>
-	/// Creates a new instace of the Ollama API client
+	/// Creates a new instance of the Ollama API client
 	/// </summary>
 	/// <param name="uri">The uri of the Ollama API endpoint</param>
 	/// <param name="defaultModel">The default model that should be used with Ollama</param>
@@ -62,7 +62,7 @@ public class OllamaApiClient : IOllamaApiClient
 	}
 
 	/// <summary>
-	/// Creates a new instace of the Ollama API client
+	/// Creates a new instance of the Ollama API client
 	/// </summary>
 	/// <param name="config">The configuration for the Ollama API client</param>
 	public OllamaApiClient(Configuration config)
@@ -71,7 +71,7 @@ public class OllamaApiClient : IOllamaApiClient
 	}
 
 	/// <summary>
-	/// Creates a new instace of the Ollama API client
+	/// Creates a new instance of the Ollama API client
 	/// </summary>
 	/// <param name="client">The Http client to access the Ollama API with</param>
 	/// <param name="defaultModel">The default model that should be used with Ollama</param>
