@@ -6,7 +6,7 @@ namespace OllamaSharp.Models;
 /// https://github.com/jmorganca/ollama/blob/main/docs/api.md#create-a-model
 /// </summary>
 [JsonUnmappedMemberHandling(JsonUnmappedMemberHandling.Skip)]
-public class CreateModelRequest
+public class CreateModelRequest : OllamaRequest
 {
 	/// <summary>
 	/// Name of the model to create

@@ -5,7 +5,7 @@ namespace OllamaSharp.Models;
 /// <summary>
 /// https://github.com/jmorganca/ollama/blob/main/docs/api.md#pull-a-model
 /// </summary>
-public class PullModelRequest
+public class PullModelRequest : OllamaRequest
 {
 	/// <summary>
 	/// The name of the model to pull in the form of <namespace>/<model>:<tag>

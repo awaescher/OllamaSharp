@@ -5,7 +5,7 @@ namespace OllamaSharp.Models;
 /// <summary>
 /// https://github.com/jmorganca/ollama/blob/main/docs/api.md#push-a-model
 /// </summary>
-public class PushModelRequest
+public class PushModelRequest : OllamaRequest
 {
 	/// <summary>
 	/// Name of the model to push in the form of <namespace>/<model>:<tag>
