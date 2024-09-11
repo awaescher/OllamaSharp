@@ -5,7 +5,7 @@ namespace OllamaSharp.Models;
 /// <summary>
 /// https://github.com/jmorganca/ollama/blob/main/docs/api.md#generate-a-completion
 /// </summary>
-public class GenerateRequest
+public class GenerateRequest : OllamaRequest
 {
 	/// <summary>
 	/// The model name (required)

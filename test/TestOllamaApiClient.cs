@@ -24,7 +24,7 @@ public class TestOllamaApiClient : IOllamaApiClient
 		_expectedGenerateResponses = responses;
 	}
 
-	public async IAsyncEnumerable<ChatResponseStream?> Chat(ChatRequest chatRequest, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+	public async IAsyncEnumerable<ChatResponseStream?> Chat(ChatRequest request, [EnumeratorCancellation] CancellationToken cancellationToken = default)
 	{
 		foreach (var response in _expectedChatResponses)
 		{
@@ -43,7 +43,7 @@ public class TestOllamaApiClient : IOllamaApiClient
 		throw new NotImplementedException();
 	}
 
-	public Task DeleteModel(string model, CancellationToken cancellationToken = default)
+	public Task DeleteModel(DeleteModelRequest request, CancellationToken cancellationToken = default)
 	{
 		throw new NotImplementedException();
 	}
@@ -87,12 +87,12 @@ public class TestOllamaApiClient : IOllamaApiClient
 		throw new NotImplementedException();
 	}
 
-	public IAsyncEnumerable<PushModelResponse?> PushModel(PushModelRequest modelRequest, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+	public IAsyncEnumerable<PushModelResponse?> PushModel(PushModelRequest request, [EnumeratorCancellation] CancellationToken cancellationToken = default)
 	{
 		throw new NotImplementedException();
 	}
 
-	public Task<ShowModelResponse> ShowModel(string model, CancellationToken cancellationToken = default)
+	public Task<ShowModelResponse> ShowModel(ShowModelRequest request, CancellationToken cancellationToken = default)
 	{
 		throw new NotImplementedException();
 	}
