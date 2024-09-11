@@ -66,6 +66,14 @@ public static class OllamaApiClientExtensions
 	}
 
 	/// <summary>
+	/// Sends a request to the /api/delete endpoint to delete a model
+	/// </summary>
+	/// <param name="model">The name of the model to delete</param>
+	/// <param name="cancellationToken">The token to cancel the operation with</param>
+	public static Task DeleteModel(this IOllamaApiClient client, string model, CancellationToken cancellationToken = default)
+	 => client.DeleteModel(new DeleteModelRequest { Model = model }, cancellationToken);
+
+	/// <summary>
 	/// Sends a request to the /api/pull endpoint to pull a new model
 	/// </summary>
 	/// <param name="client">The client used to execute the command</param>
@@ -124,4 +132,14 @@ public static class OllamaApiClientExtensions
 		};
 		return client.Generate(request, cancellationToken);
 	}
+
+	/// <summary>
+	/// Sends a request to the /api/show endpoint to show the information of a
+	/// model
+	/// </summary>
+	/// <param name="model">The name of the model the get the information for</param>
+	/// <param name="cancellationToken">The token to cancel the operation with</param>
+	/// <returns>The model information</returns>
+	public static Task<ShowModelResponse> ShowModel(this IOllamaApiClient client, string model, CancellationToken cancellationToken = default)
+	 => client.ShowModel(new ShowModelRequest { Model = model }, cancellationToken);
 }
