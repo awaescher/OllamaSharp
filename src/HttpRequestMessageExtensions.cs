@@ -17,12 +17,20 @@ public static class HttpRequestMessageExtensions
 	public static void ApplyCustomHeaders(this HttpRequestMessage requestMessage, OllamaApiClient apiClient, OllamaRequest? ollamaRequest)
 	{
 		foreach (var header in apiClient.DefaultRequestHeaders)
-			requestMessage.Headers.Add(header.Key, header.Value);
+			AddOrUpdateHeaderValue(requestMessage.Headers, header.Key, header.Value);
 
 		if (ollamaRequest != null)
 		{
 			foreach (var header in ollamaRequest.CustomHeaders)
-				requestMessage.Headers.Add(header.Key, header.Value);
+				AddOrUpdateHeaderValue(requestMessage.Headers, header.Key, header.Value);
 		}
+	}
+
+	private static void AddOrUpdateHeaderValue(System.Net.Http.Headers.HttpRequestHeaders requestMessageHeaders, string headerKey, string headerValue)
+	{
+		if (requestMessageHeaders.Contains(headerKey))
+			requestMessageHeaders.Remove(headerKey);
+
+		requestMessageHeaders.Add(headerKey, headerValue);
 	}
 }

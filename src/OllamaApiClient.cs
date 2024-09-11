@@ -30,7 +30,7 @@ public class OllamaApiClient : IOllamaApiClient
 	/// Gets the serializer options for outgoing web requests like Post or Delete
 	/// </summary>
 	public JsonSerializerOptions OutgoingJsonSerializerOptions { get; } = new() { Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping };
-	
+
 	/// <summary>
 	/// Gets the serializer options used for deserializing http responses.
 	/// </summary>
