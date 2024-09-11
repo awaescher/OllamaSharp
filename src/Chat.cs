@@ -28,6 +28,9 @@ public class Chat
 	/// </summary>
 	public string Model { get; set; }
 	
+	/// <summary>
+	/// Gets or sets the RequestOptions to chat with
+	/// </summary>
 	public RequestOptions? Options { get; set; }
 
 	/// <summary>
