@@ -6,7 +6,7 @@ namespace OllamaSharp.Models;
 /// <summary>
 /// https://github.com/jmorganca/ollama/blob/main/docs/api.md#generate-embeddings
 /// </summary>
-public class EmbedRequest
+public class EmbedRequest : OllamaRequest
 {
 	/// <summary>
 	/// The name of the model to generate embeddings from
