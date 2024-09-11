@@ -25,6 +25,11 @@ public class OllamaApiClient : IOllamaApiClient
 	/// Gets the serializer options for outgoing web requests like Post or Delete
 	/// </summary>
 	public JsonSerializerOptions OutgoingJsonSerializerOptions { get; } = new() { Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping };
+	
+	/// <summary>
+	/// Gets the serializer options used for deserializing http responses.
+	/// </summary>
+	public JsonSerializerOptions IncomingJsonSerializerOptions { get; } = new();
 
 	private readonly HttpClient _client;
 
@@ -37,7 +42,7 @@ public class OllamaApiClient : IOllamaApiClient
 	public string SelectedModel { get; set; }
 
 	/// <summary>
-	/// Creates a new instace of the Ollama API client
+	/// Creates a new instance of the Ollama API client
 	/// </summary>
 	/// <param name="uriString">The uri of the Ollama API endpoint</param>
 	/// <param name="defaultModel">The default model that should be used with Ollama</param>
@@ -47,7 +52,7 @@ public class OllamaApiClient : IOllamaApiClient
 	}
 
 	/// <summary>
-	/// Creates a new instace of the Ollama API client
+	/// Creates a new instance of the Ollama API client
 	/// </summary>
 	/// <param name="uri">The uri of the Ollama API endpoint</param>
 	/// <param name="defaultModel">The default model that should be used with Ollama</param>
@@ -57,7 +62,7 @@ public class OllamaApiClient : IOllamaApiClient
 	}
 
 	/// <summary>
-	/// Creates a new instace of the Ollama API client
+	/// Creates a new instance of the Ollama API client
 	/// </summary>
 	/// <param name="config">The configuration for the Ollama API client</param>
 	public OllamaApiClient(Configuration config)
@@ -66,7 +71,7 @@ public class OllamaApiClient : IOllamaApiClient
 	}
 
 	/// <summary>
-	/// Creates a new instace of the Ollama API client
+	/// Creates a new instance of the Ollama API client
 	/// </summary>
 	/// <param name="client">The Http client to access the Ollama API with</param>
 	/// <param name="defaultModel">The default model that should be used with Ollama</param>
@@ -215,7 +220,7 @@ public class OllamaApiClient : IOllamaApiClient
 
 		var responseBody = await response.Content.ReadAsStringAsync();
 
-		return JsonSerializer.Deserialize<TResponse>(responseBody)!;
+		return JsonSerializer.Deserialize<TResponse>(responseBody, IncomingJsonSerializerOptions)!;
 	}
 
 	private async Task PostAsync<TRequest>(string endpoint, TRequest request, CancellationToken cancellationToken)
@@ -235,7 +240,7 @@ public class OllamaApiClient : IOllamaApiClient
 
 		var responseBody = await response.Content.ReadAsStringAsync();
 
-		return JsonSerializer.Deserialize<TResponse>(responseBody)!;
+		return JsonSerializer.Deserialize<TResponse>(responseBody, IncomingJsonSerializerOptions)!;
 	}
 
 	private async IAsyncEnumerable<TResponse?> StreamPostAsync<TRequest, TResponse>(string endpoint, TRequest requestModel, [EnumeratorCancellation] CancellationToken cancellationToken)
@@ -253,7 +258,7 @@ public class OllamaApiClient : IOllamaApiClient
 			yield return result;
 	}
 
-	private static async IAsyncEnumerable<TLine?> ProcessStreamedResponseAsync<TLine>(HttpResponseMessage response, [EnumeratorCancellation] CancellationToken cancellationToken)
+	private async IAsyncEnumerable<TLine?> ProcessStreamedResponseAsync<TLine>(HttpResponseMessage response, [EnumeratorCancellation] CancellationToken cancellationToken)
 	{
 		var stream = await response.Content.ReadAsStreamAsync();
 		using var reader = new StreamReader(stream);
@@ -261,11 +266,11 @@ public class OllamaApiClient : IOllamaApiClient
 		while (!reader.EndOfStream && !cancellationToken.IsCancellationRequested)
 		{
 			var line = await reader.ReadLineAsync();
-			yield return JsonSerializer.Deserialize<TLine?>(line);
+			yield return JsonSerializer.Deserialize<TLine?>(line, IncomingJsonSerializerOptions);
 		}
 	}
 
-	private static async IAsyncEnumerable<GenerateResponseStream?> ProcessStreamedCompletionResponseAsync(HttpResponseMessage response, [EnumeratorCancellation] CancellationToken cancellationToken)
+	private async IAsyncEnumerable<GenerateResponseStream?> ProcessStreamedCompletionResponseAsync(HttpResponseMessage response, [EnumeratorCancellation] CancellationToken cancellationToken)
 	{
 		using var stream = await response.Content.ReadAsStreamAsync();
 		using var reader = new StreamReader(stream);
@@ -273,15 +278,15 @@ public class OllamaApiClient : IOllamaApiClient
 		while (!reader.EndOfStream && !cancellationToken.IsCancellationRequested)
 		{
 			var line = await reader.ReadLineAsync();
-			var streamedResponse = JsonSerializer.Deserialize<GenerateResponseStream>(line);
+			var streamedResponse = JsonSerializer.Deserialize<GenerateResponseStream>(line, IncomingJsonSerializerOptions);
 
 			yield return streamedResponse?.Done ?? false
-				? JsonSerializer.Deserialize<GenerateDoneResponseStream>(line)!
+				? JsonSerializer.Deserialize<GenerateDoneResponseStream>(line, IncomingJsonSerializerOptions)!
 				: streamedResponse;
 		}
 	}
 
-	private static async IAsyncEnumerable<ChatResponseStream?> ProcessStreamedChatResponseAsync(HttpResponseMessage response, [EnumeratorCancellation] CancellationToken cancellationToken)
+	private async IAsyncEnumerable<ChatResponseStream?> ProcessStreamedChatResponseAsync(HttpResponseMessage response, [EnumeratorCancellation] CancellationToken cancellationToken)
 	{
 		using var stream = await response.Content.ReadAsStreamAsync();
 		using var reader = new StreamReader(stream);
@@ -289,10 +294,10 @@ public class OllamaApiClient : IOllamaApiClient
 		while (!reader.EndOfStream && !cancellationToken.IsCancellationRequested)
 		{
 			var line = await reader.ReadLineAsync();
-			var streamedResponse = JsonSerializer.Deserialize<ChatResponseStream>(line);
+			var streamedResponse = JsonSerializer.Deserialize<ChatResponseStream>(line, IncomingJsonSerializerOptions);
 
 			yield return streamedResponse?.Done ?? false
-				? JsonSerializer.Deserialize<ChatDoneResponseStream>(line)!
+				? JsonSerializer.Deserialize<ChatDoneResponseStream>(line, IncomingJsonSerializerOptions)!
 				: streamedResponse;
 		}
 	}
