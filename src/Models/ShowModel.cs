@@ -7,7 +7,7 @@ namespace OllamaSharp.Models;
 /// https://github.com/jmorganca/ollama/blob/main/docs/api.md#show-model-information
 /// </summary>
 [JsonUnmappedMemberHandling(JsonUnmappedMemberHandling.Skip)]
-public class ShowModelRequest
+public class ShowModelRequest : OllamaRequest
 {
 	/// <summary>
 	///  The name of the model to show

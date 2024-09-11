@@ -6,7 +6,7 @@ namespace OllamaSharp.Models;
 /// https://github.com/jmorganca/ollama/blob/main/docs/api.md#delete-a-model
 /// </summary>
 [JsonUnmappedMemberHandling(JsonUnmappedMemberHandling.Skip)]
-public class DeleteModelRequest
+public class DeleteModelRequest : OllamaRequest
 {
 	/// <summary>
 	/// The name of the model to delete

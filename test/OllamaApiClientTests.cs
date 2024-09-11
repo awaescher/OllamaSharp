@@ -17,9 +17,10 @@ public class OllamaApiClientTests
 {
 	private OllamaApiClient _client;
 	private HttpResponseMessage? _response;
+	private Dictionary<string, string>? _expectedRequestHeaders;
 
 	[OneTimeSetUp]
-	public void Setup()
+	public void OneTimeSetUp()
 	{
 		var mockHandler = new Mock<HttpMessageHandler>(MockBehavior.Strict);
 
@@ -27,12 +28,45 @@ public class OllamaApiClientTests
 			.Protected()
 			.Setup<Task<HttpResponseMessage?>>(
 				"SendAsync",
-				ItExpr.Is<HttpRequestMessage>(_ => true),
+				ItExpr.Is<HttpRequestMessage>(r => ValidateExpectedRequestHeaders(r)),
 				ItExpr.IsAny<CancellationToken>())
 			.ReturnsAsync(() => _response);
 
 		var httpClient = new HttpClient(mockHandler.Object) { BaseAddress = new Uri("http://empty") };
 		_client = new OllamaApiClient(httpClient);
+
+		_client.DefaultRequestHeaders["default_header"] = "ok";
+	}
+
+	[SetUp]
+	public void SetUp()
+	{
+		_expectedRequestHeaders = null;
+	}
+
+	/// <summary>
+	/// Validates if the http request message has the same headers as defined in _expectedRequestHeaders.
+	/// This method does nothing if _expectedRequestHeaders is null.
+	/// </summary>
+	private bool ValidateExpectedRequestHeaders(HttpRequestMessage request)
+	{
+		if (_expectedRequestHeaders is null)
+			return true;
+
+		if (_expectedRequestHeaders.Count != request.Headers.Count())
+			throw new InvalidOperationException($"Expected {_expectedRequestHeaders.Count} request header(s) but found {request.Headers.Count()}!");
+
+		foreach (var expectedHeader in _expectedRequestHeaders)
+		{
+			if (!request.Headers.Contains(expectedHeader.Key))
+				throw new InvalidOperationException($"Expected request header '{expectedHeader.Key}' was not found!");
+
+			var actualHeaderValue = request.Headers.GetValues(expectedHeader.Key).Single();
+			if (!string.Equals(actualHeaderValue, expectedHeader.Value))
+				throw new InvalidOperationException($"Request request header '{expectedHeader.Key}' has value '{actualHeaderValue}' while '{expectedHeader.Value}' was expected!");
+		}
+
+		return true;
 	}
 
 	public class CreateModelMethod : OllamaApiClientTests
@@ -56,14 +90,91 @@ public class OllamaApiClientTests
 			stream.Seek(0, SeekOrigin.Begin);
 
 			var builder = new StringBuilder();
-			var modelStream = _client.CreateModel(
-				new CreateModelRequest(),
-				CancellationToken.None);
+			var modelStream = _client.CreateModel(new CreateModelRequest(), CancellationToken.None);
 
 			await foreach (var status in modelStream)
 				builder.Append(status?.Status);
 
 			builder.ToString().Should().Be("Creating modelDownloading modelModel created");
+		}
+
+		/// <summary>
+		/// Applies to all methods on the OllamaApiClient
+		/// </summary>
+		[Test, NonParallelizable]
+		public async Task Sends_Default_Request_Headers()
+		{
+			_expectedRequestHeaders = new Dictionary<string, string>
+			{
+				["default_header"] = "ok" // set as default on the OllamaApiClient (see above)
+			};
+
+			_response = new HttpResponseMessage
+			{
+				StatusCode = HttpStatusCode.OK,
+				Content = new StreamContent(new MemoryStream())
+			};
+
+			var builder = new StringBuilder();
+			await foreach (var status in _client.CreateModel(new CreateModelRequest(), CancellationToken.None))
+				builder.Append(status?.Status);
+
+			builder.Length.Should().Be(0); // assert anything, the test will fail if the expected headers are not available
+		}
+
+		/// <summary>
+		/// Applies to all methods on the OllamaApiClient
+		/// </summary>
+		[Test, NonParallelizable]
+		public async Task Sends_Custom_Request_Headers()
+		{
+			_expectedRequestHeaders = new Dictionary<string, string>
+			{
+				["default_header"] = "ok", // set as default on the OllamaApiClient (see above)
+				["api_method"] = "create" // set as custom request header (see below)
+			};
+
+			_response = new HttpResponseMessage
+			{
+				StatusCode = HttpStatusCode.OK,
+				Content = new StreamContent(new MemoryStream())
+			};
+
+			var request = new CreateModelRequest();
+			request.CustomHeaders["api_method"] = "create"; // set custom request headers
+
+			var builder = new StringBuilder();
+			await foreach (var status in _client.CreateModel(request, CancellationToken.None))
+				builder.Append(status?.Status);
+
+			builder.Length.Should().Be(0); // assert anything, the test will fail if the expected headers are not available
+		}
+
+		/// <summary>
+		/// Applies to all methods on the OllamaApiClient
+		/// </summary>
+		[Test, NonParallelizable]
+		public async Task Overwrites_Http_Headers()
+		{
+			_expectedRequestHeaders = new Dictionary<string, string>
+			{
+				["default_header"] = "overwritten" // default header value on the OllamaApiClient is 1, but it's overwritten below
+			};
+
+			_response = new HttpResponseMessage
+			{
+				StatusCode = HttpStatusCode.OK,
+				Content = new StreamContent(new MemoryStream())
+			};
+
+			var request = new CreateModelRequest();
+			request.CustomHeaders["default_header"] = "overwritten";  // overwrites the default header defined on the OllamaApiClient
+
+			var builder = new StringBuilder();
+			await foreach (var status in _client.CreateModel(request, CancellationToken.None))
+				builder.Append(status?.Status);
+
+			builder.Length.Should().Be(0); // assert anything, the test will fail if the expected headers are not available
 		}
 	}
 

@@ -7,7 +7,7 @@ namespace OllamaSharp.Models.Chat;
 /// <summary>
 /// https://github.com/jmorganca/ollama/blob/main/docs/api.md#generate-a-chat-completion
 /// </summary>
-public class ChatRequest
+public class ChatRequest : OllamaRequest
 {
 	/// <summary>
 	/// The model name (required)

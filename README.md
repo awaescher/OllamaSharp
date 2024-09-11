@@ -18,7 +18,9 @@ OllamaSharp provides .NET bindings for the [Ollama API](https://github.com/jmorg
 
 OllamaSharp wraps every Ollama API endpoint in awaitable methods that fully support response streaming.
 
-The following list shows a few examples to get a glimpse on how easy it is to use. The list is not complete.
+The following list shows a few simple code examples.
+
+ℹ **Try our full-featured Ollama API client app [OllamaSharpConsole](https://github.com/awaescher/OllamaSharpConsole) to interact with your Ollama instance.**
 
 ### Initializing
 

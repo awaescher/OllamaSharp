@@ -24,7 +24,7 @@ public interface IOllamaApiClient
 	/// Sends a request to the /api/chat endpoint and streams the response of the chat.
 	/// To implement a fully interactive chat, you should make use of the Chat class with "new Chat(...)"
 	/// </summary>
-	/// <param name="chatRequest">The request to send to Ollama</param>
+	/// <param name="request">The request to send to Ollama</param>
 	/// <param name="cancellationToken">The token to cancel the operation with</param>
 	/// <returns>
 	/// An asynchronous enumerable that yields ChatResponseStream. Each item
@@ -35,7 +35,7 @@ public interface IOllamaApiClient
 	/// This is the method to call the Ollama endpoint /api/chat. You might not want to do this manually.
 	/// To implement a fully interactive chat, you should make use of the Chat class with "new Chat(...)"
 	/// </remarks>
-	IAsyncEnumerable<ChatResponseStream?> Chat(ChatRequest chatRequest, [EnumeratorCancellation] CancellationToken cancellationToken = default);
+	IAsyncEnumerable<ChatResponseStream?> Chat(ChatRequest request, [EnumeratorCancellation] CancellationToken cancellationToken = default);
 
 	/// <summary>
 	/// Sends a request to the /api/copy endpoint to copy a model
@@ -55,9 +55,9 @@ public interface IOllamaApiClient
 	/// <summary>
 	/// Sends a request to the /api/delete endpoint to delete a model
 	/// </summary>
-	/// <param name="model">The name of the model to delete</param>
+	/// <param name="request">The request containing the model to delete</param>
 	/// <param name="cancellationToken">The token to cancel the operation with</param>
-	Task DeleteModel(string model, CancellationToken cancellationToken = default);
+	Task DeleteModel(DeleteModelRequest request, CancellationToken cancellationToken = default);
 
 	/// <summary>
 	/// Sends a request to the /api/embed endpoint to generate embeddings
@@ -67,8 +67,7 @@ public interface IOllamaApiClient
 	Task<EmbedResponse> Embed(EmbedRequest request, CancellationToken cancellationToken = default);
 
 	/// <summary>
-	/// Sends a request to the /api/tags endpoint to get all models that are
-	/// available locally
+	/// Sends a request to the /api/tags endpoint to get all models that are available locally
 	/// </summary>
 	/// <param name="cancellationToken">The token to cancel the operation with</param>
 	Task<IEnumerable<Model>> ListLocalModels(CancellationToken cancellationToken = default);
@@ -82,8 +81,7 @@ public interface IOllamaApiClient
 	/// <summary>
 	/// Sends a request to the /api/pull endpoint to pull a new model
 	/// </summary>
-	/// <param name="request">The request specifying the model name and whether
-	/// to use insecure connection</param>
+	/// <param name="request">The request specifying the model name and whether to use insecure connection</param>
 	/// <param name="cancellationToken">The token to cancel the operation with</param>
 	/// <returns>
 	/// Async enumerable of PullStatus objects representing the status of the
@@ -94,27 +92,24 @@ public interface IOllamaApiClient
 	/// <summary>
 	/// Pushes a model to the Ollama API endpoint.
 	/// </summary>
-	/// <param name="modelRequest">The request containing the model information to
-	/// push.</param>
+	/// <param name="request">The request containing the model information to push.</param>
 	/// <param name="cancellationToken">The token to cancel the operation with.</param>
 	/// <returns>
 	/// An asynchronous enumerable of push status updates. Use the enumerator
 	/// to retrieve the push status updates.
 	/// </returns>
-	IAsyncEnumerable<PushModelResponse?> PushModel(PushModelRequest modelRequest, [EnumeratorCancellation] CancellationToken cancellationToken = default);
+	IAsyncEnumerable<PushModelResponse?> PushModel(PushModelRequest request, [EnumeratorCancellation] CancellationToken cancellationToken = default);
 
 	/// <summary>
-	/// Sends a request to the /api/show endpoint to show the information of a
-	/// model
+	/// Sends a request to the /api/show endpoint to show the information of a model
 	/// </summary>
-	/// <param name="model">The name of the model the get the information for</param>
+	/// <param name="request">The request containing the name of the model the get the information for</param>
 	/// <param name="cancellationToken">The token to cancel the operation with</param>
 	/// <returns>The model information</returns>
-	Task<ShowModelResponse> ShowModel(string model, CancellationToken cancellationToken = default);
+	Task<ShowModelResponse> ShowModel(ShowModelRequest request, CancellationToken cancellationToken = default);
 
 	/// <summary>
-	/// Streams completion responses from the /api/generate endpoint on the
-	/// Ollama API based on the provided request.
+	/// Streams completion responses from the /api/generate endpoint on the Ollama API based on the provided request.
 	/// </summary>
 	/// <param name="request">The request containing the parameters for the completion.</param>
 	/// <param name="cancellationToken">The token to cancel the operation with.</param>
