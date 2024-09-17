@@ -11,6 +11,7 @@ public class TestOllamaApiClient : IOllamaApiClient
 {
 	private ChatResponseStream[] _expectedChatResponses = [];
 	private GenerateResponseStream[] _expectedGenerateResponses = [];
+	private ChatResponse _expectedChatResponse;
 
 	public string SelectedModel { get; set; } = string.Empty;
 
@@ -24,6 +25,11 @@ public class TestOllamaApiClient : IOllamaApiClient
 		_expectedGenerateResponses = responses;
 	}
 
+	internal void SetExpectedChatResponse(ChatResponse chatResponse)
+	{
+		_expectedChatResponse = chatResponse;
+	}
+
 	public async IAsyncEnumerable<ChatResponseStream?> Chat(ChatRequest request, [EnumeratorCancellation] CancellationToken cancellationToken = default)
 	{
 		foreach (var response in _expectedChatResponses)
@@ -31,6 +37,11 @@ public class TestOllamaApiClient : IOllamaApiClient
 			await Task.Yield();
 			yield return response;
 		}
+	}
+
+	public Task<ChatResponse> ChatAsync(ChatRequest request, CancellationToken cancellationToken = default)
+	{
+		return Task.FromResult(_expectedChatResponse);
 	}
 
 	public Task CopyModel(CopyModelRequest request, CancellationToken cancellationToken = default)

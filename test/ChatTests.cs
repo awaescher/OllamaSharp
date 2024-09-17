@@ -83,6 +83,19 @@ public class ChatTests
 			chat.Messages.First().Role.Should().Be(ChatRole.User);
 			chat.Messages.First().Content.Should().Be("henlo");
 		}
+		
+		[Test]
+		public async Task Sends_Message_One_Reply()
+		{
+			var expectedResponse = new ChatResponse { Message = CreateMessage(ChatRole.Assistant, "Pong!") };
+			_ollama.SetExpectedChatResponse(expectedResponse);
+
+			var answer = await _ollama.ChatAsync(new ChatRequest {Messages = new []{CreateMessage(ChatRole.User, "Ping!")}});
+
+			answer.Message.Content.Should().Be(expectedResponse.Message.Content);
+
+			answer.Message.Role.Should().Be(ChatRole.Assistant);
+		}
 	}
 
 	public class SendAsMethod : ChatTests

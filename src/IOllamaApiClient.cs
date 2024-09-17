@@ -36,6 +36,17 @@ public interface IOllamaApiClient
 	/// To implement a fully interactive chat, you should make use of the Chat class with "new Chat(...)"
 	/// </remarks>
 	IAsyncEnumerable<ChatResponseStream?> Chat(ChatRequest request, [EnumeratorCancellation] CancellationToken cancellationToken = default);
+	
+
+	/// <summary>
+	/// Sends a non-streaming request to the /api/chat endpoint and returns the response.
+	/// </summary>
+	/// <param name="request">The request to send to Ollama</param>
+	/// <param name="cancellationToken">The token to cancel the operation with</param>
+	/// <returns>
+	/// A ChatResponse which contains the Message from the /api/chat endpoint.
+	/// </returns>
+	Task<ChatResponse> ChatAsync(ChatRequest request, CancellationToken cancellationToken = default);
 
 	/// <summary>
 	/// Sends a request to the /api/copy endpoint to copy a model

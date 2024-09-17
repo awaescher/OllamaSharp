@@ -181,6 +181,22 @@ public class OllamaApiClient : IOllamaApiClient
 	}
 
 	/// <inheritdoc />
+	public async Task<ChatResponse> ChatAsync(ChatRequest request, CancellationToken cancellationToken = default)
+	{
+		request.Stream = false;
+		var requestMessage = new HttpRequestMessage(HttpMethod.Post, "api/chat")
+		{
+			Content = new StringContent(JsonSerializer.Serialize(request, OutgoingJsonSerializerOptions), Encoding.UTF8, "application/json")
+		};
+
+		var completion = HttpCompletionOption.ResponseContentRead;
+
+		using var response = await SendToOllamaAsync(requestMessage, request, completion, cancellationToken);
+
+		return await ProcessChatResponseAsync(response, cancellationToken);
+	}
+
+	/// <inheritdoc />
 	public async Task<bool> IsRunning(CancellationToken cancellationToken = default)
 	{
 		var requestMessage = new HttpRequestMessage(HttpMethod.Get, ""); // without route returns "Ollama is running"
@@ -306,6 +322,12 @@ public class OllamaApiClient : IOllamaApiClient
 				? JsonSerializer.Deserialize<ChatDoneResponseStream>(line, IncomingJsonSerializerOptions)!
 				: streamedResponse;
 		}
+	}
+
+	private async Task<ChatResponse?> ProcessChatResponseAsync(HttpResponseMessage response, CancellationToken cancellationToken)
+	{
+		var stream = await response.Content.ReadAsStringAsync();
+		return JsonSerializer.Deserialize<ChatResponse>(stream, IncomingJsonSerializerOptions);
 	}
 
 	/// <summary>
