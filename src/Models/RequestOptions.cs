@@ -265,4 +265,12 @@ public class RequestOptions
 	[JsonPropertyName("vocab_only")]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public bool? VocabOnly { get; set; }
+
+	/// <summary>
+	///  Enable NUMA support.
+	/// (Default: False)
+	/// </summary>
+	[JsonPropertyName("numa")]
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public bool? Numa { get; set; }
 }
