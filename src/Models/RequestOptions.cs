@@ -1,3 +1,4 @@
+using System.Buffers.Text;
 using System.Text.Json.Serialization;
 
 namespace OllamaSharp.Models;
@@ -59,6 +60,24 @@ public class RequestOptions
 	public int? NumGpu { get; set; }
 
 	/// <summary>
+	/// This option controls which GPU is used for small tensors. The overhead of
+	/// splitting the computation across all GPUs is not worthwhile. The GPU will
+	/// use slightly more VRAM to store a scratch buffer for temporary results.
+	/// By default, GPU 0 is used.
+	/// </summary>
+	[JsonPropertyName("main_gpu")]
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public int? MainGpu { get; set; }
+
+	/// <summary>
+	/// Prompt processing maximum batch size.
+	/// (Default: 512)
+	/// </summary>
+	[JsonPropertyName("num_batch")]
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public int? NumBatch { get; set; }
+
+	/// <summary>
 	/// Sets the number of threads to use during computation. By default,
 	/// Ollama will detect this for optimal performance.
 	/// It is recommended to set this value to the number of physical CPU cores
@@ -67,6 +86,14 @@ public class RequestOptions
 	[JsonPropertyName("num_thread")]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public int? NumThread { get; set; }
+
+	/// <summary>
+	/// Number of tokens to keep from the initial prompt.
+	/// (Default: 4, -1 = all)
+	/// </summary>
+	[JsonPropertyName("num_keep")]
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public int? NumKeep { get; set; }
 
 	/// <summary>
 	/// Sets how far back for the model to look back to prevent repetition.
@@ -84,6 +111,22 @@ public class RequestOptions
 	[JsonPropertyName("repeat_penalty")]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public float? RepeatPenalty { get; set; }
+
+	/// <summary>
+	/// The penalty to apply to tokens based on their presence in the prompt.
+	/// (Default: 0.0)
+	/// </summary>
+	[JsonPropertyName("presence_penalty")]
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public float? PresencePenalty { get; set; }
+
+	/// <summary>
+	/// The penalty to apply to tokens based on their frequency in the prompt.
+	/// (Default: 0.0)
+	/// </summary>
+	[JsonPropertyName("frequency_penalty")]
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public float? FrequencyPenalty { get; set; }
 
 	/// <summary>
 	/// The temperature of the model. Increasing the temperature will make the
@@ -155,4 +198,39 @@ public class RequestOptions
 	[JsonPropertyName("min_p")]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public float? MinP { get; set; }
+
+	/// <summary>
+	/// The typical-p value to use for sampling. Locally Typical Sampling implementation described in the paper
+	/// https://arxiv.org/abs/2202.00666. (Default: 1.0)
+	/// </summary>
+	[JsonPropertyName("typical_p")]
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public float? TypicalP { get; set; }
+
+	/// <summary>
+	/// Penalize newline tokens (Default: True)
+	/// </summary>
+	[JsonPropertyName("penalize_newline")]
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public bool? PenalizeNewline { get; set; }
+
+	/// <summary>
+	/// Models are mapped into memory by default, which allows the system to
+	/// load only the necessary parts as needed. Disabling mmap makes loading
+	/// slower but reduces pageouts if you're not using mlock. If the model is
+	/// bigger than your RAM, turning off mmap stops it from loading.
+	/// (Default: True)
+	/// </summary>
+	[JsonPropertyName("use_mmap")]
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public bool? UseMmap { get; set; }
+
+	/// <summary>
+	/// Lock the model in memory to prevent swapping. This can improve
+	/// performance, but it uses more RAM and may slow down loading.
+	/// (Default: False)
+	/// </summary>
+	[JsonPropertyName("use_mlock")]
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public bool? UseMlock { get; set; }
 }
