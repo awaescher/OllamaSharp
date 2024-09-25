@@ -233,4 +233,36 @@ public class RequestOptions
 	[JsonPropertyName("use_mlock")]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public bool? UseMlock { get; set; }
+
+	/// <summary>
+	/// Enable low VRAM mode.
+	/// (Default: False)
+	/// </summary>
+	[JsonPropertyName("low_vram")]
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public bool? LowVRAM { get; set; }
+
+	/// <summary>
+	/// Enable f16 key/value.
+	/// (Default: False)
+	/// </summary>
+	[JsonPropertyName("f16_kv")]
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public bool? F16Kv { get; set; }
+
+	/// <summary>
+	/// Return logits for all the tokens, not just the last one.
+	/// (Default: False)
+	/// </summary>
+	[JsonPropertyName("logits_all")]
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public bool? LogitsAll { get; set; }
+
+	/// <summary>
+	/// Load only the vocabulary, not the weights.
+	/// (Default: False)
+	/// </summary>
+	[JsonPropertyName("vocab_only")]
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public bool? VocabOnly { get; set; }
 }
