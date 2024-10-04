@@ -59,6 +59,12 @@ public class ShowModelResponse
 	/// </summary>
 	[JsonPropertyName("model_info")]
 	public ModelInfo Info { get; set; } = null!;
+
+	/// <summary>
+	/// Extra information about the projector
+	/// </summary>
+	[JsonPropertyName("projector_info")]
+	public ProjectorInfo? Projector { get; set; } = null!;
 }
 
 public class ModelInfo
@@ -75,6 +81,12 @@ public class ModelInfo
 	[JsonPropertyName("general.quantization_version")]
 	public int? QuantizationVersion { get; set; }
 
+	[JsonExtensionData]
+	public IDictionary<string, object>? ExtraInfo { get; set; }
+}
+
+public class ProjectorInfo
+{
 	[JsonExtensionData]
 	public IDictionary<string, object>? ExtraInfo { get; set; }
 }
