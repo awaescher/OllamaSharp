@@ -18,6 +18,8 @@
 		<PackageTags>ollama;ollama-api;api;llm;openai;ai;localllama;llama;streaming;gpt;llamacpp</PackageTags>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 		<Version>1.1.1</Version>
+		<SignAssembly>True</SignAssembly>
+		<AssemblyOriginatorKeyFile>OllamaSharp.snk</AssemblyOriginatorKeyFile>
 	</PropertyGroup>
 
 	<ItemGroup>

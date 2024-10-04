@@ -14,9 +14,10 @@ namespace OllamaSharp;
 /// </summary>
 public class Chat
 {
-	private List<Message> _messages = new();
-
-	public IReadOnlyCollection<Message> Messages => _messages.AsReadOnly();
+	/// <summary>
+	/// Gets or sets the messages of the chat history
+	/// </summary>
+	public List<Message> Messages { get; set; } = new();
 
 	/// <summary>
 	/// Gets the Ollama API client
@@ -27,7 +28,7 @@ public class Chat
 	/// Gets or sets the AI model to chat with
 	/// </summary>
 	public string Model { get; set; }
-	
+
 	/// <summary>
 	/// Gets or sets the RequestOptions to chat with
 	/// </summary>
@@ -45,16 +46,17 @@ public class Chat
 		Model = Client.SelectedModel;
 
 		if (!string.IsNullOrEmpty(systemPrompt))
-			_messages.Add(new Message(ChatRole.System, systemPrompt));
+			Messages.Add(new Message(ChatRole.System, systemPrompt));
 	}
 
 	/// <summary>
 	/// Sets the message history
 	/// </summary>
 	/// <param name="messages">The message history</param>
+	[Obsolete("Set the property Messages instead")]
 	public void SetMessages(List<Message> messages)
 	{
-		_messages = messages;
+		Messages = messages;
 	}
 
 	/// <summary>
@@ -94,7 +96,7 @@ public class Chat
 	/// <param name="cancellationToken">The token to cancel the operation with</param>
 	public async IAsyncEnumerable<string> SendAs(ChatRole role, string message, IEnumerable<Tool>? tools, IEnumerable<string>? imagesAsBase64 = default, [EnumeratorCancellation] CancellationToken cancellationToken = default)
 	{
-		_messages.Add(new Message(role, message, imagesAsBase64?.ToArray()));
+		Messages.Add(new Message(role, message, imagesAsBase64?.ToArray()));
 
 		var hasTools = tools?.Any() ?? false;
 
@@ -121,6 +123,6 @@ public class Chat
 #pragma warning restore S3267 // Loops should be simplified with "LINQ" expressions
 
 		if (messageBuilder.HasValue)
-			_messages.Add(messageBuilder.ToMessage());
+			Messages.Add(messageBuilder.ToMessage());
 	}
 }

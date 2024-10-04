@@ -113,14 +113,14 @@ public class ChatTests
 		{
 			var chat = new Chat(_ollama);
 
-			chat.SetMessages([new Message { Content = "A", Role = ChatRole.System }]);
+			chat.Messages = [new Message { Content = "A", Role = ChatRole.System }];
 			chat.Messages.Single().Content.Should().Be("A");
 
-			chat.SetMessages([new Message { Content = "B", Role = ChatRole.System }]);
+			chat.Messages = [new Message { Content = "B", Role = ChatRole.System }];
 			chat.Messages.Single().Content.Should().Be("B");
 		}
 	}
 
 	protected static Message CreateMessage(ChatRole role, string content)
-			=> new() { Role = role, Content = content };
+		=> new() { Role = role, Content = content };
 }
