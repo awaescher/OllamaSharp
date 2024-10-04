@@ -240,7 +240,7 @@ public class RequestOptions
 	/// </summary>
 	[JsonPropertyName("low_vram")]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-	public bool? LowVRAM { get; set; }
+	public bool? LowVram { get; set; }
 
 	/// <summary>
 	/// Enable f16 key/value.
@@ -248,7 +248,7 @@ public class RequestOptions
 	/// </summary>
 	[JsonPropertyName("f16_kv")]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-	public bool? F16Kv { get; set; }
+	public bool? F16kv { get; set; }
 
 	/// <summary>
 	/// Return logits for all the tokens, not just the last one.
