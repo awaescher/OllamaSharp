@@ -313,7 +313,7 @@ public class OllamaApiClient : IOllamaApiClient
 	/// </summary>
 	/// <param name="requestMessage">The http request message to send</param>
 	/// <param name="ollamaRequest">The request containing custom http request headers</param>
-	/// <param name="completionOption">When the operation should complete (as soon as a response is available or after reading the whole respose content)</param>
+	/// <param name="completionOption">When the operation should complete (as soon as a response is available or after reading the whole response content)</param>
 	/// <param name="cancellationToken">The token to cancel the operation with</param>
 	protected virtual async Task<HttpResponseMessage> SendToOllamaAsync(HttpRequestMessage requestMessage, OllamaRequest? ollamaRequest, HttpCompletionOption completionOption, CancellationToken cancellationToken)
 	{
