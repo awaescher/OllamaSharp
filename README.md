@@ -3,6 +3,11 @@
 </p>
 
 # OllamaSharp 🦙
+[![GitHub release](https://img.shields.io/github/release/awaescher/OllamaSharp.svg)](https://GitHub.com/awaescher/OllamaSharp/releases/)
+[![GitHub license](https://badgen.net/github/license/awaescher/OllamaSharp)](https://github.com/awaescher/OllamaSharp/blob/master/LICENSE)
+[![GitHub commits](https://badgen.net/github/commits/awaescher/OllamaSharp)](https://GitHub.com/awaescher/OllamaSharp/commit/)
+[![GitHub forks](https://img.shields.io/github/forks/awaescher/OllamaSharp.svg?style=social&label=Fork&maxAge=2592000)](https://GitHub.com/awaescher/OllamaSharp/network/)
+[![GitHub stars](https://img.shields.io/github/stars/awaescher/OllamaSharp.svg?style=social&label=Star&maxAge=2592000)](https://GitHub.com/awaescher/OllamaSharp/stargazers/)
 
 OllamaSharp provides .NET bindings for the [Ollama API](https://github.com/jmorganca/ollama/blob/main/docs/api.md), simplifying interaction with Ollama both locally and remotely.
 
