@@ -16,28 +16,28 @@ using OllamaSharp.Models.Exceptions;
 namespace OllamaSharp;
 
 /// <summary>
-/// The default client to use the Ollama API conveniently
-/// https://github.com/jmorganca/ollama/blob/main/docs/api.md
+/// The default client to use the Ollama API conveniently.
+/// <see href="https://github.com/jmorganca/ollama/blob/main/docs/api.md"/>
 /// </summary>
 public class OllamaApiClient : IOllamaApiClient
 {
 	/// <summary>
-	/// Gets the default request headers that are sent to the Ollama API
+	/// Gets the default request headers that are sent to the Ollama API.
 	/// </summary>
 	public Dictionary<string, string> DefaultRequestHeaders { get; } = new();
 
 	/// <summary>
-	/// Gets the serializer options for outgoing web requests like Post or Delete
+	/// Gets the serializer options for outgoing web requests like Post or Delete.
 	/// </summary>
 	public JsonSerializerOptions OutgoingJsonSerializerOptions { get; } = new() { Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping };
 
 	/// <summary>
-	/// Gets the serializer options used for deserializing http responses.
+	/// Gets the serializer options used for deserializing HTTP responses.
 	/// </summary>
 	public JsonSerializerOptions IncomingJsonSerializerOptions { get; } = new();
 
 	/// <summary>
-	/// Gets the current configuration of the API client
+	/// Gets the current configuration of the API client.
 	/// </summary>
 	public Configuration Config { get; }
 
@@ -45,44 +45,44 @@ public class OllamaApiClient : IOllamaApiClient
 	public string SelectedModel { get; set; }
 
 	/// <summary>
-	/// Gets the http client that is used to communicate with the Ollama API
+	/// Gets the HTTP client that is used to communicate with the Ollama API.
 	/// </summary>
 	private readonly HttpClient _client;
 
 	/// <summary>
-	/// Creates a new instance of the Ollama API client
+	/// Creates a new instance of the Ollama API client.
 	/// </summary>
-	/// <param name="uriString">The uri of the Ollama API endpoint</param>
-	/// <param name="defaultModel">The default model that should be used with Ollama</param>
+	/// <param name="uriString">The URI of the Ollama API endpoint.</param>
+	/// <param name="defaultModel">The default model that should be used with Ollama.</param>
 	public OllamaApiClient(string uriString, string defaultModel = "")
 		: this(new Uri(uriString), defaultModel)
 	{
 	}
 
 	/// <summary>
-	/// Creates a new instance of the Ollama API client
+	/// Creates a new instance of the Ollama API client.
 	/// </summary>
-	/// <param name="uri">The uri of the Ollama API endpoint</param>
-	/// <param name="defaultModel">The default model that should be used with Ollama</param>
+	/// <param name="uri">The URI of the Ollama API endpoint.</param>
+	/// <param name="defaultModel">The default model that should be used with Ollama.</param>
 	public OllamaApiClient(Uri uri, string defaultModel = "")
 		: this(new Configuration { Uri = uri, Model = defaultModel })
 	{
 	}
 
 	/// <summary>
-	/// Creates a new instance of the Ollama API client
+	/// Creates a new instance of the Ollama API client.
 	/// </summary>
-	/// <param name="config">The configuration for the Ollama API client</param>
+	/// <param name="config">The configuration for the Ollama API client.</param>
 	public OllamaApiClient(Configuration config)
 		: this(new HttpClient() { BaseAddress = config.Uri }, config.Model)
 	{
 	}
 
 	/// <summary>
-	/// Creates a new instance of the Ollama API client
+	/// Creates a new instance of the Ollama API client.
 	/// </summary>
-	/// <param name="client">The Http client to access the Ollama API with</param>
-	/// <param name="defaultModel">The default model that should be used with Ollama</param>
+	/// <param name="client">The HTTP client to access the Ollama API with.</param>
+	/// <param name="defaultModel">The default model that should be used with Ollama.</param>
 	/// <exception cref="ArgumentNullException"></exception>
 	public OllamaApiClient(HttpClient client, string defaultModel = "")
 	{
@@ -309,12 +309,12 @@ public class OllamaApiClient : IOllamaApiClient
 	}
 
 	/// <summary>
-	/// Sends a http request message to the Ollama API.
+	/// Sends an HTTP request message to the Ollama API.
 	/// </summary>
-	/// <param name="requestMessage">The http request message to send</param>
-	/// <param name="ollamaRequest">The request containing custom http request headers</param>
-	/// <param name="completionOption">When the operation should complete (as soon as a response is available or after reading the whole response content)</param>
-	/// <param name="cancellationToken">The token to cancel the operation with</param>
+	/// <param name="requestMessage">The HTTP request message to send.</param>
+	/// <param name="ollamaRequest">The request containing custom HTTP request headers.</param>
+	/// <param name="completionOption">When the operation should complete (as soon as a response is available or after reading the whole response content).</param>
+	/// <param name="cancellationToken">The token to cancel the operation with.</param>
 	protected virtual async Task<HttpResponseMessage> SendToOllamaAsync(HttpRequestMessage requestMessage, OllamaRequest? ollamaRequest, HttpCompletionOption completionOption, CancellationToken cancellationToken)
 	{
 		requestMessage.ApplyCustomHeaders(this, ollamaRequest);
@@ -346,23 +346,29 @@ public class OllamaApiClient : IOllamaApiClient
 	}
 
 	/// <summary>
-	/// The configuration for the Ollama API client
+	/// The configuration for the Ollama API client.
 	/// </summary>
 	public class Configuration
 	{
 		/// <summary>
-		/// Gets or sets the uri of the Ollama API endpoint
+		/// Gets or sets the URI of the Ollama API endpoint.
 		/// </summary>
 		public Uri Uri { get; set; } = null!;
 
 		/// <summary>
-		/// Gets or sets the model that should be used
+		/// Gets or sets the model that should be used.
 		/// </summary>
 		public string Model { get; set; } = null!;
 	}
 }
 
+/// <summary>
+/// Represents a conversation context containing context data.
+/// </summary>
 public record ConversationContext(long[] Context);
 
-public record ConversationContextWithResponse(string Response, long[] Context) :
-	ConversationContext(Context);
+/// <summary>
+/// Represents a conversation context with an additional response.
+/// Inherits from <see cref="ConversationContext"/>.
+/// </summary>
+public record ConversationContextWithResponse(string Response, long[] Context) : ConversationContext(Context);

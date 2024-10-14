@@ -5,6 +5,7 @@
 		<Nullable>enable</Nullable>
 		<LangVersion>10</LangVersion>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<Title>OllamaSharp</Title>
 		<Copyright>Andreas Wäscher</Copyright>
 		<Authors>Andreas Wäscher, Milkey Tan, Jerrett Davis</Authors>
@@ -20,6 +21,7 @@
 		<Version>1.1.1</Version>
 		<SignAssembly>True</SignAssembly>
 		<AssemblyOriginatorKeyFile>OllamaSharp.snk</AssemblyOriginatorKeyFile>
+		<RepositoryType>git</RepositoryType>
 	</PropertyGroup>
 
 	<ItemGroup>
