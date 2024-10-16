@@ -59,6 +59,7 @@ public class ChatRequest : OllamaRequest
 	/// Gets or sets the tools for the model to use if supported. Requires stream to be set to false.
 	/// </summary>
 	[JsonPropertyName("tools")]
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public IEnumerable<Tool>? Tools { get; set; }
 }
 
