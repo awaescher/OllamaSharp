@@ -333,7 +333,18 @@ public class OllamaApiClient : IOllamaApiClient
 			var body = await response.Content.ReadAsStringAsync() ?? string.Empty;
 
 			var errorElement = new JsonElement();
-			var couldParse = JsonDocument.Parse(body)?.RootElement.TryGetProperty("error", out errorElement) ?? false;
+
+			var couldParse = false;
+
+			try
+			{
+				couldParse = JsonDocument.Parse(body)?.RootElement.TryGetProperty("error", out errorElement) ?? false;
+			}
+			catch (JsonException)
+			{
+				// parsing failed, this is optional
+			}
+
 			var errorString = (couldParse ? errorElement.GetString() : body) ?? string.Empty;
 
 			if (errorString.Contains("does not support tools"))

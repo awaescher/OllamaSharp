@@ -8,6 +8,7 @@ using NUnit.Framework;
 using OllamaSharp;
 using OllamaSharp.Models;
 using OllamaSharp.Models.Chat;
+using OllamaSharp.Models.Exceptions;
 
 namespace Tests;
 
@@ -419,6 +420,32 @@ public class OllamaApiClientTests
 			responses[0]!.Role.Should().Be(ChatRole.Assistant);
 			responses[1]!.Role.Should().Be(ChatRole.Assistant);
 			responses[2]!.Role.Should().Be(ChatRole.Assistant);
+		}
+
+		[Test, NonParallelizable]
+		public async Task Throws_Known_Exception_For_Models_That_Dont_Support_Tools()
+		{
+			_response = new HttpResponseMessage
+			{
+				StatusCode = HttpStatusCode.BadRequest,
+				Content = new StringContent("{ error: llama2 does not support tools }")
+			};
+
+			var act = () => _client.Chat(new ChatRequest(), CancellationToken.None).StreamToEnd();
+			await act.Should().ThrowAsync<ModelDoesNotSupportToolsException>();
+		}
+
+		[Test, NonParallelizable]
+		public async Task Throws_OllamaException_If_Parsing_Of_BadRequest_Errors_Fails()
+		{
+			_response = new HttpResponseMessage
+			{
+				StatusCode = HttpStatusCode.BadRequest,
+				Content = new StringContent("panic!")
+			};
+
+			var act = () => _client.Chat(new ChatRequest(), CancellationToken.None).StreamToEnd();
+			await act.Should().ThrowAsync<OllamaException>();
 		}
 	}
 
