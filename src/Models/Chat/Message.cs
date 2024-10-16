@@ -69,12 +69,14 @@ public class Message
 	/// Gets or sets an array of base64-encoded images (for multimodal models such as llava).
 	/// </summary>
 	[JsonPropertyName("images")]
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public string[]? Images { get; set; }
 
 	/// <summary>
 	/// Gets or sets a list of tools the model wants to use (for models that support function calls, such as llama3.1).
 	/// </summary>
 	[JsonPropertyName("tool_calls")]
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public IEnumerable<ToolCall>? ToolCalls { get; set; }
 
 	/// <summary>

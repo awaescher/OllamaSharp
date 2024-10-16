@@ -18,6 +18,7 @@ public class OllamaApiClientTests
 {
 	private OllamaApiClient _client;
 	private HttpResponseMessage? _response;
+	private HttpRequestMessage? _request;
 	private Dictionary<string, string>? _expectedRequestHeaders;
 
 	[OneTimeSetUp]
@@ -51,6 +52,8 @@ public class OllamaApiClientTests
 	/// </summary>
 	private bool ValidateExpectedRequestHeaders(HttpRequestMessage request)
 	{
+		this._request = request;
+
 		if (_expectedRequestHeaders is null)
 			return true;
 
@@ -268,6 +271,12 @@ public class OllamaApiClientTests
 			result.PromptEvalDuration.Should().Be(35137000);
 			result.EvalCount.Should().Be(323);
 			result.EvalDuration.Should().Be(4575154000);
+
+			// Ensure that the request body does not contain the images, tools or tool_calls properties when not provided
+			var requestBody = await _request.Content.ReadAsStringAsync();
+			requestBody.Should().NotContain("tools");
+			requestBody.Should().NotContain("tool_calls");
+			requestBody.Should().NotContain("images");
 		}
 
 		[Test, NonParallelizable]
