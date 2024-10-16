@@ -317,7 +317,7 @@ public class OllamaApiClient : IOllamaApiClient
 	/// <param name="cancellationToken">The token to cancel the operation with.</param>
 	protected virtual async Task<HttpResponseMessage> SendToOllamaAsync(HttpRequestMessage requestMessage, OllamaRequest? ollamaRequest, HttpCompletionOption completionOption, CancellationToken cancellationToken)
 	{
-		requestMessage.ApplyCustomHeaders(this, ollamaRequest);
+		requestMessage.ApplyCustomHeaders(DefaultRequestHeaders, ollamaRequest);
 
 		var response = await _client.SendAsync(requestMessage, completionOption, cancellationToken);
 
