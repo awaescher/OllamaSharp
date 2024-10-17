@@ -46,13 +46,19 @@ public class OllamaApiClientTests
 		_expectedRequestHeaders = null;
 	}
 
+	[OneTimeTearDown]
+	public void OneTimeTearDown()
+	{
+		_client.Dispose();
+	}
+
 	/// <summary>
 	/// Validates if the http request message has the same headers as defined in _expectedRequestHeaders.
 	/// This method does nothing if _expectedRequestHeaders is null.
 	/// </summary>
 	private bool ValidateExpectedRequestHeaders(HttpRequestMessage request)
 	{
-		this._request = request;
+		_request = request;
 
 		if (_expectedRequestHeaders is null)
 			return true;

@@ -1,7 +1,7 @@
 using System;
 using OllamaSharp.Models.Chat;
 
-namespace OllamaSharp;
+namespace OllamaSharp.AsyncEnumerableExtensions;
 
 /// <summary>
 /// Appender to stream IAsyncEnumerable(ChatResponseStream) to build up one single ChatDoneResponseStream object

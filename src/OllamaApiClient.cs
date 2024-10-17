@@ -9,6 +9,7 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.AI;
 using OllamaSharp.Models;
 using OllamaSharp.Models.Chat;
 using OllamaSharp.Models.Exceptions;
@@ -19,8 +20,10 @@ namespace OllamaSharp;
 /// The default client to use the Ollama API conveniently.
 /// <see href="https://github.com/jmorganca/ollama/blob/main/docs/api.md"/>
 /// </summary>
-public class OllamaApiClient : IOllamaApiClient
+public class OllamaApiClient : IOllamaApiClient, IChatClient
 {
+	private readonly bool _disposeHttpClient;
+
 	/// <summary>
 	/// Gets the default request headers that are sent to the Ollama API.
 	/// </summary>
@@ -79,6 +82,7 @@ public class OllamaApiClient : IOllamaApiClient
 	public OllamaApiClient(Configuration config)
 		: this(new HttpClient() { BaseAddress = config.Uri }, config.Model)
 	{
+		_disposeHttpClient = true;
 	}
 
 	/// <summary>
@@ -358,6 +362,48 @@ public class OllamaApiClient : IOllamaApiClient
 
 		response.EnsureSuccessStatusCode();
 	}
+	/// <summary>
+	/// Releases the resources used by the <see cref="OllamaApiClient"/> instance.
+	/// Disposes the internal HTTP client if it was created internally.
+	/// </summary>
+	public void Dispose()
+	{
+		if (_disposeHttpClient)
+			_client?.Dispose();
+	}
+
+	#region IChatClient implementation
+
+	/// <inheritdoc/>
+	ChatClientMetadata IChatClient.Metadata => new("ollama", Uri, SelectedModel);
+
+	/// <inheritdoc/>
+	async Task<ChatCompletion> IChatClient.CompleteAsync(IList<ChatMessage> chatMessages, ChatOptions? options, CancellationToken cancellationToken)
+	{
+		var request = MicrosoftAi.AbstractionMapper.ToOllamaSharpChatRequest(this, chatMessages, options, stream: false);
+		var response = await Chat(request, cancellationToken).StreamToEnd();
+		return MicrosoftAi.AbstractionMapper.ToChatCompletion(request, response) ?? new ChatCompletion([]);
+	}
+
+	/// <inheritdoc/>
+	async IAsyncEnumerable<StreamingChatCompletionUpdate> IChatClient.CompleteStreamingAsync(IList<ChatMessage> chatMessages, ChatOptions? options, [EnumeratorCancellation] CancellationToken cancellationToken)
+	{
+		var request = MicrosoftAi.AbstractionMapper.ToOllamaSharpChatRequest(this, chatMessages, options, stream: true);
+		await foreach (var response in Chat(request, cancellationToken))
+			yield return MicrosoftAi.AbstractionMapper.ToStreamingChatCompletionUpdate(response);
+	}
+
+	/// <inheritdoc/>
+	TService? IChatClient.GetService<TService>(object? key) where TService : class
+		=> key is null ? this as TService : null;
+
+	/// <inheritdoc/>
+	void IDisposable.Dispose()
+	{
+		Dispose();
+	}
+
+	#endregion
 
 	/// <summary>
 	/// The configuration for the Ollama API client.

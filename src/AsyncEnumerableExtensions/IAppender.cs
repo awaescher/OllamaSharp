@@ -1,4 +1,4 @@
-namespace OllamaSharp;
+namespace OllamaSharp.AsyncEnumerableExtensions;
 
 /// <summary>
 /// Interface to append items while streaming an IAsyncEnumerable to the end

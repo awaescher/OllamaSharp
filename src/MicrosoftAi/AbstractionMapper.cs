@@ -8,10 +8,15 @@ using OllamaSharp.Models.Chat;
 namespace OllamaSharp.MicrosoftAi;
 
 /// <summary>
-/// See https://github.com/dotnet/extensions/blob/main/src/Libraries/Microsoft.Extensions.AI.Ollama/OllamaChatClient.cs
+/// Provides mapping functionality between OllamaSharp and Microsoft.Extensions.AI models.
 /// </summary>
 public static class AbstractionMapper
 {
+	/// <summary>
+	/// Maps a <see cref="ChatRequest"/> and <see cref="ChatDoneResponseStream"/> to a <see cref="ChatCompletion"/>.
+	/// </summary>
+	/// <param name="request">The chat request containing initial request data.</param>
+	/// <param name="response">The response stream with completion data.</param>
 	public static ChatCompletion? ToChatCompletion(ChatRequest request, ChatDoneResponseStream? response)
 	{
 		if (response is null)
@@ -33,6 +38,13 @@ public static class AbstractionMapper
 		return completion;
 	}
 
+	/// <summary>
+	/// Converts Microsoft.Extensions.AI messages and options to an OllamaSharp chat request.
+	/// </summary>
+	/// <param name="apiClient">The API client used for communication.</param>
+	/// <param name="chatMessages">A list of chat messages.</param>
+	/// <param name="options">Optional chat options to configure the request.</param>
+	/// <param name="stream">Indicates if the request should be streamed.</param>
 	public static ChatRequest ToOllamaSharpChatRequest(IOllamaApiClient apiClient, IList<ChatMessage> chatMessages, ChatOptions? options, bool stream)
 	{
 		// unused ChatOptions properties
@@ -59,13 +71,21 @@ public static class AbstractionMapper
 		};
 	}
 
+	/// <summary>
+	/// Converts a collection of Microsoft.Extensions.AI.<see cref="AITool"/> to a collection of OllamaSharp tools.
+	/// </summary>
+	/// <param name="tools">The tools to convert.</param>
 	private static IEnumerable<Tool>? ToOllamaSharpTools(IEnumerable<AITool>? tools)
 	{
 		return tools?.Select(ToOllamaSharpTool)
-			.Where(t => t is not null)
-			.Cast<Tool>();
+					 .Where(t => t is not null)
+					 .Cast<Tool>();
 	}
 
+	/// <summary>
+	/// Converts an Microsoft.Extensions.AI.<see cref="AITool"/> to an OllamaSharp tool.
+	/// </summary>
+	/// <param name="tool">The tool to convert.</param>
 	private static Tool? ToOllamaSharpTool(AITool tool)
 	{
 		if (tool is AIFunction f)
@@ -74,6 +94,10 @@ public static class AbstractionMapper
 		return null;
 	}
 
+	/// <summary>
+	/// Converts <see cref="AIFunctionMetadata"/> to a <see cref="Tool"/>.
+	/// </summary>
+	/// <param name="functionMetadata">The function metadata to convert.</param>
 	private static Tool? ToOllamaSharpTool(AIFunctionMetadata functionMetadata)
 	{
 		return new Tool
@@ -98,11 +122,19 @@ public static class AbstractionMapper
 		};
 	}
 
+	/// <summary>
+	/// Converts a <see cref="Type"/> to a function type string.
+	/// </summary>
+	/// <param name="_">The type to convert.</param>
 	private static string ToFunctionTypeString(Type? _)
 	{
 		return "string"; // TODO others supported?
 	}
 
+	/// <summary>
+	/// Converts a list of Microsoft.Extensions.AI.<see cref="ChatMessage"/> to a list of Ollama <see cref="Message"/>.
+	/// </summary>
+	/// <param name="chatMessages">The chat messages to convert.</param>
 	private static IEnumerable<Message> ToOllamaSharpMessages(IList<ChatMessage> chatMessages)
 	{
 		foreach (var cm in chatMessages)
@@ -117,6 +149,10 @@ public static class AbstractionMapper
 		}
 	}
 
+	/// <summary>
+	/// Converts a Microsoft.Extensions.AI.<see cref="DataContent"/> to a base64 image string.
+	/// </summary>
+	/// <param name="content">The data content to convert.</param>
 	private static string ToOllamaImage(DataContent content)
 	{
 		if (content is null || !content.ContainsData)
@@ -130,6 +166,10 @@ public static class AbstractionMapper
 		return string.Empty;
 	}
 
+	/// <summary>
+	/// Converts a Microsoft.Extensions.AI.<see cref="FunctionCallContent"/> to a <see cref="Message.ToolCall"/>.
+	/// </summary>
+	/// <param name="functionCall">The function call content to convert.</param>
 	private static Message.ToolCall ToOllamaSharpToolCall(FunctionCallContent functionCall)
 	{
 		return new Message.ToolCall
@@ -142,6 +182,10 @@ public static class AbstractionMapper
 		};
 	}
 
+	/// <summary>
+	/// Maps a <see cref="Microsoft.Extensions.AI.ChatRole"/> to an <see cref="OllamaSharp.Models.Chat.ChatRole"/>.
+	/// </summary>
+	/// <param name="role">The chat role to map.</param>
 	private static Models.Chat.ChatRole ToOllamaSharpRole(Microsoft.Extensions.AI.ChatRole role)
 	{
 		return role.Value switch
@@ -154,6 +198,10 @@ public static class AbstractionMapper
 		};
 	}
 
+	/// <summary>
+	/// Maps an <see cref="OllamaSharp.Models.Chat.ChatRole"/> to a <see cref="Microsoft.Extensions.AI.ChatRole"/>.
+	/// </summary>
+	/// <param name="role">The chat role to map.</param>
 	private static Microsoft.Extensions.AI.ChatRole ToAbstractionRole(OllamaSharp.Models.Chat.ChatRole? role)
 	{
 		if (role is null)
@@ -169,6 +217,10 @@ public static class AbstractionMapper
 		};
 	}
 
+	/// <summary>
+	/// Converts a <see cref="ChatResponseStream"/> to a <see cref="StreamingChatCompletionUpdate"/>.
+	/// </summary>
+	/// <param name="response">The response stream to convert.</param>
 	public static StreamingChatCompletionUpdate ToStreamingChatCompletionUpdate(ChatResponseStream? response)
 	{
 		return new StreamingChatCompletionUpdate // TODO
@@ -186,6 +238,10 @@ public static class AbstractionMapper
 		};
 	}
 
+	/// <summary>
+	/// Converts a <see cref="Message"/> to a <see cref="ChatMessage"/>.
+	/// </summary>
+	/// <param name="message">The message to convert.</param>
 	private static ChatMessage ToChatMessage(Message message)
 	{
 		var contents = new List<AIContent>();
@@ -211,6 +267,10 @@ public static class AbstractionMapper
 		return new ChatMessage(new Microsoft.Extensions.AI.ChatRole(roleString), contents);
 	}
 
+	/// <summary>
+	/// Parses additional properties from a <see cref="ChatDoneResponseStream"/>.
+	/// </summary>
+	/// <param name="response">The response to parse.</param>
 	private static AdditionalPropertiesDictionary? ParseOllamaChatResponseProps(ChatDoneResponseStream response)
 	{
 		const double NANOSECONDS_PER_MILLISECOND = 1_000_000;
@@ -224,6 +284,10 @@ public static class AbstractionMapper
 		};
 	}
 
+	/// <summary>
+	/// Maps a string representation of a finish reason to a <see cref="ChatFinishReason"/>.
+	/// </summary>
+	/// <param name="ollamaDoneReason">The finish reason string.</param>
 	private static ChatFinishReason? ToFinishReason(string? ollamaDoneReason)
 	{
 		return ollamaDoneReason switch
@@ -235,6 +299,11 @@ public static class AbstractionMapper
 		};
 	}
 
+	/// <summary>
+	/// Parses usage details from a <see cref="ChatDoneResponseStream"/>.
+	/// </summary>
+	/// <param name="response">The response to parse.</param>
+	/// <returns>A <see cref="UsageDetails"/> object containing the parsed usage details.</returns>
 	private static UsageDetails? ParseOllamaChatResponseUsage(ChatDoneResponseStream? response)
 	{
 		if (response?.PromptEvalCount is not null || response?.EvalCount is not null)
