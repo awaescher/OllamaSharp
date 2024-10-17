@@ -12,6 +12,8 @@ public class TestOllamaApiClient : IOllamaApiClient
 	private ChatResponseStream[] _expectedChatResponses = [];
 	private GenerateResponseStream[] _expectedGenerateResponses = [];
 
+	public Uri Uri { get; } = new("http://localhost");
+
 	public string SelectedModel { get; set; } = string.Empty;
 
 	internal void SetExpectedChatResponses(params ChatResponseStream[] responses)

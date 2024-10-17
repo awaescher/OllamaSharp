@@ -44,7 +44,7 @@ public class ChatTests
 								Function = new Message.Function
 								{
 									Name = "get_current_weather",
-									Arguments = new Dictionary<string, string>()
+									Arguments = new Dictionary<string, object?>()
 									{
 										["format"] = "celsius",
 										["location"] = "Los Angeles, CA"

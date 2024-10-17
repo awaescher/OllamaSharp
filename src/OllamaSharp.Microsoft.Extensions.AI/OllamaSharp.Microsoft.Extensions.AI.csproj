@@ -5,18 +5,18 @@
 		<Nullable>enable</Nullable>
 		<LangVersion>10</LangVersion>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-		<Title>OllamaSharp</Title>
+		<Title>OllamaSharp.Microsoft.Extensions.AI</Title>
 		<Copyright>Andreas Wäscher</Copyright>
-		<Authors>Andreas Wäscher, Milkey Tan, Jerrett Davis</Authors>
+		<Authors>Andreas Wäscher</Authors>
 		<PackageIcon>Ollama.png</PackageIcon>
 		<Description>
-			The easiest way to use the Ollama API in .NET
+			The Ollama implementation for the Microsoft.Extensions.AI
 		</Description>
 		<PackageProjectUrl>https://github.com/awaescher/OllamaSharp</PackageProjectUrl>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<RepositoryUrl>https://github.com/awaescher/OllamaSharp</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
-		<PackageTags>ollama;ollama-api;api;llm;openai;ai;localllama;llama;streaming;gpt;llamacpp</PackageTags>
+		<PackageTags>ollama;ollama-api;api;llm;semantic-kernel;microsoft-ai;openai;ai;localllama;llama;streaming;gpt;llamacpp</PackageTags>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 		<SignAssembly>True</SignAssembly>
 		<AssemblyOriginatorKeyFile>..\..\OllamaSharp.snk</AssemblyOriginatorKeyFile>
@@ -36,9 +36,13 @@
 			<PackagePath>\</PackagePath>
 		</None>
 	</ItemGroup>
-
+	
 	<ItemGroup>
-		<PackageReference Include="System.Text.Json" Version="8.0.5" />
+		<PackageReference Include="Microsoft.Extensions.AI.Abstractions" Version="9.0.0-preview.9.24507.7" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <ProjectReference Include="..\OllamaSharp\OllamaSharp.csproj" />
 	</ItemGroup>
 
 </Project>
