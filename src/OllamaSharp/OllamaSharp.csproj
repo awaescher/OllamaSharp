@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
 		<Nullable>enable</Nullable>
-		<LangVersion>10</LangVersion>
+		<LangVersion>12</LangVersion>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Title>OllamaSharp</Title>
 		<Copyright>Andreas Wäscher</Copyright>

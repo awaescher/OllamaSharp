@@ -24,7 +24,7 @@ public class OllamaApiClient : IOllamaApiClient
 	/// <summary>
 	/// Gets the default request headers that are sent to the Ollama API
 	/// </summary>
-	public Dictionary<string, string> DefaultRequestHeaders { get; } = new();
+	public Dictionary<string, string> DefaultRequestHeaders { get; } = [];
 
 	/// <summary>
 	/// Gets the serializer options for outgoing web requests like Post or Delete

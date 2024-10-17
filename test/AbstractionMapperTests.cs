@@ -2,7 +2,6 @@ using FluentAssertions;
 using Microsoft.Extensions.AI;
 using Moq;
 using NUnit.Framework;
-using NUnit.Framework.Constraints;
 using OllamaSharp;
 using OllamaSharp.Abstraction;
 using OllamaSharp.Models.Chat;

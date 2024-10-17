@@ -3,14 +3,14 @@
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
 		<Nullable>enable</Nullable>
-		<LangVersion>10</LangVersion>
+		<LangVersion>12</LangVersion>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Title>OllamaSharp.Microsoft.Extensions.AI</Title>
 		<Copyright>Andreas Wäscher</Copyright>
 		<Authors>Andreas Wäscher</Authors>
 		<PackageIcon>Ollama.png</PackageIcon>
 		<Description>
-			The Ollama implementation for the Microsoft.Extensions.AI
+			The Ollama implementation for Microsoft.Extensions.AI
 		</Description>
 		<PackageProjectUrl>https://github.com/awaescher/OllamaSharp</PackageProjectUrl>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
@@ -36,13 +36,13 @@
 			<PackagePath>\</PackagePath>
 		</None>
 	</ItemGroup>
-	
+
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Extensions.AI.Abstractions" Version="9.0.0-preview.9.24507.7" />
 	</ItemGroup>
-	
+
 	<ItemGroup>
-	  <ProjectReference Include="..\OllamaSharp\OllamaSharp.csproj" />
+		<ProjectReference Include="..\OllamaSharp\OllamaSharp.csproj" />
 	</ItemGroup>
 
 </Project>

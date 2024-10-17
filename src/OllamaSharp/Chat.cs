@@ -17,7 +17,7 @@ public class Chat
 	/// <summary>
 	/// Gets or sets the messages of the chat history
 	/// </summary>
-	public List<Message> Messages { get; set; } = new();
+	public List<Message> Messages { get; set; } = [];
 
 	/// <summary>
 	/// Gets the Ollama API client
@@ -111,7 +111,6 @@ public class Chat
 
 		var messageBuilder = new MessageBuilder();
 
-#pragma warning disable S3267 // Loops should be simplified with "LINQ" expressions
 		await foreach (var answer in Client.Chat(request, cancellationToken))
 		{
 			if (answer is not null)
@@ -120,7 +119,6 @@ public class Chat
 				yield return answer.Message?.Content ?? string.Empty;
 			}
 		}
-#pragma warning restore S3267 // Loops should be simplified with "LINQ" expressions
 
 		if (messageBuilder.HasValue)
 			Messages.Add(messageBuilder.ToMessage());

@@ -7,5 +7,5 @@ namespace OllamaSharp.Models;
 /// </summary>
 public abstract class OllamaRequest
 {
-	public Dictionary<string, string> CustomHeaders { get; } = new();
+	public Dictionary<string, string> CustomHeaders { get; } = [];
 }

@@ -102,7 +102,7 @@ public static class OllamaApiClientExtensions
 		var request = new EmbedRequest
 		{
 			Model = client.SelectedModel,
-			Input = new List<string> { input }
+			Input = [input]
 		};
 		return client.Embed(request, cancellationToken);
 	}
@@ -128,7 +128,7 @@ public static class OllamaApiClientExtensions
 			Prompt = prompt,
 			Model = client.SelectedModel,
 			Stream = true,
-			Context = context?.Context ?? Array.Empty<long>()
+			Context = context?.Context ?? []
 		};
 		return client.Generate(request, cancellationToken);
 	}

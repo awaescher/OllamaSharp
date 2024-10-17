@@ -5,7 +5,9 @@ using System.Linq;
 using Microsoft.Extensions.AI;
 using OllamaSharp.Models.Chat;
 
+#pragma warning disable IDE0130 // Namespace does not match folder structure
 namespace OllamaSharp.Abstraction;
+#pragma warning restore IDE0130 // Namespace does not match folder structure
 
 /// <summary>
 /// See https://github.com/dotnet/extensions/blob/main/src/Libraries/Microsoft.Extensions.AI.Ollama/OllamaChatClient.cs
@@ -22,7 +24,7 @@ public static class AbstractionMapper
 		{
 			FinishReason = ToFinishReason(response.DoneReason),
 			AdditionalProperties = ParseOllamaChatResponseProps(response),
-			Choices = new List<ChatMessage>() { chatMessage },
+			Choices = [chatMessage],
 			CompletionId = response.CreatedAt,
 			CreatedAt = DateTimeOffset.TryParse(response.CreatedAt, CultureInfo.InvariantCulture, DateTimeStyles.None, out var createdAt) ? createdAt : null,
 			ModelId = response.Model ?? request.Model,
@@ -63,35 +65,13 @@ public static class AbstractionMapper
 	{
 		return tools?.Select(ToOllamaSharpTool)
 			.Where(t => t is not null)
-			.Cast<Tool>()
-			?? Array.Empty<Tool>();
+			.Cast<Tool>() ?? [];
 	}
 
 	private static Tool? ToOllamaSharpTool(AITool tool)
 	{
 		if (tool is AIFunction f)
-		{
-			return new Tool
-			{
-				Function = new Function
-				{
-					Description = f.Metadata.Description,
-					Name = f.Metadata.Name,
-					Parameters = new Parameters
-					{
-						Properties = f.Metadata.Parameters.ToDictionary(p => p.Name, p => new Properties
-						{
-							Description = p.Description,
-							Enum = Array.Empty<string>(), // TODO is there such as possible values in AIFunctionParameterMetadata?
-							Type = ToFunctionTypeString(p.ParameterType)
-						}),
-						Required = f.Metadata.Parameters.Where(p => p.IsRequired).Select(p => p.Name),
-						Type = "object"
-					}
-				},
-				Type = "function"
-			};
-		}
+			return ToOllamaSharpTool(f.Metadata);
 
 		return null;
 	}
@@ -109,7 +89,7 @@ public static class AbstractionMapper
 					Properties = functionMetadata.Parameters.ToDictionary(p => p.Name, p => new Properties
 					{
 						Description = p.Description,
-						Enum = Array.Empty<string>(), // TODO is there such as possible values in AIFunctionParameterMetadata?
+						Enum = [], // TODO is there such as possible values in AIFunctionParameterMetadata?
 						Type = ToFunctionTypeString(p.ParameterType)
 					}),
 					Required = functionMetadata.Parameters.Where(p => p.IsRequired).Select(p => p.Name),
