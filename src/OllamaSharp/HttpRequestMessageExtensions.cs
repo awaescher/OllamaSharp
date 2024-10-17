@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Net.Http;
 using OllamaSharp.Models;
 
@@ -12,11 +13,11 @@ public static class HttpRequestMessageExtensions
 	/// Applies default headers from the OllamaApiClient and optional Ollama requests
 	/// </summary>
 	/// <param name="requestMessage">The http request message to set the headers on</param>
-	/// <param name="apiClient">The OllamaApiClient get the default request headers from</param>
+	/// <param name="headers">The headers to set on the request message</param>
 	/// <param name="ollamaRequest">The request to the Ollama API to get the custom headers from</param>
-	public static void ApplyCustomHeaders(this HttpRequestMessage requestMessage, OllamaApiClient apiClient, OllamaRequest? ollamaRequest)
+	public static void ApplyCustomHeaders(this HttpRequestMessage requestMessage, Dictionary<string, string> headers, OllamaRequest? ollamaRequest)
 	{
-		foreach (var header in apiClient.DefaultRequestHeaders)
+		foreach (var header in headers)
 			AddOrUpdateHeaderValue(requestMessage.Headers, header.Key, header.Value);
 
 		if (ollamaRequest != null)

@@ -3,8 +3,10 @@ name: .NET Build, Test, and Publish Nuget Package
 on:
   push:
     branches: [ "main", "master" ]
+    paths: [ 'src/**' ]
   pull_request:
     branches: [ "main", "master" ]
+    paths: [ 'src/**' ]
 
 jobs:
 
@@ -41,7 +43,7 @@ jobs:
       
     - name: Build
       run: dotnet build --no-restore --configuration=Release /p:Version=${{steps.gitversion.outputs.semVer}}
-      
+
     - name: Test
       run: dotnet test --no-build --configuration=Release --verbosity normal
       

@@ -4,19 +4,19 @@
 
 # OllamaSharp 🦙
 
-OllamaSharp provides .NET bindings for the [Ollama API](https://github.com/jmorganca/ollama/blob/main/docs/api.md), simplifying interaction with Ollama both locally and remotely.
+OllamaSharp provides .NET bindings for the [Ollama API](https://github.com/jmorganca/ollama/blob/main/docs/api.md), simplifying interactions with Ollama both locally and remotely.
 
 ## Features
 
 - Ease of use: Interact with Ollama in just a few lines of code.
-- API endpoint coverage: Support for all Ollama API endpoints including chats, embeddings, listing models, pulling and creating new models, and more.
+- API endpoint coverage: Support for all the Ollama API endpoints, including chats, embeddings, listing models, pulling and creating new models, and more.
 - Real-time streaming: Stream responses directly to your application.
 - Progress reporting: Get real-time progress feedback on tasks like model pulling.
 - Support for [vision models](https://ollama.com/blog/vision-models) and [tools (function calling)](https://ollama.com/blog/tool-support).
 
 ## Usage
 
-OllamaSharp wraps every Ollama API endpoint in awaitable methods that fully support response streaming.
+OllamaSharp wraps each Ollama API endpoint in awaitable methods that fully support response streaming.
 
 The following list shows a few simple code examples.
 
@@ -69,7 +69,7 @@ while (true)
 
 ## Credits
 
-Icon and name were reused from the amazing [Ollama project](https://github.com/jmorganca/ollama).
+The icon and name were reused from the amazing [Ollama project](https://github.com/jmorganca/ollama).
 
 **I would like to thank all the contributors who take the time to improve OllamaSharp. First and foremost [mili-tan](https://github.com/mili-tan), who always keeps OllamaSharp in sync with the Ollama API. ❤**
 
