@@ -19,7 +19,7 @@ public static class OllamaApiClientExtensions
 	/// <param name="destination">The name the copied model should get.</param>
 	/// <param name="cancellationToken">The token to cancel the operation with.</param>
 	public static Task CopyModel(this IOllamaApiClient client, string source, string destination, CancellationToken cancellationToken = default)
-		=> client.CopyModel(new CopyModelRequest { Source = source, Destination = destination }, cancellationToken);
+		=> client.CopyModelAsync(new CopyModelRequest { Source = source, Destination = destination }, cancellationToken);
 
 	/// <summary>
 	/// Sends a request to the /api/create endpoint to create a model.
@@ -39,7 +39,7 @@ public static class OllamaApiClientExtensions
 			ModelFileContent = modelFileContent,
 			Stream = true
 		};
-		return client.CreateModel(request, cancellationToken);
+		return client.CreateModelAsync(request, cancellationToken);
 	}
 
 	/// <summary>
@@ -62,7 +62,7 @@ public static class OllamaApiClientExtensions
 			Path = path,
 			Stream = true
 		};
-		return client.CreateModel(request, cancellationToken);
+		return client.CreateModelAsync(request, cancellationToken);
 	}
 
 	/// <summary>
@@ -72,7 +72,7 @@ public static class OllamaApiClientExtensions
 	/// <param name="model">The name of the model to delete.</param>
 	/// <param name="cancellationToken">The token to cancel the operation with.</param>
 	public static Task DeleteModel(this IOllamaApiClient client, string model, CancellationToken cancellationToken = default)
-		=> client.DeleteModel(new DeleteModelRequest { Model = model }, cancellationToken);
+		=> client.DeleteModelAsync(new DeleteModelRequest { Model = model }, cancellationToken);
 
 	/// <summary>
 	/// Sends a request to the /api/pull endpoint to pull a new model.
@@ -81,7 +81,7 @@ public static class OllamaApiClientExtensions
 	/// <param name="model">The name of the model to pull.</param>
 	/// <param name="cancellationToken">The token to cancel the operation with.</param>
 	public static IAsyncEnumerable<PullModelResponse?> PullModel(this IOllamaApiClient client, string model, CancellationToken cancellationToken = default)
-		=> client.PullModel(new PullModelRequest { Model = model }, cancellationToken);
+		=> client.PullModelAsync(new PullModelRequest { Model = model }, cancellationToken);
 
 	/// <summary>
 	/// Sends a request to the /api/push endpoint to push a new model.
@@ -90,7 +90,7 @@ public static class OllamaApiClientExtensions
 	/// <param name="name">The name of the model to push.</param>
 	/// <param name="cancellationToken">The token to cancel the operation with.</param>
 	public static IAsyncEnumerable<PushModelResponse?> PushModel(this IOllamaApiClient client, string name, CancellationToken cancellationToken = default)
-		=> client.PushModel(new PushModelRequest { Model = name, Stream = true }, cancellationToken);
+		=> client.PushModelAsync(new PushModelRequest { Model = name, Stream = true }, cancellationToken);
 
 	/// <summary>
 	/// Sends a request to the /api/embed endpoint to generate embeddings for the currently selected model.
@@ -105,7 +105,7 @@ public static class OllamaApiClientExtensions
 			Model = client.SelectedModel,
 			Input = [input]
 		};
-		return client.Embed(request, cancellationToken);
+		return client.EmbedAsync(request, cancellationToken);
 	}
 
 	/// <summary>
@@ -120,7 +120,7 @@ public static class OllamaApiClientExtensions
 	/// </param>
 	/// <param name="cancellationToken">The token to cancel the operation with.</param>
 	/// <returns>An async enumerable that can be used to iterate over the streamed responses.</returns>
-	public static IAsyncEnumerable<GenerateResponseStream?> Generate(this IOllamaApiClient client, string prompt, ConversationContext? context = null, CancellationToken cancellationToken = default)
+	public static IAsyncEnumerable<GenerateResponseStream?> GenerateAsync(this IOllamaApiClient client, string prompt, ConversationContext? context = null, CancellationToken cancellationToken = default)
 	{
 		var request = new GenerateRequest
 		{
@@ -129,7 +129,7 @@ public static class OllamaApiClientExtensions
 			Stream = true,
 			Context = context?.Context ?? []
 		};
-		return client.Generate(request, cancellationToken);
+		return client.GenerateAsync(request, cancellationToken);
 	}
 
 	/// <summary>
@@ -140,5 +140,5 @@ public static class OllamaApiClientExtensions
 	/// <param name="cancellationToken">The token to cancel the operation with.</param>
 	/// <returns>The model information.</returns>
 	public static Task<ShowModelResponse> ShowModel(this IOllamaApiClient client, string model, CancellationToken cancellationToken = default)
-		=> client.ShowModel(new ShowModelRequest { Model = model }, cancellationToken);
+		=> client.ShowModelAsync(new ShowModelRequest { Model = model }, cancellationToken);
 }

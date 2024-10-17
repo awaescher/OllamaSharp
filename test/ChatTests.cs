@@ -20,7 +20,7 @@ public class ChatTests
 				new ChatResponseStream { Message = CreateMessage(ChatRole.Assistant, " are you?") });
 
 			var chat = new Chat(_ollama);
-			var answer = await chat.Send("henlo", CancellationToken.None).StreamToEnd();
+			var answer = await chat.SendAsync("henlo", CancellationToken.None).StreamToEndAsync();
 
 			answer.Should().Be("Hi human, how are you?");
 
@@ -57,7 +57,7 @@ public class ChatTests
 				});
 
 			var chat = new Chat(_ollama);
-			await chat.Send("How is the weather in LA?", CancellationToken.None).StreamToEnd();
+			await chat.SendAsync("How is the weather in LA?", CancellationToken.None).StreamToEndAsync();
 
 			chat.Messages.Last().Role.Should().Be(ChatRole.Assistant);
 			chat.Messages.Last().ToolCalls.Should().HaveCount(1);
@@ -68,7 +68,7 @@ public class ChatTests
 		public async Task Sends_System_Prompt_Message()
 		{
 			var chat = new Chat(_ollama, "Speak like a pirate.");
-			await chat.Send("henlo", CancellationToken.None).StreamToEnd();
+			await chat.SendAsync("henlo", CancellationToken.None).StreamToEndAsync();
 
 			chat.Messages.First().Role.Should().Be(ChatRole.System);
 			chat.Messages.First().Content.Should().Be("Speak like a pirate.");
@@ -78,7 +78,7 @@ public class ChatTests
 		public async Task Sends_Messages_As_User()
 		{
 			var chat = new Chat(_ollama);
-			await chat.Send("henlo", CancellationToken.None).StreamToEnd();
+			await chat.SendAsync("henlo", CancellationToken.None).StreamToEndAsync();
 
 			chat.Messages.First().Role.Should().Be(ChatRole.User);
 			chat.Messages.First().Content.Should().Be("henlo");
@@ -95,7 +95,7 @@ public class ChatTests
 				new ChatResponseStream { Message = CreateMessage(ChatRole.Assistant, " tool.") });
 
 			var chat = new Chat(_ollama);
-			await chat.SendAs(ChatRole.Tool, "Henlo assistant.", CancellationToken.None).StreamToEnd();
+			await chat.SendAsAsync(ChatRole.Tool, "Henlo assistant.", CancellationToken.None).StreamToEndAsync();
 
 			var history = chat.Messages.ToArray();
 			history.Length.Should().Be(2);

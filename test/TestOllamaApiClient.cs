@@ -26,7 +26,7 @@ public class TestOllamaApiClient : IOllamaApiClient
 		_expectedGenerateResponses = responses;
 	}
 
-	public async IAsyncEnumerable<ChatResponseStream?> Chat(ChatRequest request, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+	public async IAsyncEnumerable<ChatResponseStream?> ChatAsync(ChatRequest request, [EnumeratorCancellation] CancellationToken cancellationToken = default)
 	{
 		foreach (var response in _expectedChatResponses)
 		{
@@ -35,27 +35,27 @@ public class TestOllamaApiClient : IOllamaApiClient
 		}
 	}
 
-	public Task CopyModel(CopyModelRequest request, CancellationToken cancellationToken = default)
+	public Task CopyModelAsync(CopyModelRequest request, CancellationToken cancellationToken = default)
 	{
 		throw new NotImplementedException();
 	}
 
-	public IAsyncEnumerable<CreateModelResponse?> CreateModel(CreateModelRequest request, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+	public IAsyncEnumerable<CreateModelResponse?> CreateModelAsync(CreateModelRequest request, [EnumeratorCancellation] CancellationToken cancellationToken = default)
 	{
 		throw new NotImplementedException();
 	}
 
-	public Task DeleteModel(DeleteModelRequest request, CancellationToken cancellationToken = default)
+	public Task DeleteModelAsync(DeleteModelRequest request, CancellationToken cancellationToken = default)
 	{
 		throw new NotImplementedException();
 	}
 
-	public Task<EmbedResponse> Embed(EmbedRequest request, CancellationToken cancellationToken = default)
+	public Task<EmbedResponse> EmbedAsync(EmbedRequest request, CancellationToken cancellationToken = default)
 	{
 		throw new NotImplementedException();
 	}
 
-	public async IAsyncEnumerable<GenerateResponseStream?> Generate(GenerateRequest request, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+	public async IAsyncEnumerable<GenerateResponseStream?> GenerateAsync(GenerateRequest request, [EnumeratorCancellation] CancellationToken cancellationToken = default)
 	{
 		foreach (var response in _expectedGenerateResponses)
 		{
@@ -64,37 +64,37 @@ public class TestOllamaApiClient : IOllamaApiClient
 		}
 	}
 
-	public Task<Version> GetVersion(CancellationToken cancellationToken = default)
+	public Task<Version> GetVersionAsync(CancellationToken cancellationToken = default)
 	{
 		throw new NotImplementedException();
 	}
 
-	public Task<bool> IsRunning(CancellationToken cancellationToken = default)
+	public Task<bool> IsRunningAsync(CancellationToken cancellationToken = default)
 	{
 		throw new NotImplementedException();
 	}
 
-	public Task<IEnumerable<Model>> ListLocalModels(CancellationToken cancellationToken = default)
+	public Task<IEnumerable<Model>> ListLocalModelsAsync(CancellationToken cancellationToken = default)
 	{
 		throw new NotImplementedException();
 	}
 
-	public Task<IEnumerable<RunningModel>> ListRunningModels(CancellationToken cancellationToken = default)
+	public Task<IEnumerable<RunningModel>> ListRunningModelsAsync(CancellationToken cancellationToken = default)
 	{
 		throw new NotImplementedException();
 	}
 
-	public IAsyncEnumerable<PullModelResponse?> PullModel(PullModelRequest request, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+	public IAsyncEnumerable<PullModelResponse?> PullModelAsync(PullModelRequest request, [EnumeratorCancellation] CancellationToken cancellationToken = default)
 	{
 		throw new NotImplementedException();
 	}
 
-	public IAsyncEnumerable<PushModelResponse?> PushModel(PushModelRequest request, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+	public IAsyncEnumerable<PushModelResponse?> PushModelAsync(PushModelRequest request, [EnumeratorCancellation] CancellationToken cancellationToken = default)
 	{
 		throw new NotImplementedException();
 	}
 
-	public Task<ShowModelResponse> ShowModel(ShowModelRequest request, CancellationToken cancellationToken = default)
+	public Task<ShowModelResponse> ShowModelAsync(ShowModelRequest request, CancellationToken cancellationToken = default)
 	{
 		throw new NotImplementedException();
 	}
