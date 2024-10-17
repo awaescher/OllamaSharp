@@ -42,6 +42,9 @@ public class OllamaApiClient : IOllamaApiClient
 	public Configuration Config { get; }
 
 	/// <inheritdoc />
+	public Uri Uri => _client.BaseAddress;
+
+	/// <inheritdoc />
 	public string SelectedModel { get; set; }
 
 	/// <summary>

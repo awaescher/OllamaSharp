@@ -16,6 +16,11 @@ namespace OllamaSharp;
 public interface IOllamaApiClient
 {
 	/// <summary>
+	/// Gets the endpoint uri used by the api client
+	/// </summary>
+	public Uri Uri { get; }
+
+	/// <summary>
 	/// Gets or sets the name of the model to run requests on.
 	/// </summary>
 	string SelectedModel { get; set; }

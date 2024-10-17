@@ -70,6 +70,6 @@ public class Message
 		public string? Name { get; set; }
 
 		[JsonPropertyName("arguments")]
-		public Dictionary<string, string>? Arguments { get; set; }
+		public IDictionary<string, object?>? Arguments { get; set; }
 	}
 }

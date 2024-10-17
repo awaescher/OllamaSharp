@@ -17,28 +17,23 @@
 		<RepositoryUrl>https://github.com/awaescher/OllamaSharp</RepositoryUrl>
 		<PackageTags>ollama;ollama-api;api;llm;openai;ai;localllama;llama;streaming;gpt;llamacpp</PackageTags>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
-		<Version>1.1.1</Version>
 		<SignAssembly>True</SignAssembly>
 		<AssemblyOriginatorKeyFile>OllamaSharp.snk</AssemblyOriginatorKeyFile>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<None Include="..\Ollama.png">
+		<None Include="..\..\Ollama.png">
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
 		</None>
-		<None Include="..\LICENSE">
+		<None Include="..\..\LICENSE">
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
 		</None>
-		<None Include="..\README.md">
+		<None Include="..\..\README.md">
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
 		</None>
 	</ItemGroup>
 
-	<ItemGroup>
-		<PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="8.0.0" />
-		<PackageReference Include="System.Text.Json" Version="8.0.5" />
-	</ItemGroup>
 </Project>
