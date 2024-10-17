@@ -374,10 +374,10 @@ public class OllamaApiClientTests
 			var toolsFunction = result.Message.ToolCalls!.ElementAt(0).Function;
 			toolsFunction.Name.Should().Be("get_current_weather");
 			toolsFunction.Arguments!.ElementAt(0).Key.Should().Be("format");
-			toolsFunction.Arguments!.ElementAt(0).Value.Should().Be("celsius");
+			toolsFunction.Arguments!.ElementAt(0).Value.ToString().Should().Be("celsius");
 
 			toolsFunction.Arguments!.ElementAt(1).Key.Should().Be("location");
-			toolsFunction.Arguments!.ElementAt(1).Value.Should().Be("Los Angeles, CA");
+			toolsFunction.Arguments!.ElementAt(1).Value.ToString().Should().Be("Los Angeles, CA");
 		}
 	}
 

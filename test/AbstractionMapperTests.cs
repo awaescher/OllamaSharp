@@ -69,8 +69,23 @@ public class AbstractionMapperTests
 		}
 	}
 
-	public class ToChatRequestMethod : AbstractionMapperTests
+	public class ToOllamaSharpChatRequestMethod : AbstractionMapperTests
 	{
+		[Test]
+		public void Maps_Partial_Options_Class()
+		{
+			var messages = new List<ChatMessage>
+			{
+				new() { Role = Microsoft.Extensions.AI.ChatRole.Assistant, Text = "A" },
+				new() { Role = Microsoft.Extensions.AI.ChatRole.User, Text = "B" },
+			};
+
+			var options = new ChatOptions { Temperature = 0.5f, /* other properties are left out */ };
+
+			Action act = () => AbstractionMapper.ToOllamaSharpChatRequest(Mock.Of<IOllamaApiClient>(), messages, options, stream: true);
+			act.Should().NotThrow();
+		}
+
 		[Test]
 		public void Maps_Messages()
 		{
@@ -223,7 +238,7 @@ public class AbstractionMapperTests
 
 			var chatRequest = AbstractionMapper.ToOllamaSharpChatRequest(Mock.Of<IOllamaApiClient>(), chatMessages, null, stream: true);
 
-			chatRequest.Tools.Should().BeEmpty();
+			chatRequest.Tools.Should().BeNull();
 		}
 	}
 
@@ -266,9 +281,8 @@ public class AbstractionMapperTests
 				Description = "Gets the current weather for a certain location",
 				AdditionalProperties = new Dictionary<string, object?>(),
 				JsonSerializerOptions = null,
-				Name = "",
-				Parameters = null,
-				ReturnParameter = null
+				Parameters = [],
+				ReturnParameter = new AIFunctionReturnParameterMetadata()
 			};
 
 			var stream = new ChatResponseStream

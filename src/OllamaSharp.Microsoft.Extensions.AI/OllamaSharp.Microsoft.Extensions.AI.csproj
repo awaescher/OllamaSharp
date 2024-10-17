@@ -5,6 +5,7 @@
 		<Nullable>enable</Nullable>
 		<LangVersion>12</LangVersion>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<Title>OllamaSharp.Microsoft.Extensions.AI</Title>
 		<Copyright>Andreas Wäscher</Copyright>
 		<Authors>Andreas Wäscher</Authors>

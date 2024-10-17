@@ -51,7 +51,7 @@ public static class AbstractionMapper
 			{
 				FrequencyPenalty = options?.FrequencyPenalty,
 				PresencePenalty = options?.PresencePenalty,
-				Stop = options?.StopSequences.ToArray(),
+				Stop = options?.StopSequences?.ToArray(),
 				Temperature = options?.Temperature,
 				TopP = options?.TopP,
 			},
@@ -61,11 +61,11 @@ public static class AbstractionMapper
 		};
 	}
 
-	private static IEnumerable<Tool> ToOllamaSharpTools(IEnumerable<AITool>? tools)
+	private static IEnumerable<Tool>? ToOllamaSharpTools(IEnumerable<AITool>? tools)
 	{
 		return tools?.Select(ToOllamaSharpTool)
 			.Where(t => t is not null)
-			.Cast<Tool>() ?? [];
+			.Cast<Tool>();
 	}
 
 	private static Tool? ToOllamaSharpTool(AITool tool)
