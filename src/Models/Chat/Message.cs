@@ -106,6 +106,6 @@ public class Message
 		/// Gets or sets the arguments for the function, represented as a dictionary of argument names and values.
 		/// </summary>
 		[JsonPropertyName("arguments")]
-		public Dictionary<string, string>? Arguments { get; set; }
+		public IDictionary<string, object?>? Arguments { get; set; }
 	}
 }

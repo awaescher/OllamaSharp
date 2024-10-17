@@ -46,13 +46,19 @@ public class OllamaApiClientTests
 		_expectedRequestHeaders = null;
 	}
 
+	[OneTimeTearDown]
+	public void OneTimeTearDown()
+	{
+		_client.Dispose();
+	}
+
 	/// <summary>
 	/// Validates if the http request message has the same headers as defined in _expectedRequestHeaders.
 	/// This method does nothing if _expectedRequestHeaders is null.
 	/// </summary>
 	private bool ValidateExpectedRequestHeaders(HttpRequestMessage request)
 	{
-		this._request = request;
+		_request = request;
 
 		if (_expectedRequestHeaders is null)
 			return true;
@@ -94,7 +100,7 @@ public class OllamaApiClientTests
 			stream.Seek(0, SeekOrigin.Begin);
 
 			var builder = new StringBuilder();
-			var modelStream = _client.CreateModel(new CreateModelRequest(), CancellationToken.None);
+			var modelStream = _client.CreateModelAsync(new CreateModelRequest(), CancellationToken.None);
 
 			await foreach (var status in modelStream)
 				builder.Append(status?.Status);
@@ -120,7 +126,7 @@ public class OllamaApiClientTests
 			};
 
 			var builder = new StringBuilder();
-			await foreach (var status in _client.CreateModel(new CreateModelRequest(), CancellationToken.None))
+			await foreach (var status in _client.CreateModelAsync(new CreateModelRequest(), CancellationToken.None))
 				builder.Append(status?.Status);
 
 			builder.Length.Should().Be(0); // assert anything, the test will fail if the expected headers are not available
@@ -148,7 +154,7 @@ public class OllamaApiClientTests
 			request.CustomHeaders["api_method"] = "create"; // set custom request headers
 
 			var builder = new StringBuilder();
-			await foreach (var status in _client.CreateModel(request, CancellationToken.None))
+			await foreach (var status in _client.CreateModelAsync(request, CancellationToken.None))
 				builder.Append(status?.Status);
 
 			builder.Length.Should().Be(0); // assert anything, the test will fail if the expected headers are not available
@@ -175,7 +181,7 @@ public class OllamaApiClientTests
 			request.CustomHeaders["default_header"] = "overwritten";  // overwrites the default header defined on the OllamaApiClient
 
 			var builder = new StringBuilder();
-			await foreach (var status in _client.CreateModel(request, CancellationToken.None))
+			await foreach (var status in _client.CreateModelAsync(request, CancellationToken.None))
 				builder.Append(status?.Status);
 
 			builder.Length.Should().Be(0); // assert anything, the test will fail if the expected headers are not available
@@ -203,7 +209,7 @@ public class OllamaApiClientTests
 			await writer.FinishCompletionStreamResponse("blue.", context: [1, 2, 3]);
 			stream.Seek(0, SeekOrigin.Begin);
 
-			var context = await _client.Generate("prompt").StreamToEnd();
+			var context = await _client.GenerateAsync("prompt").StreamToEndAsync();
 
 			context.Should().NotBeNull();
 			context.Response.Should().Be("The sky is blue.");
@@ -258,7 +264,7 @@ public class OllamaApiClientTests
 					new(ChatRole.User, "And where?")]
 			};
 
-			var result = await _client.Chat(chat, CancellationToken.None).StreamToEnd();
+			var result = await _client.ChatAsync(chat, CancellationToken.None).StreamToEndAsync();
 
 			result.Should().NotBeNull();
 			result.Message.Role.Should().Be(ChatRole.Assistant);
@@ -362,7 +368,7 @@ public class OllamaApiClientTests
 				]
 			};
 
-			var result = await _client.Chat(chat, CancellationToken.None).StreamToEnd();
+			var result = await _client.ChatAsync(chat, CancellationToken.None).StreamToEndAsync();
 
 			result.Should().NotBeNull();
 			result.Message.Role.Should().Be(ChatRole.Assistant);
@@ -374,10 +380,10 @@ public class OllamaApiClientTests
 			var toolsFunction = result.Message.ToolCalls!.ElementAt(0).Function;
 			toolsFunction.Name.Should().Be("get_current_weather");
 			toolsFunction.Arguments!.ElementAt(0).Key.Should().Be("format");
-			toolsFunction.Arguments!.ElementAt(0).Value.Should().Be("celsius");
+			toolsFunction.Arguments!.ElementAt(0).Value.ToString().Should().Be("celsius");
 
 			toolsFunction.Arguments!.ElementAt(1).Key.Should().Be("location");
-			toolsFunction.Arguments!.ElementAt(1).Value.Should().Be("Los Angeles, CA");
+			toolsFunction.Arguments!.ElementAt(1).Value.ToString().Should().Be("Los Angeles, CA");
 		}
 	}
 
@@ -412,7 +418,7 @@ public class OllamaApiClientTests
 				]
 			};
 
-			var chatStream = _client.Chat(chat, CancellationToken.None);
+			var chatStream = _client.ChatAsync(chat, CancellationToken.None);
 
 			var builder = new StringBuilder();
 			var responses = new List<Message?>();
@@ -440,7 +446,7 @@ public class OllamaApiClientTests
 				Content = new StringContent("{ error: llama2 does not support tools }")
 			};
 
-			var act = () => _client.Chat(new ChatRequest(), CancellationToken.None).StreamToEnd();
+			var act = () => _client.ChatAsync(new ChatRequest(), CancellationToken.None).StreamToEndAsync();
 			await act.Should().ThrowAsync<ModelDoesNotSupportToolsException>();
 		}
 
@@ -453,7 +459,7 @@ public class OllamaApiClientTests
 				Content = new StringContent("panic!")
 			};
 
-			var act = () => _client.Chat(new ChatRequest(), CancellationToken.None).StreamToEnd();
+			var act = () => _client.ChatAsync(new ChatRequest(), CancellationToken.None).StreamToEndAsync();
 			await act.Should().ThrowAsync<OllamaException>();
 		}
 	}
@@ -469,7 +475,7 @@ public class OllamaApiClientTests
 				Content = new StringContent("{\r\n\"models\": [\r\n{\r\n\"name\": \"codellama:latest\",\r\n\"modified_at\": \"2023-10-12T14:17:04.967950259+02:00\",\r\n\"size\": 3791811617,\r\n\"digest\": \"36893bf9bc7ff7ace56557cd28784f35f834290c85d39115c6b91c00a031cfad\"\r\n},\r\n{\r\n\"name\": \"llama2:latest\",\r\n\"modified_at\": \"2023-10-02T14:10:14.78152065+02:00\",\r\n\"size\": 3791737662,\r\n\"digest\": \"d5611f7c428cf71fb05660257d18e043477f8b46cf561bf86940c687c1a59f70\"\r\n},\r\n{\r\n\"name\": \"mistral:latest\",\r\n\"modified_at\": \"2023-10-02T14:16:24.841447764+02:00\",\r\n\"size\": 4108916688,\r\n\"digest\": \"8aa307f73b2622af521e8f22d46e4b777123c4df91898dcb2e4079dc8fdf579e\"\r\n},\r\n{\r\n\"name\": \"vicuna:latest\",\r\n\"modified_at\": \"2023-10-06T09:44:16.936312659+02:00\",\r\n\"size\": 3825517709,\r\n\"digest\": \"675fa173a76abc48325d395854471961abf74b664d91e92ffb4fc03e0bde652b\"\r\n}\r\n]\r\n}\r\n")
 			};
 
-			var models = await _client.ListLocalModels(CancellationToken.None);
+			var models = await _client.ListLocalModelsAsync(CancellationToken.None);
 			models.Count().Should().Be(4);
 
 			var first = models.First();
@@ -539,7 +545,7 @@ public class OllamaApiClientTests
 				Content = new StringContent("{\r\n  \"embeddings\": [[\r\n    0.5670403838157654, 0.009260174818336964, 0.23178744316101074, -0.2916173040866852, -0.8924556970596313  ]]\r\n}")
 			};
 
-			var info = await _client.Embed(new EmbedRequest { Model = "", Input = [""] }, CancellationToken.None);
+			var info = await _client.EmbedAsync(new EmbedRequest { Model = "", Input = [""] }, CancellationToken.None);
 
 			info.Embeddings[0].Should().HaveCount(5);
 			info.Embeddings[0][0].Should().BeApproximately(0.567, precision: 0.01);

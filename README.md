@@ -36,20 +36,20 @@ ollama.SelectedModel = "llama3.1:8b";
 ### Listing all models that are available locally
 
 ```csharp
-var models = await ollama.ListLocalModels();
+var models = await ollama.ListLocalModelsAsync();
 ```
 
 ### Pulling a model and reporting progress
 
 ```csharp
-await foreach (var status in ollama.PullModel("llama3.1:405b"))
+await foreach (var status in ollama.PullModelAsync("llama3.1:405b"))
     Console.WriteLine($"{status.Percent}% {status.Status}");
 ```
 
 ### Generating a completion directly into the console
 
 ```csharp
-await foreach (var stream in ollama.Generate("How are you today?"))
+await foreach (var stream in ollama.GenerateAsync("How are you today?"))
     Console.Write(stream.Response);
 ```
 
@@ -60,7 +60,7 @@ var chat = new Chat(ollama);
 while (true)
 {
     var message = Console.ReadLine();
-    await foreach (var answerToken in chat.Send(message))
+    await foreach (var answerToken in chat.SendAsync(message))
         Console.Write(answerToken);
 }
 // messages including their roles and tool calls will automatically be tracked within the chat object

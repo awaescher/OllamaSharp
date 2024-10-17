@@ -9,6 +9,7 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.AI;
 using OllamaSharp.Models;
 using OllamaSharp.Models.Chat;
 using OllamaSharp.Models.Exceptions;
@@ -19,12 +20,14 @@ namespace OllamaSharp;
 /// The default client to use the Ollama API conveniently.
 /// <see href="https://github.com/jmorganca/ollama/blob/main/docs/api.md"/>
 /// </summary>
-public class OllamaApiClient : IOllamaApiClient
+public class OllamaApiClient : IOllamaApiClient, IChatClient
 {
+	private readonly bool _disposeHttpClient;
+
 	/// <summary>
 	/// Gets the default request headers that are sent to the Ollama API.
 	/// </summary>
-	public Dictionary<string, string> DefaultRequestHeaders { get; } = new();
+	public Dictionary<string, string> DefaultRequestHeaders { get; } = [];
 
 	/// <summary>
 	/// Gets the serializer options for outgoing web requests like Post or Delete.
@@ -40,6 +43,9 @@ public class OllamaApiClient : IOllamaApiClient
 	/// Gets the current configuration of the API client.
 	/// </summary>
 	public Configuration Config { get; }
+
+	/// <inheritdoc />
+	public Uri Uri => _client.BaseAddress;
 
 	/// <inheritdoc />
 	public string SelectedModel { get; set; }
@@ -76,6 +82,7 @@ public class OllamaApiClient : IOllamaApiClient
 	public OllamaApiClient(Configuration config)
 		: this(new HttpClient() { BaseAddress = config.Uri }, config.Model)
 	{
+		_disposeHttpClient = true;
 	}
 
 	/// <summary>
@@ -96,14 +103,14 @@ public class OllamaApiClient : IOllamaApiClient
 	}
 
 	/// <inheritdoc />
-	public async IAsyncEnumerable<CreateModelResponse?> CreateModel(CreateModelRequest request, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+	public async IAsyncEnumerable<CreateModelResponse?> CreateModelAsync(CreateModelRequest request, [EnumeratorCancellation] CancellationToken cancellationToken = default)
 	{
 		await foreach (var result in StreamPostAsync<CreateModelRequest, CreateModelResponse?>("api/create", request, cancellationToken))
 			yield return result;
 	}
 
 	/// <inheritdoc />
-	public async Task DeleteModel(DeleteModelRequest request, CancellationToken cancellationToken = default)
+	public async Task DeleteModelAsync(DeleteModelRequest request, CancellationToken cancellationToken = default)
 	{
 		var requestMessage = new HttpRequestMessage(HttpMethod.Delete, "api/delete")
 		{
@@ -114,36 +121,36 @@ public class OllamaApiClient : IOllamaApiClient
 	}
 
 	/// <inheritdoc />
-	public async Task<IEnumerable<Model>> ListLocalModels(CancellationToken cancellationToken = default)
+	public async Task<IEnumerable<Model>> ListLocalModelsAsync(CancellationToken cancellationToken = default)
 	{
 		var data = await GetAsync<ListModelsResponse>("api/tags", cancellationToken);
 		return data.Models;
 	}
 
 	/// <inheritdoc />
-	public async Task<IEnumerable<RunningModel>> ListRunningModels(CancellationToken cancellationToken = default)
+	public async Task<IEnumerable<RunningModel>> ListRunningModelsAsync(CancellationToken cancellationToken = default)
 	{
 		var data = await GetAsync<ListRunningModelsResponse>("api/ps", cancellationToken);
 		return data.RunningModels;
 	}
 
 	/// <inheritdoc />
-	public Task<ShowModelResponse> ShowModel(ShowModelRequest request, CancellationToken cancellationToken = default)
+	public Task<ShowModelResponse> ShowModelAsync(ShowModelRequest request, CancellationToken cancellationToken = default)
 		=> PostAsync<ShowModelRequest, ShowModelResponse>("api/show", request, cancellationToken);
 
 	/// <inheritdoc />
-	public Task CopyModel(CopyModelRequest request, CancellationToken cancellationToken = default)
+	public Task CopyModelAsync(CopyModelRequest request, CancellationToken cancellationToken = default)
 		=> PostAsync("api/copy", request, cancellationToken);
 
 	/// <inheritdoc />
-	public async IAsyncEnumerable<PullModelResponse?> PullModel(PullModelRequest request, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+	public async IAsyncEnumerable<PullModelResponse?> PullModelAsync(PullModelRequest request, [EnumeratorCancellation] CancellationToken cancellationToken = default)
 	{
 		await foreach (var result in StreamPostAsync<PullModelRequest, PullModelResponse?>("api/pull", request, cancellationToken))
 			yield return result;
 	}
 
 	/// <inheritdoc />
-	public async IAsyncEnumerable<PushModelResponse?> PushModel(PushModelRequest request, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+	public async IAsyncEnumerable<PushModelResponse?> PushModelAsync(PushModelRequest request, [EnumeratorCancellation] CancellationToken cancellationToken = default)
 	{
 		var stream = StreamPostAsync<PushModelRequest, PushModelResponse?>("api/push", request, cancellationToken);
 
@@ -152,18 +159,18 @@ public class OllamaApiClient : IOllamaApiClient
 	}
 
 	/// <inheritdoc />
-	public Task<EmbedResponse> Embed(EmbedRequest request, CancellationToken cancellationToken = default)
+	public Task<EmbedResponse> EmbedAsync(EmbedRequest request, CancellationToken cancellationToken = default)
 		=> PostAsync<EmbedRequest, EmbedResponse>("api/embed", request, cancellationToken);
 
 	/// <inheritdoc />
-	public async IAsyncEnumerable<GenerateResponseStream?> Generate(GenerateRequest request, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+	public async IAsyncEnumerable<GenerateResponseStream?> GenerateAsync(GenerateRequest request, [EnumeratorCancellation] CancellationToken cancellationToken = default)
 	{
-		await foreach (var result in GenerateCompletion(request, cancellationToken))
+		await foreach (var result in GenerateCompletionAsync(request, cancellationToken))
 			yield return result;
 	}
 
 	/// <inheritdoc />
-	public async IAsyncEnumerable<ChatResponseStream?> Chat(ChatRequest request, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+	public async IAsyncEnumerable<ChatResponseStream?> ChatAsync(ChatRequest request, [EnumeratorCancellation] CancellationToken cancellationToken = default)
 	{
 		var requestMessage = new HttpRequestMessage(HttpMethod.Post, "api/chat")
 		{
@@ -181,7 +188,7 @@ public class OllamaApiClient : IOllamaApiClient
 	}
 
 	/// <inheritdoc />
-	public async Task<bool> IsRunning(CancellationToken cancellationToken = default)
+	public async Task<bool> IsRunningAsync(CancellationToken cancellationToken = default)
 	{
 		var requestMessage = new HttpRequestMessage(HttpMethod.Get, ""); // without route returns "Ollama is running"
 
@@ -193,13 +200,13 @@ public class OllamaApiClient : IOllamaApiClient
 	}
 
 	/// <inheritdoc />
-	public async Task<Version> GetVersion(CancellationToken cancellationToken = default)
+	public async Task<Version> GetVersionAsync(CancellationToken cancellationToken = default)
 	{
 		var data = await GetAsync<JsonNode>("api/version", cancellationToken);
 		return Version.Parse(data["version"]?.ToString());
 	}
 
-	private async IAsyncEnumerable<GenerateResponseStream?> GenerateCompletion(GenerateRequest generateRequest, [EnumeratorCancellation] CancellationToken cancellationToken)
+	private async IAsyncEnumerable<GenerateResponseStream?> GenerateCompletionAsync(GenerateRequest generateRequest, [EnumeratorCancellation] CancellationToken cancellationToken)
 	{
 		var requestMessage = new HttpRequestMessage(HttpMethod.Post, "api/generate")
 		{
@@ -321,12 +328,12 @@ public class OllamaApiClient : IOllamaApiClient
 
 		var response = await _client.SendAsync(requestMessage, completionOption, cancellationToken);
 
-		await EnsureSuccessStatusCode(response);
+		await EnsureSuccessStatusCodeAsync(response);
 
 		return response;
 	}
 
-	private async Task EnsureSuccessStatusCode(HttpResponseMessage response)
+	private async Task EnsureSuccessStatusCodeAsync(HttpResponseMessage response)
 	{
 		if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 		{
@@ -355,6 +362,48 @@ public class OllamaApiClient : IOllamaApiClient
 
 		response.EnsureSuccessStatusCode();
 	}
+	/// <summary>
+	/// Releases the resources used by the <see cref="OllamaApiClient"/> instance.
+	/// Disposes the internal HTTP client if it was created internally.
+	/// </summary>
+	public void Dispose()
+	{
+		if (_disposeHttpClient)
+			_client?.Dispose();
+	}
+
+	#region IChatClient implementation
+
+	/// <inheritdoc/>
+	ChatClientMetadata IChatClient.Metadata => new("ollama", Uri, SelectedModel);
+
+	/// <inheritdoc/>
+	async Task<ChatCompletion> IChatClient.CompleteAsync(IList<ChatMessage> chatMessages, ChatOptions? options, CancellationToken cancellationToken)
+	{
+		var request = MicrosoftAi.AbstractionMapper.ToOllamaSharpChatRequest(this, chatMessages, options, stream: false);
+		var response = await ChatAsync(request, cancellationToken).StreamToEndAsync();
+		return MicrosoftAi.AbstractionMapper.ToChatCompletion(request, response) ?? new ChatCompletion([]);
+	}
+
+	/// <inheritdoc/>
+	async IAsyncEnumerable<StreamingChatCompletionUpdate> IChatClient.CompleteStreamingAsync(IList<ChatMessage> chatMessages, ChatOptions? options, [EnumeratorCancellation] CancellationToken cancellationToken)
+	{
+		var request = MicrosoftAi.AbstractionMapper.ToOllamaSharpChatRequest(this, chatMessages, options, stream: true);
+		await foreach (var response in ChatAsync(request, cancellationToken))
+			yield return MicrosoftAi.AbstractionMapper.ToStreamingChatCompletionUpdate(response);
+	}
+
+	/// <inheritdoc/>
+	TService? IChatClient.GetService<TService>(object? key) where TService : class
+		=> key is null ? this as TService : null;
+
+	/// <inheritdoc/>
+	void IDisposable.Dispose()
+	{
+		Dispose();
+	}
+
+	#endregion
 
 	/// <summary>
 	/// The configuration for the Ollama API client.
