@@ -2,10 +2,10 @@ name: .NET Build, Test, and Publish Nuget Package
 
 on:
   push:
-    branches: [ "main", "master", "preview" ]
+    branches: [ "main", "master" ]
     paths: [ 'src/**' ]
   pull_request:
-    branches: [ "main", "master", "preview" ]
+    branches: [ "main", "master" ]
     paths: [ 'src/**' ]
 
 jobs:
@@ -48,13 +48,13 @@ jobs:
       run: dotnet test --no-build --configuration=Release --verbosity normal
       
     - name: pack nuget packages
-      run: dotnet pack --output nupkgs --configuration=Release --no-restore --no-build /p:PackageVersion=${{steps.gitversion.outputs.semVer}}${{ github.ref == 'refs/heads/preview' && '-preview' || '' }}
+      run: dotnet pack --output nupkgs --configuration=Release --no-restore --no-build /p:PackageVersion=${{steps.gitversion.outputs.semVer}}
 
     - name: Create a GitHub release
       uses: ncipollo/release-action@v1
       with:
-        tag: ${{steps.gitversion.outputs.semVer}}${{ github.ref == 'refs/heads/preview' && '-preview' || '' }}
-        name: Release ${{steps.gitversion.outputs.semVer}}${{ github.ref == 'refs/heads/preview' && '-preview' || '' }}
+        tag: ${{steps.gitversion.outputs.semVer}}
+        name: Release ${{steps.gitversion.outputs.semVer}}
       if: github.event_name != 'pull_request'
 
     - name: upload nuget package
