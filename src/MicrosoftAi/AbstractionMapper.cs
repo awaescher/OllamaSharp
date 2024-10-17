@@ -5,9 +5,7 @@ using System.Linq;
 using Microsoft.Extensions.AI;
 using OllamaSharp.Models.Chat;
 
-#pragma warning disable IDE0130 // Namespace does not match folder structure
-namespace OllamaSharp.Abstraction;
-#pragma warning restore IDE0130 // Namespace does not match folder structure
+namespace OllamaSharp.MicrosoftAi;
 
 /// <summary>
 /// See https://github.com/dotnet/extensions/blob/main/src/Libraries/Microsoft.Extensions.AI.Ollama/OllamaChatClient.cs

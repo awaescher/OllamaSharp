@@ -5,16 +5,12 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.AI;
-using OllamaSharp.Abstraction;
 
-#pragma warning disable IDE0130 // Namespace does not match folder structure
-namespace OllamaSharp;
-#pragma warning restore IDE0130 // Namespace does not match folder structure
+namespace OllamaSharp.MicrosoftAi;
 
 /// <summary>
 /// The Ollama implementation for Microsoft.Extensions.AI
 /// </summary>
-/// <param name="apiClient">The api client used to communicate with the Ollama endpoint</param>
 public class OllamaChatClient : IChatClient
 {
 	/// <summary>

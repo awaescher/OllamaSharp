@@ -26,8 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\OllamaSharp.Microsoft.Extensions.AI\OllamaSharp.Microsoft.Extensions.AI.csproj" />
-    <ProjectReference Include="..\src\OllamaSharp\OllamaSharp.csproj" />
+    <ProjectReference Include="..\src\OllamaSharp.csproj" />
   </ItemGroup>
 
 </Project>

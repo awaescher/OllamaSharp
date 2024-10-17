@@ -3,7 +3,7 @@ using Microsoft.Extensions.AI;
 using Moq;
 using NUnit.Framework;
 using OllamaSharp;
-using OllamaSharp.Abstraction;
+using OllamaSharp.MicrosoftAi;
 using OllamaSharp.Models.Chat;
 
 namespace Tests;
