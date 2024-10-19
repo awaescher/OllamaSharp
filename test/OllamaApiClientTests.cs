@@ -295,7 +295,8 @@ public class OllamaApiClientTests
 				                    "name": "get_current_weather",
 				                    "arguments": {
 				                        "format": "celsius",
-				                        "location": "Los Angeles, CA"
+				                        "location": "Los Angeles, CA",
+										"number": 42
 				                    }
 				                }
 				            }
@@ -353,6 +354,11 @@ public class OllamaApiClientTests
 										Description = "The format to return the weather in, e.g. 'celsius' or 'fahrenheit'",
 										Enum = ["celsius", "fahrenheit"]
 									},
+									["number"] = new()
+									{
+										Type = "integer",
+										Description = "The number of the day to get the weather for, e.g. 42"
+									}
 								},
 								Required = ["location", "format"],
 							}
@@ -378,6 +384,9 @@ public class OllamaApiClientTests
 
 			toolsFunction.Arguments!.ElementAt(1).Key.Should().Be("location");
 			toolsFunction.Arguments!.ElementAt(1).Value.Should().Be("Los Angeles, CA");
+
+			toolsFunction.Arguments!.ElementAt(2).Key.Should().Be("number");
+			toolsFunction.Arguments!.ElementAt(2).Value.Should().Be("42");
 		}
 	}
 
