@@ -47,10 +47,10 @@ public class ChatTests
 									Arguments = new Dictionary<string, object?>()
 									{
 										["format"] = "celsius",
-										["location"] = "Los Angeles, CA"
+										["location"] = "Los Angeles, CA",
+										["number"] = 30,
 									}
 								}
-
 							}
 						]
 					}
