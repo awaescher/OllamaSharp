@@ -2,6 +2,45 @@
  <img alt="ollama" height="200px" src="https://github.com/awaescher/OllamaSharp/blob/main/Ollama.png">
 </p>
 
+<p align="center">
+  
+  <!-- NuGet Downloads -->
+  <a href="https://www.nuget.org/packages/OllamaSharp">
+    <img src="https://img.shields.io/nuget/dt/OllamaSharp.svg" alt="NuGet Downloads">
+  </a>
+  
+  <!-- License -->
+  <a href="LICENSE">
+    <img src="https://img.shields.io/github/license/awaescher/OllamaSharp.svg" alt="License">
+  </a>
+  
+  <!-- GitHub Stars -->
+  <a href="https://github.com/awaescher/OllamaSharp/stargazers">
+    <img src="https://img.shields.io/github/stars/awaescher/OllamaSharp.svg" alt="GitHub Stars">
+  </a>
+  
+  <!-- GitHub Issues -->
+  <a href="https://github.com/awaescher/OllamaSharp/issues">
+    <img src="https://img.shields.io/github/issues/awaescher/OllamaSharp.svg" alt="GitHub Issues">
+  </a>
+  
+  <!-- GitHub Last Commit -->
+  <a href="https://github.com/awaescher/OllamaSharp/commits/main">
+    <img src="https://img.shields.io/github/last-commit/awaescher/OllamaSharp.svg" alt="GitHub Last Commit">
+  </a>
+  
+  <!-- .NET Version -->
+  <a href="#">
+    <img src="https://img.shields.io/badge/.NET-6.0%2B-512BD4" alt=".NET Version">
+  </a>
+  
+  <!-- Contributors -->
+  <a href="https://github.com/awaescher/OllamaSharp/graphs/contributors">
+    <img src="https://img.shields.io/github/contributors/awaescher/OllamaSharp.svg" alt="Contributors">
+  </a>
+  
+</p>
+
 # OllamaSharp 🦙
 
 OllamaSharp provides .NET bindings for the [Ollama API](https://github.com/jmorganca/ollama/blob/main/docs/api.md), simplifying interactions with Ollama both locally and remotely.
