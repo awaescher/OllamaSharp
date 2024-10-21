@@ -10,14 +10,12 @@
 		<Copyright>Andreas Wäscher</Copyright>
 		<Authors>Andreas Wäscher, Milkey Tan, Jerrett Davis</Authors>
 		<PackageIcon>Ollama.png</PackageIcon>
-		<Description>
-			The easiest way to use the Ollama API in .NET
-		</Description>
+		<Description>The easiest way to use the Ollama API in .NET</Description>
 		<PackageProjectUrl>https://github.com/awaescher/OllamaSharp</PackageProjectUrl>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<RepositoryUrl>https://github.com/awaescher/OllamaSharp</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
-		<PackageTags>ollama;ollama-api;api;llm;openai;ai;localllama;llama;streaming;gpt;llamacpp</PackageTags>
+		<PackageTags>ollama;ollama-api;api;llm;openai;ai;localllama;llama;streaming;gpt;llamacpp;ichatclient</PackageTags>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 		<SignAssembly>True</SignAssembly>
 		<AssemblyOriginatorKeyFile>..\OllamaSharp.snk</AssemblyOriginatorKeyFile>
