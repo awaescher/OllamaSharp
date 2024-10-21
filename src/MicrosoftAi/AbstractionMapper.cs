@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Nodes;
 using Microsoft.Extensions.AI;
 using OllamaSharp.Models.Chat;
 
@@ -46,13 +47,9 @@ public static class AbstractionMapper
 	/// <param name="stream">Indicates if the request should be streamed.</param>
 	public static ChatRequest ToOllamaSharpChatRequest(IOllamaApiClient apiClient, IList<ChatMessage> chatMessages, ChatOptions? options, bool stream)
 	{
-		// unused ChatOptions properties
-		// options.MaxOutputTokens,
-		// options.ToolMode,
-
 		return new ChatRequest
 		{
-			Format = options?.ResponseFormat is ChatResponseFormat.Json ? "json" : null,
+			Format = options?.ResponseFormat == ChatResponseFormat.Json ? "json" : null,
 			KeepAlive = null,
 			Messages = ToOllamaSharpMessages(chatMessages),
 			Model = options?.ModelId ?? apiClient.SelectedModel,
@@ -110,8 +107,8 @@ public static class AbstractionMapper
 					Properties = functionMetadata.Parameters.ToDictionary(p => p.Name, p => new Properties
 					{
 						Description = p.Description,
-						Enum = [], // TODO is there such as possible values in AIFunctionParameterMetadata?
-						Type = ToFunctionTypeString(p.ParameterType)
+						Enum = GetPossibleValues(p.Schema as JsonObject),
+						Type = ToFunctionTypeString(p.Schema as JsonObject)
 					}),
 					Required = functionMetadata.Parameters.Where(p => p.IsRequired).Select(p => p.Name),
 					Type = "object"
@@ -122,10 +119,19 @@ public static class AbstractionMapper
 	}
 
 	/// <summary>
-	/// Converts a <see cref="Type"/> to a function type string.
+	/// Converts parameter schema object to a function type string.
 	/// </summary>
-	/// <param name="_">The type to convert.</param>
-	private static string ToFunctionTypeString(Type? _)
+	/// <param name="schema">The schema object holding schema type information.</param>
+	private static IEnumerable<string>? GetPossibleValues(JsonObject? schema)
+	{
+		return []; // TODO others supported?
+	}
+
+	/// <summary>
+	/// Converts parameter schema object to a function type string.
+	/// </summary>
+	/// <param name="schema">The schema object holding schema type information.</param>
+	private static string ToFunctionTypeString(JsonObject? schema)
 	{
 		return "string"; // TODO others supported?
 	}
@@ -157,10 +163,9 @@ public static class AbstractionMapper
 		if (content is null || !content.ContainsData)
 			return string.Empty;
 
-		if (content.MediaType?.StartsWith("image", StringComparison.OrdinalIgnoreCase) ?? false)
-		{
-			return content.Uri; // If the content is binary data, converts it to a data: URI with base64 encoding
-		}
+		var isImage = content is ImageContent || content?.MediaType?.StartsWith("image", StringComparison.OrdinalIgnoreCase) == true;
+		if (isImage)
+			return content?.Uri ?? ""; // If the content is binary data, converts it to a data: URI with base64 encoding
 
 		return string.Empty;
 	}
@@ -222,13 +227,11 @@ public static class AbstractionMapper
 	/// <param name="response">The response stream to convert.</param>
 	public static StreamingChatCompletionUpdate ToStreamingChatCompletionUpdate(ChatResponseStream? response)
 	{
-		return new StreamingChatCompletionUpdate // TODO
+		return new StreamingChatCompletionUpdate
 		{
-			//AdditionalProperties
-			//AuthorName
-			//ChoiceIndex
-			//CompletionId
-			//Contents
+			// no need to set "Contents" as we set the text
+			CompletionId = response?.CreatedAtString,
+			ChoiceIndex = 0, // should be left at 0 as Ollama does not support this
 			CreatedAt = response?.CreatedAt,
 			FinishReason = response?.Done == true ? ChatFinishReason.Stop : null,
 			RawRepresentation = response,
