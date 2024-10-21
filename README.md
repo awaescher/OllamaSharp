@@ -6,6 +6,8 @@
 
 OllamaSharp provides .NET bindings for the [Ollama API](https://github.com/jmorganca/ollama/blob/main/docs/api.md), simplifying interactions with Ollama both locally and remotely.
 
+✅ Supporting [Microsoft.Extensions.AI](https://devblogs.microsoft.com/dotnet/introducing-microsoft-extensions-ai-preview/) and [Microsoft Semantic Kernel](https://github.com/microsoft/semantic-kernel/pull/7362)
+
 ## Features
 
 - Ease of use: Interact with Ollama in just a few lines of code.
