@@ -52,7 +52,7 @@ public static class AbstractionMapper
 
 		return new ChatRequest
 		{
-			Format = options?.ResponseFormat == ChatResponseFormat.Json ? "json" : null,
+			Format = options?.ResponseFormat is ChatResponseFormat.Json ? "json" : null,
 			KeepAlive = null,
 			Messages = ToOllamaSharpMessages(chatMessages),
 			Model = options?.ModelId ?? apiClient.SelectedModel,
