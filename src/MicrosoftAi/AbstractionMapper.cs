@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using Microsoft.Extensions.AI;
 using OllamaSharp.Models.Chat;
@@ -28,8 +27,8 @@ public static class AbstractionMapper
 			FinishReason = ToFinishReason(response.DoneReason),
 			AdditionalProperties = ParseOllamaChatResponseProps(response),
 			Choices = [chatMessage],
-			CompletionId = response.CreatedAt,
-			CreatedAt = DateTimeOffset.TryParse(response.CreatedAt, CultureInfo.InvariantCulture, DateTimeStyles.None, out var createdAt) ? createdAt : null,
+			CompletionId = response.CreatedAtString,
+			CreatedAt = response.CreatedAt,
 			ModelId = response.Model ?? request.Model,
 			RawRepresentation = response,
 			Usage = ParseOllamaChatResponseUsage(response)
@@ -230,7 +229,7 @@ public static class AbstractionMapper
 			//ChoiceIndex
 			//CompletionId
 			//Contents
-			CreatedAt = DateTimeOffset.TryParse(response?.CreatedAt ?? "", CultureInfo.InvariantCulture, DateTimeStyles.None, out var createdAt) ? createdAt : null,
+			CreatedAt = response?.CreatedAt,
 			FinishReason = response?.Done == true ? ChatFinishReason.Stop : null,
 			RawRepresentation = response,
 			Text = response?.Message?.Content ?? string.Empty,

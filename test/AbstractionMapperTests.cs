@@ -19,7 +19,7 @@ public class AbstractionMapperTests
 
 			var stream = new ChatDoneResponseStream
 			{
-				CreatedAt = ollamaCreatedStamp,
+				CreatedAtString = ollamaCreatedStamp,
 				Done = true,
 				DoneReason = "stop",
 				EvalCount = 111,
@@ -45,7 +45,7 @@ public class AbstractionMapperTests
 
 			chatCompletion.CompletionId.Should().Be(ollamaCreatedStamp);
 
-			chatCompletion.CreatedAt.Should().Be(new DateTimeOffset(2023, 08, 04, 8, 52, 19, 385, 406, TimeSpan.FromHours(-7)));
+			chatCompletion.CreatedAt.Should().Be(new DateTimeOffset(2023, 08, 04, 08, 52, 19, 385, 406, TimeSpan.FromHours(-7)));
 
 			chatCompletion.FinishReason.Should().Be(ChatFinishReason.Stop);
 
@@ -251,7 +251,7 @@ public class AbstractionMapperTests
 
 			var stream = new ChatResponseStream
 			{
-				CreatedAt = "",
+				CreatedAt = date,
 				Model = "",
 				Done = false,
 				Message = new Message()
@@ -287,7 +287,7 @@ public class AbstractionMapperTests
 
 			var stream = new ChatResponseStream
 			{
-				CreatedAt = "",
+				CreatedAt = new DateTimeOffset(2024, 12, 31, 23, 44, 55, TimeSpan.Zero),
 				Model = "",
 				Done = false,
 				Message = new Message()
