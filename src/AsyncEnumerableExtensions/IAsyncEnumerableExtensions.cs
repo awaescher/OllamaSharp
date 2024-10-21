@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.Extensions.AI;
 using OllamaSharp.AsyncEnumerableExtensions;
 using OllamaSharp.Models;
 using OllamaSharp.Models.Chat;
@@ -13,7 +12,7 @@ namespace OllamaSharp;
 /// <summary>
 /// Extension methods to stream IAsyncEnumerable to its end and return one single result value
 /// </summary>
-public static class IAsyncEnumerableExtensions
+public static partial class IAsyncEnumerableExtensions
 {
 	/// <summary>
 	/// Streams a given IAsyncEnumerable to its end and appends its items to a single response string
@@ -41,15 +40,6 @@ public static class IAsyncEnumerableExtensions
 	/// <returns>A single ChatDoneResponseStream built up from every single IAsyncEnumerable item</returns>
 	public static Task<ChatDoneResponseStream?> StreamToEndAsync(this IAsyncEnumerable<ChatResponseStream?> stream, Action<ChatResponseStream?>? itemCallback = null)
 		=> stream.StreamToEndAsync(new ChatResponseStreamAppender(), itemCallback);
-
-	/// <summary>
-	/// Streams a given IAsyncEnumerable of response chunks to its end and builds one single StreamingChatCompletionUpdate out of them.
-	/// </summary>
-	/// <param name="stream">The IAsyncEnumerable to stream</param>
-	/// <param name="itemCallback">An optional callback to additionally process every single item from the IAsyncEnumerable</param>
-	/// <returns>A single StreamingChatCompletionUpdate built up from every single IAsyncEnumerable item</returns>
-	public static Task<StreamingChatCompletionUpdate?> StreamToEndAsync(this IAsyncEnumerable<StreamingChatCompletionUpdate?> stream, Action<StreamingChatCompletionUpdate?>? itemCallback = null)
-		=> stream.StreamToEndAsync(new MicrosoftAi.StreamingChatCompletionUpdateAppender(), itemCallback);
 
 	/// <summary>
 	/// Streams a given IAsyncEnumerable of response chunks to its end and builds one single ChatDoneResponseStream out of them.
