@@ -159,7 +159,7 @@ public static class AbstractionMapper
 
 		if (content.MediaType?.StartsWith("image", StringComparison.OrdinalIgnoreCase) ?? false)
 		{
-			return content.Data.ToString(); // TODO convert to base64?
+			return content.Uri; // If the content is binary data, converts it to a data: URI with base64 encoding
 		}
 
 		return string.Empty;
