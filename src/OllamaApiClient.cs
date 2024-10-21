@@ -382,7 +382,7 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient
 	{
 		var request = MicrosoftAi.AbstractionMapper.ToOllamaSharpChatRequest(this, chatMessages, options, stream: false);
 		var response = await ChatAsync(request, cancellationToken).StreamToEndAsync();
-		return MicrosoftAi.AbstractionMapper.ToChatCompletion(request, response) ?? new ChatCompletion([]);
+		return MicrosoftAi.AbstractionMapper.ToChatCompletion(response, request.Model) ?? new ChatCompletion([]);
 	}
 
 	/// <inheritdoc/>

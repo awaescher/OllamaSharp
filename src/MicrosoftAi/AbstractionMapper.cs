@@ -15,27 +15,26 @@ public static class AbstractionMapper
 	/// <summary>
 	/// Maps a <see cref="ChatRequest"/> and <see cref="ChatDoneResponseStream"/> to a <see cref="ChatCompletion"/>.
 	/// </summary>
-	/// <param name="request">The chat request containing initial request data.</param>
-	/// <param name="response">The response stream with completion data.</param>
-	public static ChatCompletion? ToChatCompletion(ChatRequest request, ChatDoneResponseStream? response)
+	/// <param name="stream">The response stream with completion data.</param>
+	/// <param name="fallbackModel">The name of the model if the response stream object does not define one.</param>
+	public static ChatCompletion? ToChatCompletion(ChatDoneResponseStream? stream, string fallbackModel = "")
 	{
-		if (response is null)
+		if (stream is null)
 			return null;
 
-		var chatMessage = ToChatMessage(response.Message);
-		var completion = new ChatCompletion(chatMessage)
-		{
-			FinishReason = ToFinishReason(response.DoneReason),
-			AdditionalProperties = ParseOllamaChatResponseProps(response),
-			Choices = [chatMessage],
-			CompletionId = response.CreatedAtString,
-			CreatedAt = response.CreatedAt,
-			ModelId = response.Model ?? request.Model,
-			RawRepresentation = response,
-			Usage = ParseOllamaChatResponseUsage(response)
-		};
+		var chatMessage = ToChatMessage(stream.Message);
 
-		return completion;
+		return new ChatCompletion(chatMessage)
+		{
+			FinishReason = ToFinishReason(stream.DoneReason),
+			AdditionalProperties = ParseOllamaChatResponseProps(stream),
+			Choices = [chatMessage],
+			CompletionId = stream.CreatedAtString,
+			CreatedAt = stream.CreatedAt,
+			ModelId = string.IsNullOrEmpty(stream.Model) ? fallbackModel : stream.Model,
+			RawRepresentation = stream,
+			Usage = ParseOllamaChatResponseUsage(stream)
+		};
 	}
 
 	/// <summary>
@@ -244,7 +243,7 @@ public static class AbstractionMapper
 	/// Converts a <see cref="Message"/> to a <see cref="ChatMessage"/>.
 	/// </summary>
 	/// <param name="message">The message to convert.</param>
-	private static ChatMessage ToChatMessage(Message message)
+	public static ChatMessage ToChatMessage(Message message)
 	{
 		var contents = new List<AIContent>();
 
@@ -255,7 +254,7 @@ public static class AbstractionMapper
 				if (toolCall.Function is { } function)
 				{
 					var id = Guid.NewGuid().ToString().Substring(0, 8);
-					contents.Add(new FunctionCallContent(id, function.Name ?? "", function.Arguments));
+					contents.Add(new FunctionCallContent(id, function.Name ?? "n/a", function.Arguments) { RawRepresentation = toolCall });
 				}
 			}
 		}
@@ -265,8 +264,7 @@ public static class AbstractionMapper
 		if (message.Content?.Length > 0 || contents.Count == 0)
 			contents.Insert(0, new TextContent(message.Content));
 
-		var roleString = message.Role?.ToString() ?? "";
-		return new ChatMessage(new Microsoft.Extensions.AI.ChatRole(roleString), contents);
+		return new ChatMessage(ToAbstractionRole(message.Role), contents) { RawRepresentation = message };
 	}
 
 	/// <summary>
