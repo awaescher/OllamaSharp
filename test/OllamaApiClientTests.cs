@@ -303,6 +303,8 @@ public class OllamaApiClientTests
 				                        "format": "celsius",
 				                        "location": "Los Angeles, CA",
 										"number": 42
+				                        "location": "Los Angeles, CA",
+										"number": 42
 				                    }
 				                }
 				            }
@@ -360,6 +362,11 @@ public class OllamaApiClientTests
 										Description = "The format to return the weather in, e.g. 'celsius' or 'fahrenheit'",
 										Enum = ["celsius", "fahrenheit"]
 									},
+									["number"] = new()
+									{
+										Type = "integer",
+										Description = "The number of the day to get the weather for, e.g. 42"
+									}
 									["number"] = new()
 									{
 										Type = "integer",
