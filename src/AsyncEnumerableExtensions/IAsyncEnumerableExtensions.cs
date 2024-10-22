@@ -50,7 +50,7 @@ public static partial class IAsyncEnumerableExtensions
 	/// <returns>A single ChatDoneResponseStream built up from every single IAsyncEnumerable item</returns>
 	public static async Task<Tout> StreamToEndAsync<Tin, Tout>(this IAsyncEnumerable<Tin> stream, IAppender<Tin, Tout> appender, Action<Tin>? itemCallback = null)
 	{
-		await foreach (var item in stream)
+		await foreach (var item in stream.ConfigureAwait(false))
 		{
 			appender.Append(item);
 			itemCallback?.Invoke(item);

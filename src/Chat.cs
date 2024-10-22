@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using System.Threading.Tasks;
 using OllamaSharp.Models;
 using OllamaSharp.Models.Chat;
 
@@ -101,7 +102,7 @@ public class Chat
 
 		var messageBuilder = new MessageBuilder();
 
-		await foreach (var answer in Client.ChatAsync(request, cancellationToken))
+		await foreach (var answer in Client.ChatAsync(request, cancellationToken).ConfigureAwait(false))
 		{
 			if (answer is not null)
 			{
