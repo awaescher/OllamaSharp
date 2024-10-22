@@ -22,7 +22,7 @@ OllamaSharp wraps each Ollama API endpoint in awaitable methods that fully suppo
 
 The following list shows a few simple code examples.
 
-ℹ **Try our full-featured Ollama API client app [OllamaSharpConsole](https://github.com/awaescher/OllamaSharpConsole) to interact with your Ollama instance.**
+ℹ **Try our full featured [demo application](./demo) that's included in this repository**
 
 ### Initializing
 
