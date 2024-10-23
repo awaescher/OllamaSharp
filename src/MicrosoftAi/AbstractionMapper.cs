@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Nodes;
 using Microsoft.Extensions.AI;
+using OllamaSharp.Models;
 using OllamaSharp.Models.Chat;
 
 namespace OllamaSharp.MicrosoftAi;
@@ -46,7 +47,7 @@ public static class AbstractionMapper
 	/// <param name="stream">Indicates if the request should be streamed.</param>
 	public static ChatRequest ToOllamaSharpChatRequest(IOllamaApiClient apiClient, IList<ChatMessage> chatMessages, ChatOptions? options, bool stream)
 	{
-		return new ChatRequest
+		var request = new ChatRequest
 		{
 			Format = options?.ResponseFormat == ChatResponseFormat.Json ? "json" : null,
 			KeepAlive = null,
@@ -64,6 +65,56 @@ public static class AbstractionMapper
 			Template = null,
 			Tools = ToOllamaSharpTools(options?.Tools)
 		};
+
+		if (options?.AdditionalProperties?.Any() ?? false)
+		{
+			TryAddOllamaOption<bool?>(options, OllamaOption.F16kv, v => request.Options.F16kv = v);
+			TryAddOllamaOption<float?>(options, OllamaOption.FrequencyPenalty, v => request.Options.FrequencyPenalty = v);
+			TryAddOllamaOption<bool?>(options, OllamaOption.LogitsAll, v => request.Options.LogitsAll = v);
+			TryAddOllamaOption<bool?>(options, OllamaOption.LowVram, v => request.Options.LowVram = v);
+			TryAddOllamaOption<int?>(options, OllamaOption.MainGpu, v => request.Options.MainGpu = v);
+			TryAddOllamaOption<float?>(options, OllamaOption.MinP, v => request.Options.MinP = v);
+			TryAddOllamaOption<int?>(options, OllamaOption.MiroStat, v => request.Options.MiroStat = v);
+			TryAddOllamaOption<float?>(options, OllamaOption.MiroStatEta, v => request.Options.MiroStatEta = v);
+			TryAddOllamaOption<float?>(options, OllamaOption.MiroStatTau, v => request.Options.MiroStatTau = v);
+			TryAddOllamaOption<bool?>(options, OllamaOption.Numa, v => request.Options.Numa = v);
+			TryAddOllamaOption<int?>(options, OllamaOption.NumBatch, v => request.Options.NumBatch = v);
+			TryAddOllamaOption<int?>(options, OllamaOption.NumCtx, v => request.Options.NumCtx = v);
+			TryAddOllamaOption<int?>(options, OllamaOption.NumGpu, v => request.Options.NumGpu = v);
+			TryAddOllamaOption<int?>(options, OllamaOption.NumGqa, v => request.Options.NumGqa = v);
+			TryAddOllamaOption<int?>(options, OllamaOption.NumKeep, v => request.Options.NumKeep = v);
+			TryAddOllamaOption<int?>(options, OllamaOption.NumPredict, v => request.Options.NumPredict = v);
+			TryAddOllamaOption<int?>(options, OllamaOption.NumThread, v => request.Options.NumThread = v);
+			TryAddOllamaOption<bool?>(options, OllamaOption.PenalizeNewline, v => request.Options.PenalizeNewline = v);
+			TryAddOllamaOption<float?>(options, OllamaOption.PresencePenalty, v => request.Options.PresencePenalty = v);
+			TryAddOllamaOption<int?>(options, OllamaOption.RepeatLastN, v => request.Options.RepeatLastN = v);
+			TryAddOllamaOption<float?>(options, OllamaOption.RepeatPenalty, v => request.Options.RepeatPenalty = v);
+			TryAddOllamaOption<int?>(options, OllamaOption.Seed, v => request.Options.Seed = v);
+			TryAddOllamaOption<string[]?>(options, OllamaOption.Stop, v => request.Options.Stop = v);
+			TryAddOllamaOption<float?>(options, OllamaOption.Temperature, v => request.Options.Temperature = v);
+			TryAddOllamaOption<float?>(options, OllamaOption.TfsZ, v => request.Options.TfsZ = v);
+			TryAddOllamaOption<int?>(options, OllamaOption.TopK, v => request.Options.TopK = v);
+			TryAddOllamaOption<float?>(options, OllamaOption.TopP, v => request.Options.TopP = v);
+			TryAddOllamaOption<float?>(options, OllamaOption.TypicalP, v => request.Options.TypicalP = v);
+			TryAddOllamaOption<bool?>(options, OllamaOption.UseMlock, v => request.Options.UseMlock = v);
+			TryAddOllamaOption<bool?>(options, OllamaOption.UseMmap, v => request.Options.UseMmap = v);
+			TryAddOllamaOption<bool?>(options, OllamaOption.VocabOnly, v => request.Options.VocabOnly = v);
+		}
+
+		return request;
+	}
+
+	/// <summary>
+	/// Tries to find Ollama options in the additional properties and adds them to the ChatRequest options
+	/// </summary>
+	/// <typeparam name="T">The type of the option</typeparam>
+	/// <param name="microsoftChatOptions">The chat options from the Microsoft abstraction</param>
+	/// <param name="option">The Ollama setting to add</param>
+	/// <param name="optionSetter">The setter to set the Ollama option if available in the chat options</param>
+	private static void TryAddOllamaOption<T>(ChatOptions microsoftChatOptions, OllamaOption option, Action<T> optionSetter)
+	{
+		if (microsoftChatOptions?.AdditionalProperties?.TryGetValue(option.Name, out var value) ?? false)
+			optionSetter((T)value);
 	}
 
 	/// <summary>

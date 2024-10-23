@@ -4,6 +4,7 @@ using Moq;
 using NUnit.Framework;
 using OllamaSharp;
 using OllamaSharp.MicrosoftAi;
+using OllamaSharp.Models;
 using OllamaSharp.Models.Chat;
 
 namespace Tests;
@@ -248,6 +249,78 @@ public partial class AbstractionMapperTests
 			chatRequest.Options.UseMlock.Should().BeNull();
 			chatRequest.Options.UseMmap.Should().BeNull();
 			chatRequest.Options.VocabOnly.Should().BeNull();
+		}
+
+
+		[Test]
+		public void Maps_Ollama_Options()
+		{
+			var options = new Microsoft.Extensions.AI.ChatOptions()
+				.AddOllamaOption(OllamaOption.F16kv, true)
+				.AddOllamaOption(OllamaOption.FrequencyPenalty, 0.11f)
+				.AddOllamaOption(OllamaOption.LogitsAll, false)
+				.AddOllamaOption(OllamaOption.LowVram, true)
+				.AddOllamaOption(OllamaOption.MainGpu, 1)
+				.AddOllamaOption(OllamaOption.MinP, 0.22f)
+				.AddOllamaOption(OllamaOption.MiroStat, 2)
+				.AddOllamaOption(OllamaOption.MiroStatEta, 0.33f)
+				.AddOllamaOption(OllamaOption.MiroStatTau, 0.44f)
+				.AddOllamaOption(OllamaOption.Numa, false)
+				.AddOllamaOption(OllamaOption.NumBatch, 3)
+				.AddOllamaOption(OllamaOption.NumCtx, 4)
+				.AddOllamaOption(OllamaOption.NumGpu, 5)
+				.AddOllamaOption(OllamaOption.NumGqa, 6)
+				.AddOllamaOption(OllamaOption.NumKeep, 7)
+				.AddOllamaOption(OllamaOption.NumPredict, 8)
+				.AddOllamaOption(OllamaOption.NumThread, 9)
+				.AddOllamaOption(OllamaOption.PenalizeNewline, true)
+				.AddOllamaOption(OllamaOption.PresencePenalty, 0.55f)
+				.AddOllamaOption(OllamaOption.RepeatLastN, 10)
+				.AddOllamaOption(OllamaOption.RepeatPenalty, 0.66f)
+				.AddOllamaOption(OllamaOption.Seed, 11)
+				.AddOllamaOption(OllamaOption.Stop, new string[] { "stop", "quit", "exit" })
+				.AddOllamaOption(OllamaOption.Temperature, 0.77f)
+				.AddOllamaOption(OllamaOption.TfsZ, 0.88f)
+				.AddOllamaOption(OllamaOption.TopK, 12)
+				.AddOllamaOption(OllamaOption.TopP, 0.99f)
+				.AddOllamaOption(OllamaOption.TypicalP, 1.01f)
+				.AddOllamaOption(OllamaOption.UseMlock, false)
+				.AddOllamaOption(OllamaOption.UseMmap, true)
+				.AddOllamaOption(OllamaOption.VocabOnly, false);
+
+			var ollamaRequest = AbstractionMapper.ToOllamaSharpChatRequest(Mock.Of<IOllamaApiClient>(), [], options, stream: true);
+
+			ollamaRequest.Options.F16kv.Should().Be(true);
+			ollamaRequest.Options.FrequencyPenalty.Should().Be(0.11f);
+			ollamaRequest.Options.LogitsAll.Should().Be(false);
+			ollamaRequest.Options.LowVram.Should().Be(true);
+			ollamaRequest.Options.MainGpu.Should().Be(1);
+			ollamaRequest.Options.MinP.Should().Be(0.22f);
+			ollamaRequest.Options.MiroStat.Should().Be(2);
+			ollamaRequest.Options.MiroStatEta.Should().Be(0.33f);
+			ollamaRequest.Options.MiroStatTau.Should().Be(0.44f);
+			ollamaRequest.Options.Numa.Should().Be(false);
+			ollamaRequest.Options.NumBatch.Should().Be(3);
+			ollamaRequest.Options.NumCtx.Should().Be(4);
+			ollamaRequest.Options.NumGpu.Should().Be(5);
+			ollamaRequest.Options.NumGqa.Should().Be(6);
+			ollamaRequest.Options.NumKeep.Should().Be(7);
+			ollamaRequest.Options.NumPredict.Should().Be(8);
+			ollamaRequest.Options.NumThread.Should().Be(9);
+			ollamaRequest.Options.PenalizeNewline.Should().Be(true);
+			ollamaRequest.Options.PresencePenalty.Should().Be(0.55f);
+			ollamaRequest.Options.RepeatLastN.Should().Be(10);
+			ollamaRequest.Options.RepeatPenalty.Should().Be(0.66f);
+			ollamaRequest.Options.Seed.Should().Be(11);
+			ollamaRequest.Options.Stop.Should().BeEquivalentTo("stop", "quit", "exit");
+			ollamaRequest.Options.Temperature.Should().Be(0.77f);
+			ollamaRequest.Options.TfsZ.Should().Be(0.88f);
+			ollamaRequest.Options.TopK.Should().Be(12);
+			ollamaRequest.Options.TopP.Should().Be(0.99f);
+			ollamaRequest.Options.TypicalP.Should().Be(1.01f);
+			ollamaRequest.Options.UseMlock.Should().Be(false);
+			ollamaRequest.Options.UseMmap.Should().Be(true);
+			ollamaRequest.Options.VocabOnly.Should().Be(false);
 		}
 	}
 
