@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text.Json.Serialization;
-using OllamaSharp.Models.Chat.Converter;
 
 namespace OllamaSharp.Models.Chat;
 
@@ -107,7 +106,6 @@ public class Message
 		/// Gets or sets the arguments for the function, represented as a dictionary of argument names and values.
 		/// </summary>
 		[JsonPropertyName("arguments")]
-		[JsonConverter(typeof(StringDictionaryConverter))]
-		public Dictionary<string, string>? Arguments { get; set; }
+		public IDictionary<string, object?>? Arguments { get; set; }
 	}
 }
