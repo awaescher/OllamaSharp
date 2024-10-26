@@ -222,9 +222,9 @@ public class OllamaApiClient : IOllamaApiClient
 
 		using var response = await SendToOllamaAsync(requestMessage, null, HttpCompletionOption.ResponseContentRead, cancellationToken);
 
-		var responseBody = await response.Content.ReadAsStringAsync();
+		using var responseStream = await response.Content.ReadAsStreamAsync();
 
-		return JsonSerializer.Deserialize<TResponse>(responseBody, IncomingJsonSerializerOptions)!;
+		return (await JsonSerializer.DeserializeAsync<TResponse>(responseStream, IncomingJsonSerializerOptions, cancellationToken))!;
 	}
 
 	private async Task PostAsync<TRequest>(string endpoint, TRequest ollamaRequest, CancellationToken cancellationToken) where TRequest : OllamaRequest
@@ -246,9 +246,9 @@ public class OllamaApiClient : IOllamaApiClient
 
 		using var response = await SendToOllamaAsync(requestMessage, ollamaRequest, HttpCompletionOption.ResponseContentRead, cancellationToken);
 
-		var responseBody = await response.Content.ReadAsStringAsync();
+		using var responseStream = await response.Content.ReadAsStreamAsync();
 
-		return JsonSerializer.Deserialize<TResponse>(responseBody, IncomingJsonSerializerOptions)!;
+		return (await JsonSerializer.DeserializeAsync<TResponse>(responseStream, IncomingJsonSerializerOptions, cancellationToken))!;
 	}
 
 	private async IAsyncEnumerable<TResponse?> StreamPostAsync<TRequest, TResponse>(string endpoint, TRequest ollamaRequest, [EnumeratorCancellation] CancellationToken cancellationToken) where TRequest : OllamaRequest
