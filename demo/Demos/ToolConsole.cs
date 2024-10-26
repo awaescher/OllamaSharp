@@ -179,7 +179,7 @@ public class ToolConsole(IOllamaApiClient ollama) : OllamaConsole(ollama)
 			{
 				var paramIndex = Array.IndexOf(paramNames, paramName);
 				if (paramIndex >= 0)
-					parameters[paramIndex] = value;
+					parameters[paramIndex] = value?.ToString() ?? "";
 			}
 
 			return parameters;
