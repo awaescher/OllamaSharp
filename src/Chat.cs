@@ -117,7 +117,7 @@ public class Chat
 			if (answer is not null)
 			{
 				messageBuilder.Append(answer);
-				yield return answer.Message?.Content ?? string.Empty;
+				yield return answer.Message.Content ?? string.Empty;
 			}
 		}
 #pragma warning restore S3267 // Loops should be simplified with "LINQ" expressions

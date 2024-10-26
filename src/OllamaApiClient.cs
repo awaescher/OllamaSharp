@@ -338,7 +338,7 @@ public class OllamaApiClient : IOllamaApiClient
 
 			try
 			{
-				couldParse = JsonDocument.Parse(body)?.RootElement.TryGetProperty("error", out errorElement) ?? false;
+				couldParse = JsonDocument.Parse(body).RootElement.TryGetProperty("error", out errorElement);
 			}
 			catch (JsonException)
 			{
