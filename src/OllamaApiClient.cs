@@ -377,9 +377,3 @@ public class OllamaApiClient : IOllamaApiClient
 /// Represents a conversation context containing context data.
 /// </summary>
 public record ConversationContext(long[] Context);
-
-/// <summary>
-/// Represents a conversation context with an additional response.
-/// Inherits from <see cref="ConversationContext"/>.
-/// </summary>
-public record ConversationContextWithResponse(string Response, long[] Context) : ConversationContext(Context);
