@@ -1,4 +1,3 @@
-using System.Buffers.Text;
 using System.Text.Json.Serialization;
 
 namespace OllamaSharp.Models;

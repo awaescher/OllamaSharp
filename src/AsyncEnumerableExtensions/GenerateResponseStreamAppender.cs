@@ -2,7 +2,7 @@ using System;
 using System.Text;
 using OllamaSharp.Models;
 
-namespace OllamaSharp;
+namespace OllamaSharp.AsyncEnumerableExtensions;
 
 /// <summary>
 /// Appender to stream IAsyncEnumerable(GenerateResponseStream) to build up one single GenerateDoneResponseStream object

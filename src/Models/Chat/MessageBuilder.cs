@@ -51,12 +51,12 @@ public class MessageBuilder
 	/// <summary>
 	/// Base64-encoded images (for multimodal models such as llava)
 	/// </summary>
-	public List<string> Images { get; set; } = new();
+	public List<string> Images { get; set; } = [];
 
 	/// <summary>
 	/// A list of tools the model wants to use (for models that support function calls, such as llama3.1)
 	/// </summary>
-	public List<Message.ToolCall> ToolCalls { get; set; } = new();
+	public List<Message.ToolCall> ToolCalls { get; set; } = [];
 
 	/// <summary>
 	/// Gets whether the message builder received message chunks yet

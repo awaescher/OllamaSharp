@@ -10,7 +10,7 @@ namespace Tests;
 
 public class IAsyncEnumerableExtensionTests
 {
-	public class StreamToEndMethod : IAsyncEnumerableExtensionTests
+	public class StreamToEndAsyncMethod : IAsyncEnumerableExtensionTests
 	{
 		[Test]
 		public async Task Appends_Stream_To_One_Single_Response_Value()
@@ -22,7 +22,7 @@ public class IAsyncEnumerableExtensionTests
 				new ChatResponseStream { Message = CreateMessage(ChatRole.Assistant, "man, how") },
 				new ChatDoneResponseStream { Message = CreateMessage(ChatRole.Assistant, " are you?"), Done = true });
 
-			var answer = await ollama.Chat(new ChatRequest()).StreamToEnd();
+			var answer = await ollama.ChatAsync(new ChatRequest()).StreamToEndAsync();
 
 			answer.Message.Content.Should().Be("Hi human, how are you?");
 		}
@@ -39,7 +39,7 @@ public class IAsyncEnumerableExtensionTests
 				new ChatResponseStream { Message = CreateMessage(ChatRole.Assistant, "B") },
 				new ChatDoneResponseStream { Message = CreateMessage(ChatRole.Assistant, "C"), Done = true });
 
-			await ollama.Chat(new ChatRequest()).StreamToEnd(r => concatinatedItems += r.Message.Content);
+			await ollama.ChatAsync(new ChatRequest()).StreamToEndAsync(r => concatinatedItems += r.Message.Content);
 
 			concatinatedItems.Should().Be("ABC");
 		}
@@ -57,7 +57,7 @@ public class IAsyncEnumerableExtensionTests
 				new ChatResponseStream { Message = CreateMessage(ChatRole.Assistant, "This message") },
 				new ChatResponseStream { Message = CreateMessage(ChatRole.Assistant, " is not compl") }); // missing last message with Done=true
 
-			Func<Task> act = async () => await ollama.Chat(new ChatRequest()).StreamToEnd();
+			Func<Task> act = async () => await ollama.ChatAsync(new ChatRequest()).StreamToEndAsync();
 
 			await act.Should().ThrowAsync<InvalidOperationException>();
 
@@ -65,7 +65,7 @@ public class IAsyncEnumerableExtensionTests
 				new GenerateResponseStream { Response = "This message" },
 				new GenerateResponseStream { Response = " is not compl" }); // missing last message with Done=true
 
-			act = async () => await ollama.Generate(new GenerateRequest()).StreamToEnd();
+			act = async () => await ollama.GenerateAsync(new GenerateRequest()).StreamToEndAsync();
 
 			await act.Should().ThrowAsync<InvalidOperationException>();
 		}

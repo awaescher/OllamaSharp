@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace OllamaSharp;
+namespace OllamaSharp.AsyncEnumerableExtensions;
 
 /// <summary>
 /// Appender to stream IAsyncEnumerable(string) to build up one single result string
