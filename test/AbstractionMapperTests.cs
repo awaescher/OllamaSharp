@@ -441,7 +441,6 @@ public partial class AbstractionMapperTests
 			toolCall.Arguments["unit"].Should().Be("celsius");
 			toolCall.CallId.Should().NotBeEmpty().And.HaveLength(8); // random guid
 			toolCall.Exception.Should().BeNull();
-			toolCall.ModelId.Should().BeNull();
 			toolCall.Name.Should().Be("get_weather");
 			toolCall.RawRepresentation.Should().Be(message.ToolCalls.Single());
 			chatMessage.RawRepresentation.Should().Be(message);
