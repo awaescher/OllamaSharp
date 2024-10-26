@@ -69,6 +69,31 @@ while (true)
 // and are accessible via the Messages property
 ```
 
+## Useage with Microsoft.AI.Extensions
+
+Microsoft built an abstraction library to streamline the usage of different AI providers. This is a really interesting concept if you plan to build apps that might use different providers, like ChatGPT, Claude and local models with Ollama.
+
+I encourage you to read their accouncement [Introducing Microsoft.Extensions.AI Preview – Unified AI Building Blocks for .NET](https://devblogs.microsoft.com/dotnet/introducing-microsoft-extensions-ai-preview/).
+
+OllamaSharp is the first full implementation of their `IChatClient` interface that makes it possible to use Ollama just like every other chat provider.
+
+To do this, simply use the `OllamaApiClient` as `IChatClient` instead of `IOllamaApiClient`. 
+
+```csharp
+// install package Microsoft.Extensions.AI.Abstractions
+
+private static IChatClient CreateChatClient(Arguments arguments)
+{
+  if (arguments.Provider.Equals("ollama", StringComparison.OrdinalIgnoreCase))
+    return new OllamaApiClient(arguments.Uri, arguments.Model);
+  else
+    return new OpenAIChatClient(new OpenAI.OpenAIClient(arguments.ApiKey), arguments.Model); // ChatGPT or compatible
+}
+```
+
+> [!NOTE]
+> `IOllamaApiClient` provides many Ollama specific methods that `IChatClient` misses. Because it is an abstraction, `IChatClient` will never implement the full Ollama API specification. However, `OllamaApiClient` implements both: `IOllamaApiClient` and `IChatClient` which allows you to cast it to any of these two interfaces as you need them at any time.
+
 ## Credits
 
 The icon and name were reused from the amazing [Ollama project](https://github.com/jmorganca/ollama).
