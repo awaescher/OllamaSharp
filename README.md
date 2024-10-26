@@ -69,7 +69,7 @@ while (true)
 // and are accessible via the Messages property
 ```
 
-## Useage with Microsoft.AI.Extensions
+## Usage with Microsoft.Extensions.AI
 
 Microsoft built an abstraction library to streamline the usage of different AI providers. This is a really interesting concept if you plan to build apps that might use different providers, like ChatGPT, Claude and local models with Ollama.
 
