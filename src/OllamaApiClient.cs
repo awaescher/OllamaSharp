@@ -229,9 +229,9 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient
 
 		using var response = await SendToOllamaAsync(requestMessage, null, HttpCompletionOption.ResponseContentRead, cancellationToken).ConfigureAwait(false);
 
-		var responseBody = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+		using var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
 
-		return JsonSerializer.Deserialize<TResponse>(responseBody, IncomingJsonSerializerOptions)!;
+		return (await JsonSerializer.DeserializeAsync<TResponse>(responseStream, IncomingJsonSerializerOptions, cancellationToken))!;
 	}
 
 	private async Task PostAsync<TRequest>(string endpoint, TRequest ollamaRequest, CancellationToken cancellationToken) where TRequest : OllamaRequest
@@ -253,9 +253,9 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient
 
 		using var response = await SendToOllamaAsync(requestMessage, ollamaRequest, HttpCompletionOption.ResponseContentRead, cancellationToken).ConfigureAwait(false);
 
-		var responseBody = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+		using var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
 
-		return JsonSerializer.Deserialize<TResponse>(responseBody, IncomingJsonSerializerOptions)!;
+		return (await JsonSerializer.DeserializeAsync<TResponse>(responseStream, IncomingJsonSerializerOptions, cancellationToken))!;
 	}
 
 	private async IAsyncEnumerable<TResponse?> StreamPostAsync<TRequest, TResponse>(string endpoint, TRequest ollamaRequest, [EnumeratorCancellation] CancellationToken cancellationToken) where TRequest : OllamaRequest
