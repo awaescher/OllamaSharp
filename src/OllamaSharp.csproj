@@ -3,25 +3,22 @@
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
 		<Nullable>enable</Nullable>
-		<LangVersion>10</LangVersion>
+		<LangVersion>12</LangVersion>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<Title>OllamaSharp</Title>
 		<Copyright>Andreas Wäscher</Copyright>
 		<Authors>Andreas Wäscher, Milkey Tan, Jerrett Davis</Authors>
 		<PackageIcon>Ollama.png</PackageIcon>
-		<Description>
-			The easiest way to use the Ollama API in .NET
-		</Description>
+		<Description>The easiest way to use the Ollama API in .NET</Description>
 		<PackageProjectUrl>https://github.com/awaescher/OllamaSharp</PackageProjectUrl>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<RepositoryUrl>https://github.com/awaescher/OllamaSharp</RepositoryUrl>
-		<PackageTags>ollama;ollama-api;api;llm;openai;ai;localllama;llama;streaming;gpt;llamacpp</PackageTags>
-		<PackageLicenseFile>LICENSE</PackageLicenseFile>
-		<Version>1.1.1</Version>
-		<SignAssembly>True</SignAssembly>
-		<AssemblyOriginatorKeyFile>OllamaSharp.snk</AssemblyOriginatorKeyFile>
 		<RepositoryType>git</RepositoryType>
+		<PackageTags>ollama;ollama-api;api;llm;openai;ai;localllama;llama;streaming;gpt;llamacpp;ichatclient</PackageTags>
+		<PackageLicenseFile>LICENSE</PackageLicenseFile>
+		<SignAssembly>True</SignAssembly>
+		<AssemblyOriginatorKeyFile>..\OllamaSharp.snk</AssemblyOriginatorKeyFile>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -41,6 +38,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="8.0.0" />
-		<PackageReference Include="System.Text.Json" Version="8.0.5" />
+		<PackageReference Include="Microsoft.Extensions.AI.Abstractions" Version="9.0.0-preview.9.24525.1" />
 	</ItemGroup>
+
 </Project>

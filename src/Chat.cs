@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using System.Threading.Tasks;
 using OllamaSharp.Models;
 using OllamaSharp.Models.Chat;
 
@@ -17,7 +18,7 @@ public class Chat
 	/// <summary>
 	/// Gets or sets the messages of the chat history
 	/// </summary>
-	public List<Message> Messages { get; set; } = new();
+	public List<Message> Messages { get; set; } = [];
 
 	/// <summary>
 	/// Gets the Ollama API client
@@ -50,22 +51,12 @@ public class Chat
 	}
 
 	/// <summary>
-	/// Sets the message history
-	/// </summary>
-	/// <param name="messages">The message history</param>
-	[Obsolete("Set the property Messages instead")]
-	public void SetMessages(List<Message> messages)
-	{
-		Messages = messages;
-	}
-
-	/// <summary>
 	/// Sends a message to the currently selected model and streams its response
 	/// </summary>
 	/// <param name="message">The message to send</param>
 	/// <param name="cancellationToken">The token to cancel the operation with</param>
-	public IAsyncEnumerable<string> Send(string message, CancellationToken cancellationToken = default)
-		=> Send(message, tools: null, imagesAsBase64: null, cancellationToken);
+	public IAsyncEnumerable<string> SendAsync(string message, CancellationToken cancellationToken = default)
+		=> SendAsync(message, tools: null, imagesAsBase64: null, cancellationToken);
 
 	/// <summary>
 	/// Sends a message to the currently selected model and streams its response
@@ -74,8 +65,8 @@ public class Chat
 	/// <param name="tools">Tools that the model can make use of, see https://ollama.com/blog/tool-support. By using tools, response streaming is automatically turned off</param>
 	/// <param name="imagesAsBase64">Base64 encoded images to send to the model</param>
 	/// <param name="cancellationToken">The token to cancel the operation with</param>
-	public IAsyncEnumerable<string> Send(string message, IEnumerable<Tool>? tools, IEnumerable<string>? imagesAsBase64 = default, CancellationToken cancellationToken = default)
-		=> SendAs(ChatRole.User, message, tools, imagesAsBase64, cancellationToken);
+	public IAsyncEnumerable<string> SendAsync(string message, IEnumerable<Tool>? tools, IEnumerable<string>? imagesAsBase64 = default, CancellationToken cancellationToken = default)
+		=> SendAsAsync(ChatRole.User, message, tools, imagesAsBase64, cancellationToken);
 
 	/// <summary>
 	/// Sends a message in a given role to the currently selected model and streams its response
@@ -83,8 +74,8 @@ public class Chat
 	/// <param name="role">The role in which the message should be sent</param>
 	/// <param name="message">The message to send</param>
 	/// <param name="cancellationToken">The token to cancel the operation with</param>
-	public IAsyncEnumerable<string> SendAs(ChatRole role, string message, CancellationToken cancellationToken = default)
-		=> SendAs(role, message, tools: null, imagesAsBase64: null, cancellationToken);
+	public IAsyncEnumerable<string> SendAsAsync(ChatRole role, string message, CancellationToken cancellationToken = default)
+		=> SendAsAsync(role, message, tools: null, imagesAsBase64: null, cancellationToken);
 
 	/// <summary>
 	/// Sends a message in a given role to the currently selected model and streams its response
@@ -94,7 +85,7 @@ public class Chat
 	/// <param name="tools">Tools that the model can make use of, see https://ollama.com/blog/tool-support. By using tools, response streaming is automatically turned off</param>
 	/// <param name="imagesAsBase64">Base64 encoded images to send to the model</param>
 	/// <param name="cancellationToken">The token to cancel the operation with</param>
-	public async IAsyncEnumerable<string> SendAs(ChatRole role, string message, IEnumerable<Tool>? tools, IEnumerable<string>? imagesAsBase64 = default, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+	public async IAsyncEnumerable<string> SendAsAsync(ChatRole role, string message, IEnumerable<Tool>? tools, IEnumerable<string>? imagesAsBase64 = default, [EnumeratorCancellation] CancellationToken cancellationToken = default)
 	{
 		Messages.Add(new Message(role, message, imagesAsBase64?.ToArray()));
 
@@ -111,8 +102,7 @@ public class Chat
 
 		var messageBuilder = new MessageBuilder();
 
-#pragma warning disable S3267 // Loops should be simplified with "LINQ" expressions
-		await foreach (var answer in Client.Chat(request, cancellationToken))
+		await foreach (var answer in Client.ChatAsync(request, cancellationToken).ConfigureAwait(false))
 		{
 			if (answer is not null)
 			{
@@ -120,7 +110,6 @@ public class Chat
 				yield return answer.Message?.Content ?? string.Empty;
 			}
 		}
-#pragma warning restore S3267 // Loops should be simplified with "LINQ" expressions
 
 		if (messageBuilder.HasValue)
 			Messages.Add(messageBuilder.ToMessage());
