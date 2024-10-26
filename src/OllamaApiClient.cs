@@ -345,7 +345,7 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient
 
 			try
 			{
-				couldParse = JsonDocument.Parse(body)?.RootElement.TryGetProperty("error", out errorElement) ?? false;
+				couldParse = JsonDocument.Parse(body).RootElement.TryGetProperty("error", out errorElement);
 			}
 			catch (JsonException)
 			{
