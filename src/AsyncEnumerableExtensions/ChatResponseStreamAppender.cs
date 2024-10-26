@@ -1,4 +1,3 @@
-using System;
 using OllamaSharp.Models.Chat;
 
 namespace OllamaSharp;

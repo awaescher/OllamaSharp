@@ -1,5 +1,3 @@
-using System;
-
 namespace OllamaSharp.Models.Exceptions;
 
 /// <summary>

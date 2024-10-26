@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text.Json.Serialization;
 using OllamaSharp.Models.Chat.Converter;
