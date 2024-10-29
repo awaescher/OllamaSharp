@@ -160,11 +160,19 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient
 
 	/// <inheritdoc />
 	public Task<EmbedResponse> EmbedAsync(EmbedRequest request, CancellationToken cancellationToken = default)
-		=> PostAsync<EmbedRequest, EmbedResponse>("api/embed", request, cancellationToken);
+	{
+		if (string.IsNullOrEmpty(request.Model))
+			request.Model = SelectedModel;
+
+		return PostAsync<EmbedRequest, EmbedResponse>("api/embed", request, cancellationToken);
+	}
 
 	/// <inheritdoc />
 	public async IAsyncEnumerable<GenerateResponseStream?> GenerateAsync(GenerateRequest request, [EnumeratorCancellation] CancellationToken cancellationToken = default)
 	{
+		if (string.IsNullOrEmpty(request.Model))
+			request.Model = SelectedModel;
+
 		await foreach (var result in GenerateCompletionAsync(request, cancellationToken).ConfigureAwait(false))
 			yield return result;
 	}
@@ -172,6 +180,9 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient
 	/// <inheritdoc />
 	public async IAsyncEnumerable<ChatResponseStream?> ChatAsync(ChatRequest request, [EnumeratorCancellation] CancellationToken cancellationToken = default)
 	{
+		if (string.IsNullOrEmpty(request.Model))
+			request.Model = SelectedModel;
+
 		var requestMessage = new HttpRequestMessage(HttpMethod.Post, "api/chat")
 		{
 			Content = new StringContent(JsonSerializer.Serialize(request, OutgoingJsonSerializerOptions), Encoding.UTF8, "application/json")
