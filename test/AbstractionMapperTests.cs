@@ -24,7 +24,7 @@ public partial class AbstractionMapperTests
 
 			var options = new ChatOptions { Temperature = 0.5f, /* other properties are left out */ };
 
-			var request = AbstractionMapper.ToOllamaSharpChatRequest(Mock.Of<IOllamaApiClient>(), messages, options, stream: true);
+			var request = AbstractionMapper.ToOllamaSharpChatRequest(messages, options, stream: true);
 
 			request.Options.F16kv.Should().BeNull();
 			request.Options.FrequencyPenalty.Should().BeNull();
@@ -93,7 +93,7 @@ public partial class AbstractionMapperTests
 				},
 			};
 
-			var chatRequest = AbstractionMapper.ToOllamaSharpChatRequest(Mock.Of<IOllamaApiClient>(), chatMessages, null, stream: true);
+			var chatRequest = AbstractionMapper.ToOllamaSharpChatRequest(chatMessages, null, stream: true);
 
 			chatRequest.Messages.Should().HaveCount(3);
 
@@ -142,7 +142,7 @@ public partial class AbstractionMapperTests
 				},
 			};
 
-			var chatRequest = AbstractionMapper.ToOllamaSharpChatRequest(Mock.Of<IOllamaApiClient>(), chatMessages, null, stream: true);
+			var chatRequest = AbstractionMapper.ToOllamaSharpChatRequest(chatMessages, null, stream: true);
 
 			chatRequest.Messages.Should().HaveCount(2);
 
@@ -175,7 +175,7 @@ public partial class AbstractionMapperTests
 				Tools = [new WeatherFunction()]
 			};
 
-			var chatRequest = AbstractionMapper.ToOllamaSharpChatRequest(Mock.Of<IOllamaApiClient>(), chatMessages, options, stream: true);
+			var chatRequest = AbstractionMapper.ToOllamaSharpChatRequest(chatMessages, options, stream: true);
 
 			var tool = chatRequest.Tools.Single();
 			tool.Function.Description.Should().Be("Gets the current weather for a current location");
@@ -209,7 +209,7 @@ public partial class AbstractionMapperTests
 				TopP = 10.1f
 			};
 
-			var chatRequest = AbstractionMapper.ToOllamaSharpChatRequest(Mock.Of<IOllamaApiClient>(), chatMessages, options, stream: true);
+			var chatRequest = AbstractionMapper.ToOllamaSharpChatRequest(chatMessages, options, stream: true);
 
 			chatRequest.Format.Should().Be("json");
 			chatRequest.Model.Should().Be("llama3.1:405b");
@@ -288,7 +288,7 @@ public partial class AbstractionMapperTests
 				.AddOllamaOption(OllamaOption.UseMmap, true)
 				.AddOllamaOption(OllamaOption.VocabOnly, false);
 
-			var ollamaRequest = AbstractionMapper.ToOllamaSharpChatRequest(Mock.Of<IOllamaApiClient>(), [], options, stream: true);
+			var ollamaRequest = AbstractionMapper.ToOllamaSharpChatRequest([], options, stream: true);
 
 			ollamaRequest.Options.F16kv.Should().Be(true);
 			ollamaRequest.Options.FrequencyPenalty.Should().Be(0.11f);
@@ -346,7 +346,7 @@ public partial class AbstractionMapperTests
 				TotalDuration = 6666666666
 			};
 
-			var chatCompletion = AbstractionMapper.ToChatCompletion(stream);
+			var chatCompletion = AbstractionMapper.ToChatCompletion(stream, usedModel: null);
 
 			chatCompletion.AdditionalProperties.Should().NotBeNull();
 			chatCompletion.AdditionalProperties["eval_duration"].Should().Be(TimeSpan.FromSeconds(2.222222222));
@@ -446,6 +446,75 @@ public partial class AbstractionMapperTests
 			chatMessage.RawRepresentation.Should().Be(message);
 			chatMessage.Role.Should().Be(Microsoft.Extensions.AI.ChatRole.Assistant);
 			chatMessage.Text.Should().Be("It seems the sun will be out all day.");
+		}
+	}
+
+	public partial class ToOllamaEmbedRequestMethod : AbstractionMapperTests
+	{
+		[Test]
+		public void Maps_Request()
+		{
+			var values = new string[] { "Teenage ", " Dirtbag." };
+
+			var options = new EmbeddingGenerationOptions
+			{
+				Dimensions = 8,
+				ModelId = "nomic_embed"
+			};
+
+			var request = AbstractionMapper.ToOllamaEmbedRequest(values, options);
+
+			request.Input.Should().BeEquivalentTo(["Teenage ", " Dirtbag."]);
+			request.KeepAlive.Should().BeNull();
+			request.Model.Should().Be("nomic_embed");
+			request.Options.Should().BeNull();
+			request.Truncate.Should().BeNull();
+		}
+
+		[Test]
+		public void Maps_KeepAlive_And_Truncate_From_AdditionalProperties()
+		{
+			var options = new EmbeddingGenerationOptions();
+			options.AdditionalProperties = [];
+			options.AdditionalProperties["keep_alive"] = 123456789;
+			options.AdditionalProperties["truncate"] = true;
+
+			var request = AbstractionMapper.ToOllamaEmbedRequest([], options);
+
+			request.KeepAlive.Should().Be(123456789);
+			request.Truncate.Should().BeTrue();
+		}
+	}
+
+	public partial class ToGeneratedEmbeddingsMethod : AbstractionMapperTests
+	{
+		[Test]
+		public void Maps_Response()
+		{
+			var request = new EmbedRequest();
+			var response = new EmbedResponse
+			{
+				Embeddings =
+				[
+					[0.101f, 0.102f, 0.103f],
+					[0.201f, 0.202f, 0.203f]
+				],
+				LoadDuration = 1_100_000,
+				PromptEvalCount = 18,
+				TotalDuration = 3_200_000
+			};
+
+			var mappedResponse = AbstractionMapper.ToGeneratedEmbeddings(request, response, usedModel: "model");
+
+			mappedResponse.AdditionalProperties.Should().NotBeNull();
+			mappedResponse.Count.Should().Be(2);
+			mappedResponse[0].ModelId.Should().Be("model");
+			mappedResponse[0].Vector.ToArray().Should().BeEquivalentTo([0.101f, 0.102f, 0.103f]);
+			mappedResponse[1].ModelId.Should().Be("model");
+			mappedResponse[1].Vector.ToArray().Should().BeEquivalentTo([0.201f, 0.202f, 0.203f]);
+			mappedResponse.Usage.InputTokenCount.Should().Be(18);
+			mappedResponse.Usage.OutputTokenCount.Should().BeNull();
+			mappedResponse.Usage.TotalTokenCount.Should().Be(18);
 		}
 	}
 }
