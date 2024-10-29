@@ -20,7 +20,7 @@ namespace OllamaSharp;
 /// The default client to use the Ollama API conveniently.
 /// <see href="https://github.com/jmorganca/ollama/blob/main/docs/api.md"/>
 /// </summary>
-public class OllamaApiClient : IOllamaApiClient, IChatClient
+public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerator<string, Embedding<float>>
 {
 	private readonly bool _disposeHttpClient;
 
@@ -383,36 +383,48 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient
 			_client?.Dispose();
 	}
 
-	#region IChatClient implementation
+	#region IChatClient and IEmbeddingGenerator implementation
 
 	/// <inheritdoc/>
 	ChatClientMetadata IChatClient.Metadata => new("ollama", Uri, SelectedModel);
 
 	/// <inheritdoc/>
+	EmbeddingGeneratorMetadata IEmbeddingGenerator<string, Embedding<float>>.Metadata => new("ollama", Uri, SelectedModel);
+
+	/// <inheritdoc/>
 	async Task<ChatCompletion> IChatClient.CompleteAsync(IList<ChatMessage> chatMessages, ChatOptions? options, CancellationToken cancellationToken)
 	{
-		var request = MicrosoftAi.AbstractionMapper.ToOllamaSharpChatRequest(this, chatMessages, options, stream: false);
+		var request = MicrosoftAi.AbstractionMapper.ToOllamaSharpChatRequest(chatMessages, options, stream: false);
 		var response = await ChatAsync(request, cancellationToken).StreamToEndAsync().ConfigureAwait(false);
-		return MicrosoftAi.AbstractionMapper.ToChatCompletion(response, request.Model) ?? new ChatCompletion([]);
+		return MicrosoftAi.AbstractionMapper.ToChatCompletion(response, response?.Model ?? request.Model ?? SelectedModel) ?? new ChatCompletion([]);
 	}
 
 	/// <inheritdoc/>
 	async IAsyncEnumerable<StreamingChatCompletionUpdate> IChatClient.CompleteStreamingAsync(IList<ChatMessage> chatMessages, ChatOptions? options, [EnumeratorCancellation] CancellationToken cancellationToken)
 	{
-		var request = MicrosoftAi.AbstractionMapper.ToOllamaSharpChatRequest(this, chatMessages, options, stream: true);
+		var request = MicrosoftAi.AbstractionMapper.ToOllamaSharpChatRequest(chatMessages, options, stream: true);
 		await foreach (var response in ChatAsync(request, cancellationToken).ConfigureAwait(false))
 			yield return MicrosoftAi.AbstractionMapper.ToStreamingChatCompletionUpdate(response);
+	}
+
+	/// <inheritdoc/>
+	async Task<GeneratedEmbeddings<Embedding<float>>> IEmbeddingGenerator<string, Embedding<float>>.GenerateAsync(IEnumerable<string> values, EmbeddingGenerationOptions? options, CancellationToken cancellationToken)
+	{
+		var request = MicrosoftAi.AbstractionMapper.ToOllamaEmbedRequest(values, options);
+		var result = await EmbedAsync(request, cancellationToken).ConfigureAwait(false);
+		return MicrosoftAi.AbstractionMapper.ToGeneratedEmbeddings(request, result, request.Model ?? SelectedModel);
 	}
 
 	/// <inheritdoc/>
 	TService? IChatClient.GetService<TService>(object? key) where TService : class
 		=> key is null ? this as TService : null;
 
+	/// <inheritdoc />
+	TService? IEmbeddingGenerator<string, Embedding<float>>.GetService<TService>(object? key) where TService : class
+		=> key is null ? this as TService : null;
+
 	/// <inheritdoc/>
-	void IDisposable.Dispose()
-	{
-		Dispose();
-	}
+	void IDisposable.Dispose() => Dispose();
 
 	#endregion
 
