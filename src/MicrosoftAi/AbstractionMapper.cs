@@ -17,8 +17,8 @@ public static class AbstractionMapper
 	/// Maps a <see cref="ChatRequest"/> and <see cref="ChatDoneResponseStream"/> to a <see cref="ChatCompletion"/>.
 	/// </summary>
 	/// <param name="stream">The response stream with completion data.</param>
-	/// <param name="fallbackModel">The name of the model if the response stream object does not define one.</param>
-	public static ChatCompletion? ToChatCompletion(ChatDoneResponseStream? stream, string fallbackModel = "")
+	/// <param name="usedModel">The used model. This has to be a separate argument because there might be fallbacks from the calling method.</param>
+	public static ChatCompletion? ToChatCompletion(ChatDoneResponseStream? stream, string? usedModel)
 	{
 		if (stream is null)
 			return null;
@@ -32,7 +32,7 @@ public static class AbstractionMapper
 			Choices = [chatMessage],
 			CompletionId = stream.CreatedAtString,
 			CreatedAt = stream.CreatedAt,
-			ModelId = string.IsNullOrEmpty(stream.Model) ? fallbackModel : stream.Model,
+			ModelId = usedModel ?? stream.Model,
 			RawRepresentation = stream,
 			Usage = ParseOllamaChatResponseUsage(stream)
 		};
@@ -41,18 +41,17 @@ public static class AbstractionMapper
 	/// <summary>
 	/// Converts Microsoft.Extensions.AI messages and options to an OllamaSharp chat request.
 	/// </summary>
-	/// <param name="apiClient">The API client used for communication.</param>
 	/// <param name="chatMessages">A list of chat messages.</param>
 	/// <param name="options">Optional chat options to configure the request.</param>
 	/// <param name="stream">Indicates if the request should be streamed.</param>
-	public static ChatRequest ToOllamaSharpChatRequest(IOllamaApiClient apiClient, IList<ChatMessage> chatMessages, ChatOptions? options, bool stream)
+	public static ChatRequest ToOllamaSharpChatRequest(IList<ChatMessage> chatMessages, ChatOptions? options, bool stream)
 	{
 		var request = new ChatRequest
 		{
 			Format = options?.ResponseFormat == ChatResponseFormat.Json ? "json" : null,
 			KeepAlive = null,
 			Messages = ToOllamaSharpMessages(chatMessages),
-			Model = options?.ModelId ?? apiClient.SelectedModel,
+			Model = options?.ModelId ?? "", // will be set OllamaApiClient.SelectedModel if not set
 			Options = new Models.RequestOptions
 			{
 				FrequencyPenalty = options?.FrequencyPenalty,
@@ -336,6 +335,21 @@ public static class AbstractionMapper
 	}
 
 	/// <summary>
+	/// Parses additional properties from a <see cref="EmbedResponse"/>.
+	/// </summary>
+	/// <param name="response">The response to parse.</param>
+	private static AdditionalPropertiesDictionary? ParseOllamaEmbedResponseProps(EmbedResponse response)
+	{
+		const double NANOSECONDS_PER_MILLISECOND = 1_000_000;
+
+		return new AdditionalPropertiesDictionary
+		{
+			["load_duration"] = TimeSpan.FromMilliseconds((response.LoadDuration ?? 0) / NANOSECONDS_PER_MILLISECOND),
+			["total_duration"] = TimeSpan.FromMilliseconds((response.TotalDuration ?? 0) / NANOSECONDS_PER_MILLISECOND)
+		};
+	}
+
+	/// <summary>
 	/// Maps a string representation of a finish reason to a <see cref="ChatFinishReason"/>.
 	/// </summary>
 	/// <param name="ollamaDoneReason">The finish reason string.</param>
@@ -368,5 +382,55 @@ public static class AbstractionMapper
 		}
 
 		return null;
+	}
+
+	/// <summary>
+	/// Gets an embedding request for the Ollama API
+	/// </summary>
+	/// <param name="values">The values to get embeddings for</param>
+	/// <param name="options">The options for the embeddings</param>
+	public static EmbedRequest ToOllamaEmbedRequest(IEnumerable<string> values, EmbeddingGenerationOptions? options)
+	{
+		var request = new EmbedRequest()
+		{
+			Input = values.ToList(),
+			Model = options?.ModelId ?? "" // will be set OllamaApiClient.SelectedModel if not set
+		};
+
+		if (options?.AdditionalProperties is { } requestProps)
+		{
+			if (requestProps.TryGetValue("keep_alive", out long keepAlive))
+				request.KeepAlive = keepAlive;
+
+			if (requestProps.TryGetValue("truncate", out bool truncate))
+				request.Truncate = truncate;
+		}
+
+		return request;
+	}
+
+	/// <summary>
+	/// Gets Microsoft GeneratedEmbeddings mapped from Ollama embeddings
+	/// </summary>
+	/// <param name="ollamaRequest">The original Ollama request that was used to generate the embeddings</param>
+	/// <param name="ollamaResponse">The response from Ollama containing the embeddings</param>
+	/// <param name="usedModel">The used model. This has to be a separate argument because there might be fallbacks from the calling method.</param>
+	public static GeneratedEmbeddings<Embedding<float>> ToGeneratedEmbeddings(EmbedRequest ollamaRequest, EmbedResponse ollamaResponse, string? usedModel)
+	{
+		var mapped = (ollamaResponse.Embeddings ?? []).Select(vector => new Embedding<float>(vector)
+		{
+			CreatedAt = DateTimeOffset.UtcNow,
+			ModelId = usedModel ?? ollamaRequest.Model
+		});
+
+		return new GeneratedEmbeddings<Embedding<float>>(mapped)
+		{
+			AdditionalProperties = ParseOllamaEmbedResponseProps(ollamaResponse),
+			Usage = new UsageDetails
+			{
+				InputTokenCount = ollamaResponse.PromptEvalCount,
+				TotalTokenCount = ollamaResponse.PromptEvalCount
+			}
+		};
 	}
 }

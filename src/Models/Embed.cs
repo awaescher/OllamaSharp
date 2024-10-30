@@ -33,7 +33,7 @@ public class EmbedRequest : OllamaRequest
 	/// </summary>
 	[JsonPropertyName("keep_alive")]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-	public string? KeepAlive { get; set; }
+	public long? KeepAlive { get; set; }
 
 	/// <summary>
 	/// Truncates the end of each input to fit within context length.
@@ -53,7 +53,7 @@ public class EmbedResponse
 	/// An array of embeddings for the input text
 	/// </summary>
 	[JsonPropertyName("embeddings")]
-	public List<double[]> Embeddings { get; set; } = null!;
+	public List<float[]> Embeddings { get; set; } = null!;
 
 	/// <summary>
 	/// The time spent generating the response

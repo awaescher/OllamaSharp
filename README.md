@@ -75,7 +75,7 @@ Microsoft built an abstraction library to streamline the usage of different AI p
 
 I encourage you to read their accouncement [Introducing Microsoft.Extensions.AI Preview – Unified AI Building Blocks for .NET](https://devblogs.microsoft.com/dotnet/introducing-microsoft-extensions-ai-preview/).
 
-OllamaSharp is the first full implementation of their `IChatClient` interface that makes it possible to use Ollama just like every other chat provider.
+OllamaSharp is the first full implementation of their `IChatClient` and `IEmbeddingGenerator` that makes it possible to use Ollama just like every other chat provider.
 
 To do this, simply use the `OllamaApiClient` as `IChatClient` instead of `IOllamaApiClient`. 
 
@@ -92,7 +92,7 @@ private static IChatClient CreateChatClient(Arguments arguments)
 ```
 
 > [!NOTE]
-> `IOllamaApiClient` provides many Ollama specific methods that `IChatClient` misses. Because it is an abstraction, `IChatClient` will never implement the full Ollama API specification. However, `OllamaApiClient` implements both: `IOllamaApiClient` and `IChatClient` which allows you to cast it to any of these two interfaces as you need them at any time.
+> `IOllamaApiClient` provides many Ollama specific methods that `IChatClient` and `IEmbeddingGenerator` miss. Because these are abstractions, `IChatClient` and `IEmbeddingGenerator` will never implement the full Ollama API specification. However, `OllamaApiClient` implements three interfaces: the native `IOllamaApiClient` and Microsoft `IChatClient` and `IEmbeddingGenerator<string, Embedding<float>>` which allows you to cast it to any of these two interfaces as you need them at any time.
 
 ## Credits
 
