@@ -27,10 +27,12 @@ public class RunningModel : Model
 	/// <summary>
 	/// The amount of vram (in bytes) used by the model.
 	/// </summary>
-	[JsonPropertyName("size_vram")] public long SizeVram { get; set; }
+	[JsonPropertyName("size_vram")]
+	public long SizeVram { get; set; }
 
 	/// <summary>
 	/// The time the model will be unloaded from memory.
 	/// </summary>
-	[JsonPropertyName("expires_at")] public DateTime ExpiresAt { get; set; }
+	[JsonPropertyName("expires_at")]
+	public DateTime ExpiresAt { get; set; }
 }
