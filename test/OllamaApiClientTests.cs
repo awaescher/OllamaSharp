@@ -557,7 +557,7 @@ public class OllamaApiClientTests
 			var info = await _client.EmbedAsync(new EmbedRequest { Model = "", Input = [""] }, CancellationToken.None);
 
 			info.Embeddings[0].Should().HaveCount(5);
-			info.Embeddings[0][0].Should().BeApproximately(0.567, precision: 0.01);
+			info.Embeddings[0][0].Should().BeApproximately(0.567f, precision: 0.01f);
 		}
 	}
 }
