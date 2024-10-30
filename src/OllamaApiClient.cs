@@ -112,7 +112,7 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 	/// <inheritdoc />
 	public async Task DeleteModelAsync(DeleteModelRequest request, CancellationToken cancellationToken = default)
 	{
-		var requestMessage = new HttpRequestMessage(HttpMethod.Delete, "api/delete")
+		using var requestMessage = new HttpRequestMessage(HttpMethod.Delete, "api/delete")
 		{
 			Content = new StringContent(JsonSerializer.Serialize(request, OutgoingJsonSerializerOptions), Encoding.UTF8, "application/json")
 		};
@@ -183,7 +183,7 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 		if (string.IsNullOrEmpty(request.Model))
 			request.Model = SelectedModel;
 
-		var requestMessage = new HttpRequestMessage(HttpMethod.Post, "api/chat")
+		using var requestMessage = new HttpRequestMessage(HttpMethod.Post, "api/chat")
 		{
 			Content = new StringContent(JsonSerializer.Serialize(request, OutgoingJsonSerializerOptions), Encoding.UTF8, "application/json")
 		};
@@ -201,7 +201,7 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 	/// <inheritdoc />
 	public async Task<bool> IsRunningAsync(CancellationToken cancellationToken = default)
 	{
-		var requestMessage = new HttpRequestMessage(HttpMethod.Get, ""); // without route returns "Ollama is running"
+		using var requestMessage = new HttpRequestMessage(HttpMethod.Get, ""); // without route returns "Ollama is running"
 
 		using var response = await SendToOllamaAsync(requestMessage, null, HttpCompletionOption.ResponseContentRead, cancellationToken).ConfigureAwait(false);
 
@@ -219,7 +219,7 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 
 	private async IAsyncEnumerable<GenerateResponseStream?> GenerateCompletionAsync(GenerateRequest generateRequest, [EnumeratorCancellation] CancellationToken cancellationToken)
 	{
-		var requestMessage = new HttpRequestMessage(HttpMethod.Post, "api/generate")
+		using var requestMessage = new HttpRequestMessage(HttpMethod.Post, "api/generate")
 		{
 			Content = new StringContent(JsonSerializer.Serialize(generateRequest, OutgoingJsonSerializerOptions), Encoding.UTF8, "application/json")
 		};
@@ -236,18 +236,18 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 
 	private async Task<TResponse> GetAsync<TResponse>(string endpoint, CancellationToken cancellationToken)
 	{
-		var requestMessage = new HttpRequestMessage(HttpMethod.Get, endpoint);
+		using var requestMessage = new HttpRequestMessage(HttpMethod.Get, endpoint);
 
 		using var response = await SendToOllamaAsync(requestMessage, null, HttpCompletionOption.ResponseContentRead, cancellationToken).ConfigureAwait(false);
 
-		var responseBody = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+		using var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
 
-		return JsonSerializer.Deserialize<TResponse>(responseBody, IncomingJsonSerializerOptions)!;
+		return (await JsonSerializer.DeserializeAsync<TResponse>(responseStream, IncomingJsonSerializerOptions, cancellationToken))!;
 	}
 
 	private async Task PostAsync<TRequest>(string endpoint, TRequest ollamaRequest, CancellationToken cancellationToken) where TRequest : OllamaRequest
 	{
-		var requestMessage = new HttpRequestMessage(HttpMethod.Post, endpoint)
+		using var requestMessage = new HttpRequestMessage(HttpMethod.Post, endpoint)
 		{
 			Content = new StringContent(JsonSerializer.Serialize(ollamaRequest, OutgoingJsonSerializerOptions), Encoding.UTF8, "application/json")
 		};
@@ -257,21 +257,21 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 
 	private async Task<TResponse> PostAsync<TRequest, TResponse>(string endpoint, TRequest ollamaRequest, CancellationToken cancellationToken) where TRequest : OllamaRequest
 	{
-		var requestMessage = new HttpRequestMessage(HttpMethod.Post, endpoint)
+		using var requestMessage = new HttpRequestMessage(HttpMethod.Post, endpoint)
 		{
 			Content = new StringContent(JsonSerializer.Serialize(ollamaRequest, OutgoingJsonSerializerOptions), Encoding.UTF8, "application/json")
 		};
 
 		using var response = await SendToOllamaAsync(requestMessage, ollamaRequest, HttpCompletionOption.ResponseContentRead, cancellationToken).ConfigureAwait(false);
 
-		var responseBody = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+		using var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
 
-		return JsonSerializer.Deserialize<TResponse>(responseBody, IncomingJsonSerializerOptions)!;
+		return (await JsonSerializer.DeserializeAsync<TResponse>(responseStream, IncomingJsonSerializerOptions, cancellationToken))!;
 	}
 
 	private async IAsyncEnumerable<TResponse?> StreamPostAsync<TRequest, TResponse>(string endpoint, TRequest ollamaRequest, [EnumeratorCancellation] CancellationToken cancellationToken) where TRequest : OllamaRequest
 	{
-		var requestMessage = new HttpRequestMessage(HttpMethod.Post, endpoint)
+		using var requestMessage = new HttpRequestMessage(HttpMethod.Post, endpoint)
 		{
 			Content = new StringContent(JsonSerializer.Serialize(ollamaRequest, OutgoingJsonSerializerOptions), Encoding.UTF8, "application/json")
 		};
@@ -356,7 +356,7 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 
 			try
 			{
-				couldParse = JsonDocument.Parse(body)?.RootElement.TryGetProperty("error", out errorElement) ?? false;
+				couldParse = JsonDocument.Parse(body).RootElement.TryGetProperty("error", out errorElement);
 			}
 			catch (JsonException)
 			{
@@ -449,9 +449,3 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 /// Represents a conversation context containing context data.
 /// </summary>
 public record ConversationContext(long[] Context);
-
-/// <summary>
-/// Represents a conversation context with an additional response.
-/// Inherits from <see cref="ConversationContext"/>.
-/// </summary>
-public record ConversationContextWithResponse(string Response, long[] Context) : ConversationContext(Context);

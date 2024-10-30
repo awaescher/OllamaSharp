@@ -18,13 +18,15 @@ public class PushModelRequest : OllamaRequest
 	/// Only use this if you are pulling from your own library during development.
 	/// </summary>
 	[JsonPropertyName("insecure")]
-	public bool Insecure { get; set; }
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public bool? Insecure { get; set; }
 
 	/// <summary>
 	/// Gets or sets a value indicating whether to stream the response.
 	/// </summary>
 	[JsonPropertyName("stream")]
-	public bool Stream { get; set; }
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public bool? Stream { get; set; }
 }
 
 /// <summary>

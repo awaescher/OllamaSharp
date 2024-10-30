@@ -21,6 +21,13 @@ public class GenerateRequest : OllamaRequest
 	public string Prompt { get; set; } = null!;
 
 	/// <summary>
+	/// Suffix for Fill-In-the-Middle generate
+	/// </summary>
+	[JsonPropertyName("suffix")]
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public string Suffix { get; set; } = null!;
+
+	/// <summary>
 	/// Additional model parameters listed in the documentation for the
 	/// Modelfile such as temperature
 	/// </summary>

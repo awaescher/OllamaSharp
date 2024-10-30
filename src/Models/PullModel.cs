@@ -13,6 +13,21 @@ public class PullModelRequest : OllamaRequest
 	/// </summary>
 	[JsonPropertyName("model")]
 	public string? Model { get; set; }
+
+	/// <summary>
+	/// Gets or sets a value indicating whether to allow insecure connections to the library.
+	/// Only use this if you are pulling from your own library during development.
+	/// </summary>
+	[JsonPropertyName("insecure")]
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public bool? Insecure { get; set; }
+
+	/// <summary>
+	/// Gets or sets a value indicating whether to stream the response.
+	/// </summary>
+	[JsonPropertyName("stream")]
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public bool? Stream { get; set; }
 }
 
 /// <summary>
