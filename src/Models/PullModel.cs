@@ -20,14 +20,14 @@ public class PullModelRequest : OllamaRequest
 	/// </summary>
 	[JsonPropertyName("insecure")]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-	public bool Insecure { get; set; }
+	public bool? Insecure { get; set; }
 
 	/// <summary>
 	/// Gets or sets a value indicating whether to stream the response.
 	/// </summary>
 	[JsonPropertyName("stream")]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-	public bool Stream { get; set; }
+	public bool? Stream { get; set; }
 }
 
 /// <summary>
