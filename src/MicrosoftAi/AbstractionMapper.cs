@@ -59,6 +59,7 @@ public static class AbstractionMapper
 				Stop = options?.StopSequences?.ToArray(),
 				Temperature = options?.Temperature,
 				TopP = options?.TopP,
+				TopK = options?.TopK,
 			},
 			Stream = stream,
 			Template = null,
