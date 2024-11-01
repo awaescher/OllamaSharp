@@ -286,7 +286,8 @@ public static class AbstractionMapper
 			FinishReason = response?.Done == true ? ChatFinishReason.Stop : null,
 			RawRepresentation = response,
 			Text = response?.Message?.Content ?? string.Empty,
-			Role = ToAbstractionRole(response?.Message?.Role)
+			Role = ToAbstractionRole(response?.Message?.Role),
+			ModelId = response?.Model
 		};
 	}
 
