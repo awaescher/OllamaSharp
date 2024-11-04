@@ -115,7 +115,7 @@ public static class AbstractionMapper
 	private static void TryAddOllamaOption<T>(ChatOptions microsoftChatOptions, OllamaOption option, Action<T> optionSetter)
 	{
 		if (microsoftChatOptions?.AdditionalProperties?.TryGetValue(option.Name, out var value) ?? false)
-			optionSetter((T)value);
+			optionSetter((T)value!);
 	}
 
 	/// <summary>
@@ -191,6 +191,7 @@ public static class AbstractionMapper
 	/// Converts a list of Microsoft.Extensions.AI.<see cref="ChatMessage"/> to a list of Ollama <see cref="Message"/>.
 	/// </summary>
 	/// <param name="chatMessages">The chat messages to convert.</param>
+	/// <param name="serializerOptions">Serializer options</param>
 	private static IEnumerable<Message> ToOllamaSharpMessages(IList<ChatMessage> chatMessages, JsonSerializerOptions serializerOptions)
 	{
 		foreach (var cm in chatMessages)
