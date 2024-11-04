@@ -83,6 +83,18 @@ public class ChatTests
 			chat.Messages.First().Role.Should().Be(ChatRole.User);
 			chat.Messages.First().Content.Should().Be("henlo");
 		}
+
+		[Test]
+		public async Task Sends_Image_Bytes_As_Base64()
+		{
+			var bytes1 = System.Text.Encoding.ASCII.GetBytes("ABC");
+			var bytes2 = System.Text.Encoding.ASCII.GetBytes("ABD");
+
+			var chat = new Chat(_ollama);
+			await chat.SendAsync("", [bytes1, bytes2], CancellationToken.None).StreamToEndAsync();
+
+			chat.Messages.Single(m => m.Role == ChatRole.User).Images.Should().BeEquivalentTo("QUJD", "QUJE");
+		}
 	}
 
 	public class SendAsMethod : ChatTests
@@ -104,9 +116,22 @@ public class ChatTests
 			history[1].Role.Should().Be(ChatRole.Assistant);
 			history[1].Content.Should().Be("Hi tool.");
 		}
+
+
+		[Test]
+		public async Task Sends_Image_Bytes_As_Base64()
+		{
+			var bytes1 = System.Text.Encoding.ASCII.GetBytes("ABC");
+			var bytes2 = System.Text.Encoding.ASCII.GetBytes("ABD");
+
+			var chat = new Chat(_ollama);
+			await chat.SendAsAsync(ChatRole.User, "", [bytes1, bytes2], CancellationToken.None).StreamToEndAsync();
+
+			chat.Messages.Single(m => m.Role == ChatRole.User).Images.Should().BeEquivalentTo("QUJD", "QUJE");
+		}
 	}
 
-	public class SetMessagesMethod : ChatTests
+	public class MessagesPropertyMethod : ChatTests
 	{
 		[Test]
 		public void Replaces_Chat_History()

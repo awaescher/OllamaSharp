@@ -1,6 +1,5 @@
 using FluentAssertions;
 using Microsoft.Extensions.AI;
-using Moq;
 using NUnit.Framework;
 using OllamaSharp;
 using OllamaSharp.MicrosoftAi;
@@ -8,6 +7,9 @@ using OllamaSharp.Models;
 using OllamaSharp.Models.Chat;
 
 namespace Tests;
+
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+#pragma warning disable CS8604 // Possible null reference argument.
 
 public partial class AbstractionMapperTests
 {
@@ -110,10 +112,14 @@ public partial class AbstractionMapperTests
 			message.Role.Should().Be(OllamaSharp.Models.Chat.ChatRole.Assistant);
 		}
 
+		/// <summary>
+		/// Ollama wants images without the metadata like "data:image/png;base64,"
+		/// </summary>
 		[Test]
-		public void Maps_Messages_With_Images()
+		public void Maps_Base64_Images()
 		{
-			const string TRANSPARENT_PIXEL = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/wcAAgEBAYkFNgAAAAAASUVORK5CYII=";
+			const string TRANSPARENT_PIXEL = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/wcAAgEBAYkFNgAAAAAASUVORK5CYII=";
+			const string TRANSPARENT_PIXEL_WITH_BASE64_META = "data:image/png;base64," + TRANSPARENT_PIXEL;
 
 			var chatMessages = new List<Microsoft.Extensions.AI.ChatMessage>
 			{
@@ -123,7 +129,7 @@ public partial class AbstractionMapperTests
 					AuthorName = "a1",
 					Contents = [
 						new TextContent("Make me an image like this, but with beer."),
-						new ImageContent(TRANSPARENT_PIXEL)],
+						new ImageContent(TRANSPARENT_PIXEL_WITH_BASE64_META)],
 					RawRepresentation = null,
 					Role = Microsoft.Extensions.AI.ChatRole.User
 				},
@@ -133,10 +139,10 @@ public partial class AbstractionMapperTests
 					AuthorName = "a2",
 					Contents = [
 						new TextContent("Interesting idea, here we go:"),
-						new ImageContent(TRANSPARENT_PIXEL),
-						new ImageContent(TRANSPARENT_PIXEL),
-						new ImageContent(TRANSPARENT_PIXEL),
-						new ImageContent(TRANSPARENT_PIXEL)],
+						new ImageContent(TRANSPARENT_PIXEL_WITH_BASE64_META),
+						new ImageContent(TRANSPARENT_PIXEL_WITH_BASE64_META),
+						new ImageContent(TRANSPARENT_PIXEL_WITH_BASE64_META),
+						new ImageContent(TRANSPARENT_PIXEL_WITH_BASE64_META)],
 					RawRepresentation = null,
 					Role = Microsoft.Extensions.AI.ChatRole.Assistant
 				},
@@ -148,11 +154,64 @@ public partial class AbstractionMapperTests
 
 			var message = chatRequest.Messages.ElementAt(0);
 			message.Role.Should().Be(OllamaSharp.Models.Chat.ChatRole.User);
-			message.Images.Single().Should().Be(TRANSPARENT_PIXEL);
+			message.Images.Single().Should().Be(TRANSPARENT_PIXEL); // <- WITHOUT BASE64_META
 
 			message = chatRequest.Messages.ElementAt(1);
 			message.Role.Should().Be(OllamaSharp.Models.Chat.ChatRole.Assistant);
 			message.Images.Should().HaveCount(4);
+		}
+
+		[Test]
+		public void Maps_Byte_Array_Images()
+		{
+			var bytes = System.Text.Encoding.ASCII.GetBytes("ABC");
+
+			var chatMessages = new List<Microsoft.Extensions.AI.ChatMessage>
+			{
+				new()
+				{
+					AdditionalProperties = [],
+					AuthorName = "a1",
+					Contents = [
+						new TextContent("Make me an image like this, but with beer."),
+						new ImageContent(bytes)],
+					RawRepresentation = null,
+					Role = Microsoft.Extensions.AI.ChatRole.User
+				}
+			};
+
+			var request = AbstractionMapper.ToOllamaSharpChatRequest(chatMessages, null, stream: true);
+			request.Messages.Single().Images.Single().Should().Be("QUJD");
+		}
+
+		/// <summary>
+		/// Ollama only supports images provided as base64 string, that means with the image content
+		/// Links to images are not supported
+		/// </summary>
+		[Test]
+		public void Does_Not_Support_Image_Links()
+		{
+			var chatMessages = new List<Microsoft.Extensions.AI.ChatMessage>
+			{
+				new()
+				{
+					AdditionalProperties = [],
+					AuthorName = "a1",
+					Contents = [
+						new TextContent("Make me an image like this, but with beer."),
+						new ImageContent("https://unsplash.com/sunset.png")],
+					RawRepresentation = null,
+					Role = Microsoft.Extensions.AI.ChatRole.User
+				}
+			};
+
+			Action act = () =>
+			{
+				var request = AbstractionMapper.ToOllamaSharpChatRequest(chatMessages, null, stream: true);
+				request.Messages.Should().NotBeEmpty(); // access .Messages to invoke the evaluation of IEnumerable<Message>
+			};
+
+			act.Should().Throw<NotSupportedException>().Which.Message.Should().Contain("Images have to be provided as content");
 		}
 
 		[Test]
@@ -187,7 +246,7 @@ public partial class AbstractionMapperTests
 			tool.Function.Parameters.Properties["unit"].Description.Should().Be("The unit to calculate the current temperature to");
 			tool.Function.Parameters.Properties["unit"].Enum.Should().BeEmpty();
 			tool.Function.Parameters.Properties["unit"].Type.Should().Be("string");
-			tool.Function.Parameters.Required.Should().BeEquivalentTo(["city"]);
+			tool.Function.Parameters.Required.Should().BeEquivalentTo("city");
 			tool.Function.Parameters.Type.Should().Be("object");
 			tool.Type.Should().Be("function");
 		}
@@ -464,7 +523,7 @@ public partial class AbstractionMapperTests
 
 			var request = AbstractionMapper.ToOllamaEmbedRequest(values, options);
 
-			request.Input.Should().BeEquivalentTo(["Teenage ", " Dirtbag."]);
+			request.Input.Should().BeEquivalentTo("Teenage ", " Dirtbag.");
 			request.KeepAlive.Should().BeNull();
 			request.Model.Should().Be("nomic_embed");
 			request.Options.Should().BeNull();
@@ -518,3 +577,6 @@ public partial class AbstractionMapperTests
 		}
 	}
 }
+
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+#pragma warning restore CS8604 // Possible null reference argument.
