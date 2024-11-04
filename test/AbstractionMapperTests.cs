@@ -1,3 +1,4 @@
+using System.Text.Json;
 using FluentAssertions;
 using Microsoft.Extensions.AI;
 using Moq;
@@ -24,7 +25,7 @@ public partial class AbstractionMapperTests
 
 			var options = new ChatOptions { Temperature = 0.5f, /* other properties are left out */ };
 
-			var request = AbstractionMapper.ToOllamaSharpChatRequest(messages, options, stream: true);
+			var request = AbstractionMapper.ToOllamaSharpChatRequest(messages, options, stream: true, JsonSerializerOptions.Default);
 
 			request.Options.F16kv.Should().BeNull();
 			request.Options.FrequencyPenalty.Should().BeNull();
@@ -93,7 +94,7 @@ public partial class AbstractionMapperTests
 				},
 			};
 
-			var chatRequest = AbstractionMapper.ToOllamaSharpChatRequest(chatMessages, null, stream: true);
+			var chatRequest = AbstractionMapper.ToOllamaSharpChatRequest(chatMessages, null, stream: true, JsonSerializerOptions.Default);
 
 			chatRequest.Messages.Should().HaveCount(3);
 
@@ -142,7 +143,7 @@ public partial class AbstractionMapperTests
 				},
 			};
 
-			var chatRequest = AbstractionMapper.ToOllamaSharpChatRequest(chatMessages, null, stream: true);
+			var chatRequest = AbstractionMapper.ToOllamaSharpChatRequest(chatMessages, null, stream: true, JsonSerializerOptions.Default);
 
 			chatRequest.Messages.Should().HaveCount(2);
 
@@ -175,7 +176,7 @@ public partial class AbstractionMapperTests
 				Tools = [new WeatherFunction()]
 			};
 
-			var chatRequest = AbstractionMapper.ToOllamaSharpChatRequest(chatMessages, options, stream: true);
+			var chatRequest = AbstractionMapper.ToOllamaSharpChatRequest(chatMessages, options, stream: true, JsonSerializerOptions.Default);
 
 			var tool = chatRequest.Tools.Single();
 			tool.Function.Description.Should().Be("Gets the current weather for a current location");
@@ -190,6 +191,73 @@ public partial class AbstractionMapperTests
 			tool.Function.Parameters.Required.Should().BeEquivalentTo(["city"]);
 			tool.Function.Parameters.Type.Should().Be("object");
 			tool.Type.Should().Be("function");
+		}
+
+		[Test]
+		public void Maps_Messages_With_ToolResponse()
+		{
+			var chatMessages = new List<Microsoft.Extensions.AI.ChatMessage>
+			{
+				new()
+				{
+					AdditionalProperties = [],
+					AuthorName = "a1",
+					RawRepresentation = null,
+					Role = Microsoft.Extensions.AI.ChatRole.Tool,
+					Text = "The weather in Honululu is 25°C."
+				}
+			};
+
+			var chatRequest = AbstractionMapper.ToOllamaSharpChatRequest(chatMessages, new(), stream: true, JsonSerializerOptions.Default);
+
+			var tool = chatRequest.Messages.Single();
+			tool.Content.Should().Contain("The weather in Honululu is 25°C.");
+			tool.Role.Should().Be(OllamaSharp.Models.Chat.ChatRole.Tool);
+		}
+
+		[Test]
+		public void Maps_Messages_With_MultipleToolResponse()
+		{
+			var aiChatMessages = new List<Microsoft.Extensions.AI.ChatMessage>
+			{
+				new()
+				{
+					AdditionalProperties = [],
+					AuthorName = "a1",
+					RawRepresentation = null,
+					Role = Microsoft.Extensions.AI.ChatRole.User,
+					Contents = [
+						new TextContent("I have found those 2 results"),
+						new FunctionResultContent(
+							callId: "123",
+							name: "Function1",
+							result: new { Temperature = 40 }),
+
+						new FunctionResultContent(
+							callId: "456",
+							name: "Function2",
+							result: new { Summary = "This is a tool result test" }
+						),
+					]
+				}
+			};
+
+			var chatRequest = AbstractionMapper.ToOllamaSharpChatRequest(aiChatMessages, new(), stream: true, JsonSerializerOptions.Default);
+			var chatMessages = chatRequest.Messages?.ToList();
+
+			chatMessages.Should().HaveCount(3);
+
+			Message user = chatMessages![0];
+			Message tool1 = chatMessages[1];
+			Message tool2 = chatMessages[2];
+			tool1.Content.Should().Contain("\"Temperature\":40");
+			tool1.Content.Should().Contain("\"CallId\":\"123\"");
+			tool1.Role.Should().Be(OllamaSharp.Models.Chat.ChatRole.Tool);
+			tool2.Content.Should().Contain("\"Summary\":\"This is a tool result test\"");
+			tool2.Content.Should().Contain("\"CallId\":\"456\"");
+			tool2.Role.Should().Be(OllamaSharp.Models.Chat.ChatRole.Tool);
+			user.Content.Should().Contain("I have found those 2 results");
+			user.Role.Should().Be(OllamaSharp.Models.Chat.ChatRole.User);
 		}
 
 		[Test]
@@ -209,7 +277,7 @@ public partial class AbstractionMapperTests
 				TopP = 10.1f
 			};
 
-			var chatRequest = AbstractionMapper.ToOllamaSharpChatRequest(chatMessages, options, stream: true);
+			var chatRequest = AbstractionMapper.ToOllamaSharpChatRequest(chatMessages, options, stream: true, JsonSerializerOptions.Default);
 
 			chatRequest.Format.Should().Be("json");
 			chatRequest.Model.Should().Be("llama3.1:405b");
@@ -251,7 +319,6 @@ public partial class AbstractionMapperTests
 			chatRequest.Options.VocabOnly.Should().BeNull();
 		}
 
-
 		[Test]
 		public void Maps_Ollama_Options()
 		{
@@ -288,7 +355,7 @@ public partial class AbstractionMapperTests
 				.AddOllamaOption(OllamaOption.UseMmap, true)
 				.AddOllamaOption(OllamaOption.VocabOnly, false);
 
-			var ollamaRequest = AbstractionMapper.ToOllamaSharpChatRequest([], options, stream: true);
+			var ollamaRequest = AbstractionMapper.ToOllamaSharpChatRequest([], options, stream: true, JsonSerializerOptions.Default);
 
 			ollamaRequest.Options.F16kv.Should().Be(true);
 			ollamaRequest.Options.FrequencyPenalty.Should().Be(0.11f);
