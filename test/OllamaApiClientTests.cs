@@ -2,6 +2,7 @@ using System.Net;
 using System.Text;
 using System.Text.Json;
 using FluentAssertions;
+using Microsoft.Extensions.AI;
 using Moq;
 using Moq.Protected;
 using NUnit.Framework;
@@ -9,6 +10,7 @@ using OllamaSharp;
 using OllamaSharp.Models;
 using OllamaSharp.Models.Chat;
 using OllamaSharp.Models.Exceptions;
+using ChatRole = OllamaSharp.Models.Chat.ChatRole;
 
 namespace Tests;
 
@@ -19,6 +21,7 @@ public class OllamaApiClientTests
 	private OllamaApiClient _client;
 	private HttpResponseMessage? _response;
 	private HttpRequestMessage? _request;
+	private string? _requestContent;
 	private Dictionary<string, string>? _expectedRequestHeaders;
 
 	[OneTimeSetUp]
@@ -49,7 +52,7 @@ public class OllamaApiClientTests
 	[OneTimeTearDown]
 	public void OneTimeTearDown()
 	{
-		_client.Dispose();
+		((IDisposable)_client).Dispose();
 	}
 
 	/// <summary>
@@ -59,6 +62,7 @@ public class OllamaApiClientTests
 	private bool ValidateExpectedRequestHeaders(HttpRequestMessage request)
 	{
 		_request = request;
+		_requestContent = request.Content?.ReadAsStringAsync().GetAwaiter().GetResult();
 
 		if (_expectedRequestHeaders is null)
 			return true;
@@ -215,6 +219,78 @@ public class OllamaApiClientTests
 			context.Response.Should().Be("The sky is blue.");
 			var expectation = new int[] { 1, 2, 3 };
 			context.Context.Should().BeEquivalentTo(expectation);
+		}
+	}
+
+	public class CompleteMethod : OllamaApiClientTests
+	{
+		[Test, NonParallelizable]
+		public async Task Sends_Parameters_With_Request()
+		{
+			var payload = """
+				{
+				    "model": "llama2",
+				    "created_at": "2024-07-12T12:34:39.63897616Z",
+				    "message": {
+				        "role": "assistant",
+				        "content": "Test content."
+				    },
+				    "done_reason": "stop",
+				    "done": true,
+				    "total_duration": 137729492272,
+				    "load_duration": 133071702768,
+				    "prompt_eval_count": 26,
+				    "prompt_eval_duration": 35137000,
+				    "eval_count": 323,
+				    "eval_duration": 4575154000
+				}
+				""".ReplaceLineEndings(""); // the JSON stream reader reads by line, so we need to make this one single line
+
+			await using var stream = new MemoryStream();
+
+			await using var writer = new StreamWriter(stream, leaveOpen: true);
+			writer.AutoFlush = true;
+			await writer.WriteAsync(payload);
+			stream.Seek(0, SeekOrigin.Begin);
+
+			_response = new HttpResponseMessage
+			{
+				StatusCode = HttpStatusCode.OK,
+				Content = new StreamContent(stream)
+			};
+
+			List<ChatMessage> chatHistory = [];
+			chatHistory.Add(new(Microsoft.Extensions.AI.ChatRole.User, "Why?"));
+			chatHistory.Add(new(Microsoft.Extensions.AI.ChatRole.Assistant, "Because!"));
+			chatHistory.Add(new(Microsoft.Extensions.AI.ChatRole.User, "And where?"));
+
+			var options = new ChatOptions
+			{
+				ModelId = "model",
+				TopP = 100,
+				TopK = 50,
+				Temperature = 0.5f,
+				FrequencyPenalty = 0.1f,
+				PresencePenalty = 0.2f,
+				StopSequences = ["stop me"],
+			};
+
+			var chatClient = _client as IChatClient;
+
+			await chatClient.CompleteAsync(chatHistory, options, CancellationToken.None);
+
+			_request.Should().NotBeNull();
+			_requestContent.Should().NotBeNull();
+
+			_requestContent.Should().Contain("Why?");
+			_requestContent.Should().Contain("Because!");
+			_requestContent.Should().Contain("And where?");
+			_requestContent.Should().Contain("\"top_p\":100");
+			_requestContent.Should().Contain("\"top_k\":50");
+			_requestContent.Should().Contain("\"temperature\":0.5");
+			_requestContent.Should().Contain("\"frequency_penalty\":0.1");
+			_requestContent.Should().Contain("\"presence_penalty\":0.2");
+			_requestContent.Should().Contain("\"stop\":[\"stop me\"]");
 		}
 	}
 

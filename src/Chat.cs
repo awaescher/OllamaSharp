@@ -62,6 +62,24 @@ public class Chat
 	/// Sends a message to the currently selected model and streams its response
 	/// </summary>
 	/// <param name="message">The message to send</param>
+	/// <param name="imagesAsBytes">Images in byte representation to send to the model</param>
+	/// <param name="cancellationToken">The token to cancel the operation with</param>
+	public IAsyncEnumerable<string> SendAsync(string message, IEnumerable<IEnumerable<byte>> imagesAsBytes, CancellationToken cancellationToken = default)
+		=> SendAsync(message, imagesAsBytes?.ToBase64() ?? [], cancellationToken);
+
+	/// <summary>
+	/// Sends a message to the currently selected model and streams its response
+	/// </summary>
+	/// <param name="message">The message to send</param>
+	/// <param name="imagesAsBase64">Base64 encoded images to send to the model</param>
+	/// <param name="cancellationToken">The token to cancel the operation with</param>
+	public IAsyncEnumerable<string> SendAsync(string message, IEnumerable<string> imagesAsBase64, CancellationToken cancellationToken = default)
+		=> SendAsync(message, [], imagesAsBase64, cancellationToken);
+
+	/// <summary>
+	/// Sends a message to the currently selected model and streams its response
+	/// </summary>
+	/// <param name="message">The message to send</param>
 	/// <param name="tools">Tools that the model can make use of, see https://ollama.com/blog/tool-support. By using tools, response streaming is automatically turned off</param>
 	/// <param name="imagesAsBase64">Base64 encoded images to send to the model</param>
 	/// <param name="cancellationToken">The token to cancel the operation with</param>
@@ -76,6 +94,26 @@ public class Chat
 	/// <param name="cancellationToken">The token to cancel the operation with</param>
 	public IAsyncEnumerable<string> SendAsAsync(ChatRole role, string message, CancellationToken cancellationToken = default)
 		=> SendAsAsync(role, message, tools: null, imagesAsBase64: null, cancellationToken);
+
+	/// <summary>
+	/// Sends a message in a given role to the currently selected model and streams its response
+	/// </summary>
+	/// <param name="role">The role in which the message should be sent</param>
+	/// <param name="message">The message to send</param>
+	/// <param name="imagesAsBytes">Images in byte representation to send to the model</param>
+	/// <param name="cancellationToken">The token to cancel the operation with</param>
+	public IAsyncEnumerable<string> SendAsAsync(ChatRole role, string message, IEnumerable<IEnumerable<byte>> imagesAsBytes, CancellationToken cancellationToken = default)
+		=> SendAsAsync(role, message, imagesAsBytes?.ToBase64() ?? [], cancellationToken);
+
+	/// <summary>
+	/// Sends a message in a given role to the currently selected model and streams its response
+	/// </summary>
+	/// <param name="role">The role in which the message should be sent</param>
+	/// <param name="message">The message to send</param>
+	/// <param name="imagesAsBase64">Base64 encoded images to send to the model</param>
+	/// <param name="cancellationToken">The token to cancel the operation with</param>
+	public IAsyncEnumerable<string> SendAsAsync(ChatRole role, string message, IEnumerable<string> imagesAsBase64, CancellationToken cancellationToken = default)
+		=> SendAsAsync(role, message, [], imagesAsBase64, cancellationToken);
 
 	/// <summary>
 	/// Sends a message in a given role to the currently selected model and streams its response

@@ -67,8 +67,6 @@ public partial class ImageChatConsole(IOllamaApiClient ollama) : OllamaConsole(o
 							continue;
 						}
 
-						var imagesBase64 = imageBytes.Select(Convert.ToBase64String);
-
 						// remove paths from the message
 						foreach (var path in imagePaths)
 							message = message.Replace(path, "");
@@ -88,7 +86,7 @@ public partial class ImageChatConsole(IOllamaApiClient ollama) : OllamaConsole(o
 							AnsiConsole.MarkupLine($"[{HintTextColor}]The images were scaled down for the console only, the model gets full versions.[/]");
 						AnsiConsole.WriteLine();
 
-						await foreach (var answerToken in chat.SendAsync(message, [], imagesBase64))
+						await foreach (var answerToken in chat.SendAsync(message, imageBytes))
 							AnsiConsole.MarkupInterpolated($"[{AiTextColor}]{answerToken}[/]");
 					}
 					else
