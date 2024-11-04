@@ -86,20 +86,6 @@ public partial class ImageChatConsole(IOllamaApiClient ollama) : OllamaConsole(o
 							AnsiConsole.MarkupLine($"[{HintTextColor}]The images were scaled down for the console only, the model gets full versions.[/]");
 						AnsiConsole.WriteLine();
 
-
-						//var userContent = new List<AIContent>();
-						//userContent.Add(new TextContent(message));
-						//userContent.AddRange(imageBytes.Select(ib => new ImageContent(ib)));
-
-						//ChatMessage[] messages =
-						//[
-						//	new ChatMessage(ChatRole.System, [new TextContent(systemPrompt)]),
-						//	new ChatMessage(ChatRole.User, userContent)
-						//];
-
-						//await foreach (var answerToken in ((IChatClient)chat.Client).CompleteStreamingAsync(messages))
-						//	AnsiConsole.MarkupInterpolated($"[blue]{answerToken}[/]");
-
 						await foreach (var answerToken in chat.SendAsync(message, imageBytes))
 							AnsiConsole.MarkupInterpolated($"[{AiTextColor}]{answerToken}[/]");
 					}
