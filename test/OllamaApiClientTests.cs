@@ -19,6 +19,7 @@ public class OllamaApiClientTests
 	private OllamaApiClient _client;
 	private HttpResponseMessage? _response;
 	private HttpRequestMessage? _request;
+	private string? _requestContent;
 	private Dictionary<string, string>? _expectedRequestHeaders;
 
 	[OneTimeSetUp]
@@ -59,6 +60,7 @@ public class OllamaApiClientTests
 	private bool ValidateExpectedRequestHeaders(HttpRequestMessage request)
 	{
 		_request = request;
+		_requestContent = request.Content?.ReadAsStringAsync().GetAwaiter().GetResult();
 
 		if (_expectedRequestHeaders is null)
 			return true;
@@ -215,6 +217,62 @@ public class OllamaApiClientTests
 			context.Response.Should().Be("The sky is blue.");
 			var expectation = new int[] { 1, 2, 3 };
 			context.Context.Should().BeEquivalentTo(expectation);
+		}
+	}
+
+	public class CompleteMethod : OllamaApiClientTests
+	{
+		[Test, NonParallelizable]
+		public async Task DoNotSendExtra_Parameters_With_Request()
+		{
+			var payload = """
+			{
+			    "model": "llama2",
+			    "created_at": "2024-07-12T12:34:39.63897616Z",
+			    "message": {
+			        "role": "assistant",
+			        "content": "Test content."
+			    },
+			    "done_reason": "stop",
+			    "done": true,
+			    "total_duration": 137729492272,
+			    "load_duration": 133071702768,
+			    "prompt_eval_count": 26,
+			    "prompt_eval_duration": 35137000,
+			    "eval_count": 323,
+			    "eval_duration": 4575154000
+			}
+			""".ReplaceLineEndings(""); // the JSON stream reader reads by line, so we need to make this one single line
+
+			await using var stream = new MemoryStream();
+
+			await using var writer = new StreamWriter(stream, leaveOpen: true);
+			writer.AutoFlush = true;
+			await writer.WriteAsync(payload);
+			stream.Seek(0, SeekOrigin.Begin);
+
+			_response = new HttpResponseMessage
+			{
+				StatusCode = HttpStatusCode.OK,
+				Content = new StreamContent(stream)
+			};
+
+			List<Microsoft.Extensions.AI.ChatMessage> chatHistory = [];
+			chatHistory.Add(new(Microsoft.Extensions.AI.ChatRole.User, "Why?"));
+			chatHistory.Add(new(Microsoft.Extensions.AI.ChatRole.Assistant, "Because!"));
+			chatHistory.Add(new(Microsoft.Extensions.AI.ChatRole.User, "And where?"));
+
+			var chatClient = _client as Microsoft.Extensions.AI.IChatClient;
+
+			await chatClient.CompleteAsync(chatHistory);
+
+			_request.Should().NotBeNull();
+			_requestContent.Should().NotBeNull();
+
+			// Ensure that the request does not contain any other properties when not provided.
+			_requestContent.Should().NotContain("tools");
+			_requestContent.Should().NotContain("tool_calls");
+			_requestContent.Should().NotContain("images");
 		}
 	}
 
