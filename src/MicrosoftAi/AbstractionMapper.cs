@@ -59,6 +59,7 @@ public static class AbstractionMapper
 				Stop = options?.StopSequences?.ToArray(),
 				Temperature = options?.Temperature,
 				TopP = options?.TopP,
+				TopK = options?.TopK,
 			},
 			Stream = stream,
 			Template = null,
@@ -285,7 +286,8 @@ public static class AbstractionMapper
 			FinishReason = response?.Done == true ? ChatFinishReason.Stop : null,
 			RawRepresentation = response,
 			Text = response?.Message?.Content ?? string.Empty,
-			Role = ToAbstractionRole(response?.Message?.Role)
+			Role = ToAbstractionRole(response?.Message?.Role),
+			ModelId = response?.Model
 		};
 	}
 

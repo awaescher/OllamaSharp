@@ -251,7 +251,6 @@ public partial class AbstractionMapperTests
 			chatRequest.Options.VocabOnly.Should().BeNull();
 		}
 
-
 		[Test]
 		public void Maps_Ollama_Options()
 		{
