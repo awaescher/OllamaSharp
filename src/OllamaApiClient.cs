@@ -373,15 +373,6 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 
 		response.EnsureSuccessStatusCode();
 	}
-	/// <summary>
-	/// Releases the resources used by the <see cref="OllamaApiClient"/> instance.
-	/// Disposes the internal HTTP client if it was created internally.
-	/// </summary>
-	public void Cleanup()
-	{
-		if (_disposeHttpClient)
-			_client?.Dispose();
-	}
 
 	#region IChatClient and IEmbeddingGenerator implementation
 
@@ -423,8 +414,15 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 	TService? IEmbeddingGenerator<string, Embedding<float>>.GetService<TService>(object? key) where TService : class
 		=> key is null ? this as TService : null;
 
-	/// <inheritdoc/>
-	public void Dispose() => Cleanup();
+	/// <summary>
+	/// Releases the resources used by the <see cref="OllamaApiClient"/> instance.
+	/// Disposes the internal HTTP client if it was created internally.
+	/// </summary>
+	public void Dispose()
+	{
+		if (_disposeHttpClient)
+			_client?.Dispose();
+	}
 
 	#endregion
 
