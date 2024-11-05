@@ -61,6 +61,7 @@ public static class AbstractionMapper
 				Stop = options?.StopSequences?.ToArray(),
 				Temperature = options?.Temperature,
 				TopP = options?.TopP,
+				TopK = options?.TopK,
 			},
 			Stream = stream,
 			Template = null,
@@ -114,8 +115,8 @@ public static class AbstractionMapper
 	/// <param name="optionSetter">The setter to set the Ollama option if available in the chat options</param>
 	private static void TryAddOllamaOption<T>(ChatOptions microsoftChatOptions, OllamaOption option, Action<T> optionSetter)
 	{
-		if (microsoftChatOptions?.AdditionalProperties?.TryGetValue(option.Name, out var value) ?? false)
-			optionSetter((T)value!);
+		if ((microsoftChatOptions?.AdditionalProperties?.TryGetValue(option.Name, out var value) ?? false) && value is not null)
+			optionSetter((T)value);
 	}
 
 	/// <summary>
@@ -196,7 +197,7 @@ public static class AbstractionMapper
 	{
 		foreach (var cm in chatMessages)
 		{
-			var images = cm.Contents.OfType<DataContent>().Select(ToOllamaImage).Where(s => !string.IsNullOrEmpty(s)).ToArray();
+			var images = cm.Contents.OfType<ImageContent>().Select(ToOllamaImage).Where(s => !string.IsNullOrEmpty(s)).ToArray();
 			var toolCalls = cm.Contents.OfType<FunctionCallContent>().Select(ToOllamaSharpToolCall).ToArray();
 
 			yield return new Message
@@ -227,19 +228,18 @@ public static class AbstractionMapper
 	}
 
 	/// <summary>
-	/// Converts a Microsoft.Extensions.AI.<see cref="DataContent"/> to a base64 image string.
+	/// Converts a Microsoft.Extensions.AI.<see cref="ImageContent"/> to a base64 image string.
 	/// </summary>
 	/// <param name="content">The data content to convert.</param>
-	private static string ToOllamaImage(DataContent content)
+	private static string ToOllamaImage(ImageContent content)
 	{
-		if (content is null || !content.ContainsData)
+		if (content is null)
 			return string.Empty;
 
-		var isImage = content is ImageContent || content?.MediaType?.StartsWith("image", StringComparison.OrdinalIgnoreCase) == true;
-		if (isImage)
-			return content?.Uri ?? ""; // If the content is binary data, converts it to a data: URI with base64 encoding
+		if (content.ContainsData && content.Data.HasValue)
+			return Convert.ToBase64String(content.Data.Value.ToArray());
 
-		return string.Empty;
+		throw new NotSupportedException("Images have to be provided as content (byte-Array or base64-string) for Ollama to be used. Other image sources like links are not supported.");
 	}
 
 	/// <summary>
@@ -308,7 +308,8 @@ public static class AbstractionMapper
 			FinishReason = response?.Done == true ? ChatFinishReason.Stop : null,
 			RawRepresentation = response,
 			Text = response?.Message?.Content ?? string.Empty,
-			Role = ToAbstractionRole(response?.Message?.Role)
+			Role = ToAbstractionRole(response?.Message?.Role),
+			ModelId = response?.Model
 		};
 	}
 
@@ -394,7 +395,7 @@ public static class AbstractionMapper
 	/// <returns>A <see cref="UsageDetails"/> object containing the parsed usage details.</returns>
 	private static UsageDetails? ParseOllamaChatResponseUsage(ChatDoneResponseStream? response)
 	{
-		if (response?.PromptEvalCount is not null || response?.EvalCount is not null)
+		if (response is not null)
 		{
 			return new()
 			{

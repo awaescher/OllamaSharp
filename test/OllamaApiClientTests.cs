@@ -2,6 +2,7 @@ using System.Net;
 using System.Text;
 using System.Text.Json;
 using FluentAssertions;
+using Microsoft.Extensions.AI;
 using Moq;
 using Moq.Protected;
 using NUnit.Framework;
@@ -9,6 +10,7 @@ using OllamaSharp;
 using OllamaSharp.Models;
 using OllamaSharp.Models.Chat;
 using OllamaSharp.Models.Exceptions;
+using ChatRole = OllamaSharp.Models.Chat.ChatRole;
 
 namespace Tests;
 
@@ -50,7 +52,7 @@ public class OllamaApiClientTests
 	[OneTimeTearDown]
 	public void OneTimeTearDown()
 	{
-		_client.Dispose();
+		((IDisposable)_client).Dispose();
 	}
 
 	/// <summary>
@@ -223,27 +225,27 @@ public class OllamaApiClientTests
 	public class CompleteMethod : OllamaApiClientTests
 	{
 		[Test, NonParallelizable]
-		public async Task DoNotSendExtra_Parameters_With_Request()
+		public async Task Sends_Parameters_With_Request()
 		{
 			var payload = """
-			{
-			    "model": "llama2",
-			    "created_at": "2024-07-12T12:34:39.63897616Z",
-			    "message": {
-			        "role": "assistant",
-			        "content": "Test content."
-			    },
-			    "done_reason": "stop",
-			    "done": true,
-			    "total_duration": 137729492272,
-			    "load_duration": 133071702768,
-			    "prompt_eval_count": 26,
-			    "prompt_eval_duration": 35137000,
-			    "eval_count": 323,
-			    "eval_duration": 4575154000
-			}
-			""".ReplaceLineEndings(""); // the JSON stream reader reads by line, so we need to make this one single line
-
+				{
+				    "model": "llama2",
+				    "created_at": "2024-07-12T12:34:39.63897616Z",
+				    "message": {
+				        "role": "assistant",
+				        "content": "Test content."
+				    },
+				    "done_reason": "stop",
+				    "done": true,
+				    "total_duration": 137729492272,
+				    "load_duration": 133071702768,
+				    "prompt_eval_count": 26,
+				    "prompt_eval_duration": 35137000,
+				    "eval_count": 323,
+				    "eval_duration": 4575154000
+				}
+				""".ReplaceLineEndings(""); // the JSON stream reader reads by line, so we need to make this one single line
+          
 			await using var stream = new MemoryStream();
 
 			await using var writer = new StreamWriter(stream, leaveOpen: true);
@@ -264,11 +266,32 @@ public class OllamaApiClientTests
 
 			var chatClient = _client as Microsoft.Extensions.AI.IChatClient;
 
-			await chatClient.CompleteAsync(chatHistory);
+			var options = new ChatOptions
+			{
+				ModelId = "model",
+				TopP = 100,
+				TopK = 50,
+				Temperature = 0.5f,
+				FrequencyPenalty = 0.1f,
+				PresencePenalty = 0.2f,
+				StopSequences = ["stop me"],
+			};
+
+			await chatClient.CompleteAsync(chatHistory, options, CancellationToken.None);
 
 			_request.Should().NotBeNull();
 			_requestContent.Should().NotBeNull();
 
+      _requestContent.Should().Contain("Why?");
+			_requestContent.Should().Contain("Because!");
+			_requestContent.Should().Contain("And where?");
+			_requestContent.Should().Contain("\"top_p\":100");
+			_requestContent.Should().Contain("\"top_k\":50");
+			_requestContent.Should().Contain("\"temperature\":0.5");
+			_requestContent.Should().Contain("\"frequency_penalty\":0.1");
+			_requestContent.Should().Contain("\"presence_penalty\":0.2");
+			_requestContent.Should().Contain("\"stop\":[\"stop me\"]");
+      
 			// Ensure that the request does not contain any other properties when not provided.
 			_requestContent.Should().NotContain("tools");
 			_requestContent.Should().NotContain("tool_calls");
