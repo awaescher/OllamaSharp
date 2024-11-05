@@ -282,7 +282,7 @@ public class OllamaApiClientTests
 			_request.Should().NotBeNull();
 			_requestContent.Should().NotBeNull();
 
-      _requestContent.Should().Contain("Why?");
+			_requestContent.Should().Contain("Why?");
 			_requestContent.Should().Contain("Because!");
 			_requestContent.Should().Contain("And where?");
 			_requestContent.Should().Contain("\"top_p\":100");

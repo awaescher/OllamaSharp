@@ -117,7 +117,6 @@ public class ChatTests
 			history[1].Content.Should().Be("Hi tool.");
 		}
 
-
 		[Test]
 		public async Task Sends_Image_Bytes_As_Base64()
 		{

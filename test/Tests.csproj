@@ -6,8 +6,8 @@
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
-		<NoWarn>IDE0065</NoWarn>
-  </PropertyGroup>
+		<NoWarn>IDE0065;IDE0055;IDE0011</NoWarn>
+	</PropertyGroup>
 
   <ItemGroup>
 		<PackageReference Include="FluentAssertions" Version="6.12.1" />
