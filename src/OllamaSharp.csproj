@@ -19,6 +19,7 @@
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 		<SignAssembly>True</SignAssembly>
 		<AssemblyOriginatorKeyFile>..\OllamaSharp.snk</AssemblyOriginatorKeyFile>
+		<NoWarn>IDE0065;IDE0055;IDE0011;S3881</NoWarn>
 	</PropertyGroup>
 
 	<ItemGroup>

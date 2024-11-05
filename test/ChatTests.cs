@@ -61,7 +61,7 @@ public class ChatTests
 
 			chat.Messages.Last().Role.Should().Be(ChatRole.Assistant);
 			chat.Messages.Last().ToolCalls.Should().HaveCount(1);
-			chat.Messages.Last().ToolCalls!.ElementAt(0).Function!.Name.Should().Be("get_current_weather");
+			chat.Messages.Last().ToolCalls.ElementAt(0).Function.Name.Should().Be("get_current_weather");
 		}
 
 		[Test]
@@ -116,7 +116,6 @@ public class ChatTests
 			history[1].Role.Should().Be(ChatRole.Assistant);
 			history[1].Content.Should().Be("Hi tool.");
 		}
-
 
 		[Test]
 		public async Task Sends_Image_Bytes_As_Base64()

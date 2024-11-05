@@ -14,8 +14,6 @@ using ChatRole = OllamaSharp.Models.Chat.ChatRole;
 
 namespace Tests;
 
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
-
 public class OllamaApiClientTests
 {
 	private OllamaApiClient _client;
@@ -259,10 +257,12 @@ public class OllamaApiClientTests
 				Content = new StreamContent(stream)
 			};
 
-			List<ChatMessage> chatHistory = [];
+			List<Microsoft.Extensions.AI.ChatMessage> chatHistory = [];
 			chatHistory.Add(new(Microsoft.Extensions.AI.ChatRole.User, "Why?"));
 			chatHistory.Add(new(Microsoft.Extensions.AI.ChatRole.Assistant, "Because!"));
 			chatHistory.Add(new(Microsoft.Extensions.AI.ChatRole.User, "And where?"));
+
+			var chatClient = _client as Microsoft.Extensions.AI.IChatClient;
 
 			var options = new ChatOptions
 			{
@@ -274,8 +274,6 @@ public class OllamaApiClientTests
 				PresencePenalty = 0.2f,
 				StopSequences = ["stop me"],
 			};
-
-			var chatClient = _client as IChatClient;
 
 			await chatClient.CompleteAsync(chatHistory, options, CancellationToken.None);
 
@@ -291,6 +289,11 @@ public class OllamaApiClientTests
 			_requestContent.Should().Contain("\"frequency_penalty\":0.1");
 			_requestContent.Should().Contain("\"presence_penalty\":0.2");
 			_requestContent.Should().Contain("\"stop\":[\"stop me\"]");
+
+			// Ensure that the request does not contain any other properties when not provided.
+			_requestContent.Should().NotContain("tools");
+			_requestContent.Should().NotContain("tool_calls");
+			_requestContent.Should().NotContain("images");
 		}
 	}
 
@@ -453,16 +456,16 @@ public class OllamaApiClientTests
 
 			result.Message.ToolCalls.Should().HaveCount(1);
 
-			var toolsFunction = result.Message.ToolCalls!.ElementAt(0).Function;
+			var toolsFunction = result.Message.ToolCalls.ElementAt(0).Function;
 			toolsFunction.Name.Should().Be("get_current_weather");
-			toolsFunction.Arguments!.ElementAt(0).Key.Should().Be("format");
-			toolsFunction.Arguments!.ElementAt(0).Value.ToString().Should().Be("celsius");
+			toolsFunction.Arguments.ElementAt(0).Key.Should().Be("format");
+			toolsFunction.Arguments.ElementAt(0).Value.ToString().Should().Be("celsius");
 
-			toolsFunction.Arguments!.ElementAt(1).Key.Should().Be("location");
-			toolsFunction.Arguments!.ElementAt(1).Value.ToString().Should().Be("Los Angeles, CA");
+			toolsFunction.Arguments.ElementAt(1).Key.Should().Be("location");
+			toolsFunction.Arguments.ElementAt(1).Value.ToString().Should().Be("Los Angeles, CA");
 
-			toolsFunction.Arguments!.ElementAt(2).Key.Should().Be("number");
-			toolsFunction.Arguments!.ElementAt(2).Value.ToString().Should().Be("42");
+			toolsFunction.Arguments.ElementAt(2).Key.Should().Be("number");
+			toolsFunction.Arguments.ElementAt(2).Value.ToString().Should().Be("42");
 		}
 	}
 
@@ -511,9 +514,9 @@ public class OllamaApiClientTests
 			builder.ToString().Should().BeEquivalentTo("Leave me alone.");
 
 			responses.Should().HaveCount(3);
-			responses[0]!.Role.Should().Be(ChatRole.Assistant);
-			responses[1]!.Role.Should().Be(ChatRole.Assistant);
-			responses[2]!.Role.Should().Be(ChatRole.Assistant);
+			responses[0].Role.Should().Be(ChatRole.Assistant);
+			responses[1].Role.Should().Be(ChatRole.Assistant);
+			responses[2].Role.Should().Be(ChatRole.Assistant);
 		}
 
 		[Test, NonParallelizable]
@@ -658,5 +661,3 @@ public static class WriterExtensions
 		await writer.WriteLineAsync(JsonSerializer.Serialize(json));
 	}
 }
-
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
