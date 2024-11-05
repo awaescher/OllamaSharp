@@ -385,7 +385,7 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 	/// <inheritdoc/>
 	async Task<ChatCompletion> IChatClient.CompleteAsync(IList<ChatMessage> chatMessages, ChatOptions? options, CancellationToken cancellationToken)
 	{
-		var request = MicrosoftAi.AbstractionMapper.ToOllamaSharpChatRequest(chatMessages, options, stream: false);
+		var request = MicrosoftAi.AbstractionMapper.ToOllamaSharpChatRequest(chatMessages, options, stream: false, OutgoingJsonSerializerOptions);
 		var response = await ChatAsync(request, cancellationToken).StreamToEndAsync().ConfigureAwait(false);
 		return MicrosoftAi.AbstractionMapper.ToChatCompletion(response, response?.Model ?? request.Model ?? SelectedModel) ?? new ChatCompletion([]);
 	}
@@ -393,7 +393,7 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 	/// <inheritdoc/>
 	async IAsyncEnumerable<StreamingChatCompletionUpdate> IChatClient.CompleteStreamingAsync(IList<ChatMessage> chatMessages, ChatOptions? options, [EnumeratorCancellation] CancellationToken cancellationToken)
 	{
-		var request = MicrosoftAi.AbstractionMapper.ToOllamaSharpChatRequest(chatMessages, options, stream: true);
+		var request = MicrosoftAi.AbstractionMapper.ToOllamaSharpChatRequest(chatMessages, options, stream: true, OutgoingJsonSerializerOptions);
 		await foreach (var response in ChatAsync(request, cancellationToken).ConfigureAwait(false))
 			yield return MicrosoftAi.AbstractionMapper.ToStreamingChatCompletionUpdate(response);
 	}

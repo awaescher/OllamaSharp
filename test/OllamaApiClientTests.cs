@@ -245,7 +245,7 @@ public class OllamaApiClientTests
 				    "eval_duration": 4575154000
 				}
 				""".ReplaceLineEndings(""); // the JSON stream reader reads by line, so we need to make this one single line
-
+          
 			await using var stream = new MemoryStream();
 
 			await using var writer = new StreamWriter(stream, leaveOpen: true);
@@ -259,10 +259,12 @@ public class OllamaApiClientTests
 				Content = new StreamContent(stream)
 			};
 
-			List<ChatMessage> chatHistory = [];
+			List<Microsoft.Extensions.AI.ChatMessage> chatHistory = [];
 			chatHistory.Add(new(Microsoft.Extensions.AI.ChatRole.User, "Why?"));
 			chatHistory.Add(new(Microsoft.Extensions.AI.ChatRole.Assistant, "Because!"));
 			chatHistory.Add(new(Microsoft.Extensions.AI.ChatRole.User, "And where?"));
+
+			var chatClient = _client as Microsoft.Extensions.AI.IChatClient;
 
 			var options = new ChatOptions
 			{
@@ -274,8 +276,6 @@ public class OllamaApiClientTests
 				PresencePenalty = 0.2f,
 				StopSequences = ["stop me"],
 			};
-
-			var chatClient = _client as IChatClient;
 
 			await chatClient.CompleteAsync(chatHistory, options, CancellationToken.None);
 
@@ -291,6 +291,11 @@ public class OllamaApiClientTests
 			_requestContent.Should().Contain("\"frequency_penalty\":0.1");
 			_requestContent.Should().Contain("\"presence_penalty\":0.2");
 			_requestContent.Should().Contain("\"stop\":[\"stop me\"]");
+      
+			// Ensure that the request does not contain any other properties when not provided.
+			_requestContent.Should().NotContain("tools");
+			_requestContent.Should().NotContain("tool_calls");
+			_requestContent.Should().NotContain("images");
 		}
 	}
 

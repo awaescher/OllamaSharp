@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Text.Json.Nodes;
 using Microsoft.Extensions.AI;
 using OllamaSharp.Models;
@@ -44,13 +45,14 @@ public static class AbstractionMapper
 	/// <param name="chatMessages">A list of chat messages.</param>
 	/// <param name="options">Optional chat options to configure the request.</param>
 	/// <param name="stream">Indicates if the request should be streamed.</param>
-	public static ChatRequest ToOllamaSharpChatRequest(IList<ChatMessage> chatMessages, ChatOptions? options, bool stream)
+	/// <param name="serializerOptions">Serializer options</param>
+	public static ChatRequest ToOllamaSharpChatRequest(IList<ChatMessage> chatMessages, ChatOptions? options, bool stream, JsonSerializerOptions serializerOptions)
 	{
 		var request = new ChatRequest
 		{
 			Format = options?.ResponseFormat == ChatResponseFormat.Json ? "json" : null,
 			KeepAlive = null,
-			Messages = ToOllamaSharpMessages(chatMessages),
+			Messages = ToOllamaSharpMessages(chatMessages, serializerOptions),
 			Model = options?.ModelId ?? "", // will be set OllamaApiClient.SelectedModel if not set
 			Options = new Models.RequestOptions
 			{
@@ -190,17 +192,38 @@ public static class AbstractionMapper
 	/// Converts a list of Microsoft.Extensions.AI.<see cref="ChatMessage"/> to a list of Ollama <see cref="Message"/>.
 	/// </summary>
 	/// <param name="chatMessages">The chat messages to convert.</param>
-	private static IEnumerable<Message> ToOllamaSharpMessages(IList<ChatMessage> chatMessages)
+	/// <param name="serializerOptions">Serializer options</param>
+	private static IEnumerable<Message> ToOllamaSharpMessages(IList<ChatMessage> chatMessages, JsonSerializerOptions serializerOptions)
 	{
 		foreach (var cm in chatMessages)
 		{
+			var images = cm.Contents.OfType<ImageContent>().Select(ToOllamaImage).Where(s => !string.IsNullOrEmpty(s)).ToArray();
+			var toolCalls = cm.Contents.OfType<FunctionCallContent>().Select(ToOllamaSharpToolCall).ToArray();
+
 			yield return new Message
 			{
 				Content = cm.Text,
-				Images = cm.Contents.OfType<ImageContent>().Select(ToOllamaImage).Where(s => !string.IsNullOrEmpty(s)).ToArray(),
+				Images = images.Length > 0 ? images : null,
 				Role = ToOllamaSharpRole(cm.Role),
-				ToolCalls = cm.Contents.OfType<FunctionCallContent>().Select(ToOllamaSharpToolCall),
+				ToolCalls = toolCalls.Length > 0 ? toolCalls : null,
 			};
+
+			// If the message contains a function result, add it as a separate tool message
+			foreach (var frc in cm.Contents.OfType<FunctionResultContent>())
+			{
+				JsonElement jsonResult = JsonSerializer.SerializeToElement(frc.Result, serializerOptions);
+
+				yield return new Message
+				{
+					Content = JsonSerializer.Serialize(new OllamaFunctionResultContent
+					{
+						CallId = frc.CallId,
+						Result = jsonResult,
+					}, serializerOptions),
+					Role = Models.Chat.ChatRole.Tool,
+				};
+				continue;
+			}
 		}
 	}
 
