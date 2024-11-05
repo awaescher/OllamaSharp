@@ -61,7 +61,7 @@ public class ChatTests
 
 			chat.Messages.Last().Role.Should().Be(ChatRole.Assistant);
 			chat.Messages.Last().ToolCalls.Should().HaveCount(1);
-			chat.Messages.Last().ToolCalls!.ElementAt(0).Function!.Name.Should().Be("get_current_weather");
+			chat.Messages.Last().ToolCalls.ElementAt(0).Function.Name.Should().Be("get_current_weather");
 		}
 
 		[Test]

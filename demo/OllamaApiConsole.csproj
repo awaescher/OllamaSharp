@@ -1,14 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
 		<NoWarn>IDE0065;IDE0055;IDE0011</NoWarn>
 	</PropertyGroup>
 
-  <ItemGroup>
+	<ItemGroup>
 		<!-- 
 		SixLabors.ImageSharp added explicitly to fix CVE-2024-41131: https://github.com/advisories/GHSA-63p8-c4ww-9cg7  
 		and can be removed once Spectre.Console.ImageSharp uses a version greater than 3.1.4
@@ -16,10 +16,10 @@
 		<PackageReference Include="SixLabors.ImageSharp" Version="3.1.5" />
 		<PackageReference Include="Spectre.Console" Version="0.49.1" />
 		<PackageReference Include="Spectre.Console.ImageSharp" Version="0.49.1" />
-  </ItemGroup>
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\src\OllamaSharp.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\src\OllamaSharp.csproj" />
+	</ItemGroup>
 
 </Project>

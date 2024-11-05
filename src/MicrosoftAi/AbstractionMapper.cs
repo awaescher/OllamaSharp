@@ -211,7 +211,7 @@ public static class AbstractionMapper
 			// If the message contains a function result, add it as a separate tool message
 			foreach (var frc in cm.Contents.OfType<FunctionResultContent>())
 			{
-				JsonElement jsonResult = JsonSerializer.SerializeToElement(frc.Result, serializerOptions);
+				var jsonResult = JsonSerializer.SerializeToElement(frc.Result, serializerOptions);
 
 				yield return new Message
 				{
@@ -222,7 +222,6 @@ public static class AbstractionMapper
 					}, serializerOptions),
 					Role = Models.Chat.ChatRole.Tool,
 				};
-				continue;
 			}
 		}
 	}
