@@ -181,7 +181,7 @@ public partial class AbstractionMapperTests
 				}
 			};
 
-			var request = AbstractionMapper.ToOllamaSharpChatRequest(chatMessages, null, stream: true);
+			var request = AbstractionMapper.ToOllamaSharpChatRequest(chatMessages, null, stream: true, JsonSerializerOptions.Default);
 			request.Messages.Single().Images.Single().Should().Be("QUJD");
 		}
 
@@ -208,7 +208,7 @@ public partial class AbstractionMapperTests
 
 			Action act = () =>
 			{
-				var request = AbstractionMapper.ToOllamaSharpChatRequest(chatMessages, null, stream: true);
+				var request = AbstractionMapper.ToOllamaSharpChatRequest(chatMessages, null, stream: true, JsonSerializerOptions.Default);
 				request.Messages.Should().NotBeEmpty(); // access .Messages to invoke the evaluation of IEnumerable<Message>
 			};
 
