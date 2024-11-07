@@ -200,13 +200,17 @@ public static class AbstractionMapper
 			var images = cm.Contents.OfType<ImageContent>().Select(ToOllamaImage).Where(s => !string.IsNullOrEmpty(s)).ToArray();
 			var toolCalls = cm.Contents.OfType<FunctionCallContent>().Select(ToOllamaSharpToolCall).ToArray();
 
-			yield return new Message
+			// Only generates a message if there is text/content, images or tool calls
+			if (cm.Text is not null || images.Length > 0 || toolCalls.Length > 0)
 			{
-				Content = cm.Text,
-				Images = images.Length > 0 ? images : null,
-				Role = ToOllamaSharpRole(cm.Role),
-				ToolCalls = toolCalls.Length > 0 ? toolCalls : null,
-			};
+				yield return new Message
+				{
+					Content = cm.Text,
+					Images = images.Length > 0 ? images : null,
+					Role = ToOllamaSharpRole(cm.Role),
+					ToolCalls = toolCalls.Length > 0 ? toolCalls : null,
+				};
+			}
 
 			// If the message contains a function result, add it as a separate tool message
 			foreach (var frc in cm.Contents.OfType<FunctionResultContent>())

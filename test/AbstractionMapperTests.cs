@@ -317,6 +317,47 @@ public class AbstractionMapperTests
 		}
 
 		[Test]
+		public void Maps_Messages_WithoutContent_MultipleToolResponse()
+		{
+			var aiChatMessages = new List<Microsoft.Extensions.AI.ChatMessage>
+			{
+				new()
+				{
+					AdditionalProperties = [],
+					AuthorName = "a1",
+					RawRepresentation = null,
+					Role = Microsoft.Extensions.AI.ChatRole.User,
+					Contents = [
+						new FunctionResultContent(
+							callId: "123",
+							name: "Function1",
+							result: new { Temperature = 40 }),
+
+						new FunctionResultContent(
+							callId: "456",
+							name: "Function2",
+							result: new { Summary = "This is a tool result test" }
+						),
+					]
+				}
+			};
+
+			var chatRequest = AbstractionMapper.ToOllamaSharpChatRequest(aiChatMessages, new(), stream: true, JsonSerializerOptions.Default);
+			var chatMessages = chatRequest.Messages?.ToList();
+
+			chatMessages.Should().HaveCount(2);
+
+			var tool1 = chatMessages[0];
+			var tool2 = chatMessages[1];
+			tool1.Content.Should().Contain("\"Temperature\":40");
+			tool1.Content.Should().Contain("\"CallId\":\"123\"");
+			tool1.Role.Should().Be(OllamaSharp.Models.Chat.ChatRole.Tool);
+			tool2.Content.Should().Contain("\"Summary\":\"This is a tool result test\"");
+			tool2.Content.Should().Contain("\"CallId\":\"456\"");
+			tool2.Role.Should().Be(OllamaSharp.Models.Chat.ChatRole.Tool);
+		}
+
+		[Test]
 		public void Maps_Options()
 		{
 			var chatMessages = new List<Microsoft.Extensions.AI.ChatMessage>();
