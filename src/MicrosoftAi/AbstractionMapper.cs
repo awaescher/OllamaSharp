@@ -70,37 +70,38 @@ public static class AbstractionMapper
 
 		if (options?.AdditionalProperties?.Any() ?? false)
 		{
-			TryAddOllamaOption<bool?>(options, OllamaOption.F16kv, v => request.Options.F16kv = v);
-			TryAddOllamaOption<float?>(options, OllamaOption.FrequencyPenalty, v => request.Options.FrequencyPenalty = v);
-			TryAddOllamaOption<bool?>(options, OllamaOption.LogitsAll, v => request.Options.LogitsAll = v);
-			TryAddOllamaOption<bool?>(options, OllamaOption.LowVram, v => request.Options.LowVram = v);
-			TryAddOllamaOption<int?>(options, OllamaOption.MainGpu, v => request.Options.MainGpu = v);
-			TryAddOllamaOption<float?>(options, OllamaOption.MinP, v => request.Options.MinP = v);
-			TryAddOllamaOption<int?>(options, OllamaOption.MiroStat, v => request.Options.MiroStat = v);
-			TryAddOllamaOption<float?>(options, OllamaOption.MiroStatEta, v => request.Options.MiroStatEta = v);
-			TryAddOllamaOption<float?>(options, OllamaOption.MiroStatTau, v => request.Options.MiroStatTau = v);
-			TryAddOllamaOption<bool?>(options, OllamaOption.Numa, v => request.Options.Numa = v);
-			TryAddOllamaOption<int?>(options, OllamaOption.NumBatch, v => request.Options.NumBatch = v);
-			TryAddOllamaOption<int?>(options, OllamaOption.NumCtx, v => request.Options.NumCtx = v);
-			TryAddOllamaOption<int?>(options, OllamaOption.NumGpu, v => request.Options.NumGpu = v);
-			TryAddOllamaOption<int?>(options, OllamaOption.NumGqa, v => request.Options.NumGqa = v);
-			TryAddOllamaOption<int?>(options, OllamaOption.NumKeep, v => request.Options.NumKeep = v);
-			TryAddOllamaOption<int?>(options, OllamaOption.NumPredict, v => request.Options.NumPredict = v);
-			TryAddOllamaOption<int?>(options, OllamaOption.NumThread, v => request.Options.NumThread = v);
-			TryAddOllamaOption<bool?>(options, OllamaOption.PenalizeNewline, v => request.Options.PenalizeNewline = v);
-			TryAddOllamaOption<float?>(options, OllamaOption.PresencePenalty, v => request.Options.PresencePenalty = v);
-			TryAddOllamaOption<int?>(options, OllamaOption.RepeatLastN, v => request.Options.RepeatLastN = v);
-			TryAddOllamaOption<float?>(options, OllamaOption.RepeatPenalty, v => request.Options.RepeatPenalty = v);
-			TryAddOllamaOption<int?>(options, OllamaOption.Seed, v => request.Options.Seed = v);
-			TryAddOllamaOption<string[]?>(options, OllamaOption.Stop, v => request.Options.Stop = v);
-			TryAddOllamaOption<float?>(options, OllamaOption.Temperature, v => request.Options.Temperature = v);
-			TryAddOllamaOption<float?>(options, OllamaOption.TfsZ, v => request.Options.TfsZ = v);
-			TryAddOllamaOption<int?>(options, OllamaOption.TopK, v => request.Options.TopK = v);
-			TryAddOllamaOption<float?>(options, OllamaOption.TopP, v => request.Options.TopP = v);
-			TryAddOllamaOption<float?>(options, OllamaOption.TypicalP, v => request.Options.TypicalP = v);
-			TryAddOllamaOption<bool?>(options, OllamaOption.UseMlock, v => request.Options.UseMlock = v);
-			TryAddOllamaOption<bool?>(options, OllamaOption.UseMmap, v => request.Options.UseMmap = v);
-			TryAddOllamaOption<bool?>(options, OllamaOption.VocabOnly, v => request.Options.VocabOnly = v);
+			TryAddOllamaOption<bool?>(options, OllamaOption.F16kv, v => request.Options.F16kv = (bool?)v);
+			TryAddOllamaOption<float?>(options, OllamaOption.FrequencyPenalty, v => request.Options.FrequencyPenalty = (float?)v);
+			TryAddOllamaOption<bool?>(options, OllamaOption.LogitsAll, v => request.Options.LogitsAll = (bool?)v);
+			TryAddOllamaOption<bool?>(options, OllamaOption.LowVram, v => request.Options.LowVram = (bool?)v);
+			TryAddOllamaOption<int?>(options, OllamaOption.MainGpu, v => request.Options.MainGpu = (int?)v);
+			TryAddOllamaOption<float?>(options, OllamaOption.MinP, v => request.Options.MinP = (float?)v);
+			TryAddOllamaOption<int?>(options, OllamaOption.MiroStat, v => request.Options.MiroStat = (int?)v);
+			TryAddOllamaOption<float?>(options, OllamaOption.MiroStatEta, v => request.Options.MiroStatEta = (float?)v);
+			TryAddOllamaOption<float?>(options, OllamaOption.MiroStatTau, v => request.Options.MiroStatTau = (float?)v);
+			TryAddOllamaOption<bool?>(options, OllamaOption.Numa, v => request.Options.Numa = (bool?)v);
+			TryAddOllamaOption<int?>(options, OllamaOption.NumBatch, v => request.Options.NumBatch = (int?)v);
+			TryAddOllamaOption<int?>(options, OllamaOption.NumCtx, v => request.Options.NumCtx = (int?)v);
+			TryAddOllamaOption<int?>(options, OllamaOption.NumGpu, v => request.Options.NumGpu = (int?)v);
+			TryAddOllamaOption<int?>(options, OllamaOption.NumGqa, v => request.Options.NumGqa = (int?)v);
+			TryAddOllamaOption<int?>(options, OllamaOption.NumKeep, v => request.Options.NumKeep = (int?)v);
+			TryAddOllamaOption<int?>(options, OllamaOption.NumPredict, v => request.Options.NumPredict = (int?)v);
+			TryAddOllamaOption<int?>(options, OllamaOption.NumThread, v => request.Options.NumThread = (int?)v);
+			TryAddOllamaOption<bool?>(options, OllamaOption.PenalizeNewline, v => request.Options.PenalizeNewline = (bool?)v);
+			TryAddOllamaOption<float?>(options, OllamaOption.PresencePenalty, v => request.Options.PresencePenalty = (float?)v);
+			TryAddOllamaOption<int?>(options, OllamaOption.RepeatLastN, v => request.Options.RepeatLastN = (int?)v);
+			TryAddOllamaOption<float?>(options, OllamaOption.RepeatPenalty, v => request.Options.RepeatPenalty = (float?)v);
+			TryAddOllamaOption<int?>(options, OllamaOption.Seed, v => request.Options.Seed = (int?)v);
+			TryAddOllamaOption<string[]?>(options, OllamaOption.Stop,
+				v => request.Options.Stop = (v as IEnumerable<string>)?.ToArray());
+			TryAddOllamaOption<float?>(options, OllamaOption.Temperature, v => request.Options.Temperature = (float?)v);
+			TryAddOllamaOption<float?>(options, OllamaOption.TfsZ, v => request.Options.TfsZ = (float?)v);
+			TryAddOllamaOption<int?>(options, OllamaOption.TopK, v => request.Options.TopK = (int?)v);
+			TryAddOllamaOption<float?>(options, OllamaOption.TopP, v => request.Options.TopP = (float?)v);
+			TryAddOllamaOption<float?>(options, OllamaOption.TypicalP, v => request.Options.TypicalP = (float?)v);
+			TryAddOllamaOption<bool?>(options, OllamaOption.UseMlock, v => request.Options.UseMlock = (bool?)v);
+			TryAddOllamaOption<bool?>(options, OllamaOption.UseMmap, v => request.Options.UseMmap = (bool?)v);
+			TryAddOllamaOption<bool?>(options, OllamaOption.VocabOnly, v => request.Options.VocabOnly = (bool?)v);
 		}
 
 		return request;
@@ -113,10 +114,10 @@ public static class AbstractionMapper
 	/// <param name="microsoftChatOptions">The chat options from the Microsoft abstraction</param>
 	/// <param name="option">The Ollama setting to add</param>
 	/// <param name="optionSetter">The setter to set the Ollama option if available in the chat options</param>
-	private static void TryAddOllamaOption<T>(ChatOptions microsoftChatOptions, OllamaOption option, Action<T> optionSetter)
+	private static void TryAddOllamaOption<T>(ChatOptions microsoftChatOptions, OllamaOption option, Action<object?> optionSetter)
 	{
 		if ((microsoftChatOptions?.AdditionalProperties?.TryGetValue(option.Name, out var value) ?? false) && value is not null)
-			optionSetter((T)value);
+			optionSetter(value);
 	}
 
 	/// <summary>

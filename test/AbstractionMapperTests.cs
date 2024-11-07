@@ -249,6 +249,52 @@ public class AbstractionMapperTests
 			tool.Type.Should().Be("function");
 		}
 
+		[TestCaseSource(nameof(StopSequencesTestData))]
+		public void Maps_Messages_With_IEnumerable_StopSequences(object? enumerable)
+		{
+			var chatMessages = new List<Microsoft.Extensions.AI.ChatMessage>
+			{
+				new()
+				{
+					AdditionalProperties = [],
+					AuthorName = "a1",
+					RawRepresentation = null,
+					Role = Microsoft.Extensions.AI.ChatRole.User,
+					Text = "What's the weather in Honululu?"
+				}
+			};
+
+			var options = new ChatOptions()
+			{
+				AdditionalProperties = new AdditionalPropertiesDictionary() { ["stop"] = enumerable }
+			};
+
+			var chatRequest = AbstractionMapper.ToOllamaSharpChatRequest(chatMessages, options, stream: true, JsonSerializerOptions.Default);
+
+			var stopSequences = chatRequest.Options.Stop;
+			var typedEnumerable = (IEnumerable<string>?)enumerable;
+
+			if (typedEnumerable == null)
+			{
+				stopSequences.Should().BeNull();
+				return;
+			}
+			stopSequences.Should().HaveCount(typedEnumerable?.Count() ?? 0);
+		}
+
+		public static IEnumerable<TestCaseData> StopSequencesTestData
+		{
+			get
+			{
+				yield return new TestCaseData((object?)(IEnumerable<string>?)null);
+				yield return new TestCaseData((object?)new List<string> { "stop1", "stop2", "stop3", "stop4" });
+				yield return new TestCaseData((object?)new string[] { "stop1", "stop2", "stop3" });
+				yield return new TestCaseData((object?)new HashSet<string> { "stop1", "stop2", });
+				yield return new TestCaseData((object?)new Stack<string>(new[] { "stop1" }));
+				yield return new TestCaseData((object?)new Queue<string>(new[] { "stop1" }));
+			}
+		}
+
 		[Test]
 		public void Maps_Messages_With_ToolResponse()
 		{
