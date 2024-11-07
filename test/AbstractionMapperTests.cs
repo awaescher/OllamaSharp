@@ -286,6 +286,7 @@ public class AbstractionMapperTests
 		{
 			get
 			{
+				yield return new TestCaseData((object?)(JsonSerializer.Deserialize<JsonElement>("[\"stop1\", \"stop2\"]")).EnumerateArray().Select(e => e.GetString()));
 				yield return new TestCaseData((object?)(IEnumerable<string>?)null);
 				yield return new TestCaseData((object?)new List<string> { "stop1", "stop2", "stop3", "stop4" });
 				yield return new TestCaseData((object?)new string[] { "stop1", "stop2", "stop3" });
