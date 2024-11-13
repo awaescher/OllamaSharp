@@ -4,7 +4,8 @@ using OllamaSharp.Models.Chat;
 namespace OllamaSharp.AsyncEnumerableExtensions;
 
 /// <summary>
-/// Appender to stream IAsyncEnumerable(ChatResponseStream) to build up one single ChatDoneResponseStream object
+/// Appender to stream <see cref="System.Collections.Generic.IAsyncEnumerable{ChatResponseStream}"/> to
+/// build up one single <see cref="ChatDoneResponseStream"/> object
 /// </summary>
 public class ChatResponseStreamAppender : IAppender<ChatResponseStream?, ChatDoneResponseStream?>
 {
@@ -12,7 +13,7 @@ public class ChatResponseStreamAppender : IAppender<ChatResponseStream?, ChatDon
 	private ChatDoneResponseStream? _lastItem;
 
 	/// <summary>
-	/// Appends a given ChatResponseStream item to build a single return object
+	/// Appends a given <see cref="ChatResponseStream"/> item to build a single return object
 	/// </summary>
 	/// <param name="item">The item to append</param>
 	public void Append(ChatResponseStream? item)
@@ -24,8 +25,10 @@ public class ChatResponseStreamAppender : IAppender<ChatResponseStream?, ChatDon
 	}
 
 	/// <summary>
-	/// Builds up one single ChatDoneResponseStream object from the previously streamed ChatResponseStream items
+	/// Builds up one single <see cref="ChatDoneResponseStream"/> object from the
+	/// previously streamed <see cref="ChatResponseStream"/> items
 	/// </summary>
+	/// <returns>The completed consolidated <see cref="ChatDoneResponseStream"/> object</returns>
 	public ChatDoneResponseStream? Complete()
 	{
 		if (_lastItem is null)

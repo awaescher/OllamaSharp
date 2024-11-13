@@ -52,7 +52,7 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 	public string SelectedModel { get; set; }
 
 	/// <summary>
-	/// Gets the HTTP client that is used to communicate with the Ollama API.
+	/// Gets the <see cref="HttpClient" /> used to communicate with the Ollama API.
 	/// </summary>
 	private readonly HttpClient _client;
 
@@ -221,7 +221,8 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 	public async Task<Version> GetVersionAsync(CancellationToken cancellationToken = default)
 	{
 		var data = await GetAsync<JsonNode>("api/version", cancellationToken).ConfigureAwait(false);
-		return Version.Parse(data["version"]?.ToString());
+		var versionString = data["version"]?.ToString() ?? throw new InvalidOperationException("Could not get version from response.");
+		return Version.Parse(versionString);
 	}
 
 	private async IAsyncEnumerable<GenerateResponseStream?> GenerateCompletionAsync(GenerateRequest generateRequest, [EnumeratorCancellation] CancellationToken cancellationToken)
