@@ -58,6 +58,7 @@ public static class AbstractionMapper
 			{
 				FrequencyPenalty = options?.FrequencyPenalty,
 				PresencePenalty = options?.PresencePenalty,
+				Seed = (int?)options?.Seed,
 				Stop = options?.StopSequences?.ToArray(),
 				Temperature = options?.Temperature,
 				TopP = options?.TopP,

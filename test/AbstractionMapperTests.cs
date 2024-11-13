@@ -416,6 +416,7 @@ public class AbstractionMapperTests
 				ModelId = "llama3.1:405b",
 				PresencePenalty = 0.3f,
 				ResponseFormat = ChatResponseFormat.Json,
+				Seed = 11,
 				StopSequences = ["stop1", "stop2", "stop3"],
 				Temperature = 0.1f,
 				TopP = 10.1f
@@ -430,6 +431,7 @@ public class AbstractionMapperTests
 			chatRequest.Options.Stop.Should().BeEquivalentTo("stop1", "stop2", "stop3");
 			chatRequest.Options.Temperature.Should().Be(0.1f);
 			chatRequest.Options.TopP.Should().Be(10.1f);
+			chatRequest.Options.Seed.Should().Be(11);
 			chatRequest.Stream.Should().BeTrue();
 			chatRequest.Template.Should().BeNull();
 
@@ -488,7 +490,6 @@ public class AbstractionMapperTests
 				.AddOllamaOption(OllamaOption.PresencePenalty, 0.55f)
 				.AddOllamaOption(OllamaOption.RepeatLastN, 10)
 				.AddOllamaOption(OllamaOption.RepeatPenalty, 0.66f)
-				.AddOllamaOption(OllamaOption.Seed, 11)
 				.AddOllamaOption(OllamaOption.Stop, new string[] { "stop", "quit", "exit" })
 				.AddOllamaOption(OllamaOption.Temperature, 0.77f)
 				.AddOllamaOption(OllamaOption.TfsZ, 0.88f)
