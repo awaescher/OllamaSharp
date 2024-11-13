@@ -1,0 +1,114 @@
+### YamlMime:TableOfContent
+items:
+- uid: OllamaSharp
+  name: OllamaSharp
+  items:
+  - uid: OllamaSharp.Chat
+    name: Chat
+  - uid: OllamaSharp.ChatOptionsExtensions
+    name: ChatOptionsExtensions
+  - uid: OllamaSharp.ConversationContext
+    name: ConversationContext
+  - uid: OllamaSharp.IAsyncEnumerableExtensions
+    name: IAsyncEnumerableExtensions
+  - uid: OllamaSharp.IOllamaApiClient
+    name: IOllamaApiClient
+  - uid: OllamaSharp.OllamaApiClient
+    name: OllamaApiClient
+  - uid: OllamaSharp.OllamaApiClient.Configuration
+    name: OllamaApiClient.Configuration
+  - uid: OllamaSharp.OllamaApiClientExtensions
+    name: OllamaApiClientExtensions
+- uid: OllamaSharp.Models
+  name: OllamaSharp.Models
+  items:
+  - uid: OllamaSharp.Models.CopyModelRequest
+    name: CopyModelRequest
+  - uid: OllamaSharp.Models.CreateModelRequest
+    name: CreateModelRequest
+  - uid: OllamaSharp.Models.CreateModelResponse
+    name: CreateModelResponse
+  - uid: OllamaSharp.Models.DeleteModelRequest
+    name: DeleteModelRequest
+  - uid: OllamaSharp.Models.Details
+    name: Details
+  - uid: OllamaSharp.Models.EmbedRequest
+    name: EmbedRequest
+  - uid: OllamaSharp.Models.EmbedResponse
+    name: EmbedResponse
+  - uid: OllamaSharp.Models.GenerateDoneResponseStream
+    name: GenerateDoneResponseStream
+  - uid: OllamaSharp.Models.GenerateRequest
+    name: GenerateRequest
+  - uid: OllamaSharp.Models.GenerateResponseStream
+    name: GenerateResponseStream
+  - uid: OllamaSharp.Models.ListModelsResponse
+    name: ListModelsResponse
+  - uid: OllamaSharp.Models.ListRunningModelsResponse
+    name: ListRunningModelsResponse
+  - uid: OllamaSharp.Models.Model
+    name: Model
+  - uid: OllamaSharp.Models.ModelInfo
+    name: ModelInfo
+  - uid: OllamaSharp.Models.OllamaOption
+    name: OllamaOption
+  - uid: OllamaSharp.Models.OllamaRequest
+    name: OllamaRequest
+  - uid: OllamaSharp.Models.ProjectorInfo
+    name: ProjectorInfo
+  - uid: OllamaSharp.Models.PullModelRequest
+    name: PullModelRequest
+  - uid: OllamaSharp.Models.PullModelResponse
+    name: PullModelResponse
+  - uid: OllamaSharp.Models.PushModelRequest
+    name: PushModelRequest
+  - uid: OllamaSharp.Models.PushModelResponse
+    name: PushModelResponse
+  - uid: OllamaSharp.Models.RequestOptions
+    name: RequestOptions
+  - uid: OllamaSharp.Models.RunningModel
+    name: RunningModel
+  - uid: OllamaSharp.Models.ShowModelRequest
+    name: ShowModelRequest
+  - uid: OllamaSharp.Models.ShowModelResponse
+    name: ShowModelResponse
+- uid: OllamaSharp.Models.Chat
+  name: OllamaSharp.Models.Chat
+  items:
+  - uid: OllamaSharp.Models.Chat.ChatDoneResponseStream
+    name: ChatDoneResponseStream
+  - uid: OllamaSharp.Models.Chat.ChatRequest
+    name: ChatRequest
+  - uid: OllamaSharp.Models.Chat.ChatResponseStream
+    name: ChatResponseStream
+  - uid: OllamaSharp.Models.Chat.ChatRole
+    name: ChatRole
+  - uid: OllamaSharp.Models.Chat.Function
+    name: Function
+  - uid: OllamaSharp.Models.Chat.Message
+    name: Message
+  - uid: OllamaSharp.Models.Chat.Message.Function
+    name: Message.Function
+  - uid: OllamaSharp.Models.Chat.Message.ToolCall
+    name: Message.ToolCall
+  - uid: OllamaSharp.Models.Chat.MessageBuilder
+    name: MessageBuilder
+  - uid: OllamaSharp.Models.Chat.Parameters
+    name: Parameters
+  - uid: OllamaSharp.Models.Chat.Properties
+    name: Properties
+  - uid: OllamaSharp.Models.Chat.Tool
+    name: Tool
+- uid: OllamaSharp.Models.Chat.Converter
+  name: OllamaSharp.Models.Chat.Converter
+  items:
+  - uid: OllamaSharp.Models.Chat.Converter.ChatRoleConverter
+    name: ChatRoleConverter
+- uid: OllamaSharp.Models.Exceptions
+  name: OllamaSharp.Models.Exceptions
+  items:
+  - uid: OllamaSharp.Models.Exceptions.ModelDoesNotSupportToolsException
+    name: ModelDoesNotSupportToolsException
+  - uid: OllamaSharp.Models.Exceptions.OllamaException
+    name: OllamaException
+memberLayout: SamePage

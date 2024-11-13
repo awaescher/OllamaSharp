@@ -1,0 +1,2436 @@
+### YamlMime:ManagedReference
+items:
+- uid: OllamaSharp.Models.RequestOptions
+  commentId: T:OllamaSharp.Models.RequestOptions
+  id: RequestOptions
+  parent: OllamaSharp.Models
+  children:
+  - OllamaSharp.Models.RequestOptions.F16kv
+  - OllamaSharp.Models.RequestOptions.FrequencyPenalty
+  - OllamaSharp.Models.RequestOptions.LogitsAll
+  - OllamaSharp.Models.RequestOptions.LowVram
+  - OllamaSharp.Models.RequestOptions.MainGpu
+  - OllamaSharp.Models.RequestOptions.MinP
+  - OllamaSharp.Models.RequestOptions.MiroStat
+  - OllamaSharp.Models.RequestOptions.MiroStatEta
+  - OllamaSharp.Models.RequestOptions.MiroStatTau
+  - OllamaSharp.Models.RequestOptions.NumBatch
+  - OllamaSharp.Models.RequestOptions.NumCtx
+  - OllamaSharp.Models.RequestOptions.NumGpu
+  - OllamaSharp.Models.RequestOptions.NumGqa
+  - OllamaSharp.Models.RequestOptions.NumKeep
+  - OllamaSharp.Models.RequestOptions.NumPredict
+  - OllamaSharp.Models.RequestOptions.NumThread
+  - OllamaSharp.Models.RequestOptions.Numa
+  - OllamaSharp.Models.RequestOptions.PenalizeNewline
+  - OllamaSharp.Models.RequestOptions.PresencePenalty
+  - OllamaSharp.Models.RequestOptions.RepeatLastN
+  - OllamaSharp.Models.RequestOptions.RepeatPenalty
+  - OllamaSharp.Models.RequestOptions.Seed
+  - OllamaSharp.Models.RequestOptions.Stop
+  - OllamaSharp.Models.RequestOptions.Temperature
+  - OllamaSharp.Models.RequestOptions.TfsZ
+  - OllamaSharp.Models.RequestOptions.TopK
+  - OllamaSharp.Models.RequestOptions.TopP
+  - OllamaSharp.Models.RequestOptions.TypicalP
+  - OllamaSharp.Models.RequestOptions.UseMlock
+  - OllamaSharp.Models.RequestOptions.UseMmap
+  - OllamaSharp.Models.RequestOptions.VocabOnly
+  langs:
+  - csharp
+  - vb
+  name: RequestOptions
+  nameWithType: RequestOptions
+  fullName: OllamaSharp.Models.RequestOptions
+  type: Class
+  source:
+    remote:
+      path: src/Models/RequestOptions.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: RequestOptions
+    path: src/Models/RequestOptions.cs
+    startLine: 7
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models
+  summary: The configuration information used for a chat completions request.
+  example: []
+  syntax:
+    content: public class RequestOptions
+    content.vb: Public Class RequestOptions
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.MemberwiseClone
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: OllamaSharp.Models.RequestOptions.MiroStat
+  commentId: P:OllamaSharp.Models.RequestOptions.MiroStat
+  id: MiroStat
+  parent: OllamaSharp.Models.RequestOptions
+  langs:
+  - csharp
+  - vb
+  name: MiroStat
+  nameWithType: RequestOptions.MiroStat
+  fullName: OllamaSharp.Models.RequestOptions.MiroStat
+  type: Property
+  source:
+    remote:
+      path: src/Models/RequestOptions.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: MiroStat
+    path: src/Models/RequestOptions.cs
+    startLine: 13
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models
+  summary: >-
+    Enable Mirostat sampling for controlling perplexity.
+
+    (default: 0, 0 = disabled, 1 = Mirostat, 2 = Mirostat 2.0)
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("mirostat")]
+
+      [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+
+      public int? MiroStat { get; set; }
+    parameters: []
+    return:
+      type: System.Nullable{System.Int32}
+    content.vb: >-
+      <JsonPropertyName("mirostat")>
+
+      <JsonIgnore(Condition:=JsonIgnoreCondition.WhenWritingNull)>
+
+      Public Property MiroStat As Integer?
+  overload: OllamaSharp.Models.RequestOptions.MiroStat*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: mirostat
+  - type: System.Text.Json.Serialization.JsonIgnoreAttribute
+    ctor: System.Text.Json.Serialization.JsonIgnoreAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Condition
+      type: System.Text.Json.Serialization.JsonIgnoreCondition
+      value: 3
+- uid: OllamaSharp.Models.RequestOptions.MiroStatEta
+  commentId: P:OllamaSharp.Models.RequestOptions.MiroStatEta
+  id: MiroStatEta
+  parent: OllamaSharp.Models.RequestOptions
+  langs:
+  - csharp
+  - vb
+  name: MiroStatEta
+  nameWithType: RequestOptions.MiroStatEta
+  fullName: OllamaSharp.Models.RequestOptions.MiroStatEta
+  type: Property
+  source:
+    remote:
+      path: src/Models/RequestOptions.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: MiroStatEta
+    path: src/Models/RequestOptions.cs
+    startLine: 23
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models
+  summary: >-
+    Influences how quickly the algorithm responds to feedback from the
+
+    generated text. A lower learning rate will result in slower adjustments,
+
+    while a higher learning rate will make the algorithm more responsive.
+
+    (Default: 0.1)
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("mirostat_eta")]
+
+      [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+
+      public float? MiroStatEta { get; set; }
+    parameters: []
+    return:
+      type: System.Nullable{System.Single}
+    content.vb: >-
+      <JsonPropertyName("mirostat_eta")>
+
+      <JsonIgnore(Condition:=JsonIgnoreCondition.WhenWritingNull)>
+
+      Public Property MiroStatEta As Single?
+  overload: OllamaSharp.Models.RequestOptions.MiroStatEta*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: mirostat_eta
+  - type: System.Text.Json.Serialization.JsonIgnoreAttribute
+    ctor: System.Text.Json.Serialization.JsonIgnoreAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Condition
+      type: System.Text.Json.Serialization.JsonIgnoreCondition
+      value: 3
+- uid: OllamaSharp.Models.RequestOptions.MiroStatTau
+  commentId: P:OllamaSharp.Models.RequestOptions.MiroStatTau
+  id: MiroStatTau
+  parent: OllamaSharp.Models.RequestOptions
+  langs:
+  - csharp
+  - vb
+  name: MiroStatTau
+  nameWithType: RequestOptions.MiroStatTau
+  fullName: OllamaSharp.Models.RequestOptions.MiroStatTau
+  type: Property
+  source:
+    remote:
+      path: src/Models/RequestOptions.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: MiroStatTau
+    path: src/Models/RequestOptions.cs
+    startLine: 32
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models
+  summary: >-
+    Controls the balance between coherence and diversity of the output.
+
+    A lower value will result in more focused and coherent text.
+
+    (Default: 5.0)
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("mirostat_tau")]
+
+      [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+
+      public float? MiroStatTau { get; set; }
+    parameters: []
+    return:
+      type: System.Nullable{System.Single}
+    content.vb: >-
+      <JsonPropertyName("mirostat_tau")>
+
+      <JsonIgnore(Condition:=JsonIgnoreCondition.WhenWritingNull)>
+
+      Public Property MiroStatTau As Single?
+  overload: OllamaSharp.Models.RequestOptions.MiroStatTau*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: mirostat_tau
+  - type: System.Text.Json.Serialization.JsonIgnoreAttribute
+    ctor: System.Text.Json.Serialization.JsonIgnoreAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Condition
+      type: System.Text.Json.Serialization.JsonIgnoreCondition
+      value: 3
+- uid: OllamaSharp.Models.RequestOptions.NumCtx
+  commentId: P:OllamaSharp.Models.RequestOptions.NumCtx
+  id: NumCtx
+  parent: OllamaSharp.Models.RequestOptions
+  langs:
+  - csharp
+  - vb
+  name: NumCtx
+  nameWithType: RequestOptions.NumCtx
+  fullName: OllamaSharp.Models.RequestOptions.NumCtx
+  type: Property
+  source:
+    remote:
+      path: src/Models/RequestOptions.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: NumCtx
+    path: src/Models/RequestOptions.cs
+    startLine: 40
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models
+  summary: >-
+    Sets the size of the context window used to generate the next token.
+
+    (Default: 2048)
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("num_ctx")]
+
+      [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+
+      public int? NumCtx { get; set; }
+    parameters: []
+    return:
+      type: System.Nullable{System.Int32}
+    content.vb: >-
+      <JsonPropertyName("num_ctx")>
+
+      <JsonIgnore(Condition:=JsonIgnoreCondition.WhenWritingNull)>
+
+      Public Property NumCtx As Integer?
+  overload: OllamaSharp.Models.RequestOptions.NumCtx*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: num_ctx
+  - type: System.Text.Json.Serialization.JsonIgnoreAttribute
+    ctor: System.Text.Json.Serialization.JsonIgnoreAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Condition
+      type: System.Text.Json.Serialization.JsonIgnoreCondition
+      value: 3
+- uid: OllamaSharp.Models.RequestOptions.NumGqa
+  commentId: P:OllamaSharp.Models.RequestOptions.NumGqa
+  id: NumGqa
+  parent: OllamaSharp.Models.RequestOptions
+  langs:
+  - csharp
+  - vb
+  name: NumGqa
+  nameWithType: RequestOptions.NumGqa
+  fullName: OllamaSharp.Models.RequestOptions.NumGqa
+  type: Property
+  source:
+    remote:
+      path: src/Models/RequestOptions.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: NumGqa
+    path: src/Models/RequestOptions.cs
+    startLine: 48
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models
+  summary: >-
+    The number of GQA groups in the transformer layer. Required for some
+
+    models, for example it is 8 for llama2:70b
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("num_gqa")]
+
+      [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+
+      public int? NumGqa { get; set; }
+    parameters: []
+    return:
+      type: System.Nullable{System.Int32}
+    content.vb: >-
+      <JsonPropertyName("num_gqa")>
+
+      <JsonIgnore(Condition:=JsonIgnoreCondition.WhenWritingNull)>
+
+      Public Property NumGqa As Integer?
+  overload: OllamaSharp.Models.RequestOptions.NumGqa*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: num_gqa
+  - type: System.Text.Json.Serialization.JsonIgnoreAttribute
+    ctor: System.Text.Json.Serialization.JsonIgnoreAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Condition
+      type: System.Text.Json.Serialization.JsonIgnoreCondition
+      value: 3
+- uid: OllamaSharp.Models.RequestOptions.NumGpu
+  commentId: P:OllamaSharp.Models.RequestOptions.NumGpu
+  id: NumGpu
+  parent: OllamaSharp.Models.RequestOptions
+  langs:
+  - csharp
+  - vb
+  name: NumGpu
+  nameWithType: RequestOptions.NumGpu
+  fullName: OllamaSharp.Models.RequestOptions.NumGpu
+  type: Property
+  source:
+    remote:
+      path: src/Models/RequestOptions.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: NumGpu
+    path: src/Models/RequestOptions.cs
+    startLine: 56
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models
+  summary: >-
+    The number of layers to send to the GPU(s). On macOS it defaults to
+
+    1 to enable metal support, 0 to disable.
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("num_gpu")]
+
+      [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+
+      public int? NumGpu { get; set; }
+    parameters: []
+    return:
+      type: System.Nullable{System.Int32}
+    content.vb: >-
+      <JsonPropertyName("num_gpu")>
+
+      <JsonIgnore(Condition:=JsonIgnoreCondition.WhenWritingNull)>
+
+      Public Property NumGpu As Integer?
+  overload: OllamaSharp.Models.RequestOptions.NumGpu*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: num_gpu
+  - type: System.Text.Json.Serialization.JsonIgnoreAttribute
+    ctor: System.Text.Json.Serialization.JsonIgnoreAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Condition
+      type: System.Text.Json.Serialization.JsonIgnoreCondition
+      value: 3
+- uid: OllamaSharp.Models.RequestOptions.MainGpu
+  commentId: P:OllamaSharp.Models.RequestOptions.MainGpu
+  id: MainGpu
+  parent: OllamaSharp.Models.RequestOptions
+  langs:
+  - csharp
+  - vb
+  name: MainGpu
+  nameWithType: RequestOptions.MainGpu
+  fullName: OllamaSharp.Models.RequestOptions.MainGpu
+  type: Property
+  source:
+    remote:
+      path: src/Models/RequestOptions.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: MainGpu
+    path: src/Models/RequestOptions.cs
+    startLine: 66
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models
+  summary: >-
+    This option controls which GPU is used for small tensors. The overhead of
+
+    splitting the computation across all GPUs is not worthwhile. The GPU will
+
+    use slightly more VRAM to store a scratch buffer for temporary results.
+
+    By default, GPU 0 is used.
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("main_gpu")]
+
+      [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+
+      public int? MainGpu { get; set; }
+    parameters: []
+    return:
+      type: System.Nullable{System.Int32}
+    content.vb: >-
+      <JsonPropertyName("main_gpu")>
+
+      <JsonIgnore(Condition:=JsonIgnoreCondition.WhenWritingNull)>
+
+      Public Property MainGpu As Integer?
+  overload: OllamaSharp.Models.RequestOptions.MainGpu*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: main_gpu
+  - type: System.Text.Json.Serialization.JsonIgnoreAttribute
+    ctor: System.Text.Json.Serialization.JsonIgnoreAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Condition
+      type: System.Text.Json.Serialization.JsonIgnoreCondition
+      value: 3
+- uid: OllamaSharp.Models.RequestOptions.NumBatch
+  commentId: P:OllamaSharp.Models.RequestOptions.NumBatch
+  id: NumBatch
+  parent: OllamaSharp.Models.RequestOptions
+  langs:
+  - csharp
+  - vb
+  name: NumBatch
+  nameWithType: RequestOptions.NumBatch
+  fullName: OllamaSharp.Models.RequestOptions.NumBatch
+  type: Property
+  source:
+    remote:
+      path: src/Models/RequestOptions.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: NumBatch
+    path: src/Models/RequestOptions.cs
+    startLine: 74
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models
+  summary: >-
+    Prompt processing maximum batch size.
+
+    (Default: 512)
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("num_batch")]
+
+      [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+
+      public int? NumBatch { get; set; }
+    parameters: []
+    return:
+      type: System.Nullable{System.Int32}
+    content.vb: >-
+      <JsonPropertyName("num_batch")>
+
+      <JsonIgnore(Condition:=JsonIgnoreCondition.WhenWritingNull)>
+
+      Public Property NumBatch As Integer?
+  overload: OllamaSharp.Models.RequestOptions.NumBatch*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: num_batch
+  - type: System.Text.Json.Serialization.JsonIgnoreAttribute
+    ctor: System.Text.Json.Serialization.JsonIgnoreAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Condition
+      type: System.Text.Json.Serialization.JsonIgnoreCondition
+      value: 3
+- uid: OllamaSharp.Models.RequestOptions.NumThread
+  commentId: P:OllamaSharp.Models.RequestOptions.NumThread
+  id: NumThread
+  parent: OllamaSharp.Models.RequestOptions
+  langs:
+  - csharp
+  - vb
+  name: NumThread
+  nameWithType: RequestOptions.NumThread
+  fullName: OllamaSharp.Models.RequestOptions.NumThread
+  type: Property
+  source:
+    remote:
+      path: src/Models/RequestOptions.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: NumThread
+    path: src/Models/RequestOptions.cs
+    startLine: 84
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models
+  summary: >-
+    Sets the number of threads to use during computation. By default,
+
+    Ollama will detect this for optimal performance.
+
+    It is recommended to set this value to the number of physical CPU cores
+
+    your system has (as opposed to the logical number of cores).
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("num_thread")]
+
+      [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+
+      public int? NumThread { get; set; }
+    parameters: []
+    return:
+      type: System.Nullable{System.Int32}
+    content.vb: >-
+      <JsonPropertyName("num_thread")>
+
+      <JsonIgnore(Condition:=JsonIgnoreCondition.WhenWritingNull)>
+
+      Public Property NumThread As Integer?
+  overload: OllamaSharp.Models.RequestOptions.NumThread*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: num_thread
+  - type: System.Text.Json.Serialization.JsonIgnoreAttribute
+    ctor: System.Text.Json.Serialization.JsonIgnoreAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Condition
+      type: System.Text.Json.Serialization.JsonIgnoreCondition
+      value: 3
+- uid: OllamaSharp.Models.RequestOptions.NumKeep
+  commentId: P:OllamaSharp.Models.RequestOptions.NumKeep
+  id: NumKeep
+  parent: OllamaSharp.Models.RequestOptions
+  langs:
+  - csharp
+  - vb
+  name: NumKeep
+  nameWithType: RequestOptions.NumKeep
+  fullName: OllamaSharp.Models.RequestOptions.NumKeep
+  type: Property
+  source:
+    remote:
+      path: src/Models/RequestOptions.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: NumKeep
+    path: src/Models/RequestOptions.cs
+    startLine: 92
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models
+  summary: >-
+    Number of tokens to keep from the initial prompt.
+
+    (Default: 4, -1 = all)
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("num_keep")]
+
+      [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+
+      public int? NumKeep { get; set; }
+    parameters: []
+    return:
+      type: System.Nullable{System.Int32}
+    content.vb: >-
+      <JsonPropertyName("num_keep")>
+
+      <JsonIgnore(Condition:=JsonIgnoreCondition.WhenWritingNull)>
+
+      Public Property NumKeep As Integer?
+  overload: OllamaSharp.Models.RequestOptions.NumKeep*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: num_keep
+  - type: System.Text.Json.Serialization.JsonIgnoreAttribute
+    ctor: System.Text.Json.Serialization.JsonIgnoreAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Condition
+      type: System.Text.Json.Serialization.JsonIgnoreCondition
+      value: 3
+- uid: OllamaSharp.Models.RequestOptions.RepeatLastN
+  commentId: P:OllamaSharp.Models.RequestOptions.RepeatLastN
+  id: RepeatLastN
+  parent: OllamaSharp.Models.RequestOptions
+  langs:
+  - csharp
+  - vb
+  name: RepeatLastN
+  nameWithType: RequestOptions.RepeatLastN
+  fullName: OllamaSharp.Models.RequestOptions.RepeatLastN
+  type: Property
+  source:
+    remote:
+      path: src/Models/RequestOptions.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: RepeatLastN
+    path: src/Models/RequestOptions.cs
+    startLine: 100
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models
+  summary: >-
+    Sets how far back for the model to look back to prevent repetition.
+
+    (Default: 64, 0 = disabled, -1 = num_ctx)
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("repeat_last_n")]
+
+      [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+
+      public int? RepeatLastN { get; set; }
+    parameters: []
+    return:
+      type: System.Nullable{System.Int32}
+    content.vb: >-
+      <JsonPropertyName("repeat_last_n")>
+
+      <JsonIgnore(Condition:=JsonIgnoreCondition.WhenWritingNull)>
+
+      Public Property RepeatLastN As Integer?
+  overload: OllamaSharp.Models.RequestOptions.RepeatLastN*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: repeat_last_n
+  - type: System.Text.Json.Serialization.JsonIgnoreAttribute
+    ctor: System.Text.Json.Serialization.JsonIgnoreAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Condition
+      type: System.Text.Json.Serialization.JsonIgnoreCondition
+      value: 3
+- uid: OllamaSharp.Models.RequestOptions.RepeatPenalty
+  commentId: P:OllamaSharp.Models.RequestOptions.RepeatPenalty
+  id: RepeatPenalty
+  parent: OllamaSharp.Models.RequestOptions
+  langs:
+  - csharp
+  - vb
+  name: RepeatPenalty
+  nameWithType: RequestOptions.RepeatPenalty
+  fullName: OllamaSharp.Models.RequestOptions.RepeatPenalty
+  type: Property
+  source:
+    remote:
+      path: src/Models/RequestOptions.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: RepeatPenalty
+    path: src/Models/RequestOptions.cs
+    startLine: 109
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models
+  summary: >-
+    Sets how strongly to penalize repetitions.
+
+    A higher value (e.g., 1.5) will penalize repetitions more strongly,
+
+    while a lower value (e.g., 0.9) will be more lenient. (Default: 1.1)
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("repeat_penalty")]
+
+      [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+
+      public float? RepeatPenalty { get; set; }
+    parameters: []
+    return:
+      type: System.Nullable{System.Single}
+    content.vb: >-
+      <JsonPropertyName("repeat_penalty")>
+
+      <JsonIgnore(Condition:=JsonIgnoreCondition.WhenWritingNull)>
+
+      Public Property RepeatPenalty As Single?
+  overload: OllamaSharp.Models.RequestOptions.RepeatPenalty*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: repeat_penalty
+  - type: System.Text.Json.Serialization.JsonIgnoreAttribute
+    ctor: System.Text.Json.Serialization.JsonIgnoreAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Condition
+      type: System.Text.Json.Serialization.JsonIgnoreCondition
+      value: 3
+- uid: OllamaSharp.Models.RequestOptions.PresencePenalty
+  commentId: P:OllamaSharp.Models.RequestOptions.PresencePenalty
+  id: PresencePenalty
+  parent: OllamaSharp.Models.RequestOptions
+  langs:
+  - csharp
+  - vb
+  name: PresencePenalty
+  nameWithType: RequestOptions.PresencePenalty
+  fullName: OllamaSharp.Models.RequestOptions.PresencePenalty
+  type: Property
+  source:
+    remote:
+      path: src/Models/RequestOptions.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: PresencePenalty
+    path: src/Models/RequestOptions.cs
+    startLine: 117
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models
+  summary: >-
+    The penalty to apply to tokens based on their presence in the prompt.
+
+    (Default: 0.0)
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("presence_penalty")]
+
+      [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+
+      public float? PresencePenalty { get; set; }
+    parameters: []
+    return:
+      type: System.Nullable{System.Single}
+    content.vb: >-
+      <JsonPropertyName("presence_penalty")>
+
+      <JsonIgnore(Condition:=JsonIgnoreCondition.WhenWritingNull)>
+
+      Public Property PresencePenalty As Single?
+  overload: OllamaSharp.Models.RequestOptions.PresencePenalty*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: presence_penalty
+  - type: System.Text.Json.Serialization.JsonIgnoreAttribute
+    ctor: System.Text.Json.Serialization.JsonIgnoreAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Condition
+      type: System.Text.Json.Serialization.JsonIgnoreCondition
+      value: 3
+- uid: OllamaSharp.Models.RequestOptions.FrequencyPenalty
+  commentId: P:OllamaSharp.Models.RequestOptions.FrequencyPenalty
+  id: FrequencyPenalty
+  parent: OllamaSharp.Models.RequestOptions
+  langs:
+  - csharp
+  - vb
+  name: FrequencyPenalty
+  nameWithType: RequestOptions.FrequencyPenalty
+  fullName: OllamaSharp.Models.RequestOptions.FrequencyPenalty
+  type: Property
+  source:
+    remote:
+      path: src/Models/RequestOptions.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: FrequencyPenalty
+    path: src/Models/RequestOptions.cs
+    startLine: 125
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models
+  summary: >-
+    The penalty to apply to tokens based on their frequency in the prompt.
+
+    (Default: 0.0)
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("frequency_penalty")]
+
+      [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+
+      public float? FrequencyPenalty { get; set; }
+    parameters: []
+    return:
+      type: System.Nullable{System.Single}
+    content.vb: >-
+      <JsonPropertyName("frequency_penalty")>
+
+      <JsonIgnore(Condition:=JsonIgnoreCondition.WhenWritingNull)>
+
+      Public Property FrequencyPenalty As Single?
+  overload: OllamaSharp.Models.RequestOptions.FrequencyPenalty*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: frequency_penalty
+  - type: System.Text.Json.Serialization.JsonIgnoreAttribute
+    ctor: System.Text.Json.Serialization.JsonIgnoreAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Condition
+      type: System.Text.Json.Serialization.JsonIgnoreCondition
+      value: 3
+- uid: OllamaSharp.Models.RequestOptions.Temperature
+  commentId: P:OllamaSharp.Models.RequestOptions.Temperature
+  id: Temperature
+  parent: OllamaSharp.Models.RequestOptions
+  langs:
+  - csharp
+  - vb
+  name: Temperature
+  nameWithType: RequestOptions.Temperature
+  fullName: OllamaSharp.Models.RequestOptions.Temperature
+  type: Property
+  source:
+    remote:
+      path: src/Models/RequestOptions.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: Temperature
+    path: src/Models/RequestOptions.cs
+    startLine: 133
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models
+  summary: >-
+    The temperature of the model. Increasing the temperature will make the
+
+    model answer more creatively. (Default: 0.8)
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("temperature")]
+
+      [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+
+      public float? Temperature { get; set; }
+    parameters: []
+    return:
+      type: System.Nullable{System.Single}
+    content.vb: >-
+      <JsonPropertyName("temperature")>
+
+      <JsonIgnore(Condition:=JsonIgnoreCondition.WhenWritingNull)>
+
+      Public Property Temperature As Single?
+  overload: OllamaSharp.Models.RequestOptions.Temperature*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: temperature
+  - type: System.Text.Json.Serialization.JsonIgnoreAttribute
+    ctor: System.Text.Json.Serialization.JsonIgnoreAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Condition
+      type: System.Text.Json.Serialization.JsonIgnoreCondition
+      value: 3
+- uid: OllamaSharp.Models.RequestOptions.Seed
+  commentId: P:OllamaSharp.Models.RequestOptions.Seed
+  id: Seed
+  parent: OllamaSharp.Models.RequestOptions
+  langs:
+  - csharp
+  - vb
+  name: Seed
+  nameWithType: RequestOptions.Seed
+  fullName: OllamaSharp.Models.RequestOptions.Seed
+  type: Property
+  source:
+    remote:
+      path: src/Models/RequestOptions.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: Seed
+    path: src/Models/RequestOptions.cs
+    startLine: 142
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models
+  summary: >-
+    Sets the random number seed to use for generation.
+
+    Setting this to a specific number will make the model generate the same
+
+    text for the same prompt. (Default: 0)
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("seed")]
+
+      [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+
+      public int? Seed { get; set; }
+    parameters: []
+    return:
+      type: System.Nullable{System.Int32}
+    content.vb: >-
+      <JsonPropertyName("seed")>
+
+      <JsonIgnore(Condition:=JsonIgnoreCondition.WhenWritingNull)>
+
+      Public Property Seed As Integer?
+  overload: OllamaSharp.Models.RequestOptions.Seed*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: seed
+  - type: System.Text.Json.Serialization.JsonIgnoreAttribute
+    ctor: System.Text.Json.Serialization.JsonIgnoreAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Condition
+      type: System.Text.Json.Serialization.JsonIgnoreCondition
+      value: 3
+- uid: OllamaSharp.Models.RequestOptions.Stop
+  commentId: P:OllamaSharp.Models.RequestOptions.Stop
+  id: Stop
+  parent: OllamaSharp.Models.RequestOptions
+  langs:
+  - csharp
+  - vb
+  name: Stop
+  nameWithType: RequestOptions.Stop
+  fullName: OllamaSharp.Models.RequestOptions.Stop
+  type: Property
+  source:
+    remote:
+      path: src/Models/RequestOptions.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: Stop
+    path: src/Models/RequestOptions.cs
+    startLine: 151
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models
+  summary: >-
+    Sets the stop sequences to use. When this pattern is encountered the
+
+    LLM will stop generating text and return. Multiple stop patterns may
+
+    be set by specifying multiple separate stop parameters in a modelfile.
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("stop")]
+
+      [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+
+      public string[]? Stop { get; set; }
+    parameters: []
+    return:
+      type: System.String[]
+    content.vb: >-
+      <JsonPropertyName("stop")>
+
+      <JsonIgnore(Condition:=JsonIgnoreCondition.WhenWritingNull)>
+
+      Public Property [Stop] As String()
+  overload: OllamaSharp.Models.RequestOptions.Stop*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: stop
+  - type: System.Text.Json.Serialization.JsonIgnoreAttribute
+    ctor: System.Text.Json.Serialization.JsonIgnoreAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Condition
+      type: System.Text.Json.Serialization.JsonIgnoreCondition
+      value: 3
+- uid: OllamaSharp.Models.RequestOptions.TfsZ
+  commentId: P:OllamaSharp.Models.RequestOptions.TfsZ
+  id: TfsZ
+  parent: OllamaSharp.Models.RequestOptions
+  langs:
+  - csharp
+  - vb
+  name: TfsZ
+  nameWithType: RequestOptions.TfsZ
+  fullName: OllamaSharp.Models.RequestOptions.TfsZ
+  type: Property
+  source:
+    remote:
+      path: src/Models/RequestOptions.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: TfsZ
+    path: src/Models/RequestOptions.cs
+    startLine: 160
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models
+  summary: >-
+    Tail free sampling is used to reduce the impact of less probable
+
+    tokens from the output. A higher value (e.g., 2.0) will reduce the
+
+    impact more, while a value of 1.0 disables this setting. (default: 1)
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("tfs_z")]
+
+      [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+
+      public float? TfsZ { get; set; }
+    parameters: []
+    return:
+      type: System.Nullable{System.Single}
+    content.vb: >-
+      <JsonPropertyName("tfs_z")>
+
+      <JsonIgnore(Condition:=JsonIgnoreCondition.WhenWritingNull)>
+
+      Public Property TfsZ As Single?
+  overload: OllamaSharp.Models.RequestOptions.TfsZ*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: tfs_z
+  - type: System.Text.Json.Serialization.JsonIgnoreAttribute
+    ctor: System.Text.Json.Serialization.JsonIgnoreAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Condition
+      type: System.Text.Json.Serialization.JsonIgnoreCondition
+      value: 3
+- uid: OllamaSharp.Models.RequestOptions.NumPredict
+  commentId: P:OllamaSharp.Models.RequestOptions.NumPredict
+  id: NumPredict
+  parent: OllamaSharp.Models.RequestOptions
+  langs:
+  - csharp
+  - vb
+  name: NumPredict
+  nameWithType: RequestOptions.NumPredict
+  fullName: OllamaSharp.Models.RequestOptions.NumPredict
+  type: Property
+  source:
+    remote:
+      path: src/Models/RequestOptions.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: NumPredict
+    path: src/Models/RequestOptions.cs
+    startLine: 168
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models
+  summary: >-
+    Maximum number of tokens to predict when generating text.
+
+    (Default: 128, -1 = infinite generation, -2 = fill context)
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("num_predict")]
+
+      [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+
+      public int? NumPredict { get; set; }
+    parameters: []
+    return:
+      type: System.Nullable{System.Int32}
+    content.vb: >-
+      <JsonPropertyName("num_predict")>
+
+      <JsonIgnore(Condition:=JsonIgnoreCondition.WhenWritingNull)>
+
+      Public Property NumPredict As Integer?
+  overload: OllamaSharp.Models.RequestOptions.NumPredict*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: num_predict
+  - type: System.Text.Json.Serialization.JsonIgnoreAttribute
+    ctor: System.Text.Json.Serialization.JsonIgnoreAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Condition
+      type: System.Text.Json.Serialization.JsonIgnoreCondition
+      value: 3
+- uid: OllamaSharp.Models.RequestOptions.TopK
+  commentId: P:OllamaSharp.Models.RequestOptions.TopK
+  id: TopK
+  parent: OllamaSharp.Models.RequestOptions
+  langs:
+  - csharp
+  - vb
+  name: TopK
+  nameWithType: RequestOptions.TopK
+  fullName: OllamaSharp.Models.RequestOptions.TopK
+  type: Property
+  source:
+    remote:
+      path: src/Models/RequestOptions.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: TopK
+    path: src/Models/RequestOptions.cs
+    startLine: 177
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models
+  summary: >-
+    Reduces the probability of generating nonsense. A higher value
+
+    (e.g. 100) will give more diverse answers, while a lower value (e.g. 10)
+
+    will be more conservative. (Default: 40)
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("top_k")]
+
+      [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+
+      public int? TopK { get; set; }
+    parameters: []
+    return:
+      type: System.Nullable{System.Int32}
+    content.vb: >-
+      <JsonPropertyName("top_k")>
+
+      <JsonIgnore(Condition:=JsonIgnoreCondition.WhenWritingNull)>
+
+      Public Property TopK As Integer?
+  overload: OllamaSharp.Models.RequestOptions.TopK*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: top_k
+  - type: System.Text.Json.Serialization.JsonIgnoreAttribute
+    ctor: System.Text.Json.Serialization.JsonIgnoreAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Condition
+      type: System.Text.Json.Serialization.JsonIgnoreCondition
+      value: 3
+- uid: OllamaSharp.Models.RequestOptions.TopP
+  commentId: P:OllamaSharp.Models.RequestOptions.TopP
+  id: TopP
+  parent: OllamaSharp.Models.RequestOptions
+  langs:
+  - csharp
+  - vb
+  name: TopP
+  nameWithType: RequestOptions.TopP
+  fullName: OllamaSharp.Models.RequestOptions.TopP
+  type: Property
+  source:
+    remote:
+      path: src/Models/RequestOptions.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: TopP
+    path: src/Models/RequestOptions.cs
+    startLine: 186
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models
+  summary: >-
+    Works together with top-k. A higher value (e.g., 0.95) will lead to
+
+    more diverse text, while a lower value (e.g., 0.5) will generate more
+
+    focused and conservative text. (Default: 0.9)
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("top_p")]
+
+      [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+
+      public float? TopP { get; set; }
+    parameters: []
+    return:
+      type: System.Nullable{System.Single}
+    content.vb: >-
+      <JsonPropertyName("top_p")>
+
+      <JsonIgnore(Condition:=JsonIgnoreCondition.WhenWritingNull)>
+
+      Public Property TopP As Single?
+  overload: OllamaSharp.Models.RequestOptions.TopP*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: top_p
+  - type: System.Text.Json.Serialization.JsonIgnoreAttribute
+    ctor: System.Text.Json.Serialization.JsonIgnoreAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Condition
+      type: System.Text.Json.Serialization.JsonIgnoreCondition
+      value: 3
+- uid: OllamaSharp.Models.RequestOptions.MinP
+  commentId: P:OllamaSharp.Models.RequestOptions.MinP
+  id: MinP
+  parent: OllamaSharp.Models.RequestOptions
+  langs:
+  - csharp
+  - vb
+  name: MinP
+  nameWithType: RequestOptions.MinP
+  fullName: OllamaSharp.Models.RequestOptions.MinP
+  type: Property
+  source:
+    remote:
+      path: src/Models/RequestOptions.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: MinP
+    path: src/Models/RequestOptions.cs
+    startLine: 196
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models
+  summary: >-
+    Alternative to the top_p, and aims to ensure a balance of quality and variety.min_p represents the minimum
+
+    probability for a token to be considered, relative to the probability of the most likely token.For
+
+    example, with min_p=0.05 and the most likely token having a probability of 0.9, logits with a value less
+
+    than 0.05*0.9=0.045 are filtered out. (Default: 0.0)
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("min_p")]
+
+      [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+
+      public float? MinP { get; set; }
+    parameters: []
+    return:
+      type: System.Nullable{System.Single}
+    content.vb: >-
+      <JsonPropertyName("min_p")>
+
+      <JsonIgnore(Condition:=JsonIgnoreCondition.WhenWritingNull)>
+
+      Public Property MinP As Single?
+  overload: OllamaSharp.Models.RequestOptions.MinP*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: min_p
+  - type: System.Text.Json.Serialization.JsonIgnoreAttribute
+    ctor: System.Text.Json.Serialization.JsonIgnoreAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Condition
+      type: System.Text.Json.Serialization.JsonIgnoreCondition
+      value: 3
+- uid: OllamaSharp.Models.RequestOptions.TypicalP
+  commentId: P:OllamaSharp.Models.RequestOptions.TypicalP
+  id: TypicalP
+  parent: OllamaSharp.Models.RequestOptions
+  langs:
+  - csharp
+  - vb
+  name: TypicalP
+  nameWithType: RequestOptions.TypicalP
+  fullName: OllamaSharp.Models.RequestOptions.TypicalP
+  type: Property
+  source:
+    remote:
+      path: src/Models/RequestOptions.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: TypicalP
+    path: src/Models/RequestOptions.cs
+    startLine: 204
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models
+  summary: >-
+    The typical-p value to use for sampling. Locally Typical Sampling implementation described in the paper
+
+    https://arxiv.org/abs/2202.00666. (Default: 1.0)
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("typical_p")]
+
+      [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+
+      public float? TypicalP { get; set; }
+    parameters: []
+    return:
+      type: System.Nullable{System.Single}
+    content.vb: >-
+      <JsonPropertyName("typical_p")>
+
+      <JsonIgnore(Condition:=JsonIgnoreCondition.WhenWritingNull)>
+
+      Public Property TypicalP As Single?
+  overload: OllamaSharp.Models.RequestOptions.TypicalP*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: typical_p
+  - type: System.Text.Json.Serialization.JsonIgnoreAttribute
+    ctor: System.Text.Json.Serialization.JsonIgnoreAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Condition
+      type: System.Text.Json.Serialization.JsonIgnoreCondition
+      value: 3
+- uid: OllamaSharp.Models.RequestOptions.PenalizeNewline
+  commentId: P:OllamaSharp.Models.RequestOptions.PenalizeNewline
+  id: PenalizeNewline
+  parent: OllamaSharp.Models.RequestOptions
+  langs:
+  - csharp
+  - vb
+  name: PenalizeNewline
+  nameWithType: RequestOptions.PenalizeNewline
+  fullName: OllamaSharp.Models.RequestOptions.PenalizeNewline
+  type: Property
+  source:
+    remote:
+      path: src/Models/RequestOptions.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: PenalizeNewline
+    path: src/Models/RequestOptions.cs
+    startLine: 211
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models
+  summary: 'Penalize newline tokens (Default: True)'
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("penalize_newline")]
+
+      [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+
+      public bool? PenalizeNewline { get; set; }
+    parameters: []
+    return:
+      type: System.Nullable{System.Boolean}
+    content.vb: >-
+      <JsonPropertyName("penalize_newline")>
+
+      <JsonIgnore(Condition:=JsonIgnoreCondition.WhenWritingNull)>
+
+      Public Property PenalizeNewline As Boolean?
+  overload: OllamaSharp.Models.RequestOptions.PenalizeNewline*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: penalize_newline
+  - type: System.Text.Json.Serialization.JsonIgnoreAttribute
+    ctor: System.Text.Json.Serialization.JsonIgnoreAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Condition
+      type: System.Text.Json.Serialization.JsonIgnoreCondition
+      value: 3
+- uid: OllamaSharp.Models.RequestOptions.UseMmap
+  commentId: P:OllamaSharp.Models.RequestOptions.UseMmap
+  id: UseMmap
+  parent: OllamaSharp.Models.RequestOptions
+  langs:
+  - csharp
+  - vb
+  name: UseMmap
+  nameWithType: RequestOptions.UseMmap
+  fullName: OllamaSharp.Models.RequestOptions.UseMmap
+  type: Property
+  source:
+    remote:
+      path: src/Models/RequestOptions.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: UseMmap
+    path: src/Models/RequestOptions.cs
+    startLine: 222
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models
+  summary: >-
+    Models are mapped into memory by default, which allows the system to
+
+    load only the necessary parts as needed. Disabling mmap makes loading
+
+    slower but reduces pageouts if you're not using mlock. If the model is
+
+    bigger than your RAM, turning off mmap stops it from loading.
+
+    (Default: True)
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("use_mmap")]
+
+      [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+
+      public bool? UseMmap { get; set; }
+    parameters: []
+    return:
+      type: System.Nullable{System.Boolean}
+    content.vb: >-
+      <JsonPropertyName("use_mmap")>
+
+      <JsonIgnore(Condition:=JsonIgnoreCondition.WhenWritingNull)>
+
+      Public Property UseMmap As Boolean?
+  overload: OllamaSharp.Models.RequestOptions.UseMmap*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: use_mmap
+  - type: System.Text.Json.Serialization.JsonIgnoreAttribute
+    ctor: System.Text.Json.Serialization.JsonIgnoreAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Condition
+      type: System.Text.Json.Serialization.JsonIgnoreCondition
+      value: 3
+- uid: OllamaSharp.Models.RequestOptions.UseMlock
+  commentId: P:OllamaSharp.Models.RequestOptions.UseMlock
+  id: UseMlock
+  parent: OllamaSharp.Models.RequestOptions
+  langs:
+  - csharp
+  - vb
+  name: UseMlock
+  nameWithType: RequestOptions.UseMlock
+  fullName: OllamaSharp.Models.RequestOptions.UseMlock
+  type: Property
+  source:
+    remote:
+      path: src/Models/RequestOptions.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: UseMlock
+    path: src/Models/RequestOptions.cs
+    startLine: 231
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models
+  summary: >-
+    Lock the model in memory to prevent swapping. This can improve
+
+    performance, but it uses more RAM and may slow down loading.
+
+    (Default: False)
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("use_mlock")]
+
+      [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+
+      public bool? UseMlock { get; set; }
+    parameters: []
+    return:
+      type: System.Nullable{System.Boolean}
+    content.vb: >-
+      <JsonPropertyName("use_mlock")>
+
+      <JsonIgnore(Condition:=JsonIgnoreCondition.WhenWritingNull)>
+
+      Public Property UseMlock As Boolean?
+  overload: OllamaSharp.Models.RequestOptions.UseMlock*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: use_mlock
+  - type: System.Text.Json.Serialization.JsonIgnoreAttribute
+    ctor: System.Text.Json.Serialization.JsonIgnoreAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Condition
+      type: System.Text.Json.Serialization.JsonIgnoreCondition
+      value: 3
+- uid: OllamaSharp.Models.RequestOptions.LowVram
+  commentId: P:OllamaSharp.Models.RequestOptions.LowVram
+  id: LowVram
+  parent: OllamaSharp.Models.RequestOptions
+  langs:
+  - csharp
+  - vb
+  name: LowVram
+  nameWithType: RequestOptions.LowVram
+  fullName: OllamaSharp.Models.RequestOptions.LowVram
+  type: Property
+  source:
+    remote:
+      path: src/Models/RequestOptions.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: LowVram
+    path: src/Models/RequestOptions.cs
+    startLine: 239
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models
+  summary: >-
+    Enable low VRAM mode.
+
+    (Default: False)
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("low_vram")]
+
+      [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+
+      public bool? LowVram { get; set; }
+    parameters: []
+    return:
+      type: System.Nullable{System.Boolean}
+    content.vb: >-
+      <JsonPropertyName("low_vram")>
+
+      <JsonIgnore(Condition:=JsonIgnoreCondition.WhenWritingNull)>
+
+      Public Property LowVram As Boolean?
+  overload: OllamaSharp.Models.RequestOptions.LowVram*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: low_vram
+  - type: System.Text.Json.Serialization.JsonIgnoreAttribute
+    ctor: System.Text.Json.Serialization.JsonIgnoreAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Condition
+      type: System.Text.Json.Serialization.JsonIgnoreCondition
+      value: 3
+- uid: OllamaSharp.Models.RequestOptions.F16kv
+  commentId: P:OllamaSharp.Models.RequestOptions.F16kv
+  id: F16kv
+  parent: OllamaSharp.Models.RequestOptions
+  langs:
+  - csharp
+  - vb
+  name: F16kv
+  nameWithType: RequestOptions.F16kv
+  fullName: OllamaSharp.Models.RequestOptions.F16kv
+  type: Property
+  source:
+    remote:
+      path: src/Models/RequestOptions.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: F16kv
+    path: src/Models/RequestOptions.cs
+    startLine: 247
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models
+  summary: >-
+    Enable f16 key/value.
+
+    (Default: False)
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("f16_kv")]
+
+      [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+
+      public bool? F16kv { get; set; }
+    parameters: []
+    return:
+      type: System.Nullable{System.Boolean}
+    content.vb: >-
+      <JsonPropertyName("f16_kv")>
+
+      <JsonIgnore(Condition:=JsonIgnoreCondition.WhenWritingNull)>
+
+      Public Property F16kv As Boolean?
+  overload: OllamaSharp.Models.RequestOptions.F16kv*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: f16_kv
+  - type: System.Text.Json.Serialization.JsonIgnoreAttribute
+    ctor: System.Text.Json.Serialization.JsonIgnoreAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Condition
+      type: System.Text.Json.Serialization.JsonIgnoreCondition
+      value: 3
+- uid: OllamaSharp.Models.RequestOptions.LogitsAll
+  commentId: P:OllamaSharp.Models.RequestOptions.LogitsAll
+  id: LogitsAll
+  parent: OllamaSharp.Models.RequestOptions
+  langs:
+  - csharp
+  - vb
+  name: LogitsAll
+  nameWithType: RequestOptions.LogitsAll
+  fullName: OllamaSharp.Models.RequestOptions.LogitsAll
+  type: Property
+  source:
+    remote:
+      path: src/Models/RequestOptions.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: LogitsAll
+    path: src/Models/RequestOptions.cs
+    startLine: 255
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models
+  summary: >-
+    Return logits for all the tokens, not just the last one.
+
+    (Default: False)
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("logits_all")]
+
+      [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+
+      public bool? LogitsAll { get; set; }
+    parameters: []
+    return:
+      type: System.Nullable{System.Boolean}
+    content.vb: >-
+      <JsonPropertyName("logits_all")>
+
+      <JsonIgnore(Condition:=JsonIgnoreCondition.WhenWritingNull)>
+
+      Public Property LogitsAll As Boolean?
+  overload: OllamaSharp.Models.RequestOptions.LogitsAll*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: logits_all
+  - type: System.Text.Json.Serialization.JsonIgnoreAttribute
+    ctor: System.Text.Json.Serialization.JsonIgnoreAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Condition
+      type: System.Text.Json.Serialization.JsonIgnoreCondition
+      value: 3
+- uid: OllamaSharp.Models.RequestOptions.VocabOnly
+  commentId: P:OllamaSharp.Models.RequestOptions.VocabOnly
+  id: VocabOnly
+  parent: OllamaSharp.Models.RequestOptions
+  langs:
+  - csharp
+  - vb
+  name: VocabOnly
+  nameWithType: RequestOptions.VocabOnly
+  fullName: OllamaSharp.Models.RequestOptions.VocabOnly
+  type: Property
+  source:
+    remote:
+      path: src/Models/RequestOptions.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: VocabOnly
+    path: src/Models/RequestOptions.cs
+    startLine: 263
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models
+  summary: >-
+    Load only the vocabulary, not the weights.
+
+    (Default: False)
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("vocab_only")]
+
+      [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+
+      public bool? VocabOnly { get; set; }
+    parameters: []
+    return:
+      type: System.Nullable{System.Boolean}
+    content.vb: >-
+      <JsonPropertyName("vocab_only")>
+
+      <JsonIgnore(Condition:=JsonIgnoreCondition.WhenWritingNull)>
+
+      Public Property VocabOnly As Boolean?
+  overload: OllamaSharp.Models.RequestOptions.VocabOnly*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: vocab_only
+  - type: System.Text.Json.Serialization.JsonIgnoreAttribute
+    ctor: System.Text.Json.Serialization.JsonIgnoreAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Condition
+      type: System.Text.Json.Serialization.JsonIgnoreCondition
+      value: 3
+- uid: OllamaSharp.Models.RequestOptions.Numa
+  commentId: P:OllamaSharp.Models.RequestOptions.Numa
+  id: Numa
+  parent: OllamaSharp.Models.RequestOptions
+  langs:
+  - csharp
+  - vb
+  name: Numa
+  nameWithType: RequestOptions.Numa
+  fullName: OllamaSharp.Models.RequestOptions.Numa
+  type: Property
+  source:
+    remote:
+      path: src/Models/RequestOptions.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: Numa
+    path: src/Models/RequestOptions.cs
+    startLine: 271
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models
+  summary: " Enable NUMA support.\r\n(Default: False)"
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("numa")]
+
+      [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+
+      public bool? Numa { get; set; }
+    parameters: []
+    return:
+      type: System.Nullable{System.Boolean}
+    content.vb: >-
+      <JsonPropertyName("numa")>
+
+      <JsonIgnore(Condition:=JsonIgnoreCondition.WhenWritingNull)>
+
+      Public Property Numa As Boolean?
+  overload: OllamaSharp.Models.RequestOptions.Numa*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: numa
+  - type: System.Text.Json.Serialization.JsonIgnoreAttribute
+    ctor: System.Text.Json.Serialization.JsonIgnoreAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Condition
+      type: System.Text.Json.Serialization.JsonIgnoreCondition
+      value: 3
+references:
+- uid: OllamaSharp.Models
+  commentId: N:OllamaSharp.Models
+  href: OllamaSharp.html
+  name: OllamaSharp.Models
+  nameWithType: OllamaSharp.Models
+  fullName: OllamaSharp.Models
+  spec.csharp:
+  - uid: OllamaSharp
+    name: OllamaSharp
+    href: OllamaSharp.html
+  - name: .
+  - uid: OllamaSharp.Models
+    name: Models
+    href: OllamaSharp.Models.html
+  spec.vb:
+  - uid: OllamaSharp
+    name: OllamaSharp
+    href: OllamaSharp.html
+  - name: .
+  - uid: OllamaSharp.Models
+    name: Models
+    href: OllamaSharp.Models.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.MemberwiseClone
+  commentId: M:System.Object.MemberwiseClone
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  name: MemberwiseClone()
+  nameWithType: object.MemberwiseClone()
+  fullName: object.MemberwiseClone()
+  nameWithType.vb: Object.MemberwiseClone()
+  fullName.vb: Object.MemberwiseClone()
+  spec.csharp:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: OllamaSharp.Models.RequestOptions.MiroStat*
+  commentId: Overload:OllamaSharp.Models.RequestOptions.MiroStat
+  href: OllamaSharp.Models.RequestOptions.html#OllamaSharp_Models_RequestOptions_MiroStat
+  name: MiroStat
+  nameWithType: RequestOptions.MiroStat
+  fullName: OllamaSharp.Models.RequestOptions.MiroStat
+- uid: System.Nullable{System.Int32}
+  commentId: T:System.Nullable{System.Int32}
+  parent: System
+  definition: System.Nullable`1
+  href: https://learn.microsoft.com/dotnet/api/system.int32
+  name: int?
+  nameWithType: int?
+  fullName: int?
+  nameWithType.vb: Integer?
+  fullName.vb: Integer?
+  name.vb: Integer?
+  spec.csharp:
+  - uid: System.Int32
+    name: int
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.int32
+  - name: '?'
+  spec.vb:
+  - uid: System.Int32
+    name: Integer
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.int32
+  - name: '?'
+- uid: System.Nullable`1
+  commentId: T:System.Nullable`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.nullable-1
+  name: Nullable<T>
+  nameWithType: Nullable<T>
+  fullName: System.Nullable<T>
+  nameWithType.vb: Nullable(Of T)
+  fullName.vb: System.Nullable(Of T)
+  name.vb: Nullable(Of T)
+  spec.csharp:
+  - uid: System.Nullable`1
+    name: Nullable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.nullable-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.Nullable`1
+    name: Nullable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.nullable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: OllamaSharp.Models.RequestOptions.MiroStatEta*
+  commentId: Overload:OllamaSharp.Models.RequestOptions.MiroStatEta
+  href: OllamaSharp.Models.RequestOptions.html#OllamaSharp_Models_RequestOptions_MiroStatEta
+  name: MiroStatEta
+  nameWithType: RequestOptions.MiroStatEta
+  fullName: OllamaSharp.Models.RequestOptions.MiroStatEta
+- uid: System.Nullable{System.Single}
+  commentId: T:System.Nullable{System.Single}
+  parent: System
+  definition: System.Nullable`1
+  href: https://learn.microsoft.com/dotnet/api/system.single
+  name: float?
+  nameWithType: float?
+  fullName: float?
+  nameWithType.vb: Single?
+  fullName.vb: Single?
+  name.vb: Single?
+  spec.csharp:
+  - uid: System.Single
+    name: float
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.single
+  - name: '?'
+  spec.vb:
+  - uid: System.Single
+    name: Single
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.single
+  - name: '?'
+- uid: OllamaSharp.Models.RequestOptions.MiroStatTau*
+  commentId: Overload:OllamaSharp.Models.RequestOptions.MiroStatTau
+  href: OllamaSharp.Models.RequestOptions.html#OllamaSharp_Models_RequestOptions_MiroStatTau
+  name: MiroStatTau
+  nameWithType: RequestOptions.MiroStatTau
+  fullName: OllamaSharp.Models.RequestOptions.MiroStatTau
+- uid: OllamaSharp.Models.RequestOptions.NumCtx*
+  commentId: Overload:OllamaSharp.Models.RequestOptions.NumCtx
+  href: OllamaSharp.Models.RequestOptions.html#OllamaSharp_Models_RequestOptions_NumCtx
+  name: NumCtx
+  nameWithType: RequestOptions.NumCtx
+  fullName: OllamaSharp.Models.RequestOptions.NumCtx
+- uid: OllamaSharp.Models.RequestOptions.NumGqa*
+  commentId: Overload:OllamaSharp.Models.RequestOptions.NumGqa
+  href: OllamaSharp.Models.RequestOptions.html#OllamaSharp_Models_RequestOptions_NumGqa
+  name: NumGqa
+  nameWithType: RequestOptions.NumGqa
+  fullName: OllamaSharp.Models.RequestOptions.NumGqa
+- uid: OllamaSharp.Models.RequestOptions.NumGpu*
+  commentId: Overload:OllamaSharp.Models.RequestOptions.NumGpu
+  href: OllamaSharp.Models.RequestOptions.html#OllamaSharp_Models_RequestOptions_NumGpu
+  name: NumGpu
+  nameWithType: RequestOptions.NumGpu
+  fullName: OllamaSharp.Models.RequestOptions.NumGpu
+- uid: OllamaSharp.Models.RequestOptions.MainGpu*
+  commentId: Overload:OllamaSharp.Models.RequestOptions.MainGpu
+  href: OllamaSharp.Models.RequestOptions.html#OllamaSharp_Models_RequestOptions_MainGpu
+  name: MainGpu
+  nameWithType: RequestOptions.MainGpu
+  fullName: OllamaSharp.Models.RequestOptions.MainGpu
+- uid: OllamaSharp.Models.RequestOptions.NumBatch*
+  commentId: Overload:OllamaSharp.Models.RequestOptions.NumBatch
+  href: OllamaSharp.Models.RequestOptions.html#OllamaSharp_Models_RequestOptions_NumBatch
+  name: NumBatch
+  nameWithType: RequestOptions.NumBatch
+  fullName: OllamaSharp.Models.RequestOptions.NumBatch
+- uid: OllamaSharp.Models.RequestOptions.NumThread*
+  commentId: Overload:OllamaSharp.Models.RequestOptions.NumThread
+  href: OllamaSharp.Models.RequestOptions.html#OllamaSharp_Models_RequestOptions_NumThread
+  name: NumThread
+  nameWithType: RequestOptions.NumThread
+  fullName: OllamaSharp.Models.RequestOptions.NumThread
+- uid: OllamaSharp.Models.RequestOptions.NumKeep*
+  commentId: Overload:OllamaSharp.Models.RequestOptions.NumKeep
+  href: OllamaSharp.Models.RequestOptions.html#OllamaSharp_Models_RequestOptions_NumKeep
+  name: NumKeep
+  nameWithType: RequestOptions.NumKeep
+  fullName: OllamaSharp.Models.RequestOptions.NumKeep
+- uid: OllamaSharp.Models.RequestOptions.RepeatLastN*
+  commentId: Overload:OllamaSharp.Models.RequestOptions.RepeatLastN
+  href: OllamaSharp.Models.RequestOptions.html#OllamaSharp_Models_RequestOptions_RepeatLastN
+  name: RepeatLastN
+  nameWithType: RequestOptions.RepeatLastN
+  fullName: OllamaSharp.Models.RequestOptions.RepeatLastN
+- uid: OllamaSharp.Models.RequestOptions.RepeatPenalty*
+  commentId: Overload:OllamaSharp.Models.RequestOptions.RepeatPenalty
+  href: OllamaSharp.Models.RequestOptions.html#OllamaSharp_Models_RequestOptions_RepeatPenalty
+  name: RepeatPenalty
+  nameWithType: RequestOptions.RepeatPenalty
+  fullName: OllamaSharp.Models.RequestOptions.RepeatPenalty
+- uid: OllamaSharp.Models.RequestOptions.PresencePenalty*
+  commentId: Overload:OllamaSharp.Models.RequestOptions.PresencePenalty
+  href: OllamaSharp.Models.RequestOptions.html#OllamaSharp_Models_RequestOptions_PresencePenalty
+  name: PresencePenalty
+  nameWithType: RequestOptions.PresencePenalty
+  fullName: OllamaSharp.Models.RequestOptions.PresencePenalty
+- uid: OllamaSharp.Models.RequestOptions.FrequencyPenalty*
+  commentId: Overload:OllamaSharp.Models.RequestOptions.FrequencyPenalty
+  href: OllamaSharp.Models.RequestOptions.html#OllamaSharp_Models_RequestOptions_FrequencyPenalty
+  name: FrequencyPenalty
+  nameWithType: RequestOptions.FrequencyPenalty
+  fullName: OllamaSharp.Models.RequestOptions.FrequencyPenalty
+- uid: OllamaSharp.Models.RequestOptions.Temperature*
+  commentId: Overload:OllamaSharp.Models.RequestOptions.Temperature
+  href: OllamaSharp.Models.RequestOptions.html#OllamaSharp_Models_RequestOptions_Temperature
+  name: Temperature
+  nameWithType: RequestOptions.Temperature
+  fullName: OllamaSharp.Models.RequestOptions.Temperature
+- uid: OllamaSharp.Models.RequestOptions.Seed*
+  commentId: Overload:OllamaSharp.Models.RequestOptions.Seed
+  href: OllamaSharp.Models.RequestOptions.html#OllamaSharp_Models_RequestOptions_Seed
+  name: Seed
+  nameWithType: RequestOptions.Seed
+  fullName: OllamaSharp.Models.RequestOptions.Seed
+- uid: OllamaSharp.Models.RequestOptions.Stop*
+  commentId: Overload:OllamaSharp.Models.RequestOptions.Stop
+  href: OllamaSharp.Models.RequestOptions.html#OllamaSharp_Models_RequestOptions_Stop
+  name: Stop
+  nameWithType: RequestOptions.Stop
+  fullName: OllamaSharp.Models.RequestOptions.Stop
+- uid: System.String[]
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string[]
+  nameWithType: string[]
+  fullName: string[]
+  nameWithType.vb: String()
+  fullName.vb: String()
+  name.vb: String()
+  spec.csharp:
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: '['
+  - name: ']'
+  spec.vb:
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: (
+  - name: )
+- uid: OllamaSharp.Models.RequestOptions.TfsZ*
+  commentId: Overload:OllamaSharp.Models.RequestOptions.TfsZ
+  href: OllamaSharp.Models.RequestOptions.html#OllamaSharp_Models_RequestOptions_TfsZ
+  name: TfsZ
+  nameWithType: RequestOptions.TfsZ
+  fullName: OllamaSharp.Models.RequestOptions.TfsZ
+- uid: OllamaSharp.Models.RequestOptions.NumPredict*
+  commentId: Overload:OllamaSharp.Models.RequestOptions.NumPredict
+  href: OllamaSharp.Models.RequestOptions.html#OllamaSharp_Models_RequestOptions_NumPredict
+  name: NumPredict
+  nameWithType: RequestOptions.NumPredict
+  fullName: OllamaSharp.Models.RequestOptions.NumPredict
+- uid: OllamaSharp.Models.RequestOptions.TopK*
+  commentId: Overload:OllamaSharp.Models.RequestOptions.TopK
+  href: OllamaSharp.Models.RequestOptions.html#OllamaSharp_Models_RequestOptions_TopK
+  name: TopK
+  nameWithType: RequestOptions.TopK
+  fullName: OllamaSharp.Models.RequestOptions.TopK
+- uid: OllamaSharp.Models.RequestOptions.TopP*
+  commentId: Overload:OllamaSharp.Models.RequestOptions.TopP
+  href: OllamaSharp.Models.RequestOptions.html#OllamaSharp_Models_RequestOptions_TopP
+  name: TopP
+  nameWithType: RequestOptions.TopP
+  fullName: OllamaSharp.Models.RequestOptions.TopP
+- uid: OllamaSharp.Models.RequestOptions.MinP*
+  commentId: Overload:OllamaSharp.Models.RequestOptions.MinP
+  href: OllamaSharp.Models.RequestOptions.html#OllamaSharp_Models_RequestOptions_MinP
+  name: MinP
+  nameWithType: RequestOptions.MinP
+  fullName: OllamaSharp.Models.RequestOptions.MinP
+- uid: OllamaSharp.Models.RequestOptions.TypicalP*
+  commentId: Overload:OllamaSharp.Models.RequestOptions.TypicalP
+  href: OllamaSharp.Models.RequestOptions.html#OllamaSharp_Models_RequestOptions_TypicalP
+  name: TypicalP
+  nameWithType: RequestOptions.TypicalP
+  fullName: OllamaSharp.Models.RequestOptions.TypicalP
+- uid: OllamaSharp.Models.RequestOptions.PenalizeNewline*
+  commentId: Overload:OllamaSharp.Models.RequestOptions.PenalizeNewline
+  href: OllamaSharp.Models.RequestOptions.html#OllamaSharp_Models_RequestOptions_PenalizeNewline
+  name: PenalizeNewline
+  nameWithType: RequestOptions.PenalizeNewline
+  fullName: OllamaSharp.Models.RequestOptions.PenalizeNewline
+- uid: System.Nullable{System.Boolean}
+  commentId: T:System.Nullable{System.Boolean}
+  parent: System
+  definition: System.Nullable`1
+  href: https://learn.microsoft.com/dotnet/api/system.boolean
+  name: bool?
+  nameWithType: bool?
+  fullName: bool?
+  nameWithType.vb: Boolean?
+  fullName.vb: Boolean?
+  name.vb: Boolean?
+  spec.csharp:
+  - uid: System.Boolean
+    name: bool
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.boolean
+  - name: '?'
+  spec.vb:
+  - uid: System.Boolean
+    name: Boolean
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.boolean
+  - name: '?'
+- uid: OllamaSharp.Models.RequestOptions.UseMmap*
+  commentId: Overload:OllamaSharp.Models.RequestOptions.UseMmap
+  href: OllamaSharp.Models.RequestOptions.html#OllamaSharp_Models_RequestOptions_UseMmap
+  name: UseMmap
+  nameWithType: RequestOptions.UseMmap
+  fullName: OllamaSharp.Models.RequestOptions.UseMmap
+- uid: OllamaSharp.Models.RequestOptions.UseMlock*
+  commentId: Overload:OllamaSharp.Models.RequestOptions.UseMlock
+  href: OllamaSharp.Models.RequestOptions.html#OllamaSharp_Models_RequestOptions_UseMlock
+  name: UseMlock
+  nameWithType: RequestOptions.UseMlock
+  fullName: OllamaSharp.Models.RequestOptions.UseMlock
+- uid: OllamaSharp.Models.RequestOptions.LowVram*
+  commentId: Overload:OllamaSharp.Models.RequestOptions.LowVram
+  href: OllamaSharp.Models.RequestOptions.html#OllamaSharp_Models_RequestOptions_LowVram
+  name: LowVram
+  nameWithType: RequestOptions.LowVram
+  fullName: OllamaSharp.Models.RequestOptions.LowVram
+- uid: OllamaSharp.Models.RequestOptions.F16kv*
+  commentId: Overload:OllamaSharp.Models.RequestOptions.F16kv
+  href: OllamaSharp.Models.RequestOptions.html#OllamaSharp_Models_RequestOptions_F16kv
+  name: F16kv
+  nameWithType: RequestOptions.F16kv
+  fullName: OllamaSharp.Models.RequestOptions.F16kv
+- uid: OllamaSharp.Models.RequestOptions.LogitsAll*
+  commentId: Overload:OllamaSharp.Models.RequestOptions.LogitsAll
+  href: OllamaSharp.Models.RequestOptions.html#OllamaSharp_Models_RequestOptions_LogitsAll
+  name: LogitsAll
+  nameWithType: RequestOptions.LogitsAll
+  fullName: OllamaSharp.Models.RequestOptions.LogitsAll
+- uid: OllamaSharp.Models.RequestOptions.VocabOnly*
+  commentId: Overload:OllamaSharp.Models.RequestOptions.VocabOnly
+  href: OllamaSharp.Models.RequestOptions.html#OllamaSharp_Models_RequestOptions_VocabOnly
+  name: VocabOnly
+  nameWithType: RequestOptions.VocabOnly
+  fullName: OllamaSharp.Models.RequestOptions.VocabOnly
+- uid: OllamaSharp.Models.RequestOptions.Numa*
+  commentId: Overload:OllamaSharp.Models.RequestOptions.Numa
+  href: OllamaSharp.Models.RequestOptions.html#OllamaSharp_Models_RequestOptions_Numa
+  name: Numa
+  nameWithType: RequestOptions.Numa
+  fullName: OllamaSharp.Models.RequestOptions.Numa

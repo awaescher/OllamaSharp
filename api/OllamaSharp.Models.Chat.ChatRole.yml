@@ -1,0 +1,939 @@
+### YamlMime:ManagedReference
+items:
+- uid: OllamaSharp.Models.Chat.ChatRole
+  commentId: T:OllamaSharp.Models.Chat.ChatRole
+  id: ChatRole
+  parent: OllamaSharp.Models.Chat
+  children:
+  - OllamaSharp.Models.Chat.ChatRole.#ctor(System.Object)
+  - OllamaSharp.Models.Chat.ChatRole.#ctor(System.String)
+  - OllamaSharp.Models.Chat.ChatRole.Assistant
+  - OllamaSharp.Models.Chat.ChatRole.Equals(OllamaSharp.Models.Chat.ChatRole)
+  - OllamaSharp.Models.Chat.ChatRole.System
+  - OllamaSharp.Models.Chat.ChatRole.ToString
+  - OllamaSharp.Models.Chat.ChatRole.Tool
+  - OllamaSharp.Models.Chat.ChatRole.User
+  - OllamaSharp.Models.Chat.ChatRole.op_Equality(OllamaSharp.Models.Chat.ChatRole,OllamaSharp.Models.Chat.ChatRole)
+  - OllamaSharp.Models.Chat.ChatRole.op_Implicit(System.String)~OllamaSharp.Models.Chat.ChatRole
+  - OllamaSharp.Models.Chat.ChatRole.op_Inequality(OllamaSharp.Models.Chat.ChatRole,OllamaSharp.Models.Chat.ChatRole)
+  langs:
+  - csharp
+  - vb
+  name: ChatRole
+  nameWithType: ChatRole
+  fullName: OllamaSharp.Models.Chat.ChatRole
+  type: Struct
+  source:
+    remote:
+      path: src/Models/Chat/ChatRole.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: ChatRole
+    path: src/Models/Chat/ChatRole.cs
+    startLine: 10
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models.Chat
+  summary: Represents a role within a chat completions interaction, describing the intended purpose of a message.
+  example: []
+  syntax:
+    content: >-
+      [JsonConverter(typeof(ChatRoleConverter))]
+
+      public readonly struct ChatRole : IEquatable<ChatRole>
+    content.vb: >-
+      <JsonConverter(GetType(ChatRoleConverter))>
+
+      Public Structure ChatRole Implements IEquatable(Of ChatRole)
+  implements:
+  - System.IEquatable{OllamaSharp.Models.Chat.ChatRole}
+  inheritedMembers:
+  - System.ValueType.Equals(System.Object)
+  - System.ValueType.GetHashCode
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetType
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  attributes:
+  - type: System.Text.Json.Serialization.JsonConverterAttribute
+    ctor: System.Text.Json.Serialization.JsonConverterAttribute.#ctor(System.Type)
+    arguments:
+    - type: System.Type
+      value: OllamaSharp.Models.Chat.Converter.ChatRoleConverter
+- uid: OllamaSharp.Models.Chat.ChatRole.#ctor(System.String)
+  commentId: M:OllamaSharp.Models.Chat.ChatRole.#ctor(System.String)
+  id: '#ctor(System.String)'
+  parent: OllamaSharp.Models.Chat.ChatRole
+  langs:
+  - csharp
+  - vb
+  name: ChatRole(string?)
+  nameWithType: ChatRole.ChatRole(string?)
+  fullName: OllamaSharp.Models.Chat.ChatRole.ChatRole(string?)
+  type: Constructor
+  source:
+    remote:
+      path: src/Models/Chat/ChatRole.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: .ctor
+    path: src/Models/Chat/ChatRole.cs
+    startLine: 20
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models.Chat
+  summary: Initializes a new instance of <xref href="OllamaSharp.Models.Chat.ChatRole" data-throw-if-not-resolved="false"></xref> with the specified role.
+  example: []
+  syntax:
+    content: public ChatRole(string? role)
+    parameters:
+    - id: role
+      type: System.String
+      description: The role to initialize with.
+    content.vb: Public Sub New(role As String)
+  overload: OllamaSharp.Models.Chat.ChatRole.#ctor*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: Thrown when <code class="paramref">role</code> is null.
+  nameWithType.vb: ChatRole.New(String)
+  fullName.vb: OllamaSharp.Models.Chat.ChatRole.New(String)
+  name.vb: New(String)
+- uid: OllamaSharp.Models.Chat.ChatRole.#ctor(System.Object)
+  commentId: M:OllamaSharp.Models.Chat.ChatRole.#ctor(System.Object)
+  id: '#ctor(System.Object)'
+  parent: OllamaSharp.Models.Chat.ChatRole
+  langs:
+  - csharp
+  - vb
+  name: ChatRole(object)
+  nameWithType: ChatRole.ChatRole(object)
+  fullName: OllamaSharp.Models.Chat.ChatRole.ChatRole(object)
+  type: Constructor
+  source:
+    remote:
+      path: src/Models/Chat/ChatRole.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: .ctor
+    path: src/Models/Chat/ChatRole.cs
+    startLine: 29
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models.Chat
+  summary: Initializes a new instance of <xref href="OllamaSharp.Models.Chat.ChatRole" data-throw-if-not-resolved="false"></xref> using a JSON constructor.
+  example: []
+  syntax:
+    content: >-
+      [JsonConstructor]
+
+      public ChatRole(object _)
+    parameters:
+    - id: _
+      type: System.Object
+      description: The placeholder parameter for JSON constructor.
+    content.vb: >-
+      <JsonConstructor>
+
+      Public Sub New(_ As Object)
+  overload: OllamaSharp.Models.Chat.ChatRole.#ctor*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonConstructorAttribute
+    ctor: System.Text.Json.Serialization.JsonConstructorAttribute.#ctor
+    arguments: []
+  nameWithType.vb: ChatRole.New(Object)
+  fullName.vb: OllamaSharp.Models.Chat.ChatRole.New(Object)
+  name.vb: New(Object)
+- uid: OllamaSharp.Models.Chat.ChatRole.System
+  commentId: P:OllamaSharp.Models.Chat.ChatRole.System
+  id: System
+  parent: OllamaSharp.Models.Chat.ChatRole
+  langs:
+  - csharp
+  - vb
+  name: System
+  nameWithType: ChatRole.System
+  fullName: OllamaSharp.Models.Chat.ChatRole.System
+  type: Property
+  source:
+    remote:
+      path: src/Models/Chat/ChatRole.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: System
+    path: src/Models/Chat/ChatRole.cs
+    startLine: 43
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models.Chat
+  summary: Gets the role that instructs or sets the behavior of the assistant.
+  example: []
+  syntax:
+    content: public static ChatRole System { get; }
+    parameters: []
+    return:
+      type: OllamaSharp.Models.Chat.ChatRole
+    content.vb: Public Shared ReadOnly Property System As ChatRole
+  overload: OllamaSharp.Models.Chat.ChatRole.System*
+- uid: OllamaSharp.Models.Chat.ChatRole.Assistant
+  commentId: P:OllamaSharp.Models.Chat.ChatRole.Assistant
+  id: Assistant
+  parent: OllamaSharp.Models.Chat.ChatRole
+  langs:
+  - csharp
+  - vb
+  name: Assistant
+  nameWithType: ChatRole.Assistant
+  fullName: OllamaSharp.Models.Chat.ChatRole.Assistant
+  type: Property
+  source:
+    remote:
+      path: src/Models/Chat/ChatRole.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: Assistant
+    path: src/Models/Chat/ChatRole.cs
+    startLine: 48
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models.Chat
+  summary: Gets the role that provides responses to system-instructed, user-prompted input.
+  example: []
+  syntax:
+    content: public static ChatRole Assistant { get; }
+    parameters: []
+    return:
+      type: OllamaSharp.Models.Chat.ChatRole
+    content.vb: Public Shared ReadOnly Property Assistant As ChatRole
+  overload: OllamaSharp.Models.Chat.ChatRole.Assistant*
+- uid: OllamaSharp.Models.Chat.ChatRole.User
+  commentId: P:OllamaSharp.Models.Chat.ChatRole.User
+  id: User
+  parent: OllamaSharp.Models.Chat.ChatRole
+  langs:
+  - csharp
+  - vb
+  name: User
+  nameWithType: ChatRole.User
+  fullName: OllamaSharp.Models.Chat.ChatRole.User
+  type: Property
+  source:
+    remote:
+      path: src/Models/Chat/ChatRole.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: User
+    path: src/Models/Chat/ChatRole.cs
+    startLine: 53
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models.Chat
+  summary: Gets the role that provides input for chat completions.
+  example: []
+  syntax:
+    content: public static ChatRole User { get; }
+    parameters: []
+    return:
+      type: OllamaSharp.Models.Chat.ChatRole
+    content.vb: Public Shared ReadOnly Property User As ChatRole
+  overload: OllamaSharp.Models.Chat.ChatRole.User*
+- uid: OllamaSharp.Models.Chat.ChatRole.Tool
+  commentId: P:OllamaSharp.Models.Chat.ChatRole.Tool
+  id: Tool
+  parent: OllamaSharp.Models.Chat.ChatRole
+  langs:
+  - csharp
+  - vb
+  name: Tool
+  nameWithType: ChatRole.Tool
+  fullName: OllamaSharp.Models.Chat.ChatRole.Tool
+  type: Property
+  source:
+    remote:
+      path: src/Models/Chat/ChatRole.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: Tool
+    path: src/Models/Chat/ChatRole.cs
+    startLine: 58
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models.Chat
+  summary: Gets the role that is used to input the result from an external tool.
+  example: []
+  syntax:
+    content: public static ChatRole Tool { get; }
+    parameters: []
+    return:
+      type: OllamaSharp.Models.Chat.ChatRole
+    content.vb: Public Shared ReadOnly Property Tool As ChatRole
+  overload: OllamaSharp.Models.Chat.ChatRole.Tool*
+- uid: OllamaSharp.Models.Chat.ChatRole.op_Equality(OllamaSharp.Models.Chat.ChatRole,OllamaSharp.Models.Chat.ChatRole)
+  commentId: M:OllamaSharp.Models.Chat.ChatRole.op_Equality(OllamaSharp.Models.Chat.ChatRole,OllamaSharp.Models.Chat.ChatRole)
+  id: op_Equality(OllamaSharp.Models.Chat.ChatRole,OllamaSharp.Models.Chat.ChatRole)
+  parent: OllamaSharp.Models.Chat.ChatRole
+  langs:
+  - csharp
+  - vb
+  name: operator ==(ChatRole, ChatRole)
+  nameWithType: ChatRole.operator ==(ChatRole, ChatRole)
+  fullName: OllamaSharp.Models.Chat.ChatRole.operator ==(OllamaSharp.Models.Chat.ChatRole, OllamaSharp.Models.Chat.ChatRole)
+  type: Operator
+  source:
+    remote:
+      path: src/Models/Chat/ChatRole.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: op_Equality
+    path: src/Models/Chat/ChatRole.cs
+    startLine: 66
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models.Chat
+  summary: Determines if two <xref href="OllamaSharp.Models.Chat.ChatRole" data-throw-if-not-resolved="false"></xref> instances are equal.
+  example: []
+  syntax:
+    content: public static bool operator ==(ChatRole left, ChatRole right)
+    parameters:
+    - id: left
+      type: OllamaSharp.Models.Chat.ChatRole
+      description: The first <xref href="OllamaSharp.Models.Chat.ChatRole" data-throw-if-not-resolved="false"></xref> to compare.
+    - id: right
+      type: OllamaSharp.Models.Chat.ChatRole
+      description: The second <xref href="OllamaSharp.Models.Chat.ChatRole" data-throw-if-not-resolved="false"></xref> to compare.
+    return:
+      type: System.Boolean
+      description: <code>true</code> if both instances are equal; otherwise, <code>false</code>.
+    content.vb: Public Shared Operator =(left As ChatRole, right As ChatRole) As Boolean
+  overload: OllamaSharp.Models.Chat.ChatRole.op_Equality*
+  nameWithType.vb: ChatRole.=(ChatRole, ChatRole)
+  fullName.vb: OllamaSharp.Models.Chat.ChatRole.=(OllamaSharp.Models.Chat.ChatRole, OllamaSharp.Models.Chat.ChatRole)
+  name.vb: =(ChatRole, ChatRole)
+- uid: OllamaSharp.Models.Chat.ChatRole.op_Inequality(OllamaSharp.Models.Chat.ChatRole,OllamaSharp.Models.Chat.ChatRole)
+  commentId: M:OllamaSharp.Models.Chat.ChatRole.op_Inequality(OllamaSharp.Models.Chat.ChatRole,OllamaSharp.Models.Chat.ChatRole)
+  id: op_Inequality(OllamaSharp.Models.Chat.ChatRole,OllamaSharp.Models.Chat.ChatRole)
+  parent: OllamaSharp.Models.Chat.ChatRole
+  langs:
+  - csharp
+  - vb
+  name: operator !=(ChatRole, ChatRole)
+  nameWithType: ChatRole.operator !=(ChatRole, ChatRole)
+  fullName: OllamaSharp.Models.Chat.ChatRole.operator !=(OllamaSharp.Models.Chat.ChatRole, OllamaSharp.Models.Chat.ChatRole)
+  type: Operator
+  source:
+    remote:
+      path: src/Models/Chat/ChatRole.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: op_Inequality
+    path: src/Models/Chat/ChatRole.cs
+    startLine: 74
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models.Chat
+  summary: Determines if two <xref href="OllamaSharp.Models.Chat.ChatRole" data-throw-if-not-resolved="false"></xref> instances are not equal.
+  example: []
+  syntax:
+    content: public static bool operator !=(ChatRole left, ChatRole right)
+    parameters:
+    - id: left
+      type: OllamaSharp.Models.Chat.ChatRole
+      description: The first <xref href="OllamaSharp.Models.Chat.ChatRole" data-throw-if-not-resolved="false"></xref> to compare.
+    - id: right
+      type: OllamaSharp.Models.Chat.ChatRole
+      description: The second <xref href="OllamaSharp.Models.Chat.ChatRole" data-throw-if-not-resolved="false"></xref> to compare.
+    return:
+      type: System.Boolean
+      description: <code>true</code> if both instances are not equal; otherwise, <code>false</code>.
+    content.vb: Public Shared Operator <>(left As ChatRole, right As ChatRole) As Boolean
+  overload: OllamaSharp.Models.Chat.ChatRole.op_Inequality*
+  nameWithType.vb: ChatRole.<>(ChatRole, ChatRole)
+  fullName.vb: OllamaSharp.Models.Chat.ChatRole.<>(OllamaSharp.Models.Chat.ChatRole, OllamaSharp.Models.Chat.ChatRole)
+  name.vb: <>(ChatRole, ChatRole)
+- uid: OllamaSharp.Models.Chat.ChatRole.op_Implicit(System.String)~OllamaSharp.Models.Chat.ChatRole
+  commentId: M:OllamaSharp.Models.Chat.ChatRole.op_Implicit(System.String)~OllamaSharp.Models.Chat.ChatRole
+  id: op_Implicit(System.String)~OllamaSharp.Models.Chat.ChatRole
+  parent: OllamaSharp.Models.Chat.ChatRole
+  langs:
+  - csharp
+  - vb
+  name: implicit operator ChatRole(string)
+  nameWithType: ChatRole.implicit operator ChatRole(string)
+  fullName: OllamaSharp.Models.Chat.ChatRole.implicit operator OllamaSharp.Models.Chat.ChatRole(string)
+  type: Operator
+  source:
+    remote:
+      path: src/Models/Chat/ChatRole.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: op_Implicit
+    path: src/Models/Chat/ChatRole.cs
+    startLine: 80
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models.Chat
+  summary: Implicitly converts a string to a <xref href="OllamaSharp.Models.Chat.ChatRole" data-throw-if-not-resolved="false"></xref>.
+  example: []
+  syntax:
+    content: public static implicit operator ChatRole(string value)
+    parameters:
+    - id: value
+      type: System.String
+      description: The string value to convert.
+    return:
+      type: OllamaSharp.Models.Chat.ChatRole
+    content.vb: Public Shared Widening Operator CType(value As String) As ChatRole
+  overload: OllamaSharp.Models.Chat.ChatRole.op_Implicit*
+  nameWithType.vb: ChatRole.CType(String)
+  fullName.vb: OllamaSharp.Models.Chat.ChatRole.CType(String)
+  name.vb: CType(String)
+- uid: OllamaSharp.Models.Chat.ChatRole.Equals(OllamaSharp.Models.Chat.ChatRole)
+  commentId: M:OllamaSharp.Models.Chat.ChatRole.Equals(OllamaSharp.Models.Chat.ChatRole)
+  id: Equals(OllamaSharp.Models.Chat.ChatRole)
+  parent: OllamaSharp.Models.Chat.ChatRole
+  langs:
+  - csharp
+  - vb
+  name: Equals(ChatRole)
+  nameWithType: ChatRole.Equals(ChatRole)
+  fullName: OllamaSharp.Models.Chat.ChatRole.Equals(OllamaSharp.Models.Chat.ChatRole)
+  type: Method
+  source:
+    remote:
+      path: src/Models/Chat/ChatRole.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: Equals
+    path: src/Models/Chat/ChatRole.cs
+    startLine: 87
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models.Chat
+  example: []
+  syntax:
+    content: public bool Equals(ChatRole other)
+    parameters:
+    - id: other
+      type: OllamaSharp.Models.Chat.ChatRole
+    return:
+      type: System.Boolean
+    content.vb: Public Function Equals(other As ChatRole) As Boolean
+  overload: OllamaSharp.Models.Chat.ChatRole.Equals*
+  implements:
+  - System.IEquatable{OllamaSharp.Models.Chat.ChatRole}.Equals(OllamaSharp.Models.Chat.ChatRole)
+- uid: OllamaSharp.Models.Chat.ChatRole.ToString
+  commentId: M:OllamaSharp.Models.Chat.ChatRole.ToString
+  id: ToString
+  parent: OllamaSharp.Models.Chat.ChatRole
+  langs:
+  - csharp
+  - vb
+  name: ToString()
+  nameWithType: ChatRole.ToString()
+  fullName: OllamaSharp.Models.Chat.ChatRole.ToString()
+  type: Method
+  source:
+    remote:
+      path: src/Models/Chat/ChatRole.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: ToString
+    path: src/Models/Chat/ChatRole.cs
+    startLine: 94
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models.Chat
+  example: []
+  syntax:
+    content: public override string ToString()
+    return:
+      type: System.String
+    content.vb: Public Overrides Function ToString() As String
+  overridden: System.ValueType.ToString
+  overload: OllamaSharp.Models.Chat.ChatRole.ToString*
+references:
+- uid: OllamaSharp.Models.Chat
+  commentId: N:OllamaSharp.Models.Chat
+  href: OllamaSharp.html
+  name: OllamaSharp.Models.Chat
+  nameWithType: OllamaSharp.Models.Chat
+  fullName: OllamaSharp.Models.Chat
+  spec.csharp:
+  - uid: OllamaSharp
+    name: OllamaSharp
+    href: OllamaSharp.html
+  - name: .
+  - uid: OllamaSharp.Models
+    name: Models
+    href: OllamaSharp.Models.html
+  - name: .
+  - uid: OllamaSharp.Models.Chat
+    name: Chat
+    href: OllamaSharp.Models.Chat.html
+  spec.vb:
+  - uid: OllamaSharp
+    name: OllamaSharp
+    href: OllamaSharp.html
+  - name: .
+  - uid: OllamaSharp.Models
+    name: Models
+    href: OllamaSharp.Models.html
+  - name: .
+  - uid: OllamaSharp.Models.Chat
+    name: Chat
+    href: OllamaSharp.Models.Chat.html
+- uid: System.IEquatable{OllamaSharp.Models.Chat.ChatRole}
+  commentId: T:System.IEquatable{OllamaSharp.Models.Chat.ChatRole}
+  parent: System
+  definition: System.IEquatable`1
+  href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  name: IEquatable<ChatRole>
+  nameWithType: IEquatable<ChatRole>
+  fullName: System.IEquatable<OllamaSharp.Models.Chat.ChatRole>
+  nameWithType.vb: IEquatable(Of ChatRole)
+  fullName.vb: System.IEquatable(Of OllamaSharp.Models.Chat.ChatRole)
+  name.vb: IEquatable(Of ChatRole)
+  spec.csharp:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  - name: <
+  - uid: OllamaSharp.Models.Chat.ChatRole
+    name: ChatRole
+    href: OllamaSharp.Models.Chat.ChatRole.html
+  - name: '>'
+  spec.vb:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: OllamaSharp.Models.Chat.ChatRole
+    name: ChatRole
+    href: OllamaSharp.Models.Chat.ChatRole.html
+  - name: )
+- uid: System.ValueType.Equals(System.Object)
+  commentId: M:System.ValueType.Equals(System.Object)
+  parent: System.ValueType
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.valuetype.equals
+  name: Equals(object)
+  nameWithType: ValueType.Equals(object)
+  fullName: System.ValueType.Equals(object)
+  nameWithType.vb: ValueType.Equals(Object)
+  fullName.vb: System.ValueType.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.ValueType.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.valuetype.equals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.ValueType.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.valuetype.equals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.ValueType.GetHashCode
+  commentId: M:System.ValueType.GetHashCode
+  parent: System.ValueType
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.valuetype.gethashcode
+  name: GetHashCode()
+  nameWithType: ValueType.GetHashCode()
+  fullName: System.ValueType.GetHashCode()
+  spec.csharp:
+  - uid: System.ValueType.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.valuetype.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.ValueType.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.valuetype.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.IEquatable`1
+  commentId: T:System.IEquatable`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  name: IEquatable<T>
+  nameWithType: IEquatable<T>
+  fullName: System.IEquatable<T>
+  nameWithType.vb: IEquatable(Of T)
+  fullName.vb: System.IEquatable(Of T)
+  name.vb: IEquatable(Of T)
+  spec.csharp:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: System.ValueType
+  commentId: T:System.ValueType
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.valuetype
+  name: ValueType
+  nameWithType: ValueType
+  fullName: System.ValueType
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: OllamaSharp.Models.Chat.ChatRole
+  commentId: T:OllamaSharp.Models.Chat.ChatRole
+  parent: OllamaSharp.Models.Chat
+  href: OllamaSharp.Models.Chat.ChatRole.html
+  name: ChatRole
+  nameWithType: ChatRole
+  fullName: OllamaSharp.Models.Chat.ChatRole
+- uid: System.ArgumentNullException
+  commentId: T:System.ArgumentNullException
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.argumentnullexception
+  name: ArgumentNullException
+  nameWithType: ArgumentNullException
+  fullName: System.ArgumentNullException
+- uid: OllamaSharp.Models.Chat.ChatRole.#ctor*
+  commentId: Overload:OllamaSharp.Models.Chat.ChatRole.#ctor
+  href: OllamaSharp.Models.Chat.ChatRole.html#OllamaSharp_Models_Chat_ChatRole__ctor_System_String_
+  name: ChatRole
+  nameWithType: ChatRole.ChatRole
+  fullName: OllamaSharp.Models.Chat.ChatRole.ChatRole
+  nameWithType.vb: ChatRole.New
+  fullName.vb: OllamaSharp.Models.Chat.ChatRole.New
+  name.vb: New
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: OllamaSharp.Models.Chat.ChatRole.System*
+  commentId: Overload:OllamaSharp.Models.Chat.ChatRole.System
+  href: OllamaSharp.Models.Chat.ChatRole.html#OllamaSharp_Models_Chat_ChatRole_System
+  name: System
+  nameWithType: ChatRole.System
+  fullName: OllamaSharp.Models.Chat.ChatRole.System
+- uid: OllamaSharp.Models.Chat.ChatRole.Assistant*
+  commentId: Overload:OllamaSharp.Models.Chat.ChatRole.Assistant
+  href: OllamaSharp.Models.Chat.ChatRole.html#OllamaSharp_Models_Chat_ChatRole_Assistant
+  name: Assistant
+  nameWithType: ChatRole.Assistant
+  fullName: OllamaSharp.Models.Chat.ChatRole.Assistant
+- uid: OllamaSharp.Models.Chat.ChatRole.User*
+  commentId: Overload:OllamaSharp.Models.Chat.ChatRole.User
+  href: OllamaSharp.Models.Chat.ChatRole.html#OllamaSharp_Models_Chat_ChatRole_User
+  name: User
+  nameWithType: ChatRole.User
+  fullName: OllamaSharp.Models.Chat.ChatRole.User
+- uid: OllamaSharp.Models.Chat.ChatRole.Tool*
+  commentId: Overload:OllamaSharp.Models.Chat.ChatRole.Tool
+  href: OllamaSharp.Models.Chat.ChatRole.html#OllamaSharp_Models_Chat_ChatRole_Tool
+  name: Tool
+  nameWithType: ChatRole.Tool
+  fullName: OllamaSharp.Models.Chat.ChatRole.Tool
+- uid: OllamaSharp.Models.Chat.ChatRole.op_Equality*
+  commentId: Overload:OllamaSharp.Models.Chat.ChatRole.op_Equality
+  href: OllamaSharp.Models.Chat.ChatRole.html#OllamaSharp_Models_Chat_ChatRole_op_Equality_OllamaSharp_Models_Chat_ChatRole_OllamaSharp_Models_Chat_ChatRole_
+  name: operator ==
+  nameWithType: ChatRole.operator ==
+  fullName: OllamaSharp.Models.Chat.ChatRole.operator ==
+  nameWithType.vb: ChatRole.=
+  fullName.vb: OllamaSharp.Models.Chat.ChatRole.=
+  name.vb: =
+  spec.csharp:
+  - name: operator
+  - name: " "
+  - uid: OllamaSharp.Models.Chat.ChatRole.op_Equality*
+    name: ==
+    href: OllamaSharp.Models.Chat.ChatRole.html#OllamaSharp_Models_Chat_ChatRole_op_Equality_OllamaSharp_Models_Chat_ChatRole_OllamaSharp_Models_Chat_ChatRole_
+- uid: System.Boolean
+  commentId: T:System.Boolean
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.boolean
+  name: bool
+  nameWithType: bool
+  fullName: bool
+  nameWithType.vb: Boolean
+  fullName.vb: Boolean
+  name.vb: Boolean
+- uid: OllamaSharp.Models.Chat.ChatRole.op_Inequality*
+  commentId: Overload:OllamaSharp.Models.Chat.ChatRole.op_Inequality
+  href: OllamaSharp.Models.Chat.ChatRole.html#OllamaSharp_Models_Chat_ChatRole_op_Inequality_OllamaSharp_Models_Chat_ChatRole_OllamaSharp_Models_Chat_ChatRole_
+  name: operator !=
+  nameWithType: ChatRole.operator !=
+  fullName: OllamaSharp.Models.Chat.ChatRole.operator !=
+  nameWithType.vb: ChatRole.<>
+  fullName.vb: OllamaSharp.Models.Chat.ChatRole.<>
+  name.vb: <>
+  spec.csharp:
+  - name: operator
+  - name: " "
+  - uid: OllamaSharp.Models.Chat.ChatRole.op_Inequality*
+    name: '!='
+    href: OllamaSharp.Models.Chat.ChatRole.html#OllamaSharp_Models_Chat_ChatRole_op_Inequality_OllamaSharp_Models_Chat_ChatRole_OllamaSharp_Models_Chat_ChatRole_
+- uid: OllamaSharp.Models.Chat.ChatRole.op_Implicit*
+  commentId: Overload:OllamaSharp.Models.Chat.ChatRole.op_Implicit
+  name: implicit operator
+  nameWithType: ChatRole.implicit operator
+  fullName: OllamaSharp.Models.Chat.ChatRole.implicit operator
+  nameWithType.vb: ChatRole.CType
+  fullName.vb: OllamaSharp.Models.Chat.ChatRole.CType
+  name.vb: CType
+  spec.csharp:
+  - name: implicit
+  - name: " "
+  - name: operator
+- uid: OllamaSharp.Models.Chat.ChatRole.Equals*
+  commentId: Overload:OllamaSharp.Models.Chat.ChatRole.Equals
+  href: OllamaSharp.Models.Chat.ChatRole.html#OllamaSharp_Models_Chat_ChatRole_Equals_OllamaSharp_Models_Chat_ChatRole_
+  name: Equals
+  nameWithType: ChatRole.Equals
+  fullName: OllamaSharp.Models.Chat.ChatRole.Equals
+- uid: System.IEquatable{OllamaSharp.Models.Chat.ChatRole}.Equals(OllamaSharp.Models.Chat.ChatRole)
+  commentId: M:System.IEquatable{OllamaSharp.Models.Chat.ChatRole}.Equals(OllamaSharp.Models.Chat.ChatRole)
+  parent: System.IEquatable{OllamaSharp.Models.Chat.ChatRole}
+  definition: System.IEquatable`1.Equals(`0)
+  href: https://learn.microsoft.com/dotnet/api/system.iequatable-1.equals
+  name: Equals(ChatRole)
+  nameWithType: IEquatable<ChatRole>.Equals(ChatRole)
+  fullName: System.IEquatable<OllamaSharp.Models.Chat.ChatRole>.Equals(OllamaSharp.Models.Chat.ChatRole)
+  nameWithType.vb: IEquatable(Of ChatRole).Equals(ChatRole)
+  fullName.vb: System.IEquatable(Of OllamaSharp.Models.Chat.ChatRole).Equals(OllamaSharp.Models.Chat.ChatRole)
+  spec.csharp:
+  - uid: System.IEquatable{OllamaSharp.Models.Chat.ChatRole}.Equals(OllamaSharp.Models.Chat.ChatRole)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iequatable-1.equals
+  - name: (
+  - uid: OllamaSharp.Models.Chat.ChatRole
+    name: ChatRole
+    href: OllamaSharp.Models.Chat.ChatRole.html
+  - name: )
+  spec.vb:
+  - uid: System.IEquatable{OllamaSharp.Models.Chat.ChatRole}.Equals(OllamaSharp.Models.Chat.ChatRole)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iequatable-1.equals
+  - name: (
+  - uid: OllamaSharp.Models.Chat.ChatRole
+    name: ChatRole
+    href: OllamaSharp.Models.Chat.ChatRole.html
+  - name: )
+- uid: System.IEquatable`1.Equals(`0)
+  commentId: M:System.IEquatable`1.Equals(`0)
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.iequatable-1.equals
+  name: Equals(T)
+  nameWithType: IEquatable<T>.Equals(T)
+  fullName: System.IEquatable<T>.Equals(T)
+  nameWithType.vb: IEquatable(Of T).Equals(T)
+  fullName.vb: System.IEquatable(Of T).Equals(T)
+  spec.csharp:
+  - uid: System.IEquatable`1.Equals(`0)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iequatable-1.equals
+  - name: (
+  - name: T
+  - name: )
+  spec.vb:
+  - uid: System.IEquatable`1.Equals(`0)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iequatable-1.equals
+  - name: (
+  - name: T
+  - name: )
+- uid: System.ValueType.ToString
+  commentId: M:System.ValueType.ToString
+  parent: System.ValueType
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.valuetype.tostring
+  name: ToString()
+  nameWithType: ValueType.ToString()
+  fullName: System.ValueType.ToString()
+  spec.csharp:
+  - uid: System.ValueType.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.valuetype.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.ValueType.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.valuetype.tostring
+  - name: (
+  - name: )
+- uid: OllamaSharp.Models.Chat.ChatRole.ToString*
+  commentId: Overload:OllamaSharp.Models.Chat.ChatRole.ToString
+  href: OllamaSharp.Models.Chat.ChatRole.html#OllamaSharp_Models_Chat_ChatRole_ToString
+  name: ToString
+  nameWithType: ChatRole.ToString
+  fullName: OllamaSharp.Models.Chat.ChatRole.ToString
