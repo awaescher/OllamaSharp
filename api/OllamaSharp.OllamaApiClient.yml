@@ -1,0 +1,4054 @@
+### YamlMime:ManagedReference
+items:
+- uid: OllamaSharp.OllamaApiClient
+  commentId: T:OllamaSharp.OllamaApiClient
+  id: OllamaApiClient
+  parent: OllamaSharp
+  children:
+  - OllamaSharp.OllamaApiClient.#ctor(OllamaSharp.OllamaApiClient.Configuration)
+  - OllamaSharp.OllamaApiClient.#ctor(System.Net.Http.HttpClient,System.String)
+  - OllamaSharp.OllamaApiClient.#ctor(System.String,System.String)
+  - OllamaSharp.OllamaApiClient.#ctor(System.Uri,System.String)
+  - OllamaSharp.OllamaApiClient.ChatAsync(OllamaSharp.Models.Chat.ChatRequest,System.Threading.CancellationToken)
+  - OllamaSharp.OllamaApiClient.Config
+  - OllamaSharp.OllamaApiClient.CopyModelAsync(OllamaSharp.Models.CopyModelRequest,System.Threading.CancellationToken)
+  - OllamaSharp.OllamaApiClient.CreateModelAsync(OllamaSharp.Models.CreateModelRequest,System.Threading.CancellationToken)
+  - OllamaSharp.OllamaApiClient.DefaultRequestHeaders
+  - OllamaSharp.OllamaApiClient.DeleteModelAsync(OllamaSharp.Models.DeleteModelRequest,System.Threading.CancellationToken)
+  - OllamaSharp.OllamaApiClient.EmbedAsync(OllamaSharp.Models.EmbedRequest,System.Threading.CancellationToken)
+  - OllamaSharp.OllamaApiClient.GenerateAsync(OllamaSharp.Models.GenerateRequest,System.Threading.CancellationToken)
+  - OllamaSharp.OllamaApiClient.GetVersionAsync(System.Threading.CancellationToken)
+  - OllamaSharp.OllamaApiClient.IncomingJsonSerializerOptions
+  - OllamaSharp.OllamaApiClient.IsRunningAsync(System.Threading.CancellationToken)
+  - OllamaSharp.OllamaApiClient.ListLocalModelsAsync(System.Threading.CancellationToken)
+  - OllamaSharp.OllamaApiClient.ListRunningModelsAsync(System.Threading.CancellationToken)
+  - OllamaSharp.OllamaApiClient.OutgoingJsonSerializerOptions
+  - OllamaSharp.OllamaApiClient.PullModelAsync(OllamaSharp.Models.PullModelRequest,System.Threading.CancellationToken)
+  - OllamaSharp.OllamaApiClient.PushModelAsync(OllamaSharp.Models.PushModelRequest,System.Threading.CancellationToken)
+  - OllamaSharp.OllamaApiClient.SelectedModel
+  - OllamaSharp.OllamaApiClient.SendToOllamaAsync(System.Net.Http.HttpRequestMessage,OllamaSharp.Models.OllamaRequest,System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)
+  - OllamaSharp.OllamaApiClient.ShowModelAsync(OllamaSharp.Models.ShowModelRequest,System.Threading.CancellationToken)
+  - OllamaSharp.OllamaApiClient.Uri
+  langs:
+  - csharp
+  - vb
+  name: OllamaApiClient
+  nameWithType: OllamaApiClient
+  fullName: OllamaSharp.OllamaApiClient
+  type: Class
+  source:
+    remote:
+      path: src/OllamaApiClient.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: OllamaApiClient
+    path: src/OllamaApiClient.cs
+    startLine: 22
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp
+  summary: >-
+    The default client to use the Ollama API conveniently.
+
+    <a href="https://github.com/jmorganca/ollama/blob/main/docs/api.md">https://github.com/jmorganca/ollama/blob/main/docs/api.md</a>
+  example: []
+  syntax:
+    content: 'public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerator<string, Embedding<float>>, IDisposable'
+    content.vb: Public Class OllamaApiClient Implements IOllamaApiClient, IChatClient, IEmbeddingGenerator(Of String, Embedding(Of Single)), IDisposable
+  inheritance:
+  - System.Object
+  implements:
+  - OllamaSharp.IOllamaApiClient
+  - Microsoft.Extensions.AI.IChatClient
+  - Microsoft.Extensions.AI.IEmbeddingGenerator{System.String,Microsoft.Extensions.AI.Embedding{System.Single}}
+  - System.IDisposable
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.MemberwiseClone
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+  extensionMethods:
+  - OllamaSharp.IOllamaApiClient.OllamaSharp.OllamaApiClientExtensions.CopyModelAsync(System.String,System.String,System.Threading.CancellationToken)
+  - OllamaSharp.IOllamaApiClient.OllamaSharp.OllamaApiClientExtensions.CreateModelAsync(System.String,System.String,System.String,System.Threading.CancellationToken)
+  - OllamaSharp.IOllamaApiClient.OllamaSharp.OllamaApiClientExtensions.CreateModelAsync(System.String,System.String,System.Threading.CancellationToken)
+  - OllamaSharp.IOllamaApiClient.OllamaSharp.OllamaApiClientExtensions.DeleteModelAsync(System.String,System.Threading.CancellationToken)
+  - OllamaSharp.IOllamaApiClient.OllamaSharp.OllamaApiClientExtensions.EmbedAsync(System.String,System.Threading.CancellationToken)
+  - OllamaSharp.IOllamaApiClient.OllamaSharp.OllamaApiClientExtensions.GenerateAsync(System.String,OllamaSharp.ConversationContext,System.Threading.CancellationToken)
+  - OllamaSharp.IOllamaApiClient.OllamaSharp.OllamaApiClientExtensions.PullModelAsync(System.String,System.Threading.CancellationToken)
+  - OllamaSharp.IOllamaApiClient.OllamaSharp.OllamaApiClientExtensions.PushModelAsync(System.String,System.Threading.CancellationToken)
+  - OllamaSharp.IOllamaApiClient.OllamaSharp.OllamaApiClientExtensions.ShowModelAsync(System.String,System.Threading.CancellationToken)
+- uid: OllamaSharp.OllamaApiClient.DefaultRequestHeaders
+  commentId: P:OllamaSharp.OllamaApiClient.DefaultRequestHeaders
+  id: DefaultRequestHeaders
+  parent: OllamaSharp.OllamaApiClient
+  langs:
+  - csharp
+  - vb
+  name: DefaultRequestHeaders
+  nameWithType: OllamaApiClient.DefaultRequestHeaders
+  fullName: OllamaSharp.OllamaApiClient.DefaultRequestHeaders
+  type: Property
+  source:
+    remote:
+      path: src/OllamaApiClient.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: DefaultRequestHeaders
+    path: src/OllamaApiClient.cs
+    startLine: 29
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp
+  summary: Gets the default request headers that are sent to the Ollama API.
+  example: []
+  syntax:
+    content: public Dictionary<string, string> DefaultRequestHeaders { get; }
+    parameters: []
+    return:
+      type: System.Collections.Generic.Dictionary{System.String,System.String}
+    content.vb: Public ReadOnly Property DefaultRequestHeaders As Dictionary(Of String, String)
+  overload: OllamaSharp.OllamaApiClient.DefaultRequestHeaders*
+- uid: OllamaSharp.OllamaApiClient.OutgoingJsonSerializerOptions
+  commentId: P:OllamaSharp.OllamaApiClient.OutgoingJsonSerializerOptions
+  id: OutgoingJsonSerializerOptions
+  parent: OllamaSharp.OllamaApiClient
+  langs:
+  - csharp
+  - vb
+  name: OutgoingJsonSerializerOptions
+  nameWithType: OllamaApiClient.OutgoingJsonSerializerOptions
+  fullName: OllamaSharp.OllamaApiClient.OutgoingJsonSerializerOptions
+  type: Property
+  source:
+    remote:
+      path: src/OllamaApiClient.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: OutgoingJsonSerializerOptions
+    path: src/OllamaApiClient.cs
+    startLine: 34
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp
+  summary: Gets the serializer options for outgoing web requests like Post or Delete.
+  example: []
+  syntax:
+    content: public JsonSerializerOptions OutgoingJsonSerializerOptions { get; }
+    parameters: []
+    return:
+      type: System.Text.Json.JsonSerializerOptions
+    content.vb: Public ReadOnly Property OutgoingJsonSerializerOptions As JsonSerializerOptions
+  overload: OllamaSharp.OllamaApiClient.OutgoingJsonSerializerOptions*
+- uid: OllamaSharp.OllamaApiClient.IncomingJsonSerializerOptions
+  commentId: P:OllamaSharp.OllamaApiClient.IncomingJsonSerializerOptions
+  id: IncomingJsonSerializerOptions
+  parent: OllamaSharp.OllamaApiClient
+  langs:
+  - csharp
+  - vb
+  name: IncomingJsonSerializerOptions
+  nameWithType: OllamaApiClient.IncomingJsonSerializerOptions
+  fullName: OllamaSharp.OllamaApiClient.IncomingJsonSerializerOptions
+  type: Property
+  source:
+    remote:
+      path: src/OllamaApiClient.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: IncomingJsonSerializerOptions
+    path: src/OllamaApiClient.cs
+    startLine: 39
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp
+  summary: Gets the serializer options used for deserializing HTTP responses.
+  example: []
+  syntax:
+    content: public JsonSerializerOptions IncomingJsonSerializerOptions { get; }
+    parameters: []
+    return:
+      type: System.Text.Json.JsonSerializerOptions
+    content.vb: Public ReadOnly Property IncomingJsonSerializerOptions As JsonSerializerOptions
+  overload: OllamaSharp.OllamaApiClient.IncomingJsonSerializerOptions*
+- uid: OllamaSharp.OllamaApiClient.Config
+  commentId: P:OllamaSharp.OllamaApiClient.Config
+  id: Config
+  parent: OllamaSharp.OllamaApiClient
+  langs:
+  - csharp
+  - vb
+  name: Config
+  nameWithType: OllamaApiClient.Config
+  fullName: OllamaSharp.OllamaApiClient.Config
+  type: Property
+  source:
+    remote:
+      path: src/OllamaApiClient.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: Config
+    path: src/OllamaApiClient.cs
+    startLine: 44
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp
+  summary: Gets the current configuration of the API client.
+  example: []
+  syntax:
+    content: public OllamaApiClient.Configuration Config { get; }
+    parameters: []
+    return:
+      type: OllamaSharp.OllamaApiClient.Configuration
+    content.vb: Public ReadOnly Property Config As OllamaApiClient.Configuration
+  overload: OllamaSharp.OllamaApiClient.Config*
+- uid: OllamaSharp.OllamaApiClient.Uri
+  commentId: P:OllamaSharp.OllamaApiClient.Uri
+  id: Uri
+  parent: OllamaSharp.OllamaApiClient
+  langs:
+  - csharp
+  - vb
+  name: Uri
+  nameWithType: OllamaApiClient.Uri
+  fullName: OllamaSharp.OllamaApiClient.Uri
+  type: Property
+  source:
+    remote:
+      path: src/OllamaApiClient.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: Uri
+    path: src/OllamaApiClient.cs
+    startLine: 47
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp
+  summary: Gets the endpoint URI used by the API client.
+  example: []
+  syntax:
+    content: public Uri Uri { get; }
+    parameters: []
+    return:
+      type: System.Uri
+    content.vb: Public ReadOnly Property Uri As Uri
+  overload: OllamaSharp.OllamaApiClient.Uri*
+  implements:
+  - OllamaSharp.IOllamaApiClient.Uri
+- uid: OllamaSharp.OllamaApiClient.SelectedModel
+  commentId: P:OllamaSharp.OllamaApiClient.SelectedModel
+  id: SelectedModel
+  parent: OllamaSharp.OllamaApiClient
+  langs:
+  - csharp
+  - vb
+  name: SelectedModel
+  nameWithType: OllamaApiClient.SelectedModel
+  fullName: OllamaSharp.OllamaApiClient.SelectedModel
+  type: Property
+  source:
+    remote:
+      path: src/OllamaApiClient.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: SelectedModel
+    path: src/OllamaApiClient.cs
+    startLine: 50
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp
+  summary: Gets or sets the name of the model to run requests on.
+  example: []
+  syntax:
+    content: public string SelectedModel { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property SelectedModel As String
+  overload: OllamaSharp.OllamaApiClient.SelectedModel*
+  implements:
+  - OllamaSharp.IOllamaApiClient.SelectedModel
+- uid: OllamaSharp.OllamaApiClient.#ctor(System.String,System.String)
+  commentId: M:OllamaSharp.OllamaApiClient.#ctor(System.String,System.String)
+  id: '#ctor(System.String,System.String)'
+  parent: OllamaSharp.OllamaApiClient
+  langs:
+  - csharp
+  - vb
+  name: OllamaApiClient(string, string)
+  nameWithType: OllamaApiClient.OllamaApiClient(string, string)
+  fullName: OllamaSharp.OllamaApiClient.OllamaApiClient(string, string)
+  type: Constructor
+  source:
+    remote:
+      path: src/OllamaApiClient.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: .ctor
+    path: src/OllamaApiClient.cs
+    startLine: 62
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp
+  summary: Creates a new instance of the Ollama API client.
+  example: []
+  syntax:
+    content: public OllamaApiClient(string uriString, string defaultModel = "")
+    parameters:
+    - id: uriString
+      type: System.String
+      description: The URI of the Ollama API endpoint.
+    - id: defaultModel
+      type: System.String
+      description: The default model that should be used with Ollama.
+    content.vb: Public Sub New(uriString As String, defaultModel As String = "")
+  overload: OllamaSharp.OllamaApiClient.#ctor*
+  nameWithType.vb: OllamaApiClient.New(String, String)
+  fullName.vb: OllamaSharp.OllamaApiClient.New(String, String)
+  name.vb: New(String, String)
+- uid: OllamaSharp.OllamaApiClient.#ctor(System.Uri,System.String)
+  commentId: M:OllamaSharp.OllamaApiClient.#ctor(System.Uri,System.String)
+  id: '#ctor(System.Uri,System.String)'
+  parent: OllamaSharp.OllamaApiClient
+  langs:
+  - csharp
+  - vb
+  name: OllamaApiClient(Uri, string)
+  nameWithType: OllamaApiClient.OllamaApiClient(Uri, string)
+  fullName: OllamaSharp.OllamaApiClient.OllamaApiClient(System.Uri, string)
+  type: Constructor
+  source:
+    remote:
+      path: src/OllamaApiClient.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: .ctor
+    path: src/OllamaApiClient.cs
+    startLine: 72
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp
+  summary: Creates a new instance of the Ollama API client.
+  example: []
+  syntax:
+    content: public OllamaApiClient(Uri uri, string defaultModel = "")
+    parameters:
+    - id: uri
+      type: System.Uri
+      description: The URI of the Ollama API endpoint.
+    - id: defaultModel
+      type: System.String
+      description: The default model that should be used with Ollama.
+    content.vb: Public Sub New(uri As Uri, defaultModel As String = "")
+  overload: OllamaSharp.OllamaApiClient.#ctor*
+  nameWithType.vb: OllamaApiClient.New(Uri, String)
+  fullName.vb: OllamaSharp.OllamaApiClient.New(System.Uri, String)
+  name.vb: New(Uri, String)
+- uid: OllamaSharp.OllamaApiClient.#ctor(OllamaSharp.OllamaApiClient.Configuration)
+  commentId: M:OllamaSharp.OllamaApiClient.#ctor(OllamaSharp.OllamaApiClient.Configuration)
+  id: '#ctor(OllamaSharp.OllamaApiClient.Configuration)'
+  parent: OllamaSharp.OllamaApiClient
+  langs:
+  - csharp
+  - vb
+  name: OllamaApiClient(Configuration)
+  nameWithType: OllamaApiClient.OllamaApiClient(OllamaApiClient.Configuration)
+  fullName: OllamaSharp.OllamaApiClient.OllamaApiClient(OllamaSharp.OllamaApiClient.Configuration)
+  type: Constructor
+  source:
+    remote:
+      path: src/OllamaApiClient.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: .ctor
+    path: src/OllamaApiClient.cs
+    startLine: 81
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp
+  summary: Creates a new instance of the Ollama API client.
+  example: []
+  syntax:
+    content: public OllamaApiClient(OllamaApiClient.Configuration config)
+    parameters:
+    - id: config
+      type: OllamaSharp.OllamaApiClient.Configuration
+      description: The configuration for the Ollama API client.
+    content.vb: Public Sub New(config As OllamaApiClient.Configuration)
+  overload: OllamaSharp.OllamaApiClient.#ctor*
+  nameWithType.vb: OllamaApiClient.New(OllamaApiClient.Configuration)
+  fullName.vb: OllamaSharp.OllamaApiClient.New(OllamaSharp.OllamaApiClient.Configuration)
+  name.vb: New(Configuration)
+- uid: OllamaSharp.OllamaApiClient.#ctor(System.Net.Http.HttpClient,System.String)
+  commentId: M:OllamaSharp.OllamaApiClient.#ctor(System.Net.Http.HttpClient,System.String)
+  id: '#ctor(System.Net.Http.HttpClient,System.String)'
+  parent: OllamaSharp.OllamaApiClient
+  langs:
+  - csharp
+  - vb
+  name: OllamaApiClient(HttpClient, string)
+  nameWithType: OllamaApiClient.OllamaApiClient(HttpClient, string)
+  fullName: OllamaSharp.OllamaApiClient.OllamaApiClient(System.Net.Http.HttpClient, string)
+  type: Constructor
+  source:
+    remote:
+      path: src/OllamaApiClient.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: .ctor
+    path: src/OllamaApiClient.cs
+    startLine: 93
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp
+  summary: Creates a new instance of the Ollama API client.
+  example: []
+  syntax:
+    content: public OllamaApiClient(HttpClient client, string defaultModel = "")
+    parameters:
+    - id: client
+      type: System.Net.Http.HttpClient
+      description: The HTTP client to access the Ollama API with.
+    - id: defaultModel
+      type: System.String
+      description: The default model that should be used with Ollama.
+    content.vb: Public Sub New(client As HttpClient, defaultModel As String = "")
+  overload: OllamaSharp.OllamaApiClient.#ctor*
+  exceptions:
+  - type: System.ArgumentNullException
+    commentId: T:System.ArgumentNullException
+    description: ''
+  nameWithType.vb: OllamaApiClient.New(HttpClient, String)
+  fullName.vb: OllamaSharp.OllamaApiClient.New(System.Net.Http.HttpClient, String)
+  name.vb: New(HttpClient, String)
+- uid: OllamaSharp.OllamaApiClient.CreateModelAsync(OllamaSharp.Models.CreateModelRequest,System.Threading.CancellationToken)
+  commentId: M:OllamaSharp.OllamaApiClient.CreateModelAsync(OllamaSharp.Models.CreateModelRequest,System.Threading.CancellationToken)
+  id: CreateModelAsync(OllamaSharp.Models.CreateModelRequest,System.Threading.CancellationToken)
+  parent: OllamaSharp.OllamaApiClient
+  langs:
+  - csharp
+  - vb
+  name: CreateModelAsync(CreateModelRequest, CancellationToken)
+  nameWithType: OllamaApiClient.CreateModelAsync(CreateModelRequest, CancellationToken)
+  fullName: OllamaSharp.OllamaApiClient.CreateModelAsync(OllamaSharp.Models.CreateModelRequest, System.Threading.CancellationToken)
+  type: Method
+  source:
+    remote:
+      path: src/OllamaApiClient.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: CreateModelAsync
+    path: src/OllamaApiClient.cs
+    startLine: 105
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp
+  summary: Sends a request to the /api/create endpoint to create a model.
+  example: []
+  syntax:
+    content: public IAsyncEnumerable<CreateModelResponse?> CreateModelAsync(CreateModelRequest request, CancellationToken cancellationToken = default)
+    parameters:
+    - id: request
+      type: OllamaSharp.Models.CreateModelRequest
+      description: The request object containing the model details.
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+      description: The token to cancel the operation with.
+    return:
+      type: System.Collections.Generic.IAsyncEnumerable{OllamaSharp.Models.CreateModelResponse}
+      description: An asynchronous enumerable of the model creation status.
+    content.vb: Public Function CreateModelAsync(request As CreateModelRequest, cancellationToken As CancellationToken = Nothing) As IAsyncEnumerable(Of CreateModelResponse)
+  overload: OllamaSharp.OllamaApiClient.CreateModelAsync*
+  implements:
+  - OllamaSharp.IOllamaApiClient.CreateModelAsync(OllamaSharp.Models.CreateModelRequest,System.Threading.CancellationToken)
+- uid: OllamaSharp.OllamaApiClient.DeleteModelAsync(OllamaSharp.Models.DeleteModelRequest,System.Threading.CancellationToken)
+  commentId: M:OllamaSharp.OllamaApiClient.DeleteModelAsync(OllamaSharp.Models.DeleteModelRequest,System.Threading.CancellationToken)
+  id: DeleteModelAsync(OllamaSharp.Models.DeleteModelRequest,System.Threading.CancellationToken)
+  parent: OllamaSharp.OllamaApiClient
+  langs:
+  - csharp
+  - vb
+  name: DeleteModelAsync(DeleteModelRequest, CancellationToken)
+  nameWithType: OllamaApiClient.DeleteModelAsync(DeleteModelRequest, CancellationToken)
+  fullName: OllamaSharp.OllamaApiClient.DeleteModelAsync(OllamaSharp.Models.DeleteModelRequest, System.Threading.CancellationToken)
+  type: Method
+  source:
+    remote:
+      path: src/OllamaApiClient.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: DeleteModelAsync
+    path: src/OllamaApiClient.cs
+    startLine: 112
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp
+  summary: Sends a request to the /api/delete endpoint to delete a model.
+  example: []
+  syntax:
+    content: public Task DeleteModelAsync(DeleteModelRequest request, CancellationToken cancellationToken = default)
+    parameters:
+    - id: request
+      type: OllamaSharp.Models.DeleteModelRequest
+      description: The request containing the model to delete.
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+      description: The token to cancel the operation with.
+    return:
+      type: System.Threading.Tasks.Task
+    content.vb: Public Function DeleteModelAsync(request As DeleteModelRequest, cancellationToken As CancellationToken = Nothing) As Task
+  overload: OllamaSharp.OllamaApiClient.DeleteModelAsync*
+  implements:
+  - OllamaSharp.IOllamaApiClient.DeleteModelAsync(OllamaSharp.Models.DeleteModelRequest,System.Threading.CancellationToken)
+- uid: OllamaSharp.OllamaApiClient.ListLocalModelsAsync(System.Threading.CancellationToken)
+  commentId: M:OllamaSharp.OllamaApiClient.ListLocalModelsAsync(System.Threading.CancellationToken)
+  id: ListLocalModelsAsync(System.Threading.CancellationToken)
+  parent: OllamaSharp.OllamaApiClient
+  langs:
+  - csharp
+  - vb
+  name: ListLocalModelsAsync(CancellationToken)
+  nameWithType: OllamaApiClient.ListLocalModelsAsync(CancellationToken)
+  fullName: OllamaSharp.OllamaApiClient.ListLocalModelsAsync(System.Threading.CancellationToken)
+  type: Method
+  source:
+    remote:
+      path: src/OllamaApiClient.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: ListLocalModelsAsync
+    path: src/OllamaApiClient.cs
+    startLine: 123
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp
+  summary: Sends a request to the /api/tags endpoint to get all models that are available locally.
+  example: []
+  syntax:
+    content: public Task<IEnumerable<Model>> ListLocalModelsAsync(CancellationToken cancellationToken = default)
+    parameters:
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+      description: The token to cancel the operation with.
+    return:
+      type: System.Threading.Tasks.Task{System.Collections.Generic.IEnumerable{OllamaSharp.Models.Model}}
+      description: A task that represents the asynchronous operation. The task result contains a collection of <xref href="OllamaSharp.Models.Model" data-throw-if-not-resolved="false"></xref>.
+    content.vb: Public Function ListLocalModelsAsync(cancellationToken As CancellationToken = Nothing) As Task(Of IEnumerable(Of Model))
+  overload: OllamaSharp.OllamaApiClient.ListLocalModelsAsync*
+  implements:
+  - OllamaSharp.IOllamaApiClient.ListLocalModelsAsync(System.Threading.CancellationToken)
+- uid: OllamaSharp.OllamaApiClient.ListRunningModelsAsync(System.Threading.CancellationToken)
+  commentId: M:OllamaSharp.OllamaApiClient.ListRunningModelsAsync(System.Threading.CancellationToken)
+  id: ListRunningModelsAsync(System.Threading.CancellationToken)
+  parent: OllamaSharp.OllamaApiClient
+  langs:
+  - csharp
+  - vb
+  name: ListRunningModelsAsync(CancellationToken)
+  nameWithType: OllamaApiClient.ListRunningModelsAsync(CancellationToken)
+  fullName: OllamaSharp.OllamaApiClient.ListRunningModelsAsync(System.Threading.CancellationToken)
+  type: Method
+  source:
+    remote:
+      path: src/OllamaApiClient.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: ListRunningModelsAsync
+    path: src/OllamaApiClient.cs
+    startLine: 130
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp
+  summary: Sends a request to the /api/ps endpoint to get the running models.
+  example: []
+  syntax:
+    content: public Task<IEnumerable<RunningModel>> ListRunningModelsAsync(CancellationToken cancellationToken = default)
+    parameters:
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+      description: The token to cancel the operation with.
+    return:
+      type: System.Threading.Tasks.Task{System.Collections.Generic.IEnumerable{OllamaSharp.Models.RunningModel}}
+      description: A task that represents the asynchronous operation. The task result contains a collection of <xref href="OllamaSharp.Models.RunningModel" data-throw-if-not-resolved="false"></xref>.
+    content.vb: Public Function ListRunningModelsAsync(cancellationToken As CancellationToken = Nothing) As Task(Of IEnumerable(Of RunningModel))
+  overload: OllamaSharp.OllamaApiClient.ListRunningModelsAsync*
+  implements:
+  - OllamaSharp.IOllamaApiClient.ListRunningModelsAsync(System.Threading.CancellationToken)
+- uid: OllamaSharp.OllamaApiClient.ShowModelAsync(OllamaSharp.Models.ShowModelRequest,System.Threading.CancellationToken)
+  commentId: M:OllamaSharp.OllamaApiClient.ShowModelAsync(OllamaSharp.Models.ShowModelRequest,System.Threading.CancellationToken)
+  id: ShowModelAsync(OllamaSharp.Models.ShowModelRequest,System.Threading.CancellationToken)
+  parent: OllamaSharp.OllamaApiClient
+  langs:
+  - csharp
+  - vb
+  name: ShowModelAsync(ShowModelRequest, CancellationToken)
+  nameWithType: OllamaApiClient.ShowModelAsync(ShowModelRequest, CancellationToken)
+  fullName: OllamaSharp.OllamaApiClient.ShowModelAsync(OllamaSharp.Models.ShowModelRequest, System.Threading.CancellationToken)
+  type: Method
+  source:
+    remote:
+      path: src/OllamaApiClient.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: ShowModelAsync
+    path: src/OllamaApiClient.cs
+    startLine: 137
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp
+  summary: Sends a request to the /api/show endpoint to show the information of a model.
+  example: []
+  syntax:
+    content: public Task<ShowModelResponse> ShowModelAsync(ShowModelRequest request, CancellationToken cancellationToken = default)
+    parameters:
+    - id: request
+      type: OllamaSharp.Models.ShowModelRequest
+      description: The request containing the name of the model to get the information for.
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+      description: The token to cancel the operation with.
+    return:
+      type: System.Threading.Tasks.Task{OllamaSharp.Models.ShowModelResponse}
+      description: A task that represents the asynchronous operation. The task result contains the <xref href="OllamaSharp.Models.ShowModelResponse" data-throw-if-not-resolved="false"></xref>.
+    content.vb: Public Function ShowModelAsync(request As ShowModelRequest, cancellationToken As CancellationToken = Nothing) As Task(Of ShowModelResponse)
+  overload: OllamaSharp.OllamaApiClient.ShowModelAsync*
+  implements:
+  - OllamaSharp.IOllamaApiClient.ShowModelAsync(OllamaSharp.Models.ShowModelRequest,System.Threading.CancellationToken)
+- uid: OllamaSharp.OllamaApiClient.CopyModelAsync(OllamaSharp.Models.CopyModelRequest,System.Threading.CancellationToken)
+  commentId: M:OllamaSharp.OllamaApiClient.CopyModelAsync(OllamaSharp.Models.CopyModelRequest,System.Threading.CancellationToken)
+  id: CopyModelAsync(OllamaSharp.Models.CopyModelRequest,System.Threading.CancellationToken)
+  parent: OllamaSharp.OllamaApiClient
+  langs:
+  - csharp
+  - vb
+  name: CopyModelAsync(CopyModelRequest, CancellationToken)
+  nameWithType: OllamaApiClient.CopyModelAsync(CopyModelRequest, CancellationToken)
+  fullName: OllamaSharp.OllamaApiClient.CopyModelAsync(OllamaSharp.Models.CopyModelRequest, System.Threading.CancellationToken)
+  type: Method
+  source:
+    remote:
+      path: src/OllamaApiClient.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: CopyModelAsync
+    path: src/OllamaApiClient.cs
+    startLine: 141
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp
+  summary: Sends a request to the /api/copy endpoint to copy a model.
+  example: []
+  syntax:
+    content: public Task CopyModelAsync(CopyModelRequest request, CancellationToken cancellationToken = default)
+    parameters:
+    - id: request
+      type: OllamaSharp.Models.CopyModelRequest
+      description: The parameters required to copy a model.
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+      description: The token to cancel the operation with.
+    return:
+      type: System.Threading.Tasks.Task
+    content.vb: Public Function CopyModelAsync(request As CopyModelRequest, cancellationToken As CancellationToken = Nothing) As Task
+  overload: OllamaSharp.OllamaApiClient.CopyModelAsync*
+  implements:
+  - OllamaSharp.IOllamaApiClient.CopyModelAsync(OllamaSharp.Models.CopyModelRequest,System.Threading.CancellationToken)
+- uid: OllamaSharp.OllamaApiClient.PullModelAsync(OllamaSharp.Models.PullModelRequest,System.Threading.CancellationToken)
+  commentId: M:OllamaSharp.OllamaApiClient.PullModelAsync(OllamaSharp.Models.PullModelRequest,System.Threading.CancellationToken)
+  id: PullModelAsync(OllamaSharp.Models.PullModelRequest,System.Threading.CancellationToken)
+  parent: OllamaSharp.OllamaApiClient
+  langs:
+  - csharp
+  - vb
+  name: PullModelAsync(PullModelRequest, CancellationToken)
+  nameWithType: OllamaApiClient.PullModelAsync(PullModelRequest, CancellationToken)
+  fullName: OllamaSharp.OllamaApiClient.PullModelAsync(OllamaSharp.Models.PullModelRequest, System.Threading.CancellationToken)
+  type: Method
+  source:
+    remote:
+      path: src/OllamaApiClient.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: PullModelAsync
+    path: src/OllamaApiClient.cs
+    startLine: 145
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp
+  summary: Sends a request to the /api/pull endpoint to pull a new model.
+  example: []
+  syntax:
+    content: public IAsyncEnumerable<PullModelResponse?> PullModelAsync(PullModelRequest request, CancellationToken cancellationToken = default)
+    parameters:
+    - id: request
+      type: OllamaSharp.Models.PullModelRequest
+      description: The request specifying the model name and whether to use an insecure connection.
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+      description: The token to cancel the operation with.
+    return:
+      type: System.Collections.Generic.IAsyncEnumerable{OllamaSharp.Models.PullModelResponse}
+      description: >-
+        An asynchronous enumerable of <xref href="OllamaSharp.Models.PullModelResponse" data-throw-if-not-resolved="false"></xref> objects representing the status of the
+
+        model pull operation.
+    content.vb: Public Function PullModelAsync(request As PullModelRequest, cancellationToken As CancellationToken = Nothing) As IAsyncEnumerable(Of PullModelResponse)
+  overload: OllamaSharp.OllamaApiClient.PullModelAsync*
+  implements:
+  - OllamaSharp.IOllamaApiClient.PullModelAsync(OllamaSharp.Models.PullModelRequest,System.Threading.CancellationToken)
+- uid: OllamaSharp.OllamaApiClient.PushModelAsync(OllamaSharp.Models.PushModelRequest,System.Threading.CancellationToken)
+  commentId: M:OllamaSharp.OllamaApiClient.PushModelAsync(OllamaSharp.Models.PushModelRequest,System.Threading.CancellationToken)
+  id: PushModelAsync(OllamaSharp.Models.PushModelRequest,System.Threading.CancellationToken)
+  parent: OllamaSharp.OllamaApiClient
+  langs:
+  - csharp
+  - vb
+  name: PushModelAsync(PushModelRequest, CancellationToken)
+  nameWithType: OllamaApiClient.PushModelAsync(PushModelRequest, CancellationToken)
+  fullName: OllamaSharp.OllamaApiClient.PushModelAsync(OllamaSharp.Models.PushModelRequest, System.Threading.CancellationToken)
+  type: Method
+  source:
+    remote:
+      path: src/OllamaApiClient.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: PushModelAsync
+    path: src/OllamaApiClient.cs
+    startLine: 152
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp
+  summary: Pushes a model to the Ollama API endpoint.
+  example: []
+  syntax:
+    content: public IAsyncEnumerable<PushModelResponse?> PushModelAsync(PushModelRequest request, CancellationToken cancellationToken = default)
+    parameters:
+    - id: request
+      type: OllamaSharp.Models.PushModelRequest
+      description: The request containing the model information to push.
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+      description: The token to cancel the operation with.
+    return:
+      type: System.Collections.Generic.IAsyncEnumerable{OllamaSharp.Models.PushModelResponse}
+      description: >-
+        An asynchronous enumerable of push status updates. Use the enumerator
+
+        to retrieve the push status updates.
+    content.vb: Public Function PushModelAsync(request As PushModelRequest, cancellationToken As CancellationToken = Nothing) As IAsyncEnumerable(Of PushModelResponse)
+  overload: OllamaSharp.OllamaApiClient.PushModelAsync*
+  implements:
+  - OllamaSharp.IOllamaApiClient.PushModelAsync(OllamaSharp.Models.PushModelRequest,System.Threading.CancellationToken)
+- uid: OllamaSharp.OllamaApiClient.EmbedAsync(OllamaSharp.Models.EmbedRequest,System.Threading.CancellationToken)
+  commentId: M:OllamaSharp.OllamaApiClient.EmbedAsync(OllamaSharp.Models.EmbedRequest,System.Threading.CancellationToken)
+  id: EmbedAsync(OllamaSharp.Models.EmbedRequest,System.Threading.CancellationToken)
+  parent: OllamaSharp.OllamaApiClient
+  langs:
+  - csharp
+  - vb
+  name: EmbedAsync(EmbedRequest, CancellationToken)
+  nameWithType: OllamaApiClient.EmbedAsync(EmbedRequest, CancellationToken)
+  fullName: OllamaSharp.OllamaApiClient.EmbedAsync(OllamaSharp.Models.EmbedRequest, System.Threading.CancellationToken)
+  type: Method
+  source:
+    remote:
+      path: src/OllamaApiClient.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: EmbedAsync
+    path: src/OllamaApiClient.cs
+    startLine: 161
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp
+  summary: Sends a request to the /api/embed endpoint to generate embeddings.
+  example: []
+  syntax:
+    content: public Task<EmbedResponse> EmbedAsync(EmbedRequest request, CancellationToken cancellationToken = default)
+    parameters:
+    - id: request
+      type: OllamaSharp.Models.EmbedRequest
+      description: The parameters to generate embeddings for.
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+      description: The token to cancel the operation with.
+    return:
+      type: System.Threading.Tasks.Task{OllamaSharp.Models.EmbedResponse}
+      description: A task that represents the asynchronous operation. The task result contains the <xref href="OllamaSharp.Models.EmbedResponse" data-throw-if-not-resolved="false"></xref>.
+    content.vb: Public Function EmbedAsync(request As EmbedRequest, cancellationToken As CancellationToken = Nothing) As Task(Of EmbedResponse)
+  overload: OllamaSharp.OllamaApiClient.EmbedAsync*
+  implements:
+  - OllamaSharp.IOllamaApiClient.EmbedAsync(OllamaSharp.Models.EmbedRequest,System.Threading.CancellationToken)
+- uid: OllamaSharp.OllamaApiClient.GenerateAsync(OllamaSharp.Models.GenerateRequest,System.Threading.CancellationToken)
+  commentId: M:OllamaSharp.OllamaApiClient.GenerateAsync(OllamaSharp.Models.GenerateRequest,System.Threading.CancellationToken)
+  id: GenerateAsync(OllamaSharp.Models.GenerateRequest,System.Threading.CancellationToken)
+  parent: OllamaSharp.OllamaApiClient
+  langs:
+  - csharp
+  - vb
+  name: GenerateAsync(GenerateRequest, CancellationToken)
+  nameWithType: OllamaApiClient.GenerateAsync(GenerateRequest, CancellationToken)
+  fullName: OllamaSharp.OllamaApiClient.GenerateAsync(OllamaSharp.Models.GenerateRequest, System.Threading.CancellationToken)
+  type: Method
+  source:
+    remote:
+      path: src/OllamaApiClient.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: GenerateAsync
+    path: src/OllamaApiClient.cs
+    startLine: 170
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp
+  summary: Streams completion responses from the /api/generate endpoint on the Ollama API based on the provided request.
+  example: []
+  syntax:
+    content: public IAsyncEnumerable<GenerateResponseStream?> GenerateAsync(GenerateRequest request, CancellationToken cancellationToken = default)
+    parameters:
+    - id: request
+      type: OllamaSharp.Models.GenerateRequest
+      description: The request containing the parameters for the completion.
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+      description: The token to cancel the operation with.
+    return:
+      type: System.Collections.Generic.IAsyncEnumerable{OllamaSharp.Models.GenerateResponseStream}
+      description: An asynchronous enumerable of <xref href="OllamaSharp.Models.GenerateResponseStream" data-throw-if-not-resolved="false"></xref>.
+    content.vb: Public Function GenerateAsync(request As GenerateRequest, cancellationToken As CancellationToken = Nothing) As IAsyncEnumerable(Of GenerateResponseStream)
+  overload: OllamaSharp.OllamaApiClient.GenerateAsync*
+  implements:
+  - OllamaSharp.IOllamaApiClient.GenerateAsync(OllamaSharp.Models.GenerateRequest,System.Threading.CancellationToken)
+- uid: OllamaSharp.OllamaApiClient.ChatAsync(OllamaSharp.Models.Chat.ChatRequest,System.Threading.CancellationToken)
+  commentId: M:OllamaSharp.OllamaApiClient.ChatAsync(OllamaSharp.Models.Chat.ChatRequest,System.Threading.CancellationToken)
+  id: ChatAsync(OllamaSharp.Models.Chat.ChatRequest,System.Threading.CancellationToken)
+  parent: OllamaSharp.OllamaApiClient
+  langs:
+  - csharp
+  - vb
+  name: ChatAsync(ChatRequest, CancellationToken)
+  nameWithType: OllamaApiClient.ChatAsync(ChatRequest, CancellationToken)
+  fullName: OllamaSharp.OllamaApiClient.ChatAsync(OllamaSharp.Models.Chat.ChatRequest, System.Threading.CancellationToken)
+  type: Method
+  source:
+    remote:
+      path: src/OllamaApiClient.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: ChatAsync
+    path: src/OllamaApiClient.cs
+    startLine: 180
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp
+  summary: Sends a request to the /api/chat endpoint and streams the response of the chat.
+  remarks: >-
+    This is the method to call the Ollama endpoint /api/chat. You might not want to do this manually.
+
+    To implement a fully interactive chat, you should make use of the Chat class with "new Chat(...)"
+  example: []
+  syntax:
+    content: public IAsyncEnumerable<ChatResponseStream?> ChatAsync(ChatRequest request, CancellationToken cancellationToken = default)
+    parameters:
+    - id: request
+      type: OllamaSharp.Models.Chat.ChatRequest
+      description: The request to send to Ollama.
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+      description: The token to cancel the operation with.
+    return:
+      type: System.Collections.Generic.IAsyncEnumerable{OllamaSharp.Models.Chat.ChatResponseStream}
+      description: >-
+        An asynchronous enumerable that yields <xref href="OllamaSharp.Models.Chat.ChatResponseStream" data-throw-if-not-resolved="false"></xref>. Each item
+
+        represents a message in the chat response stream. Returns null when the
+
+        stream is completed.
+    content.vb: Public Function ChatAsync(request As ChatRequest, cancellationToken As CancellationToken = Nothing) As IAsyncEnumerable(Of ChatResponseStream)
+  overload: OllamaSharp.OllamaApiClient.ChatAsync*
+  implements:
+  - OllamaSharp.IOllamaApiClient.ChatAsync(OllamaSharp.Models.Chat.ChatRequest,System.Threading.CancellationToken)
+- uid: OllamaSharp.OllamaApiClient.IsRunningAsync(System.Threading.CancellationToken)
+  commentId: M:OllamaSharp.OllamaApiClient.IsRunningAsync(System.Threading.CancellationToken)
+  id: IsRunningAsync(System.Threading.CancellationToken)
+  parent: OllamaSharp.OllamaApiClient
+  langs:
+  - csharp
+  - vb
+  name: IsRunningAsync(CancellationToken)
+  nameWithType: OllamaApiClient.IsRunningAsync(CancellationToken)
+  fullName: OllamaSharp.OllamaApiClient.IsRunningAsync(System.Threading.CancellationToken)
+  type: Method
+  source:
+    remote:
+      path: src/OllamaApiClient.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: IsRunningAsync
+    path: src/OllamaApiClient.cs
+    startLine: 201
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp
+  summary: Sends a query to check whether the Ollama API is running or not.
+  example: []
+  syntax:
+    content: public Task<bool> IsRunningAsync(CancellationToken cancellationToken = default)
+    parameters:
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+      description: The token to cancel the operation with.
+    return:
+      type: System.Threading.Tasks.Task{System.Boolean}
+      description: A task that represents the asynchronous operation. The task result contains a boolean indicating whether the API is running.
+    content.vb: Public Function IsRunningAsync(cancellationToken As CancellationToken = Nothing) As Task(Of Boolean)
+  overload: OllamaSharp.OllamaApiClient.IsRunningAsync*
+  implements:
+  - OllamaSharp.IOllamaApiClient.IsRunningAsync(System.Threading.CancellationToken)
+- uid: OllamaSharp.OllamaApiClient.GetVersionAsync(System.Threading.CancellationToken)
+  commentId: M:OllamaSharp.OllamaApiClient.GetVersionAsync(System.Threading.CancellationToken)
+  id: GetVersionAsync(System.Threading.CancellationToken)
+  parent: OllamaSharp.OllamaApiClient
+  langs:
+  - csharp
+  - vb
+  name: GetVersionAsync(CancellationToken)
+  nameWithType: OllamaApiClient.GetVersionAsync(CancellationToken)
+  fullName: OllamaSharp.OllamaApiClient.GetVersionAsync(System.Threading.CancellationToken)
+  type: Method
+  source:
+    remote:
+      path: src/OllamaApiClient.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: GetVersionAsync
+    path: src/OllamaApiClient.cs
+    startLine: 213
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp
+  summary: Gets the version of Ollama.
+  example: []
+  syntax:
+    content: public Task<Version> GetVersionAsync(CancellationToken cancellationToken = default)
+    parameters:
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+      description: The token to cancel the operation with.
+    return:
+      type: System.Threading.Tasks.Task{System.Version}
+      description: A task that represents the asynchronous operation. The task result contains the <xref href="System.Version" data-throw-if-not-resolved="false"></xref>.
+    content.vb: Public Function GetVersionAsync(cancellationToken As CancellationToken = Nothing) As Task(Of Version)
+  overload: OllamaSharp.OllamaApiClient.GetVersionAsync*
+  implements:
+  - OllamaSharp.IOllamaApiClient.GetVersionAsync(System.Threading.CancellationToken)
+- uid: OllamaSharp.OllamaApiClient.SendToOllamaAsync(System.Net.Http.HttpRequestMessage,OllamaSharp.Models.OllamaRequest,System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)
+  commentId: M:OllamaSharp.OllamaApiClient.SendToOllamaAsync(System.Net.Http.HttpRequestMessage,OllamaSharp.Models.OllamaRequest,System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)
+  id: SendToOllamaAsync(System.Net.Http.HttpRequestMessage,OllamaSharp.Models.OllamaRequest,System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)
+  parent: OllamaSharp.OllamaApiClient
+  langs:
+  - csharp
+  - vb
+  name: SendToOllamaAsync(HttpRequestMessage, OllamaRequest?, HttpCompletionOption, CancellationToken)
+  nameWithType: OllamaApiClient.SendToOllamaAsync(HttpRequestMessage, OllamaRequest?, HttpCompletionOption, CancellationToken)
+  fullName: OllamaSharp.OllamaApiClient.SendToOllamaAsync(System.Net.Http.HttpRequestMessage, OllamaSharp.Models.OllamaRequest?, System.Net.Http.HttpCompletionOption, System.Threading.CancellationToken)
+  type: Method
+  source:
+    remote:
+      path: src/OllamaApiClient.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: SendToOllamaAsync
+    path: src/OllamaApiClient.cs
+    startLine: 336
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp
+  summary: Sends an HTTP request message to the Ollama API.
+  example: []
+  syntax:
+    content: protected virtual Task<HttpResponseMessage> SendToOllamaAsync(HttpRequestMessage requestMessage, OllamaRequest? ollamaRequest, HttpCompletionOption completionOption, CancellationToken cancellationToken)
+    parameters:
+    - id: requestMessage
+      type: System.Net.Http.HttpRequestMessage
+      description: The HTTP request message to send.
+    - id: ollamaRequest
+      type: OllamaSharp.Models.OllamaRequest
+      description: The request containing custom HTTP request headers.
+    - id: completionOption
+      type: System.Net.Http.HttpCompletionOption
+      description: When the operation should complete (as soon as a response is available or after reading the whole response content).
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+      description: The token to cancel the operation with.
+    return:
+      type: System.Threading.Tasks.Task{System.Net.Http.HttpResponseMessage}
+    content.vb: Protected Overridable Function SendToOllamaAsync(requestMessage As HttpRequestMessage, ollamaRequest As OllamaRequest, completionOption As HttpCompletionOption, cancellationToken As CancellationToken) As Task(Of HttpResponseMessage)
+  overload: OllamaSharp.OllamaApiClient.SendToOllamaAsync*
+  nameWithType.vb: OllamaApiClient.SendToOllamaAsync(HttpRequestMessage, OllamaRequest, HttpCompletionOption, CancellationToken)
+  fullName.vb: OllamaSharp.OllamaApiClient.SendToOllamaAsync(System.Net.Http.HttpRequestMessage, OllamaSharp.Models.OllamaRequest, System.Net.Http.HttpCompletionOption, System.Threading.CancellationToken)
+  name.vb: SendToOllamaAsync(HttpRequestMessage, OllamaRequest, HttpCompletionOption, CancellationToken)
+references:
+- uid: OllamaSharp
+  commentId: N:OllamaSharp
+  href: OllamaSharp.html
+  name: OllamaSharp
+  nameWithType: OllamaSharp
+  fullName: OllamaSharp
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: OllamaSharp.IOllamaApiClient
+  commentId: T:OllamaSharp.IOllamaApiClient
+  parent: OllamaSharp
+  href: OllamaSharp.IOllamaApiClient.html
+  name: IOllamaApiClient
+  nameWithType: IOllamaApiClient
+  fullName: OllamaSharp.IOllamaApiClient
+- uid: Microsoft.Extensions.AI.IChatClient
+  commentId: T:Microsoft.Extensions.AI.IChatClient
+  parent: Microsoft.Extensions.AI
+  isExternal: true
+  name: IChatClient
+  nameWithType: IChatClient
+  fullName: Microsoft.Extensions.AI.IChatClient
+- uid: Microsoft.Extensions.AI.IEmbeddingGenerator{System.String,Microsoft.Extensions.AI.Embedding{System.Single}}
+  commentId: T:Microsoft.Extensions.AI.IEmbeddingGenerator{System.String,Microsoft.Extensions.AI.Embedding{System.Single}}
+  parent: Microsoft.Extensions.AI
+  definition: Microsoft.Extensions.AI.IEmbeddingGenerator`2
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: IEmbeddingGenerator<string, Embedding<float>>
+  nameWithType: IEmbeddingGenerator<string, Embedding<float>>
+  fullName: Microsoft.Extensions.AI.IEmbeddingGenerator<string, Microsoft.Extensions.AI.Embedding<float>>
+  nameWithType.vb: IEmbeddingGenerator(Of String, Embedding(Of Single))
+  fullName.vb: Microsoft.Extensions.AI.IEmbeddingGenerator(Of String, Microsoft.Extensions.AI.Embedding(Of Single))
+  name.vb: IEmbeddingGenerator(Of String, Embedding(Of Single))
+  spec.csharp:
+  - uid: Microsoft.Extensions.AI.IEmbeddingGenerator`2
+    name: IEmbeddingGenerator
+    isExternal: true
+  - name: <
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: Microsoft.Extensions.AI.Embedding`1
+    name: Embedding
+    isExternal: true
+  - name: <
+  - uid: System.Single
+    name: float
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.single
+  - name: '>'
+  - name: '>'
+  spec.vb:
+  - uid: Microsoft.Extensions.AI.IEmbeddingGenerator`2
+    name: IEmbeddingGenerator
+    isExternal: true
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: Microsoft.Extensions.AI.Embedding`1
+    name: Embedding
+    isExternal: true
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: System.Single
+    name: Single
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.single
+  - name: )
+  - name: )
+- uid: System.IDisposable
+  commentId: T:System.IDisposable
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.idisposable
+  name: IDisposable
+  nameWithType: IDisposable
+  fullName: System.IDisposable
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.MemberwiseClone
+  commentId: M:System.Object.MemberwiseClone
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  name: MemberwiseClone()
+  nameWithType: object.MemberwiseClone()
+  fullName: object.MemberwiseClone()
+  nameWithType.vb: Object.MemberwiseClone()
+  fullName.vb: Object.MemberwiseClone()
+  spec.csharp:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: OllamaSharp.IOllamaApiClient.OllamaSharp.OllamaApiClientExtensions.CopyModelAsync(System.String,System.String,System.Threading.CancellationToken)
+  commentId: M:OllamaSharp.OllamaApiClientExtensions.CopyModelAsync(OllamaSharp.IOllamaApiClient,System.String,System.String,System.Threading.CancellationToken)
+  parent: OllamaSharp.OllamaApiClientExtensions
+  definition: OllamaSharp.OllamaApiClientExtensions.CopyModelAsync(OllamaSharp.IOllamaApiClient,System.String,System.String,System.Threading.CancellationToken)
+  href: OllamaSharp.OllamaApiClientExtensions.html#OllamaSharp_OllamaApiClientExtensions_CopyModelAsync_OllamaSharp_IOllamaApiClient_System_String_System_String_System_Threading_CancellationToken_
+  name: CopyModelAsync(IOllamaApiClient, string, string, CancellationToken)
+  nameWithType: OllamaApiClientExtensions.CopyModelAsync(IOllamaApiClient, string, string, CancellationToken)
+  fullName: OllamaSharp.OllamaApiClientExtensions.CopyModelAsync(OllamaSharp.IOllamaApiClient, string, string, System.Threading.CancellationToken)
+  nameWithType.vb: OllamaApiClientExtensions.CopyModelAsync(IOllamaApiClient, String, String, CancellationToken)
+  fullName.vb: OllamaSharp.OllamaApiClientExtensions.CopyModelAsync(OllamaSharp.IOllamaApiClient, String, String, System.Threading.CancellationToken)
+  name.vb: CopyModelAsync(IOllamaApiClient, String, String, CancellationToken)
+  spec.csharp:
+  - uid: OllamaSharp.OllamaApiClientExtensions.CopyModelAsync(OllamaSharp.IOllamaApiClient,System.String,System.String,System.Threading.CancellationToken)
+    name: CopyModelAsync
+    href: OllamaSharp.OllamaApiClientExtensions.html#OllamaSharp_OllamaApiClientExtensions_CopyModelAsync_OllamaSharp_IOllamaApiClient_System_String_System_String_System_Threading_CancellationToken_
+  - name: (
+  - uid: OllamaSharp.IOllamaApiClient
+    name: IOllamaApiClient
+    href: OllamaSharp.IOllamaApiClient.html
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+  spec.vb:
+  - uid: OllamaSharp.OllamaApiClientExtensions.CopyModelAsync(OllamaSharp.IOllamaApiClient,System.String,System.String,System.Threading.CancellationToken)
+    name: CopyModelAsync
+    href: OllamaSharp.OllamaApiClientExtensions.html#OllamaSharp_OllamaApiClientExtensions_CopyModelAsync_OllamaSharp_IOllamaApiClient_System_String_System_String_System_Threading_CancellationToken_
+  - name: (
+  - uid: OllamaSharp.IOllamaApiClient
+    name: IOllamaApiClient
+    href: OllamaSharp.IOllamaApiClient.html
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+- uid: OllamaSharp.IOllamaApiClient.OllamaSharp.OllamaApiClientExtensions.CreateModelAsync(System.String,System.String,System.String,System.Threading.CancellationToken)
+  commentId: M:OllamaSharp.OllamaApiClientExtensions.CreateModelAsync(OllamaSharp.IOllamaApiClient,System.String,System.String,System.String,System.Threading.CancellationToken)
+  parent: OllamaSharp.OllamaApiClientExtensions
+  definition: OllamaSharp.OllamaApiClientExtensions.CreateModelAsync(OllamaSharp.IOllamaApiClient,System.String,System.String,System.String,System.Threading.CancellationToken)
+  href: OllamaSharp.OllamaApiClientExtensions.html#OllamaSharp_OllamaApiClientExtensions_CreateModelAsync_OllamaSharp_IOllamaApiClient_System_String_System_String_System_String_System_Threading_CancellationToken_
+  name: CreateModelAsync(IOllamaApiClient, string, string, string, CancellationToken)
+  nameWithType: OllamaApiClientExtensions.CreateModelAsync(IOllamaApiClient, string, string, string, CancellationToken)
+  fullName: OllamaSharp.OllamaApiClientExtensions.CreateModelAsync(OllamaSharp.IOllamaApiClient, string, string, string, System.Threading.CancellationToken)
+  nameWithType.vb: OllamaApiClientExtensions.CreateModelAsync(IOllamaApiClient, String, String, String, CancellationToken)
+  fullName.vb: OllamaSharp.OllamaApiClientExtensions.CreateModelAsync(OllamaSharp.IOllamaApiClient, String, String, String, System.Threading.CancellationToken)
+  name.vb: CreateModelAsync(IOllamaApiClient, String, String, String, CancellationToken)
+  spec.csharp:
+  - uid: OllamaSharp.OllamaApiClientExtensions.CreateModelAsync(OllamaSharp.IOllamaApiClient,System.String,System.String,System.String,System.Threading.CancellationToken)
+    name: CreateModelAsync
+    href: OllamaSharp.OllamaApiClientExtensions.html#OllamaSharp_OllamaApiClientExtensions_CreateModelAsync_OllamaSharp_IOllamaApiClient_System_String_System_String_System_String_System_Threading_CancellationToken_
+  - name: (
+  - uid: OllamaSharp.IOllamaApiClient
+    name: IOllamaApiClient
+    href: OllamaSharp.IOllamaApiClient.html
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+  spec.vb:
+  - uid: OllamaSharp.OllamaApiClientExtensions.CreateModelAsync(OllamaSharp.IOllamaApiClient,System.String,System.String,System.String,System.Threading.CancellationToken)
+    name: CreateModelAsync
+    href: OllamaSharp.OllamaApiClientExtensions.html#OllamaSharp_OllamaApiClientExtensions_CreateModelAsync_OllamaSharp_IOllamaApiClient_System_String_System_String_System_String_System_Threading_CancellationToken_
+  - name: (
+  - uid: OllamaSharp.IOllamaApiClient
+    name: IOllamaApiClient
+    href: OllamaSharp.IOllamaApiClient.html
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+- uid: OllamaSharp.IOllamaApiClient.OllamaSharp.OllamaApiClientExtensions.CreateModelAsync(System.String,System.String,System.Threading.CancellationToken)
+  commentId: M:OllamaSharp.OllamaApiClientExtensions.CreateModelAsync(OllamaSharp.IOllamaApiClient,System.String,System.String,System.Threading.CancellationToken)
+  parent: OllamaSharp.OllamaApiClientExtensions
+  definition: OllamaSharp.OllamaApiClientExtensions.CreateModelAsync(OllamaSharp.IOllamaApiClient,System.String,System.String,System.Threading.CancellationToken)
+  href: OllamaSharp.OllamaApiClientExtensions.html#OllamaSharp_OllamaApiClientExtensions_CreateModelAsync_OllamaSharp_IOllamaApiClient_System_String_System_String_System_Threading_CancellationToken_
+  name: CreateModelAsync(IOllamaApiClient, string, string, CancellationToken)
+  nameWithType: OllamaApiClientExtensions.CreateModelAsync(IOllamaApiClient, string, string, CancellationToken)
+  fullName: OllamaSharp.OllamaApiClientExtensions.CreateModelAsync(OllamaSharp.IOllamaApiClient, string, string, System.Threading.CancellationToken)
+  nameWithType.vb: OllamaApiClientExtensions.CreateModelAsync(IOllamaApiClient, String, String, CancellationToken)
+  fullName.vb: OllamaSharp.OllamaApiClientExtensions.CreateModelAsync(OllamaSharp.IOllamaApiClient, String, String, System.Threading.CancellationToken)
+  name.vb: CreateModelAsync(IOllamaApiClient, String, String, CancellationToken)
+  spec.csharp:
+  - uid: OllamaSharp.OllamaApiClientExtensions.CreateModelAsync(OllamaSharp.IOllamaApiClient,System.String,System.String,System.Threading.CancellationToken)
+    name: CreateModelAsync
+    href: OllamaSharp.OllamaApiClientExtensions.html#OllamaSharp_OllamaApiClientExtensions_CreateModelAsync_OllamaSharp_IOllamaApiClient_System_String_System_String_System_Threading_CancellationToken_
+  - name: (
+  - uid: OllamaSharp.IOllamaApiClient
+    name: IOllamaApiClient
+    href: OllamaSharp.IOllamaApiClient.html
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+  spec.vb:
+  - uid: OllamaSharp.OllamaApiClientExtensions.CreateModelAsync(OllamaSharp.IOllamaApiClient,System.String,System.String,System.Threading.CancellationToken)
+    name: CreateModelAsync
+    href: OllamaSharp.OllamaApiClientExtensions.html#OllamaSharp_OllamaApiClientExtensions_CreateModelAsync_OllamaSharp_IOllamaApiClient_System_String_System_String_System_Threading_CancellationToken_
+  - name: (
+  - uid: OllamaSharp.IOllamaApiClient
+    name: IOllamaApiClient
+    href: OllamaSharp.IOllamaApiClient.html
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+- uid: OllamaSharp.IOllamaApiClient.OllamaSharp.OllamaApiClientExtensions.DeleteModelAsync(System.String,System.Threading.CancellationToken)
+  commentId: M:OllamaSharp.OllamaApiClientExtensions.DeleteModelAsync(OllamaSharp.IOllamaApiClient,System.String,System.Threading.CancellationToken)
+  parent: OllamaSharp.OllamaApiClientExtensions
+  definition: OllamaSharp.OllamaApiClientExtensions.DeleteModelAsync(OllamaSharp.IOllamaApiClient,System.String,System.Threading.CancellationToken)
+  href: OllamaSharp.OllamaApiClientExtensions.html#OllamaSharp_OllamaApiClientExtensions_DeleteModelAsync_OllamaSharp_IOllamaApiClient_System_String_System_Threading_CancellationToken_
+  name: DeleteModelAsync(IOllamaApiClient, string, CancellationToken)
+  nameWithType: OllamaApiClientExtensions.DeleteModelAsync(IOllamaApiClient, string, CancellationToken)
+  fullName: OllamaSharp.OllamaApiClientExtensions.DeleteModelAsync(OllamaSharp.IOllamaApiClient, string, System.Threading.CancellationToken)
+  nameWithType.vb: OllamaApiClientExtensions.DeleteModelAsync(IOllamaApiClient, String, CancellationToken)
+  fullName.vb: OllamaSharp.OllamaApiClientExtensions.DeleteModelAsync(OllamaSharp.IOllamaApiClient, String, System.Threading.CancellationToken)
+  name.vb: DeleteModelAsync(IOllamaApiClient, String, CancellationToken)
+  spec.csharp:
+  - uid: OllamaSharp.OllamaApiClientExtensions.DeleteModelAsync(OllamaSharp.IOllamaApiClient,System.String,System.Threading.CancellationToken)
+    name: DeleteModelAsync
+    href: OllamaSharp.OllamaApiClientExtensions.html#OllamaSharp_OllamaApiClientExtensions_DeleteModelAsync_OllamaSharp_IOllamaApiClient_System_String_System_Threading_CancellationToken_
+  - name: (
+  - uid: OllamaSharp.IOllamaApiClient
+    name: IOllamaApiClient
+    href: OllamaSharp.IOllamaApiClient.html
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+  spec.vb:
+  - uid: OllamaSharp.OllamaApiClientExtensions.DeleteModelAsync(OllamaSharp.IOllamaApiClient,System.String,System.Threading.CancellationToken)
+    name: DeleteModelAsync
+    href: OllamaSharp.OllamaApiClientExtensions.html#OllamaSharp_OllamaApiClientExtensions_DeleteModelAsync_OllamaSharp_IOllamaApiClient_System_String_System_Threading_CancellationToken_
+  - name: (
+  - uid: OllamaSharp.IOllamaApiClient
+    name: IOllamaApiClient
+    href: OllamaSharp.IOllamaApiClient.html
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+- uid: OllamaSharp.IOllamaApiClient.OllamaSharp.OllamaApiClientExtensions.EmbedAsync(System.String,System.Threading.CancellationToken)
+  commentId: M:OllamaSharp.OllamaApiClientExtensions.EmbedAsync(OllamaSharp.IOllamaApiClient,System.String,System.Threading.CancellationToken)
+  parent: OllamaSharp.OllamaApiClientExtensions
+  definition: OllamaSharp.OllamaApiClientExtensions.EmbedAsync(OllamaSharp.IOllamaApiClient,System.String,System.Threading.CancellationToken)
+  href: OllamaSharp.OllamaApiClientExtensions.html#OllamaSharp_OllamaApiClientExtensions_EmbedAsync_OllamaSharp_IOllamaApiClient_System_String_System_Threading_CancellationToken_
+  name: EmbedAsync(IOllamaApiClient, string, CancellationToken)
+  nameWithType: OllamaApiClientExtensions.EmbedAsync(IOllamaApiClient, string, CancellationToken)
+  fullName: OllamaSharp.OllamaApiClientExtensions.EmbedAsync(OllamaSharp.IOllamaApiClient, string, System.Threading.CancellationToken)
+  nameWithType.vb: OllamaApiClientExtensions.EmbedAsync(IOllamaApiClient, String, CancellationToken)
+  fullName.vb: OllamaSharp.OllamaApiClientExtensions.EmbedAsync(OllamaSharp.IOllamaApiClient, String, System.Threading.CancellationToken)
+  name.vb: EmbedAsync(IOllamaApiClient, String, CancellationToken)
+  spec.csharp:
+  - uid: OllamaSharp.OllamaApiClientExtensions.EmbedAsync(OllamaSharp.IOllamaApiClient,System.String,System.Threading.CancellationToken)
+    name: EmbedAsync
+    href: OllamaSharp.OllamaApiClientExtensions.html#OllamaSharp_OllamaApiClientExtensions_EmbedAsync_OllamaSharp_IOllamaApiClient_System_String_System_Threading_CancellationToken_
+  - name: (
+  - uid: OllamaSharp.IOllamaApiClient
+    name: IOllamaApiClient
+    href: OllamaSharp.IOllamaApiClient.html
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+  spec.vb:
+  - uid: OllamaSharp.OllamaApiClientExtensions.EmbedAsync(OllamaSharp.IOllamaApiClient,System.String,System.Threading.CancellationToken)
+    name: EmbedAsync
+    href: OllamaSharp.OllamaApiClientExtensions.html#OllamaSharp_OllamaApiClientExtensions_EmbedAsync_OllamaSharp_IOllamaApiClient_System_String_System_Threading_CancellationToken_
+  - name: (
+  - uid: OllamaSharp.IOllamaApiClient
+    name: IOllamaApiClient
+    href: OllamaSharp.IOllamaApiClient.html
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+- uid: OllamaSharp.IOllamaApiClient.OllamaSharp.OllamaApiClientExtensions.GenerateAsync(System.String,OllamaSharp.ConversationContext,System.Threading.CancellationToken)
+  commentId: M:OllamaSharp.OllamaApiClientExtensions.GenerateAsync(OllamaSharp.IOllamaApiClient,System.String,OllamaSharp.ConversationContext,System.Threading.CancellationToken)
+  parent: OllamaSharp.OllamaApiClientExtensions
+  definition: OllamaSharp.OllamaApiClientExtensions.GenerateAsync(OllamaSharp.IOllamaApiClient,System.String,OllamaSharp.ConversationContext,System.Threading.CancellationToken)
+  href: OllamaSharp.OllamaApiClientExtensions.html#OllamaSharp_OllamaApiClientExtensions_GenerateAsync_OllamaSharp_IOllamaApiClient_System_String_OllamaSharp_ConversationContext_System_Threading_CancellationToken_
+  name: GenerateAsync(IOllamaApiClient, string, ConversationContext, CancellationToken)
+  nameWithType: OllamaApiClientExtensions.GenerateAsync(IOllamaApiClient, string, ConversationContext, CancellationToken)
+  fullName: OllamaSharp.OllamaApiClientExtensions.GenerateAsync(OllamaSharp.IOllamaApiClient, string, OllamaSharp.ConversationContext, System.Threading.CancellationToken)
+  nameWithType.vb: OllamaApiClientExtensions.GenerateAsync(IOllamaApiClient, String, ConversationContext, CancellationToken)
+  fullName.vb: OllamaSharp.OllamaApiClientExtensions.GenerateAsync(OllamaSharp.IOllamaApiClient, String, OllamaSharp.ConversationContext, System.Threading.CancellationToken)
+  name.vb: GenerateAsync(IOllamaApiClient, String, ConversationContext, CancellationToken)
+  spec.csharp:
+  - uid: OllamaSharp.OllamaApiClientExtensions.GenerateAsync(OllamaSharp.IOllamaApiClient,System.String,OllamaSharp.ConversationContext,System.Threading.CancellationToken)
+    name: GenerateAsync
+    href: OllamaSharp.OllamaApiClientExtensions.html#OllamaSharp_OllamaApiClientExtensions_GenerateAsync_OllamaSharp_IOllamaApiClient_System_String_OllamaSharp_ConversationContext_System_Threading_CancellationToken_
+  - name: (
+  - uid: OllamaSharp.IOllamaApiClient
+    name: IOllamaApiClient
+    href: OllamaSharp.IOllamaApiClient.html
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: OllamaSharp.ConversationContext
+    name: ConversationContext
+    href: OllamaSharp.ConversationContext.html
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+  spec.vb:
+  - uid: OllamaSharp.OllamaApiClientExtensions.GenerateAsync(OllamaSharp.IOllamaApiClient,System.String,OllamaSharp.ConversationContext,System.Threading.CancellationToken)
+    name: GenerateAsync
+    href: OllamaSharp.OllamaApiClientExtensions.html#OllamaSharp_OllamaApiClientExtensions_GenerateAsync_OllamaSharp_IOllamaApiClient_System_String_OllamaSharp_ConversationContext_System_Threading_CancellationToken_
+  - name: (
+  - uid: OllamaSharp.IOllamaApiClient
+    name: IOllamaApiClient
+    href: OllamaSharp.IOllamaApiClient.html
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: OllamaSharp.ConversationContext
+    name: ConversationContext
+    href: OllamaSharp.ConversationContext.html
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+- uid: OllamaSharp.IOllamaApiClient.OllamaSharp.OllamaApiClientExtensions.PullModelAsync(System.String,System.Threading.CancellationToken)
+  commentId: M:OllamaSharp.OllamaApiClientExtensions.PullModelAsync(OllamaSharp.IOllamaApiClient,System.String,System.Threading.CancellationToken)
+  parent: OllamaSharp.OllamaApiClientExtensions
+  definition: OllamaSharp.OllamaApiClientExtensions.PullModelAsync(OllamaSharp.IOllamaApiClient,System.String,System.Threading.CancellationToken)
+  href: OllamaSharp.OllamaApiClientExtensions.html#OllamaSharp_OllamaApiClientExtensions_PullModelAsync_OllamaSharp_IOllamaApiClient_System_String_System_Threading_CancellationToken_
+  name: PullModelAsync(IOllamaApiClient, string, CancellationToken)
+  nameWithType: OllamaApiClientExtensions.PullModelAsync(IOllamaApiClient, string, CancellationToken)
+  fullName: OllamaSharp.OllamaApiClientExtensions.PullModelAsync(OllamaSharp.IOllamaApiClient, string, System.Threading.CancellationToken)
+  nameWithType.vb: OllamaApiClientExtensions.PullModelAsync(IOllamaApiClient, String, CancellationToken)
+  fullName.vb: OllamaSharp.OllamaApiClientExtensions.PullModelAsync(OllamaSharp.IOllamaApiClient, String, System.Threading.CancellationToken)
+  name.vb: PullModelAsync(IOllamaApiClient, String, CancellationToken)
+  spec.csharp:
+  - uid: OllamaSharp.OllamaApiClientExtensions.PullModelAsync(OllamaSharp.IOllamaApiClient,System.String,System.Threading.CancellationToken)
+    name: PullModelAsync
+    href: OllamaSharp.OllamaApiClientExtensions.html#OllamaSharp_OllamaApiClientExtensions_PullModelAsync_OllamaSharp_IOllamaApiClient_System_String_System_Threading_CancellationToken_
+  - name: (
+  - uid: OllamaSharp.IOllamaApiClient
+    name: IOllamaApiClient
+    href: OllamaSharp.IOllamaApiClient.html
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+  spec.vb:
+  - uid: OllamaSharp.OllamaApiClientExtensions.PullModelAsync(OllamaSharp.IOllamaApiClient,System.String,System.Threading.CancellationToken)
+    name: PullModelAsync
+    href: OllamaSharp.OllamaApiClientExtensions.html#OllamaSharp_OllamaApiClientExtensions_PullModelAsync_OllamaSharp_IOllamaApiClient_System_String_System_Threading_CancellationToken_
+  - name: (
+  - uid: OllamaSharp.IOllamaApiClient
+    name: IOllamaApiClient
+    href: OllamaSharp.IOllamaApiClient.html
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+- uid: OllamaSharp.IOllamaApiClient.OllamaSharp.OllamaApiClientExtensions.PushModelAsync(System.String,System.Threading.CancellationToken)
+  commentId: M:OllamaSharp.OllamaApiClientExtensions.PushModelAsync(OllamaSharp.IOllamaApiClient,System.String,System.Threading.CancellationToken)
+  parent: OllamaSharp.OllamaApiClientExtensions
+  definition: OllamaSharp.OllamaApiClientExtensions.PushModelAsync(OllamaSharp.IOllamaApiClient,System.String,System.Threading.CancellationToken)
+  href: OllamaSharp.OllamaApiClientExtensions.html#OllamaSharp_OllamaApiClientExtensions_PushModelAsync_OllamaSharp_IOllamaApiClient_System_String_System_Threading_CancellationToken_
+  name: PushModelAsync(IOllamaApiClient, string, CancellationToken)
+  nameWithType: OllamaApiClientExtensions.PushModelAsync(IOllamaApiClient, string, CancellationToken)
+  fullName: OllamaSharp.OllamaApiClientExtensions.PushModelAsync(OllamaSharp.IOllamaApiClient, string, System.Threading.CancellationToken)
+  nameWithType.vb: OllamaApiClientExtensions.PushModelAsync(IOllamaApiClient, String, CancellationToken)
+  fullName.vb: OllamaSharp.OllamaApiClientExtensions.PushModelAsync(OllamaSharp.IOllamaApiClient, String, System.Threading.CancellationToken)
+  name.vb: PushModelAsync(IOllamaApiClient, String, CancellationToken)
+  spec.csharp:
+  - uid: OllamaSharp.OllamaApiClientExtensions.PushModelAsync(OllamaSharp.IOllamaApiClient,System.String,System.Threading.CancellationToken)
+    name: PushModelAsync
+    href: OllamaSharp.OllamaApiClientExtensions.html#OllamaSharp_OllamaApiClientExtensions_PushModelAsync_OllamaSharp_IOllamaApiClient_System_String_System_Threading_CancellationToken_
+  - name: (
+  - uid: OllamaSharp.IOllamaApiClient
+    name: IOllamaApiClient
+    href: OllamaSharp.IOllamaApiClient.html
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+  spec.vb:
+  - uid: OllamaSharp.OllamaApiClientExtensions.PushModelAsync(OllamaSharp.IOllamaApiClient,System.String,System.Threading.CancellationToken)
+    name: PushModelAsync
+    href: OllamaSharp.OllamaApiClientExtensions.html#OllamaSharp_OllamaApiClientExtensions_PushModelAsync_OllamaSharp_IOllamaApiClient_System_String_System_Threading_CancellationToken_
+  - name: (
+  - uid: OllamaSharp.IOllamaApiClient
+    name: IOllamaApiClient
+    href: OllamaSharp.IOllamaApiClient.html
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+- uid: OllamaSharp.IOllamaApiClient.OllamaSharp.OllamaApiClientExtensions.ShowModelAsync(System.String,System.Threading.CancellationToken)
+  commentId: M:OllamaSharp.OllamaApiClientExtensions.ShowModelAsync(OllamaSharp.IOllamaApiClient,System.String,System.Threading.CancellationToken)
+  parent: OllamaSharp.OllamaApiClientExtensions
+  definition: OllamaSharp.OllamaApiClientExtensions.ShowModelAsync(OllamaSharp.IOllamaApiClient,System.String,System.Threading.CancellationToken)
+  href: OllamaSharp.OllamaApiClientExtensions.html#OllamaSharp_OllamaApiClientExtensions_ShowModelAsync_OllamaSharp_IOllamaApiClient_System_String_System_Threading_CancellationToken_
+  name: ShowModelAsync(IOllamaApiClient, string, CancellationToken)
+  nameWithType: OllamaApiClientExtensions.ShowModelAsync(IOllamaApiClient, string, CancellationToken)
+  fullName: OllamaSharp.OllamaApiClientExtensions.ShowModelAsync(OllamaSharp.IOllamaApiClient, string, System.Threading.CancellationToken)
+  nameWithType.vb: OllamaApiClientExtensions.ShowModelAsync(IOllamaApiClient, String, CancellationToken)
+  fullName.vb: OllamaSharp.OllamaApiClientExtensions.ShowModelAsync(OllamaSharp.IOllamaApiClient, String, System.Threading.CancellationToken)
+  name.vb: ShowModelAsync(IOllamaApiClient, String, CancellationToken)
+  spec.csharp:
+  - uid: OllamaSharp.OllamaApiClientExtensions.ShowModelAsync(OllamaSharp.IOllamaApiClient,System.String,System.Threading.CancellationToken)
+    name: ShowModelAsync
+    href: OllamaSharp.OllamaApiClientExtensions.html#OllamaSharp_OllamaApiClientExtensions_ShowModelAsync_OllamaSharp_IOllamaApiClient_System_String_System_Threading_CancellationToken_
+  - name: (
+  - uid: OllamaSharp.IOllamaApiClient
+    name: IOllamaApiClient
+    href: OllamaSharp.IOllamaApiClient.html
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+  spec.vb:
+  - uid: OllamaSharp.OllamaApiClientExtensions.ShowModelAsync(OllamaSharp.IOllamaApiClient,System.String,System.Threading.CancellationToken)
+    name: ShowModelAsync
+    href: OllamaSharp.OllamaApiClientExtensions.html#OllamaSharp_OllamaApiClientExtensions_ShowModelAsync_OllamaSharp_IOllamaApiClient_System_String_System_Threading_CancellationToken_
+  - name: (
+  - uid: OllamaSharp.IOllamaApiClient
+    name: IOllamaApiClient
+    href: OllamaSharp.IOllamaApiClient.html
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: Microsoft.Extensions.AI
+  commentId: N:Microsoft.Extensions.AI
+  isExternal: true
+  name: Microsoft.Extensions.AI
+  nameWithType: Microsoft.Extensions.AI
+  fullName: Microsoft.Extensions.AI
+  spec.csharp:
+  - uid: Microsoft
+    name: Microsoft
+    isExternal: true
+  - name: .
+  - uid: Microsoft.Extensions
+    name: Extensions
+    isExternal: true
+  - name: .
+  - uid: Microsoft.Extensions.AI
+    name: AI
+    isExternal: true
+  spec.vb:
+  - uid: Microsoft
+    name: Microsoft
+    isExternal: true
+  - name: .
+  - uid: Microsoft.Extensions
+    name: Extensions
+    isExternal: true
+  - name: .
+  - uid: Microsoft.Extensions.AI
+    name: AI
+    isExternal: true
+- uid: Microsoft.Extensions.AI.IEmbeddingGenerator`2
+  commentId: T:Microsoft.Extensions.AI.IEmbeddingGenerator`2
+  isExternal: true
+  name: IEmbeddingGenerator<TInput, TEmbedding>
+  nameWithType: IEmbeddingGenerator<TInput, TEmbedding>
+  fullName: Microsoft.Extensions.AI.IEmbeddingGenerator<TInput, TEmbedding>
+  nameWithType.vb: IEmbeddingGenerator(Of TInput, TEmbedding)
+  fullName.vb: Microsoft.Extensions.AI.IEmbeddingGenerator(Of TInput, TEmbedding)
+  name.vb: IEmbeddingGenerator(Of TInput, TEmbedding)
+  spec.csharp:
+  - uid: Microsoft.Extensions.AI.IEmbeddingGenerator`2
+    name: IEmbeddingGenerator
+    isExternal: true
+  - name: <
+  - name: TInput
+  - name: ','
+  - name: " "
+  - name: TEmbedding
+  - name: '>'
+  spec.vb:
+  - uid: Microsoft.Extensions.AI.IEmbeddingGenerator`2
+    name: IEmbeddingGenerator
+    isExternal: true
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TInput
+  - name: ','
+  - name: " "
+  - name: TEmbedding
+  - name: )
+- uid: OllamaSharp.OllamaApiClientExtensions.CopyModelAsync(OllamaSharp.IOllamaApiClient,System.String,System.String,System.Threading.CancellationToken)
+  commentId: M:OllamaSharp.OllamaApiClientExtensions.CopyModelAsync(OllamaSharp.IOllamaApiClient,System.String,System.String,System.Threading.CancellationToken)
+  isExternal: true
+  href: OllamaSharp.OllamaApiClientExtensions.html#OllamaSharp_OllamaApiClientExtensions_CopyModelAsync_OllamaSharp_IOllamaApiClient_System_String_System_String_System_Threading_CancellationToken_
+  name: CopyModelAsync(IOllamaApiClient, string, string, CancellationToken)
+  nameWithType: OllamaApiClientExtensions.CopyModelAsync(IOllamaApiClient, string, string, CancellationToken)
+  fullName: OllamaSharp.OllamaApiClientExtensions.CopyModelAsync(OllamaSharp.IOllamaApiClient, string, string, System.Threading.CancellationToken)
+  nameWithType.vb: OllamaApiClientExtensions.CopyModelAsync(IOllamaApiClient, String, String, CancellationToken)
+  fullName.vb: OllamaSharp.OllamaApiClientExtensions.CopyModelAsync(OllamaSharp.IOllamaApiClient, String, String, System.Threading.CancellationToken)
+  name.vb: CopyModelAsync(IOllamaApiClient, String, String, CancellationToken)
+  spec.csharp:
+  - uid: OllamaSharp.OllamaApiClientExtensions.CopyModelAsync(OllamaSharp.IOllamaApiClient,System.String,System.String,System.Threading.CancellationToken)
+    name: CopyModelAsync
+    href: OllamaSharp.OllamaApiClientExtensions.html#OllamaSharp_OllamaApiClientExtensions_CopyModelAsync_OllamaSharp_IOllamaApiClient_System_String_System_String_System_Threading_CancellationToken_
+  - name: (
+  - uid: OllamaSharp.IOllamaApiClient
+    name: IOllamaApiClient
+    href: OllamaSharp.IOllamaApiClient.html
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+  spec.vb:
+  - uid: OllamaSharp.OllamaApiClientExtensions.CopyModelAsync(OllamaSharp.IOllamaApiClient,System.String,System.String,System.Threading.CancellationToken)
+    name: CopyModelAsync
+    href: OllamaSharp.OllamaApiClientExtensions.html#OllamaSharp_OllamaApiClientExtensions_CopyModelAsync_OllamaSharp_IOllamaApiClient_System_String_System_String_System_Threading_CancellationToken_
+  - name: (
+  - uid: OllamaSharp.IOllamaApiClient
+    name: IOllamaApiClient
+    href: OllamaSharp.IOllamaApiClient.html
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+- uid: OllamaSharp.OllamaApiClientExtensions
+  commentId: T:OllamaSharp.OllamaApiClientExtensions
+  parent: OllamaSharp
+  href: OllamaSharp.OllamaApiClientExtensions.html
+  name: OllamaApiClientExtensions
+  nameWithType: OllamaApiClientExtensions
+  fullName: OllamaSharp.OllamaApiClientExtensions
+- uid: OllamaSharp.OllamaApiClientExtensions.CreateModelAsync(OllamaSharp.IOllamaApiClient,System.String,System.String,System.String,System.Threading.CancellationToken)
+  commentId: M:OllamaSharp.OllamaApiClientExtensions.CreateModelAsync(OllamaSharp.IOllamaApiClient,System.String,System.String,System.String,System.Threading.CancellationToken)
+  isExternal: true
+  href: OllamaSharp.OllamaApiClientExtensions.html#OllamaSharp_OllamaApiClientExtensions_CreateModelAsync_OllamaSharp_IOllamaApiClient_System_String_System_String_System_String_System_Threading_CancellationToken_
+  name: CreateModelAsync(IOllamaApiClient, string, string, string, CancellationToken)
+  nameWithType: OllamaApiClientExtensions.CreateModelAsync(IOllamaApiClient, string, string, string, CancellationToken)
+  fullName: OllamaSharp.OllamaApiClientExtensions.CreateModelAsync(OllamaSharp.IOllamaApiClient, string, string, string, System.Threading.CancellationToken)
+  nameWithType.vb: OllamaApiClientExtensions.CreateModelAsync(IOllamaApiClient, String, String, String, CancellationToken)
+  fullName.vb: OllamaSharp.OllamaApiClientExtensions.CreateModelAsync(OllamaSharp.IOllamaApiClient, String, String, String, System.Threading.CancellationToken)
+  name.vb: CreateModelAsync(IOllamaApiClient, String, String, String, CancellationToken)
+  spec.csharp:
+  - uid: OllamaSharp.OllamaApiClientExtensions.CreateModelAsync(OllamaSharp.IOllamaApiClient,System.String,System.String,System.String,System.Threading.CancellationToken)
+    name: CreateModelAsync
+    href: OllamaSharp.OllamaApiClientExtensions.html#OllamaSharp_OllamaApiClientExtensions_CreateModelAsync_OllamaSharp_IOllamaApiClient_System_String_System_String_System_String_System_Threading_CancellationToken_
+  - name: (
+  - uid: OllamaSharp.IOllamaApiClient
+    name: IOllamaApiClient
+    href: OllamaSharp.IOllamaApiClient.html
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+  spec.vb:
+  - uid: OllamaSharp.OllamaApiClientExtensions.CreateModelAsync(OllamaSharp.IOllamaApiClient,System.String,System.String,System.String,System.Threading.CancellationToken)
+    name: CreateModelAsync
+    href: OllamaSharp.OllamaApiClientExtensions.html#OllamaSharp_OllamaApiClientExtensions_CreateModelAsync_OllamaSharp_IOllamaApiClient_System_String_System_String_System_String_System_Threading_CancellationToken_
+  - name: (
+  - uid: OllamaSharp.IOllamaApiClient
+    name: IOllamaApiClient
+    href: OllamaSharp.IOllamaApiClient.html
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+- uid: OllamaSharp.OllamaApiClientExtensions.CreateModelAsync(OllamaSharp.IOllamaApiClient,System.String,System.String,System.Threading.CancellationToken)
+  commentId: M:OllamaSharp.OllamaApiClientExtensions.CreateModelAsync(OllamaSharp.IOllamaApiClient,System.String,System.String,System.Threading.CancellationToken)
+  isExternal: true
+  href: OllamaSharp.OllamaApiClientExtensions.html#OllamaSharp_OllamaApiClientExtensions_CreateModelAsync_OllamaSharp_IOllamaApiClient_System_String_System_String_System_Threading_CancellationToken_
+  name: CreateModelAsync(IOllamaApiClient, string, string, CancellationToken)
+  nameWithType: OllamaApiClientExtensions.CreateModelAsync(IOllamaApiClient, string, string, CancellationToken)
+  fullName: OllamaSharp.OllamaApiClientExtensions.CreateModelAsync(OllamaSharp.IOllamaApiClient, string, string, System.Threading.CancellationToken)
+  nameWithType.vb: OllamaApiClientExtensions.CreateModelAsync(IOllamaApiClient, String, String, CancellationToken)
+  fullName.vb: OllamaSharp.OllamaApiClientExtensions.CreateModelAsync(OllamaSharp.IOllamaApiClient, String, String, System.Threading.CancellationToken)
+  name.vb: CreateModelAsync(IOllamaApiClient, String, String, CancellationToken)
+  spec.csharp:
+  - uid: OllamaSharp.OllamaApiClientExtensions.CreateModelAsync(OllamaSharp.IOllamaApiClient,System.String,System.String,System.Threading.CancellationToken)
+    name: CreateModelAsync
+    href: OllamaSharp.OllamaApiClientExtensions.html#OllamaSharp_OllamaApiClientExtensions_CreateModelAsync_OllamaSharp_IOllamaApiClient_System_String_System_String_System_Threading_CancellationToken_
+  - name: (
+  - uid: OllamaSharp.IOllamaApiClient
+    name: IOllamaApiClient
+    href: OllamaSharp.IOllamaApiClient.html
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+  spec.vb:
+  - uid: OllamaSharp.OllamaApiClientExtensions.CreateModelAsync(OllamaSharp.IOllamaApiClient,System.String,System.String,System.Threading.CancellationToken)
+    name: CreateModelAsync
+    href: OllamaSharp.OllamaApiClientExtensions.html#OllamaSharp_OllamaApiClientExtensions_CreateModelAsync_OllamaSharp_IOllamaApiClient_System_String_System_String_System_Threading_CancellationToken_
+  - name: (
+  - uid: OllamaSharp.IOllamaApiClient
+    name: IOllamaApiClient
+    href: OllamaSharp.IOllamaApiClient.html
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+- uid: OllamaSharp.OllamaApiClientExtensions.DeleteModelAsync(OllamaSharp.IOllamaApiClient,System.String,System.Threading.CancellationToken)
+  commentId: M:OllamaSharp.OllamaApiClientExtensions.DeleteModelAsync(OllamaSharp.IOllamaApiClient,System.String,System.Threading.CancellationToken)
+  isExternal: true
+  href: OllamaSharp.OllamaApiClientExtensions.html#OllamaSharp_OllamaApiClientExtensions_DeleteModelAsync_OllamaSharp_IOllamaApiClient_System_String_System_Threading_CancellationToken_
+  name: DeleteModelAsync(IOllamaApiClient, string, CancellationToken)
+  nameWithType: OllamaApiClientExtensions.DeleteModelAsync(IOllamaApiClient, string, CancellationToken)
+  fullName: OllamaSharp.OllamaApiClientExtensions.DeleteModelAsync(OllamaSharp.IOllamaApiClient, string, System.Threading.CancellationToken)
+  nameWithType.vb: OllamaApiClientExtensions.DeleteModelAsync(IOllamaApiClient, String, CancellationToken)
+  fullName.vb: OllamaSharp.OllamaApiClientExtensions.DeleteModelAsync(OllamaSharp.IOllamaApiClient, String, System.Threading.CancellationToken)
+  name.vb: DeleteModelAsync(IOllamaApiClient, String, CancellationToken)
+  spec.csharp:
+  - uid: OllamaSharp.OllamaApiClientExtensions.DeleteModelAsync(OllamaSharp.IOllamaApiClient,System.String,System.Threading.CancellationToken)
+    name: DeleteModelAsync
+    href: OllamaSharp.OllamaApiClientExtensions.html#OllamaSharp_OllamaApiClientExtensions_DeleteModelAsync_OllamaSharp_IOllamaApiClient_System_String_System_Threading_CancellationToken_
+  - name: (
+  - uid: OllamaSharp.IOllamaApiClient
+    name: IOllamaApiClient
+    href: OllamaSharp.IOllamaApiClient.html
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+  spec.vb:
+  - uid: OllamaSharp.OllamaApiClientExtensions.DeleteModelAsync(OllamaSharp.IOllamaApiClient,System.String,System.Threading.CancellationToken)
+    name: DeleteModelAsync
+    href: OllamaSharp.OllamaApiClientExtensions.html#OllamaSharp_OllamaApiClientExtensions_DeleteModelAsync_OllamaSharp_IOllamaApiClient_System_String_System_Threading_CancellationToken_
+  - name: (
+  - uid: OllamaSharp.IOllamaApiClient
+    name: IOllamaApiClient
+    href: OllamaSharp.IOllamaApiClient.html
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+- uid: OllamaSharp.OllamaApiClientExtensions.EmbedAsync(OllamaSharp.IOllamaApiClient,System.String,System.Threading.CancellationToken)
+  commentId: M:OllamaSharp.OllamaApiClientExtensions.EmbedAsync(OllamaSharp.IOllamaApiClient,System.String,System.Threading.CancellationToken)
+  isExternal: true
+  href: OllamaSharp.OllamaApiClientExtensions.html#OllamaSharp_OllamaApiClientExtensions_EmbedAsync_OllamaSharp_IOllamaApiClient_System_String_System_Threading_CancellationToken_
+  name: EmbedAsync(IOllamaApiClient, string, CancellationToken)
+  nameWithType: OllamaApiClientExtensions.EmbedAsync(IOllamaApiClient, string, CancellationToken)
+  fullName: OllamaSharp.OllamaApiClientExtensions.EmbedAsync(OllamaSharp.IOllamaApiClient, string, System.Threading.CancellationToken)
+  nameWithType.vb: OllamaApiClientExtensions.EmbedAsync(IOllamaApiClient, String, CancellationToken)
+  fullName.vb: OllamaSharp.OllamaApiClientExtensions.EmbedAsync(OllamaSharp.IOllamaApiClient, String, System.Threading.CancellationToken)
+  name.vb: EmbedAsync(IOllamaApiClient, String, CancellationToken)
+  spec.csharp:
+  - uid: OllamaSharp.OllamaApiClientExtensions.EmbedAsync(OllamaSharp.IOllamaApiClient,System.String,System.Threading.CancellationToken)
+    name: EmbedAsync
+    href: OllamaSharp.OllamaApiClientExtensions.html#OllamaSharp_OllamaApiClientExtensions_EmbedAsync_OllamaSharp_IOllamaApiClient_System_String_System_Threading_CancellationToken_
+  - name: (
+  - uid: OllamaSharp.IOllamaApiClient
+    name: IOllamaApiClient
+    href: OllamaSharp.IOllamaApiClient.html
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+  spec.vb:
+  - uid: OllamaSharp.OllamaApiClientExtensions.EmbedAsync(OllamaSharp.IOllamaApiClient,System.String,System.Threading.CancellationToken)
+    name: EmbedAsync
+    href: OllamaSharp.OllamaApiClientExtensions.html#OllamaSharp_OllamaApiClientExtensions_EmbedAsync_OllamaSharp_IOllamaApiClient_System_String_System_Threading_CancellationToken_
+  - name: (
+  - uid: OllamaSharp.IOllamaApiClient
+    name: IOllamaApiClient
+    href: OllamaSharp.IOllamaApiClient.html
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+- uid: OllamaSharp.OllamaApiClientExtensions.GenerateAsync(OllamaSharp.IOllamaApiClient,System.String,OllamaSharp.ConversationContext,System.Threading.CancellationToken)
+  commentId: M:OllamaSharp.OllamaApiClientExtensions.GenerateAsync(OllamaSharp.IOllamaApiClient,System.String,OllamaSharp.ConversationContext,System.Threading.CancellationToken)
+  isExternal: true
+  href: OllamaSharp.OllamaApiClientExtensions.html#OllamaSharp_OllamaApiClientExtensions_GenerateAsync_OllamaSharp_IOllamaApiClient_System_String_OllamaSharp_ConversationContext_System_Threading_CancellationToken_
+  name: GenerateAsync(IOllamaApiClient, string, ConversationContext, CancellationToken)
+  nameWithType: OllamaApiClientExtensions.GenerateAsync(IOllamaApiClient, string, ConversationContext, CancellationToken)
+  fullName: OllamaSharp.OllamaApiClientExtensions.GenerateAsync(OllamaSharp.IOllamaApiClient, string, OllamaSharp.ConversationContext, System.Threading.CancellationToken)
+  nameWithType.vb: OllamaApiClientExtensions.GenerateAsync(IOllamaApiClient, String, ConversationContext, CancellationToken)
+  fullName.vb: OllamaSharp.OllamaApiClientExtensions.GenerateAsync(OllamaSharp.IOllamaApiClient, String, OllamaSharp.ConversationContext, System.Threading.CancellationToken)
+  name.vb: GenerateAsync(IOllamaApiClient, String, ConversationContext, CancellationToken)
+  spec.csharp:
+  - uid: OllamaSharp.OllamaApiClientExtensions.GenerateAsync(OllamaSharp.IOllamaApiClient,System.String,OllamaSharp.ConversationContext,System.Threading.CancellationToken)
+    name: GenerateAsync
+    href: OllamaSharp.OllamaApiClientExtensions.html#OllamaSharp_OllamaApiClientExtensions_GenerateAsync_OllamaSharp_IOllamaApiClient_System_String_OllamaSharp_ConversationContext_System_Threading_CancellationToken_
+  - name: (
+  - uid: OllamaSharp.IOllamaApiClient
+    name: IOllamaApiClient
+    href: OllamaSharp.IOllamaApiClient.html
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: OllamaSharp.ConversationContext
+    name: ConversationContext
+    href: OllamaSharp.ConversationContext.html
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+  spec.vb:
+  - uid: OllamaSharp.OllamaApiClientExtensions.GenerateAsync(OllamaSharp.IOllamaApiClient,System.String,OllamaSharp.ConversationContext,System.Threading.CancellationToken)
+    name: GenerateAsync
+    href: OllamaSharp.OllamaApiClientExtensions.html#OllamaSharp_OllamaApiClientExtensions_GenerateAsync_OllamaSharp_IOllamaApiClient_System_String_OllamaSharp_ConversationContext_System_Threading_CancellationToken_
+  - name: (
+  - uid: OllamaSharp.IOllamaApiClient
+    name: IOllamaApiClient
+    href: OllamaSharp.IOllamaApiClient.html
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: OllamaSharp.ConversationContext
+    name: ConversationContext
+    href: OllamaSharp.ConversationContext.html
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+- uid: OllamaSharp.OllamaApiClientExtensions.PullModelAsync(OllamaSharp.IOllamaApiClient,System.String,System.Threading.CancellationToken)
+  commentId: M:OllamaSharp.OllamaApiClientExtensions.PullModelAsync(OllamaSharp.IOllamaApiClient,System.String,System.Threading.CancellationToken)
+  isExternal: true
+  href: OllamaSharp.OllamaApiClientExtensions.html#OllamaSharp_OllamaApiClientExtensions_PullModelAsync_OllamaSharp_IOllamaApiClient_System_String_System_Threading_CancellationToken_
+  name: PullModelAsync(IOllamaApiClient, string, CancellationToken)
+  nameWithType: OllamaApiClientExtensions.PullModelAsync(IOllamaApiClient, string, CancellationToken)
+  fullName: OllamaSharp.OllamaApiClientExtensions.PullModelAsync(OllamaSharp.IOllamaApiClient, string, System.Threading.CancellationToken)
+  nameWithType.vb: OllamaApiClientExtensions.PullModelAsync(IOllamaApiClient, String, CancellationToken)
+  fullName.vb: OllamaSharp.OllamaApiClientExtensions.PullModelAsync(OllamaSharp.IOllamaApiClient, String, System.Threading.CancellationToken)
+  name.vb: PullModelAsync(IOllamaApiClient, String, CancellationToken)
+  spec.csharp:
+  - uid: OllamaSharp.OllamaApiClientExtensions.PullModelAsync(OllamaSharp.IOllamaApiClient,System.String,System.Threading.CancellationToken)
+    name: PullModelAsync
+    href: OllamaSharp.OllamaApiClientExtensions.html#OllamaSharp_OllamaApiClientExtensions_PullModelAsync_OllamaSharp_IOllamaApiClient_System_String_System_Threading_CancellationToken_
+  - name: (
+  - uid: OllamaSharp.IOllamaApiClient
+    name: IOllamaApiClient
+    href: OllamaSharp.IOllamaApiClient.html
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+  spec.vb:
+  - uid: OllamaSharp.OllamaApiClientExtensions.PullModelAsync(OllamaSharp.IOllamaApiClient,System.String,System.Threading.CancellationToken)
+    name: PullModelAsync
+    href: OllamaSharp.OllamaApiClientExtensions.html#OllamaSharp_OllamaApiClientExtensions_PullModelAsync_OllamaSharp_IOllamaApiClient_System_String_System_Threading_CancellationToken_
+  - name: (
+  - uid: OllamaSharp.IOllamaApiClient
+    name: IOllamaApiClient
+    href: OllamaSharp.IOllamaApiClient.html
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+- uid: OllamaSharp.OllamaApiClientExtensions.PushModelAsync(OllamaSharp.IOllamaApiClient,System.String,System.Threading.CancellationToken)
+  commentId: M:OllamaSharp.OllamaApiClientExtensions.PushModelAsync(OllamaSharp.IOllamaApiClient,System.String,System.Threading.CancellationToken)
+  isExternal: true
+  href: OllamaSharp.OllamaApiClientExtensions.html#OllamaSharp_OllamaApiClientExtensions_PushModelAsync_OllamaSharp_IOllamaApiClient_System_String_System_Threading_CancellationToken_
+  name: PushModelAsync(IOllamaApiClient, string, CancellationToken)
+  nameWithType: OllamaApiClientExtensions.PushModelAsync(IOllamaApiClient, string, CancellationToken)
+  fullName: OllamaSharp.OllamaApiClientExtensions.PushModelAsync(OllamaSharp.IOllamaApiClient, string, System.Threading.CancellationToken)
+  nameWithType.vb: OllamaApiClientExtensions.PushModelAsync(IOllamaApiClient, String, CancellationToken)
+  fullName.vb: OllamaSharp.OllamaApiClientExtensions.PushModelAsync(OllamaSharp.IOllamaApiClient, String, System.Threading.CancellationToken)
+  name.vb: PushModelAsync(IOllamaApiClient, String, CancellationToken)
+  spec.csharp:
+  - uid: OllamaSharp.OllamaApiClientExtensions.PushModelAsync(OllamaSharp.IOllamaApiClient,System.String,System.Threading.CancellationToken)
+    name: PushModelAsync
+    href: OllamaSharp.OllamaApiClientExtensions.html#OllamaSharp_OllamaApiClientExtensions_PushModelAsync_OllamaSharp_IOllamaApiClient_System_String_System_Threading_CancellationToken_
+  - name: (
+  - uid: OllamaSharp.IOllamaApiClient
+    name: IOllamaApiClient
+    href: OllamaSharp.IOllamaApiClient.html
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+  spec.vb:
+  - uid: OllamaSharp.OllamaApiClientExtensions.PushModelAsync(OllamaSharp.IOllamaApiClient,System.String,System.Threading.CancellationToken)
+    name: PushModelAsync
+    href: OllamaSharp.OllamaApiClientExtensions.html#OllamaSharp_OllamaApiClientExtensions_PushModelAsync_OllamaSharp_IOllamaApiClient_System_String_System_Threading_CancellationToken_
+  - name: (
+  - uid: OllamaSharp.IOllamaApiClient
+    name: IOllamaApiClient
+    href: OllamaSharp.IOllamaApiClient.html
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+- uid: OllamaSharp.OllamaApiClientExtensions.ShowModelAsync(OllamaSharp.IOllamaApiClient,System.String,System.Threading.CancellationToken)
+  commentId: M:OllamaSharp.OllamaApiClientExtensions.ShowModelAsync(OllamaSharp.IOllamaApiClient,System.String,System.Threading.CancellationToken)
+  isExternal: true
+  href: OllamaSharp.OllamaApiClientExtensions.html#OllamaSharp_OllamaApiClientExtensions_ShowModelAsync_OllamaSharp_IOllamaApiClient_System_String_System_Threading_CancellationToken_
+  name: ShowModelAsync(IOllamaApiClient, string, CancellationToken)
+  nameWithType: OllamaApiClientExtensions.ShowModelAsync(IOllamaApiClient, string, CancellationToken)
+  fullName: OllamaSharp.OllamaApiClientExtensions.ShowModelAsync(OllamaSharp.IOllamaApiClient, string, System.Threading.CancellationToken)
+  nameWithType.vb: OllamaApiClientExtensions.ShowModelAsync(IOllamaApiClient, String, CancellationToken)
+  fullName.vb: OllamaSharp.OllamaApiClientExtensions.ShowModelAsync(OllamaSharp.IOllamaApiClient, String, System.Threading.CancellationToken)
+  name.vb: ShowModelAsync(IOllamaApiClient, String, CancellationToken)
+  spec.csharp:
+  - uid: OllamaSharp.OllamaApiClientExtensions.ShowModelAsync(OllamaSharp.IOllamaApiClient,System.String,System.Threading.CancellationToken)
+    name: ShowModelAsync
+    href: OllamaSharp.OllamaApiClientExtensions.html#OllamaSharp_OllamaApiClientExtensions_ShowModelAsync_OllamaSharp_IOllamaApiClient_System_String_System_Threading_CancellationToken_
+  - name: (
+  - uid: OllamaSharp.IOllamaApiClient
+    name: IOllamaApiClient
+    href: OllamaSharp.IOllamaApiClient.html
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+  spec.vb:
+  - uid: OllamaSharp.OllamaApiClientExtensions.ShowModelAsync(OllamaSharp.IOllamaApiClient,System.String,System.Threading.CancellationToken)
+    name: ShowModelAsync
+    href: OllamaSharp.OllamaApiClientExtensions.html#OllamaSharp_OllamaApiClientExtensions_ShowModelAsync_OllamaSharp_IOllamaApiClient_System_String_System_Threading_CancellationToken_
+  - name: (
+  - uid: OllamaSharp.IOllamaApiClient
+    name: IOllamaApiClient
+    href: OllamaSharp.IOllamaApiClient.html
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+- uid: OllamaSharp.OllamaApiClient.DefaultRequestHeaders*
+  commentId: Overload:OllamaSharp.OllamaApiClient.DefaultRequestHeaders
+  href: OllamaSharp.OllamaApiClient.html#OllamaSharp_OllamaApiClient_DefaultRequestHeaders
+  name: DefaultRequestHeaders
+  nameWithType: OllamaApiClient.DefaultRequestHeaders
+  fullName: OllamaSharp.OllamaApiClient.DefaultRequestHeaders
+- uid: System.Collections.Generic.Dictionary{System.String,System.String}
+  commentId: T:System.Collections.Generic.Dictionary{System.String,System.String}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.Dictionary`2
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2
+  name: Dictionary<string, string>
+  nameWithType: Dictionary<string, string>
+  fullName: System.Collections.Generic.Dictionary<string, string>
+  nameWithType.vb: Dictionary(Of String, String)
+  fullName.vb: System.Collections.Generic.Dictionary(Of String, String)
+  name.vb: Dictionary(Of String, String)
+  spec.csharp:
+  - uid: System.Collections.Generic.Dictionary`2
+    name: Dictionary
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2
+  - name: <
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.Dictionary`2
+    name: Dictionary
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: )
+- uid: System.Collections.Generic.Dictionary`2
+  commentId: T:System.Collections.Generic.Dictionary`2
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2
+  name: Dictionary<TKey, TValue>
+  nameWithType: Dictionary<TKey, TValue>
+  fullName: System.Collections.Generic.Dictionary<TKey, TValue>
+  nameWithType.vb: Dictionary(Of TKey, TValue)
+  fullName.vb: System.Collections.Generic.Dictionary(Of TKey, TValue)
+  name.vb: Dictionary(Of TKey, TValue)
+  spec.csharp:
+  - uid: System.Collections.Generic.Dictionary`2
+    name: Dictionary
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2
+  - name: <
+  - name: TKey
+  - name: ','
+  - name: " "
+  - name: TValue
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.Dictionary`2
+    name: Dictionary
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TKey
+  - name: ','
+  - name: " "
+  - name: TValue
+  - name: )
+- uid: System.Collections.Generic
+  commentId: N:System.Collections.Generic
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Collections.Generic
+  nameWithType: System.Collections.Generic
+  fullName: System.Collections.Generic
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic
+- uid: OllamaSharp.OllamaApiClient.OutgoingJsonSerializerOptions*
+  commentId: Overload:OllamaSharp.OllamaApiClient.OutgoingJsonSerializerOptions
+  href: OllamaSharp.OllamaApiClient.html#OllamaSharp_OllamaApiClient_OutgoingJsonSerializerOptions
+  name: OutgoingJsonSerializerOptions
+  nameWithType: OllamaApiClient.OutgoingJsonSerializerOptions
+  fullName: OllamaSharp.OllamaApiClient.OutgoingJsonSerializerOptions
+- uid: System.Text.Json.JsonSerializerOptions
+  commentId: T:System.Text.Json.JsonSerializerOptions
+  parent: System.Text.Json
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.text.json.jsonserializeroptions
+  name: JsonSerializerOptions
+  nameWithType: JsonSerializerOptions
+  fullName: System.Text.Json.JsonSerializerOptions
+- uid: System.Text.Json
+  commentId: N:System.Text.Json
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Text.Json
+  nameWithType: System.Text.Json
+  fullName: System.Text.Json
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Text
+    name: Text
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.text
+  - name: .
+  - uid: System.Text.Json
+    name: Json
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.text.json
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Text
+    name: Text
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.text
+  - name: .
+  - uid: System.Text.Json
+    name: Json
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.text.json
+- uid: OllamaSharp.OllamaApiClient.IncomingJsonSerializerOptions*
+  commentId: Overload:OllamaSharp.OllamaApiClient.IncomingJsonSerializerOptions
+  href: OllamaSharp.OllamaApiClient.html#OllamaSharp_OllamaApiClient_IncomingJsonSerializerOptions
+  name: IncomingJsonSerializerOptions
+  nameWithType: OllamaApiClient.IncomingJsonSerializerOptions
+  fullName: OllamaSharp.OllamaApiClient.IncomingJsonSerializerOptions
+- uid: OllamaSharp.OllamaApiClient.Config*
+  commentId: Overload:OllamaSharp.OllamaApiClient.Config
+  href: OllamaSharp.OllamaApiClient.html#OllamaSharp_OllamaApiClient_Config
+  name: Config
+  nameWithType: OllamaApiClient.Config
+  fullName: OllamaSharp.OllamaApiClient.Config
+- uid: OllamaSharp.OllamaApiClient.Configuration
+  commentId: T:OllamaSharp.OllamaApiClient.Configuration
+  parent: OllamaSharp
+  href: OllamaSharp.OllamaApiClient.html
+  name: OllamaApiClient.Configuration
+  nameWithType: OllamaApiClient.Configuration
+  fullName: OllamaSharp.OllamaApiClient.Configuration
+  spec.csharp:
+  - uid: OllamaSharp.OllamaApiClient
+    name: OllamaApiClient
+    href: OllamaSharp.OllamaApiClient.html
+  - name: .
+  - uid: OllamaSharp.OllamaApiClient.Configuration
+    name: Configuration
+    href: OllamaSharp.OllamaApiClient.Configuration.html
+  spec.vb:
+  - uid: OllamaSharp.OllamaApiClient
+    name: OllamaApiClient
+    href: OllamaSharp.OllamaApiClient.html
+  - name: .
+  - uid: OllamaSharp.OllamaApiClient.Configuration
+    name: Configuration
+    href: OllamaSharp.OllamaApiClient.Configuration.html
+- uid: OllamaSharp.OllamaApiClient.Uri*
+  commentId: Overload:OllamaSharp.OllamaApiClient.Uri
+  href: OllamaSharp.OllamaApiClient.html#OllamaSharp_OllamaApiClient_Uri
+  name: Uri
+  nameWithType: OllamaApiClient.Uri
+  fullName: OllamaSharp.OllamaApiClient.Uri
+- uid: OllamaSharp.IOllamaApiClient.Uri
+  commentId: P:OllamaSharp.IOllamaApiClient.Uri
+  parent: OllamaSharp.IOllamaApiClient
+  href: OllamaSharp.IOllamaApiClient.html#OllamaSharp_IOllamaApiClient_Uri
+  name: Uri
+  nameWithType: IOllamaApiClient.Uri
+  fullName: OllamaSharp.IOllamaApiClient.Uri
+- uid: System.Uri
+  commentId: T:System.Uri
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.uri
+  name: Uri
+  nameWithType: Uri
+  fullName: System.Uri
+- uid: OllamaSharp.OllamaApiClient.SelectedModel*
+  commentId: Overload:OllamaSharp.OllamaApiClient.SelectedModel
+  href: OllamaSharp.OllamaApiClient.html#OllamaSharp_OllamaApiClient_SelectedModel
+  name: SelectedModel
+  nameWithType: OllamaApiClient.SelectedModel
+  fullName: OllamaSharp.OllamaApiClient.SelectedModel
+- uid: OllamaSharp.IOllamaApiClient.SelectedModel
+  commentId: P:OllamaSharp.IOllamaApiClient.SelectedModel
+  parent: OllamaSharp.IOllamaApiClient
+  href: OllamaSharp.IOllamaApiClient.html#OllamaSharp_IOllamaApiClient_SelectedModel
+  name: SelectedModel
+  nameWithType: IOllamaApiClient.SelectedModel
+  fullName: OllamaSharp.IOllamaApiClient.SelectedModel
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: OllamaSharp.OllamaApiClient.#ctor*
+  commentId: Overload:OllamaSharp.OllamaApiClient.#ctor
+  href: OllamaSharp.OllamaApiClient.html#OllamaSharp_OllamaApiClient__ctor_System_String_System_String_
+  name: OllamaApiClient
+  nameWithType: OllamaApiClient.OllamaApiClient
+  fullName: OllamaSharp.OllamaApiClient.OllamaApiClient
+  nameWithType.vb: OllamaApiClient.New
+  fullName.vb: OllamaSharp.OllamaApiClient.New
+  name.vb: New
+- uid: System.ArgumentNullException
+  commentId: T:System.ArgumentNullException
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.argumentnullexception
+  name: ArgumentNullException
+  nameWithType: ArgumentNullException
+  fullName: System.ArgumentNullException
+- uid: System.Net.Http.HttpClient
+  commentId: T:System.Net.Http.HttpClient
+  parent: System.Net.Http
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.net.http.httpclient
+  name: HttpClient
+  nameWithType: HttpClient
+  fullName: System.Net.Http.HttpClient
+- uid: System.Net.Http
+  commentId: N:System.Net.Http
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Net.Http
+  nameWithType: System.Net.Http
+  fullName: System.Net.Http
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Net
+    name: Net
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.net
+  - name: .
+  - uid: System.Net.Http
+    name: Http
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.net.http
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Net
+    name: Net
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.net
+  - name: .
+  - uid: System.Net.Http
+    name: Http
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.net.http
+- uid: OllamaSharp.OllamaApiClient.CreateModelAsync*
+  commentId: Overload:OllamaSharp.OllamaApiClient.CreateModelAsync
+  href: OllamaSharp.OllamaApiClient.html#OllamaSharp_OllamaApiClient_CreateModelAsync_OllamaSharp_Models_CreateModelRequest_System_Threading_CancellationToken_
+  name: CreateModelAsync
+  nameWithType: OllamaApiClient.CreateModelAsync
+  fullName: OllamaSharp.OllamaApiClient.CreateModelAsync
+- uid: OllamaSharp.IOllamaApiClient.CreateModelAsync(OllamaSharp.Models.CreateModelRequest,System.Threading.CancellationToken)
+  commentId: M:OllamaSharp.IOllamaApiClient.CreateModelAsync(OllamaSharp.Models.CreateModelRequest,System.Threading.CancellationToken)
+  parent: OllamaSharp.IOllamaApiClient
+  isExternal: true
+  href: OllamaSharp.IOllamaApiClient.html#OllamaSharp_IOllamaApiClient_CreateModelAsync_OllamaSharp_Models_CreateModelRequest_System_Threading_CancellationToken_
+  name: CreateModelAsync(CreateModelRequest, CancellationToken)
+  nameWithType: IOllamaApiClient.CreateModelAsync(CreateModelRequest, CancellationToken)
+  fullName: OllamaSharp.IOllamaApiClient.CreateModelAsync(OllamaSharp.Models.CreateModelRequest, System.Threading.CancellationToken)
+  spec.csharp:
+  - uid: OllamaSharp.IOllamaApiClient.CreateModelAsync(OllamaSharp.Models.CreateModelRequest,System.Threading.CancellationToken)
+    name: CreateModelAsync
+    href: OllamaSharp.IOllamaApiClient.html#OllamaSharp_IOllamaApiClient_CreateModelAsync_OllamaSharp_Models_CreateModelRequest_System_Threading_CancellationToken_
+  - name: (
+  - uid: OllamaSharp.Models.CreateModelRequest
+    name: CreateModelRequest
+    href: OllamaSharp.Models.CreateModelRequest.html
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+  spec.vb:
+  - uid: OllamaSharp.IOllamaApiClient.CreateModelAsync(OllamaSharp.Models.CreateModelRequest,System.Threading.CancellationToken)
+    name: CreateModelAsync
+    href: OllamaSharp.IOllamaApiClient.html#OllamaSharp_IOllamaApiClient_CreateModelAsync_OllamaSharp_Models_CreateModelRequest_System_Threading_CancellationToken_
+  - name: (
+  - uid: OllamaSharp.Models.CreateModelRequest
+    name: CreateModelRequest
+    href: OllamaSharp.Models.CreateModelRequest.html
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+- uid: OllamaSharp.Models.CreateModelRequest
+  commentId: T:OllamaSharp.Models.CreateModelRequest
+  parent: OllamaSharp.Models
+  href: OllamaSharp.Models.CreateModelRequest.html
+  name: CreateModelRequest
+  nameWithType: CreateModelRequest
+  fullName: OllamaSharp.Models.CreateModelRequest
+- uid: System.Threading.CancellationToken
+  commentId: T:System.Threading.CancellationToken
+  parent: System.Threading
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  name: CancellationToken
+  nameWithType: CancellationToken
+  fullName: System.Threading.CancellationToken
+- uid: System.Collections.Generic.IAsyncEnumerable{OllamaSharp.Models.CreateModelResponse}
+  commentId: T:System.Collections.Generic.IAsyncEnumerable{OllamaSharp.Models.CreateModelResponse}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.IAsyncEnumerable`1
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.iasyncenumerable-1
+  name: IAsyncEnumerable<CreateModelResponse>
+  nameWithType: IAsyncEnumerable<CreateModelResponse>
+  fullName: System.Collections.Generic.IAsyncEnumerable<OllamaSharp.Models.CreateModelResponse>
+  nameWithType.vb: IAsyncEnumerable(Of CreateModelResponse)
+  fullName.vb: System.Collections.Generic.IAsyncEnumerable(Of OllamaSharp.Models.CreateModelResponse)
+  name.vb: IAsyncEnumerable(Of CreateModelResponse)
+  spec.csharp:
+  - uid: System.Collections.Generic.IAsyncEnumerable`1
+    name: IAsyncEnumerable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.iasyncenumerable-1
+  - name: <
+  - uid: OllamaSharp.Models.CreateModelResponse
+    name: CreateModelResponse
+    href: OllamaSharp.Models.CreateModelResponse.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.IAsyncEnumerable`1
+    name: IAsyncEnumerable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.iasyncenumerable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: OllamaSharp.Models.CreateModelResponse
+    name: CreateModelResponse
+    href: OllamaSharp.Models.CreateModelResponse.html
+  - name: )
+- uid: OllamaSharp.Models
+  commentId: N:OllamaSharp.Models
+  href: OllamaSharp.html
+  name: OllamaSharp.Models
+  nameWithType: OllamaSharp.Models
+  fullName: OllamaSharp.Models
+  spec.csharp:
+  - uid: OllamaSharp
+    name: OllamaSharp
+    href: OllamaSharp.html
+  - name: .
+  - uid: OllamaSharp.Models
+    name: Models
+    href: OllamaSharp.Models.html
+  spec.vb:
+  - uid: OllamaSharp
+    name: OllamaSharp
+    href: OllamaSharp.html
+  - name: .
+  - uid: OllamaSharp.Models
+    name: Models
+    href: OllamaSharp.Models.html
+- uid: System.Threading
+  commentId: N:System.Threading
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading
+  nameWithType: System.Threading
+  fullName: System.Threading
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+- uid: System.Collections.Generic.IAsyncEnumerable`1
+  commentId: T:System.Collections.Generic.IAsyncEnumerable`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.iasyncenumerable-1
+  name: IAsyncEnumerable<T>
+  nameWithType: IAsyncEnumerable<T>
+  fullName: System.Collections.Generic.IAsyncEnumerable<T>
+  nameWithType.vb: IAsyncEnumerable(Of T)
+  fullName.vb: System.Collections.Generic.IAsyncEnumerable(Of T)
+  name.vb: IAsyncEnumerable(Of T)
+  spec.csharp:
+  - uid: System.Collections.Generic.IAsyncEnumerable`1
+    name: IAsyncEnumerable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.iasyncenumerable-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.IAsyncEnumerable`1
+    name: IAsyncEnumerable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.iasyncenumerable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: OllamaSharp.OllamaApiClient.DeleteModelAsync*
+  commentId: Overload:OllamaSharp.OllamaApiClient.DeleteModelAsync
+  href: OllamaSharp.OllamaApiClient.html#OllamaSharp_OllamaApiClient_DeleteModelAsync_OllamaSharp_Models_DeleteModelRequest_System_Threading_CancellationToken_
+  name: DeleteModelAsync
+  nameWithType: OllamaApiClient.DeleteModelAsync
+  fullName: OllamaSharp.OllamaApiClient.DeleteModelAsync
+- uid: OllamaSharp.IOllamaApiClient.DeleteModelAsync(OllamaSharp.Models.DeleteModelRequest,System.Threading.CancellationToken)
+  commentId: M:OllamaSharp.IOllamaApiClient.DeleteModelAsync(OllamaSharp.Models.DeleteModelRequest,System.Threading.CancellationToken)
+  parent: OllamaSharp.IOllamaApiClient
+  isExternal: true
+  href: OllamaSharp.IOllamaApiClient.html#OllamaSharp_IOllamaApiClient_DeleteModelAsync_OllamaSharp_Models_DeleteModelRequest_System_Threading_CancellationToken_
+  name: DeleteModelAsync(DeleteModelRequest, CancellationToken)
+  nameWithType: IOllamaApiClient.DeleteModelAsync(DeleteModelRequest, CancellationToken)
+  fullName: OllamaSharp.IOllamaApiClient.DeleteModelAsync(OllamaSharp.Models.DeleteModelRequest, System.Threading.CancellationToken)
+  spec.csharp:
+  - uid: OllamaSharp.IOllamaApiClient.DeleteModelAsync(OllamaSharp.Models.DeleteModelRequest,System.Threading.CancellationToken)
+    name: DeleteModelAsync
+    href: OllamaSharp.IOllamaApiClient.html#OllamaSharp_IOllamaApiClient_DeleteModelAsync_OllamaSharp_Models_DeleteModelRequest_System_Threading_CancellationToken_
+  - name: (
+  - uid: OllamaSharp.Models.DeleteModelRequest
+    name: DeleteModelRequest
+    href: OllamaSharp.Models.DeleteModelRequest.html
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+  spec.vb:
+  - uid: OllamaSharp.IOllamaApiClient.DeleteModelAsync(OllamaSharp.Models.DeleteModelRequest,System.Threading.CancellationToken)
+    name: DeleteModelAsync
+    href: OllamaSharp.IOllamaApiClient.html#OllamaSharp_IOllamaApiClient_DeleteModelAsync_OllamaSharp_Models_DeleteModelRequest_System_Threading_CancellationToken_
+  - name: (
+  - uid: OllamaSharp.Models.DeleteModelRequest
+    name: DeleteModelRequest
+    href: OllamaSharp.Models.DeleteModelRequest.html
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+- uid: OllamaSharp.Models.DeleteModelRequest
+  commentId: T:OllamaSharp.Models.DeleteModelRequest
+  parent: OllamaSharp.Models
+  href: OllamaSharp.Models.DeleteModelRequest.html
+  name: DeleteModelRequest
+  nameWithType: DeleteModelRequest
+  fullName: OllamaSharp.Models.DeleteModelRequest
+- uid: System.Threading.Tasks.Task
+  commentId: T:System.Threading.Tasks.Task
+  parent: System.Threading.Tasks
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task
+  name: Task
+  nameWithType: Task
+  fullName: System.Threading.Tasks.Task
+- uid: System.Threading.Tasks
+  commentId: N:System.Threading.Tasks
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading.Tasks
+  nameWithType: System.Threading.Tasks
+  fullName: System.Threading.Tasks
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks
+- uid: OllamaSharp.Models.Model
+  commentId: T:OllamaSharp.Models.Model
+  parent: OllamaSharp.Models
+  href: OllamaSharp.Models.Model.html
+  name: Model
+  nameWithType: Model
+  fullName: OllamaSharp.Models.Model
+- uid: OllamaSharp.OllamaApiClient.ListLocalModelsAsync*
+  commentId: Overload:OllamaSharp.OllamaApiClient.ListLocalModelsAsync
+  href: OllamaSharp.OllamaApiClient.html#OllamaSharp_OllamaApiClient_ListLocalModelsAsync_System_Threading_CancellationToken_
+  name: ListLocalModelsAsync
+  nameWithType: OllamaApiClient.ListLocalModelsAsync
+  fullName: OllamaSharp.OllamaApiClient.ListLocalModelsAsync
+- uid: OllamaSharp.IOllamaApiClient.ListLocalModelsAsync(System.Threading.CancellationToken)
+  commentId: M:OllamaSharp.IOllamaApiClient.ListLocalModelsAsync(System.Threading.CancellationToken)
+  parent: OllamaSharp.IOllamaApiClient
+  isExternal: true
+  href: OllamaSharp.IOllamaApiClient.html#OllamaSharp_IOllamaApiClient_ListLocalModelsAsync_System_Threading_CancellationToken_
+  name: ListLocalModelsAsync(CancellationToken)
+  nameWithType: IOllamaApiClient.ListLocalModelsAsync(CancellationToken)
+  fullName: OllamaSharp.IOllamaApiClient.ListLocalModelsAsync(System.Threading.CancellationToken)
+  spec.csharp:
+  - uid: OllamaSharp.IOllamaApiClient.ListLocalModelsAsync(System.Threading.CancellationToken)
+    name: ListLocalModelsAsync
+    href: OllamaSharp.IOllamaApiClient.html#OllamaSharp_IOllamaApiClient_ListLocalModelsAsync_System_Threading_CancellationToken_
+  - name: (
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+  spec.vb:
+  - uid: OllamaSharp.IOllamaApiClient.ListLocalModelsAsync(System.Threading.CancellationToken)
+    name: ListLocalModelsAsync
+    href: OllamaSharp.IOllamaApiClient.html#OllamaSharp_IOllamaApiClient_ListLocalModelsAsync_System_Threading_CancellationToken_
+  - name: (
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+- uid: System.Threading.Tasks.Task{System.Collections.Generic.IEnumerable{OllamaSharp.Models.Model}}
+  commentId: T:System.Threading.Tasks.Task{System.Collections.Generic.IEnumerable{OllamaSharp.Models.Model}}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<IEnumerable<Model>>
+  nameWithType: Task<IEnumerable<Model>>
+  fullName: System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<OllamaSharp.Models.Model>>
+  nameWithType.vb: Task(Of IEnumerable(Of Model))
+  fullName.vb: System.Threading.Tasks.Task(Of System.Collections.Generic.IEnumerable(Of OllamaSharp.Models.Model))
+  name.vb: Task(Of IEnumerable(Of Model))
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: System.Collections.Generic.IEnumerable`1
+    name: IEnumerable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1
+  - name: <
+  - uid: OllamaSharp.Models.Model
+    name: Model
+    href: OllamaSharp.Models.Model.html
+  - name: '>'
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: System.Collections.Generic.IEnumerable`1
+    name: IEnumerable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: OllamaSharp.Models.Model
+    name: Model
+    href: OllamaSharp.Models.Model.html
+  - name: )
+  - name: )
+- uid: System.Threading.Tasks.Task`1
+  commentId: T:System.Threading.Tasks.Task`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<TResult>
+  nameWithType: Task<TResult>
+  fullName: System.Threading.Tasks.Task<TResult>
+  nameWithType.vb: Task(Of TResult)
+  fullName.vb: System.Threading.Tasks.Task(Of TResult)
+  name.vb: Task(Of TResult)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - name: TResult
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TResult
+  - name: )
+- uid: OllamaSharp.Models.RunningModel
+  commentId: T:OllamaSharp.Models.RunningModel
+  href: OllamaSharp.Models.RunningModel.html
+  name: RunningModel
+  nameWithType: RunningModel
+  fullName: OllamaSharp.Models.RunningModel
+- uid: OllamaSharp.OllamaApiClient.ListRunningModelsAsync*
+  commentId: Overload:OllamaSharp.OllamaApiClient.ListRunningModelsAsync
+  href: OllamaSharp.OllamaApiClient.html#OllamaSharp_OllamaApiClient_ListRunningModelsAsync_System_Threading_CancellationToken_
+  name: ListRunningModelsAsync
+  nameWithType: OllamaApiClient.ListRunningModelsAsync
+  fullName: OllamaSharp.OllamaApiClient.ListRunningModelsAsync
+- uid: OllamaSharp.IOllamaApiClient.ListRunningModelsAsync(System.Threading.CancellationToken)
+  commentId: M:OllamaSharp.IOllamaApiClient.ListRunningModelsAsync(System.Threading.CancellationToken)
+  parent: OllamaSharp.IOllamaApiClient
+  isExternal: true
+  href: OllamaSharp.IOllamaApiClient.html#OllamaSharp_IOllamaApiClient_ListRunningModelsAsync_System_Threading_CancellationToken_
+  name: ListRunningModelsAsync(CancellationToken)
+  nameWithType: IOllamaApiClient.ListRunningModelsAsync(CancellationToken)
+  fullName: OllamaSharp.IOllamaApiClient.ListRunningModelsAsync(System.Threading.CancellationToken)
+  spec.csharp:
+  - uid: OllamaSharp.IOllamaApiClient.ListRunningModelsAsync(System.Threading.CancellationToken)
+    name: ListRunningModelsAsync
+    href: OllamaSharp.IOllamaApiClient.html#OllamaSharp_IOllamaApiClient_ListRunningModelsAsync_System_Threading_CancellationToken_
+  - name: (
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+  spec.vb:
+  - uid: OllamaSharp.IOllamaApiClient.ListRunningModelsAsync(System.Threading.CancellationToken)
+    name: ListRunningModelsAsync
+    href: OllamaSharp.IOllamaApiClient.html#OllamaSharp_IOllamaApiClient_ListRunningModelsAsync_System_Threading_CancellationToken_
+  - name: (
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+- uid: System.Threading.Tasks.Task{System.Collections.Generic.IEnumerable{OllamaSharp.Models.RunningModel}}
+  commentId: T:System.Threading.Tasks.Task{System.Collections.Generic.IEnumerable{OllamaSharp.Models.RunningModel}}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<IEnumerable<RunningModel>>
+  nameWithType: Task<IEnumerable<RunningModel>>
+  fullName: System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<OllamaSharp.Models.RunningModel>>
+  nameWithType.vb: Task(Of IEnumerable(Of RunningModel))
+  fullName.vb: System.Threading.Tasks.Task(Of System.Collections.Generic.IEnumerable(Of OllamaSharp.Models.RunningModel))
+  name.vb: Task(Of IEnumerable(Of RunningModel))
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: System.Collections.Generic.IEnumerable`1
+    name: IEnumerable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1
+  - name: <
+  - uid: OllamaSharp.Models.RunningModel
+    name: RunningModel
+    href: OllamaSharp.Models.RunningModel.html
+  - name: '>'
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: System.Collections.Generic.IEnumerable`1
+    name: IEnumerable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: OllamaSharp.Models.RunningModel
+    name: RunningModel
+    href: OllamaSharp.Models.RunningModel.html
+  - name: )
+  - name: )
+- uid: OllamaSharp.Models.ShowModelResponse
+  commentId: T:OllamaSharp.Models.ShowModelResponse
+  href: OllamaSharp.Models.ShowModelResponse.html
+  name: ShowModelResponse
+  nameWithType: ShowModelResponse
+  fullName: OllamaSharp.Models.ShowModelResponse
+- uid: OllamaSharp.OllamaApiClient.ShowModelAsync*
+  commentId: Overload:OllamaSharp.OllamaApiClient.ShowModelAsync
+  href: OllamaSharp.OllamaApiClient.html#OllamaSharp_OllamaApiClient_ShowModelAsync_OllamaSharp_Models_ShowModelRequest_System_Threading_CancellationToken_
+  name: ShowModelAsync
+  nameWithType: OllamaApiClient.ShowModelAsync
+  fullName: OllamaSharp.OllamaApiClient.ShowModelAsync
+- uid: OllamaSharp.IOllamaApiClient.ShowModelAsync(OllamaSharp.Models.ShowModelRequest,System.Threading.CancellationToken)
+  commentId: M:OllamaSharp.IOllamaApiClient.ShowModelAsync(OllamaSharp.Models.ShowModelRequest,System.Threading.CancellationToken)
+  parent: OllamaSharp.IOllamaApiClient
+  isExternal: true
+  href: OllamaSharp.IOllamaApiClient.html#OllamaSharp_IOllamaApiClient_ShowModelAsync_OllamaSharp_Models_ShowModelRequest_System_Threading_CancellationToken_
+  name: ShowModelAsync(ShowModelRequest, CancellationToken)
+  nameWithType: IOllamaApiClient.ShowModelAsync(ShowModelRequest, CancellationToken)
+  fullName: OllamaSharp.IOllamaApiClient.ShowModelAsync(OllamaSharp.Models.ShowModelRequest, System.Threading.CancellationToken)
+  spec.csharp:
+  - uid: OllamaSharp.IOllamaApiClient.ShowModelAsync(OllamaSharp.Models.ShowModelRequest,System.Threading.CancellationToken)
+    name: ShowModelAsync
+    href: OllamaSharp.IOllamaApiClient.html#OllamaSharp_IOllamaApiClient_ShowModelAsync_OllamaSharp_Models_ShowModelRequest_System_Threading_CancellationToken_
+  - name: (
+  - uid: OllamaSharp.Models.ShowModelRequest
+    name: ShowModelRequest
+    href: OllamaSharp.Models.ShowModelRequest.html
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+  spec.vb:
+  - uid: OllamaSharp.IOllamaApiClient.ShowModelAsync(OllamaSharp.Models.ShowModelRequest,System.Threading.CancellationToken)
+    name: ShowModelAsync
+    href: OllamaSharp.IOllamaApiClient.html#OllamaSharp_IOllamaApiClient_ShowModelAsync_OllamaSharp_Models_ShowModelRequest_System_Threading_CancellationToken_
+  - name: (
+  - uid: OllamaSharp.Models.ShowModelRequest
+    name: ShowModelRequest
+    href: OllamaSharp.Models.ShowModelRequest.html
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+- uid: OllamaSharp.Models.ShowModelRequest
+  commentId: T:OllamaSharp.Models.ShowModelRequest
+  parent: OllamaSharp.Models
+  href: OllamaSharp.Models.ShowModelRequest.html
+  name: ShowModelRequest
+  nameWithType: ShowModelRequest
+  fullName: OllamaSharp.Models.ShowModelRequest
+- uid: System.Threading.Tasks.Task{OllamaSharp.Models.ShowModelResponse}
+  commentId: T:System.Threading.Tasks.Task{OllamaSharp.Models.ShowModelResponse}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<ShowModelResponse>
+  nameWithType: Task<ShowModelResponse>
+  fullName: System.Threading.Tasks.Task<OllamaSharp.Models.ShowModelResponse>
+  nameWithType.vb: Task(Of ShowModelResponse)
+  fullName.vb: System.Threading.Tasks.Task(Of OllamaSharp.Models.ShowModelResponse)
+  name.vb: Task(Of ShowModelResponse)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: OllamaSharp.Models.ShowModelResponse
+    name: ShowModelResponse
+    href: OllamaSharp.Models.ShowModelResponse.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: OllamaSharp.Models.ShowModelResponse
+    name: ShowModelResponse
+    href: OllamaSharp.Models.ShowModelResponse.html
+  - name: )
+- uid: OllamaSharp.OllamaApiClient.CopyModelAsync*
+  commentId: Overload:OllamaSharp.OllamaApiClient.CopyModelAsync
+  href: OllamaSharp.OllamaApiClient.html#OllamaSharp_OllamaApiClient_CopyModelAsync_OllamaSharp_Models_CopyModelRequest_System_Threading_CancellationToken_
+  name: CopyModelAsync
+  nameWithType: OllamaApiClient.CopyModelAsync
+  fullName: OllamaSharp.OllamaApiClient.CopyModelAsync
+- uid: OllamaSharp.IOllamaApiClient.CopyModelAsync(OllamaSharp.Models.CopyModelRequest,System.Threading.CancellationToken)
+  commentId: M:OllamaSharp.IOllamaApiClient.CopyModelAsync(OllamaSharp.Models.CopyModelRequest,System.Threading.CancellationToken)
+  parent: OllamaSharp.IOllamaApiClient
+  isExternal: true
+  href: OllamaSharp.IOllamaApiClient.html#OllamaSharp_IOllamaApiClient_CopyModelAsync_OllamaSharp_Models_CopyModelRequest_System_Threading_CancellationToken_
+  name: CopyModelAsync(CopyModelRequest, CancellationToken)
+  nameWithType: IOllamaApiClient.CopyModelAsync(CopyModelRequest, CancellationToken)
+  fullName: OllamaSharp.IOllamaApiClient.CopyModelAsync(OllamaSharp.Models.CopyModelRequest, System.Threading.CancellationToken)
+  spec.csharp:
+  - uid: OllamaSharp.IOllamaApiClient.CopyModelAsync(OllamaSharp.Models.CopyModelRequest,System.Threading.CancellationToken)
+    name: CopyModelAsync
+    href: OllamaSharp.IOllamaApiClient.html#OllamaSharp_IOllamaApiClient_CopyModelAsync_OllamaSharp_Models_CopyModelRequest_System_Threading_CancellationToken_
+  - name: (
+  - uid: OllamaSharp.Models.CopyModelRequest
+    name: CopyModelRequest
+    href: OllamaSharp.Models.CopyModelRequest.html
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+  spec.vb:
+  - uid: OllamaSharp.IOllamaApiClient.CopyModelAsync(OllamaSharp.Models.CopyModelRequest,System.Threading.CancellationToken)
+    name: CopyModelAsync
+    href: OllamaSharp.IOllamaApiClient.html#OllamaSharp_IOllamaApiClient_CopyModelAsync_OllamaSharp_Models_CopyModelRequest_System_Threading_CancellationToken_
+  - name: (
+  - uid: OllamaSharp.Models.CopyModelRequest
+    name: CopyModelRequest
+    href: OllamaSharp.Models.CopyModelRequest.html
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+- uid: OllamaSharp.Models.CopyModelRequest
+  commentId: T:OllamaSharp.Models.CopyModelRequest
+  parent: OllamaSharp.Models
+  href: OllamaSharp.Models.CopyModelRequest.html
+  name: CopyModelRequest
+  nameWithType: CopyModelRequest
+  fullName: OllamaSharp.Models.CopyModelRequest
+- uid: OllamaSharp.Models.PullModelResponse
+  commentId: T:OllamaSharp.Models.PullModelResponse
+  href: OllamaSharp.Models.PullModelResponse.html
+  name: PullModelResponse
+  nameWithType: PullModelResponse
+  fullName: OllamaSharp.Models.PullModelResponse
+- uid: OllamaSharp.OllamaApiClient.PullModelAsync*
+  commentId: Overload:OllamaSharp.OllamaApiClient.PullModelAsync
+  href: OllamaSharp.OllamaApiClient.html#OllamaSharp_OllamaApiClient_PullModelAsync_OllamaSharp_Models_PullModelRequest_System_Threading_CancellationToken_
+  name: PullModelAsync
+  nameWithType: OllamaApiClient.PullModelAsync
+  fullName: OllamaSharp.OllamaApiClient.PullModelAsync
+- uid: OllamaSharp.IOllamaApiClient.PullModelAsync(OllamaSharp.Models.PullModelRequest,System.Threading.CancellationToken)
+  commentId: M:OllamaSharp.IOllamaApiClient.PullModelAsync(OllamaSharp.Models.PullModelRequest,System.Threading.CancellationToken)
+  parent: OllamaSharp.IOllamaApiClient
+  isExternal: true
+  href: OllamaSharp.IOllamaApiClient.html#OllamaSharp_IOllamaApiClient_PullModelAsync_OllamaSharp_Models_PullModelRequest_System_Threading_CancellationToken_
+  name: PullModelAsync(PullModelRequest, CancellationToken)
+  nameWithType: IOllamaApiClient.PullModelAsync(PullModelRequest, CancellationToken)
+  fullName: OllamaSharp.IOllamaApiClient.PullModelAsync(OllamaSharp.Models.PullModelRequest, System.Threading.CancellationToken)
+  spec.csharp:
+  - uid: OllamaSharp.IOllamaApiClient.PullModelAsync(OllamaSharp.Models.PullModelRequest,System.Threading.CancellationToken)
+    name: PullModelAsync
+    href: OllamaSharp.IOllamaApiClient.html#OllamaSharp_IOllamaApiClient_PullModelAsync_OllamaSharp_Models_PullModelRequest_System_Threading_CancellationToken_
+  - name: (
+  - uid: OllamaSharp.Models.PullModelRequest
+    name: PullModelRequest
+    href: OllamaSharp.Models.PullModelRequest.html
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+  spec.vb:
+  - uid: OllamaSharp.IOllamaApiClient.PullModelAsync(OllamaSharp.Models.PullModelRequest,System.Threading.CancellationToken)
+    name: PullModelAsync
+    href: OllamaSharp.IOllamaApiClient.html#OllamaSharp_IOllamaApiClient_PullModelAsync_OllamaSharp_Models_PullModelRequest_System_Threading_CancellationToken_
+  - name: (
+  - uid: OllamaSharp.Models.PullModelRequest
+    name: PullModelRequest
+    href: OllamaSharp.Models.PullModelRequest.html
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+- uid: OllamaSharp.Models.PullModelRequest
+  commentId: T:OllamaSharp.Models.PullModelRequest
+  parent: OllamaSharp.Models
+  href: OllamaSharp.Models.PullModelRequest.html
+  name: PullModelRequest
+  nameWithType: PullModelRequest
+  fullName: OllamaSharp.Models.PullModelRequest
+- uid: System.Collections.Generic.IAsyncEnumerable{OllamaSharp.Models.PullModelResponse}
+  commentId: T:System.Collections.Generic.IAsyncEnumerable{OllamaSharp.Models.PullModelResponse}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.IAsyncEnumerable`1
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.iasyncenumerable-1
+  name: IAsyncEnumerable<PullModelResponse>
+  nameWithType: IAsyncEnumerable<PullModelResponse>
+  fullName: System.Collections.Generic.IAsyncEnumerable<OllamaSharp.Models.PullModelResponse>
+  nameWithType.vb: IAsyncEnumerable(Of PullModelResponse)
+  fullName.vb: System.Collections.Generic.IAsyncEnumerable(Of OllamaSharp.Models.PullModelResponse)
+  name.vb: IAsyncEnumerable(Of PullModelResponse)
+  spec.csharp:
+  - uid: System.Collections.Generic.IAsyncEnumerable`1
+    name: IAsyncEnumerable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.iasyncenumerable-1
+  - name: <
+  - uid: OllamaSharp.Models.PullModelResponse
+    name: PullModelResponse
+    href: OllamaSharp.Models.PullModelResponse.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.IAsyncEnumerable`1
+    name: IAsyncEnumerable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.iasyncenumerable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: OllamaSharp.Models.PullModelResponse
+    name: PullModelResponse
+    href: OllamaSharp.Models.PullModelResponse.html
+  - name: )
+- uid: OllamaSharp.OllamaApiClient.PushModelAsync*
+  commentId: Overload:OllamaSharp.OllamaApiClient.PushModelAsync
+  href: OllamaSharp.OllamaApiClient.html#OllamaSharp_OllamaApiClient_PushModelAsync_OllamaSharp_Models_PushModelRequest_System_Threading_CancellationToken_
+  name: PushModelAsync
+  nameWithType: OllamaApiClient.PushModelAsync
+  fullName: OllamaSharp.OllamaApiClient.PushModelAsync
+- uid: OllamaSharp.IOllamaApiClient.PushModelAsync(OllamaSharp.Models.PushModelRequest,System.Threading.CancellationToken)
+  commentId: M:OllamaSharp.IOllamaApiClient.PushModelAsync(OllamaSharp.Models.PushModelRequest,System.Threading.CancellationToken)
+  parent: OllamaSharp.IOllamaApiClient
+  isExternal: true
+  href: OllamaSharp.IOllamaApiClient.html#OllamaSharp_IOllamaApiClient_PushModelAsync_OllamaSharp_Models_PushModelRequest_System_Threading_CancellationToken_
+  name: PushModelAsync(PushModelRequest, CancellationToken)
+  nameWithType: IOllamaApiClient.PushModelAsync(PushModelRequest, CancellationToken)
+  fullName: OllamaSharp.IOllamaApiClient.PushModelAsync(OllamaSharp.Models.PushModelRequest, System.Threading.CancellationToken)
+  spec.csharp:
+  - uid: OllamaSharp.IOllamaApiClient.PushModelAsync(OllamaSharp.Models.PushModelRequest,System.Threading.CancellationToken)
+    name: PushModelAsync
+    href: OllamaSharp.IOllamaApiClient.html#OllamaSharp_IOllamaApiClient_PushModelAsync_OllamaSharp_Models_PushModelRequest_System_Threading_CancellationToken_
+  - name: (
+  - uid: OllamaSharp.Models.PushModelRequest
+    name: PushModelRequest
+    href: OllamaSharp.Models.PushModelRequest.html
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+  spec.vb:
+  - uid: OllamaSharp.IOllamaApiClient.PushModelAsync(OllamaSharp.Models.PushModelRequest,System.Threading.CancellationToken)
+    name: PushModelAsync
+    href: OllamaSharp.IOllamaApiClient.html#OllamaSharp_IOllamaApiClient_PushModelAsync_OllamaSharp_Models_PushModelRequest_System_Threading_CancellationToken_
+  - name: (
+  - uid: OllamaSharp.Models.PushModelRequest
+    name: PushModelRequest
+    href: OllamaSharp.Models.PushModelRequest.html
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+- uid: OllamaSharp.Models.PushModelRequest
+  commentId: T:OllamaSharp.Models.PushModelRequest
+  parent: OllamaSharp.Models
+  href: OllamaSharp.Models.PushModelRequest.html
+  name: PushModelRequest
+  nameWithType: PushModelRequest
+  fullName: OllamaSharp.Models.PushModelRequest
+- uid: System.Collections.Generic.IAsyncEnumerable{OllamaSharp.Models.PushModelResponse}
+  commentId: T:System.Collections.Generic.IAsyncEnumerable{OllamaSharp.Models.PushModelResponse}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.IAsyncEnumerable`1
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.iasyncenumerable-1
+  name: IAsyncEnumerable<PushModelResponse>
+  nameWithType: IAsyncEnumerable<PushModelResponse>
+  fullName: System.Collections.Generic.IAsyncEnumerable<OllamaSharp.Models.PushModelResponse>
+  nameWithType.vb: IAsyncEnumerable(Of PushModelResponse)
+  fullName.vb: System.Collections.Generic.IAsyncEnumerable(Of OllamaSharp.Models.PushModelResponse)
+  name.vb: IAsyncEnumerable(Of PushModelResponse)
+  spec.csharp:
+  - uid: System.Collections.Generic.IAsyncEnumerable`1
+    name: IAsyncEnumerable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.iasyncenumerable-1
+  - name: <
+  - uid: OllamaSharp.Models.PushModelResponse
+    name: PushModelResponse
+    href: OllamaSharp.Models.PushModelResponse.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.IAsyncEnumerable`1
+    name: IAsyncEnumerable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.iasyncenumerable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: OllamaSharp.Models.PushModelResponse
+    name: PushModelResponse
+    href: OllamaSharp.Models.PushModelResponse.html
+  - name: )
+- uid: OllamaSharp.Models.EmbedResponse
+  commentId: T:OllamaSharp.Models.EmbedResponse
+  href: OllamaSharp.Models.EmbedResponse.html
+  name: EmbedResponse
+  nameWithType: EmbedResponse
+  fullName: OllamaSharp.Models.EmbedResponse
+- uid: OllamaSharp.OllamaApiClient.EmbedAsync*
+  commentId: Overload:OllamaSharp.OllamaApiClient.EmbedAsync
+  href: OllamaSharp.OllamaApiClient.html#OllamaSharp_OllamaApiClient_EmbedAsync_OllamaSharp_Models_EmbedRequest_System_Threading_CancellationToken_
+  name: EmbedAsync
+  nameWithType: OllamaApiClient.EmbedAsync
+  fullName: OllamaSharp.OllamaApiClient.EmbedAsync
+- uid: OllamaSharp.IOllamaApiClient.EmbedAsync(OllamaSharp.Models.EmbedRequest,System.Threading.CancellationToken)
+  commentId: M:OllamaSharp.IOllamaApiClient.EmbedAsync(OllamaSharp.Models.EmbedRequest,System.Threading.CancellationToken)
+  parent: OllamaSharp.IOllamaApiClient
+  isExternal: true
+  href: OllamaSharp.IOllamaApiClient.html#OllamaSharp_IOllamaApiClient_EmbedAsync_OllamaSharp_Models_EmbedRequest_System_Threading_CancellationToken_
+  name: EmbedAsync(EmbedRequest, CancellationToken)
+  nameWithType: IOllamaApiClient.EmbedAsync(EmbedRequest, CancellationToken)
+  fullName: OllamaSharp.IOllamaApiClient.EmbedAsync(OllamaSharp.Models.EmbedRequest, System.Threading.CancellationToken)
+  spec.csharp:
+  - uid: OllamaSharp.IOllamaApiClient.EmbedAsync(OllamaSharp.Models.EmbedRequest,System.Threading.CancellationToken)
+    name: EmbedAsync
+    href: OllamaSharp.IOllamaApiClient.html#OllamaSharp_IOllamaApiClient_EmbedAsync_OllamaSharp_Models_EmbedRequest_System_Threading_CancellationToken_
+  - name: (
+  - uid: OllamaSharp.Models.EmbedRequest
+    name: EmbedRequest
+    href: OllamaSharp.Models.EmbedRequest.html
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+  spec.vb:
+  - uid: OllamaSharp.IOllamaApiClient.EmbedAsync(OllamaSharp.Models.EmbedRequest,System.Threading.CancellationToken)
+    name: EmbedAsync
+    href: OllamaSharp.IOllamaApiClient.html#OllamaSharp_IOllamaApiClient_EmbedAsync_OllamaSharp_Models_EmbedRequest_System_Threading_CancellationToken_
+  - name: (
+  - uid: OllamaSharp.Models.EmbedRequest
+    name: EmbedRequest
+    href: OllamaSharp.Models.EmbedRequest.html
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+- uid: OllamaSharp.Models.EmbedRequest
+  commentId: T:OllamaSharp.Models.EmbedRequest
+  parent: OllamaSharp.Models
+  href: OllamaSharp.Models.EmbedRequest.html
+  name: EmbedRequest
+  nameWithType: EmbedRequest
+  fullName: OllamaSharp.Models.EmbedRequest
+- uid: System.Threading.Tasks.Task{OllamaSharp.Models.EmbedResponse}
+  commentId: T:System.Threading.Tasks.Task{OllamaSharp.Models.EmbedResponse}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<EmbedResponse>
+  nameWithType: Task<EmbedResponse>
+  fullName: System.Threading.Tasks.Task<OllamaSharp.Models.EmbedResponse>
+  nameWithType.vb: Task(Of EmbedResponse)
+  fullName.vb: System.Threading.Tasks.Task(Of OllamaSharp.Models.EmbedResponse)
+  name.vb: Task(Of EmbedResponse)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: OllamaSharp.Models.EmbedResponse
+    name: EmbedResponse
+    href: OllamaSharp.Models.EmbedResponse.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: OllamaSharp.Models.EmbedResponse
+    name: EmbedResponse
+    href: OllamaSharp.Models.EmbedResponse.html
+  - name: )
+- uid: OllamaSharp.Models.GenerateResponseStream
+  commentId: T:OllamaSharp.Models.GenerateResponseStream
+  parent: OllamaSharp.Models
+  href: OllamaSharp.Models.GenerateResponseStream.html
+  name: GenerateResponseStream
+  nameWithType: GenerateResponseStream
+  fullName: OllamaSharp.Models.GenerateResponseStream
+- uid: OllamaSharp.OllamaApiClient.GenerateAsync*
+  commentId: Overload:OllamaSharp.OllamaApiClient.GenerateAsync
+  href: OllamaSharp.OllamaApiClient.html#OllamaSharp_OllamaApiClient_GenerateAsync_OllamaSharp_Models_GenerateRequest_System_Threading_CancellationToken_
+  name: GenerateAsync
+  nameWithType: OllamaApiClient.GenerateAsync
+  fullName: OllamaSharp.OllamaApiClient.GenerateAsync
+- uid: OllamaSharp.IOllamaApiClient.GenerateAsync(OllamaSharp.Models.GenerateRequest,System.Threading.CancellationToken)
+  commentId: M:OllamaSharp.IOllamaApiClient.GenerateAsync(OllamaSharp.Models.GenerateRequest,System.Threading.CancellationToken)
+  parent: OllamaSharp.IOllamaApiClient
+  isExternal: true
+  href: OllamaSharp.IOllamaApiClient.html#OllamaSharp_IOllamaApiClient_GenerateAsync_OllamaSharp_Models_GenerateRequest_System_Threading_CancellationToken_
+  name: GenerateAsync(GenerateRequest, CancellationToken)
+  nameWithType: IOllamaApiClient.GenerateAsync(GenerateRequest, CancellationToken)
+  fullName: OllamaSharp.IOllamaApiClient.GenerateAsync(OllamaSharp.Models.GenerateRequest, System.Threading.CancellationToken)
+  spec.csharp:
+  - uid: OllamaSharp.IOllamaApiClient.GenerateAsync(OllamaSharp.Models.GenerateRequest,System.Threading.CancellationToken)
+    name: GenerateAsync
+    href: OllamaSharp.IOllamaApiClient.html#OllamaSharp_IOllamaApiClient_GenerateAsync_OllamaSharp_Models_GenerateRequest_System_Threading_CancellationToken_
+  - name: (
+  - uid: OllamaSharp.Models.GenerateRequest
+    name: GenerateRequest
+    href: OllamaSharp.Models.GenerateRequest.html
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+  spec.vb:
+  - uid: OllamaSharp.IOllamaApiClient.GenerateAsync(OllamaSharp.Models.GenerateRequest,System.Threading.CancellationToken)
+    name: GenerateAsync
+    href: OllamaSharp.IOllamaApiClient.html#OllamaSharp_IOllamaApiClient_GenerateAsync_OllamaSharp_Models_GenerateRequest_System_Threading_CancellationToken_
+  - name: (
+  - uid: OllamaSharp.Models.GenerateRequest
+    name: GenerateRequest
+    href: OllamaSharp.Models.GenerateRequest.html
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+- uid: OllamaSharp.Models.GenerateRequest
+  commentId: T:OllamaSharp.Models.GenerateRequest
+  parent: OllamaSharp.Models
+  href: OllamaSharp.Models.GenerateRequest.html
+  name: GenerateRequest
+  nameWithType: GenerateRequest
+  fullName: OllamaSharp.Models.GenerateRequest
+- uid: System.Collections.Generic.IAsyncEnumerable{OllamaSharp.Models.GenerateResponseStream}
+  commentId: T:System.Collections.Generic.IAsyncEnumerable{OllamaSharp.Models.GenerateResponseStream}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.IAsyncEnumerable`1
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.iasyncenumerable-1
+  name: IAsyncEnumerable<GenerateResponseStream>
+  nameWithType: IAsyncEnumerable<GenerateResponseStream>
+  fullName: System.Collections.Generic.IAsyncEnumerable<OllamaSharp.Models.GenerateResponseStream>
+  nameWithType.vb: IAsyncEnumerable(Of GenerateResponseStream)
+  fullName.vb: System.Collections.Generic.IAsyncEnumerable(Of OllamaSharp.Models.GenerateResponseStream)
+  name.vb: IAsyncEnumerable(Of GenerateResponseStream)
+  spec.csharp:
+  - uid: System.Collections.Generic.IAsyncEnumerable`1
+    name: IAsyncEnumerable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.iasyncenumerable-1
+  - name: <
+  - uid: OllamaSharp.Models.GenerateResponseStream
+    name: GenerateResponseStream
+    href: OllamaSharp.Models.GenerateResponseStream.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.IAsyncEnumerable`1
+    name: IAsyncEnumerable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.iasyncenumerable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: OllamaSharp.Models.GenerateResponseStream
+    name: GenerateResponseStream
+    href: OllamaSharp.Models.GenerateResponseStream.html
+  - name: )
+- uid: OllamaSharp.Models.Chat.ChatResponseStream
+  commentId: T:OllamaSharp.Models.Chat.ChatResponseStream
+  parent: OllamaSharp.Models.Chat
+  href: OllamaSharp.Models.Chat.ChatResponseStream.html
+  name: ChatResponseStream
+  nameWithType: ChatResponseStream
+  fullName: OllamaSharp.Models.Chat.ChatResponseStream
+- uid: OllamaSharp.OllamaApiClient.ChatAsync*
+  commentId: Overload:OllamaSharp.OllamaApiClient.ChatAsync
+  href: OllamaSharp.OllamaApiClient.html#OllamaSharp_OllamaApiClient_ChatAsync_OllamaSharp_Models_Chat_ChatRequest_System_Threading_CancellationToken_
+  name: ChatAsync
+  nameWithType: OllamaApiClient.ChatAsync
+  fullName: OllamaSharp.OllamaApiClient.ChatAsync
+- uid: OllamaSharp.IOllamaApiClient.ChatAsync(OllamaSharp.Models.Chat.ChatRequest,System.Threading.CancellationToken)
+  commentId: M:OllamaSharp.IOllamaApiClient.ChatAsync(OllamaSharp.Models.Chat.ChatRequest,System.Threading.CancellationToken)
+  parent: OllamaSharp.IOllamaApiClient
+  isExternal: true
+  href: OllamaSharp.IOllamaApiClient.html#OllamaSharp_IOllamaApiClient_ChatAsync_OllamaSharp_Models_Chat_ChatRequest_System_Threading_CancellationToken_
+  name: ChatAsync(ChatRequest, CancellationToken)
+  nameWithType: IOllamaApiClient.ChatAsync(ChatRequest, CancellationToken)
+  fullName: OllamaSharp.IOllamaApiClient.ChatAsync(OllamaSharp.Models.Chat.ChatRequest, System.Threading.CancellationToken)
+  spec.csharp:
+  - uid: OllamaSharp.IOllamaApiClient.ChatAsync(OllamaSharp.Models.Chat.ChatRequest,System.Threading.CancellationToken)
+    name: ChatAsync
+    href: OllamaSharp.IOllamaApiClient.html#OllamaSharp_IOllamaApiClient_ChatAsync_OllamaSharp_Models_Chat_ChatRequest_System_Threading_CancellationToken_
+  - name: (
+  - uid: OllamaSharp.Models.Chat.ChatRequest
+    name: ChatRequest
+    href: OllamaSharp.Models.Chat.ChatRequest.html
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+  spec.vb:
+  - uid: OllamaSharp.IOllamaApiClient.ChatAsync(OllamaSharp.Models.Chat.ChatRequest,System.Threading.CancellationToken)
+    name: ChatAsync
+    href: OllamaSharp.IOllamaApiClient.html#OllamaSharp_IOllamaApiClient_ChatAsync_OllamaSharp_Models_Chat_ChatRequest_System_Threading_CancellationToken_
+  - name: (
+  - uid: OllamaSharp.Models.Chat.ChatRequest
+    name: ChatRequest
+    href: OllamaSharp.Models.Chat.ChatRequest.html
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+- uid: OllamaSharp.Models.Chat.ChatRequest
+  commentId: T:OllamaSharp.Models.Chat.ChatRequest
+  parent: OllamaSharp.Models.Chat
+  href: OllamaSharp.Models.Chat.ChatRequest.html
+  name: ChatRequest
+  nameWithType: ChatRequest
+  fullName: OllamaSharp.Models.Chat.ChatRequest
+- uid: System.Collections.Generic.IAsyncEnumerable{OllamaSharp.Models.Chat.ChatResponseStream}
+  commentId: T:System.Collections.Generic.IAsyncEnumerable{OllamaSharp.Models.Chat.ChatResponseStream}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.IAsyncEnumerable`1
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.iasyncenumerable-1
+  name: IAsyncEnumerable<ChatResponseStream>
+  nameWithType: IAsyncEnumerable<ChatResponseStream>
+  fullName: System.Collections.Generic.IAsyncEnumerable<OllamaSharp.Models.Chat.ChatResponseStream>
+  nameWithType.vb: IAsyncEnumerable(Of ChatResponseStream)
+  fullName.vb: System.Collections.Generic.IAsyncEnumerable(Of OllamaSharp.Models.Chat.ChatResponseStream)
+  name.vb: IAsyncEnumerable(Of ChatResponseStream)
+  spec.csharp:
+  - uid: System.Collections.Generic.IAsyncEnumerable`1
+    name: IAsyncEnumerable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.iasyncenumerable-1
+  - name: <
+  - uid: OllamaSharp.Models.Chat.ChatResponseStream
+    name: ChatResponseStream
+    href: OllamaSharp.Models.Chat.ChatResponseStream.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.IAsyncEnumerable`1
+    name: IAsyncEnumerable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.iasyncenumerable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: OllamaSharp.Models.Chat.ChatResponseStream
+    name: ChatResponseStream
+    href: OllamaSharp.Models.Chat.ChatResponseStream.html
+  - name: )
+- uid: OllamaSharp.Models.Chat
+  commentId: N:OllamaSharp.Models.Chat
+  href: OllamaSharp.html
+  name: OllamaSharp.Models.Chat
+  nameWithType: OllamaSharp.Models.Chat
+  fullName: OllamaSharp.Models.Chat
+  spec.csharp:
+  - uid: OllamaSharp
+    name: OllamaSharp
+    href: OllamaSharp.html
+  - name: .
+  - uid: OllamaSharp.Models
+    name: Models
+    href: OllamaSharp.Models.html
+  - name: .
+  - uid: OllamaSharp.Models.Chat
+    name: Chat
+    href: OllamaSharp.Models.Chat.html
+  spec.vb:
+  - uid: OllamaSharp
+    name: OllamaSharp
+    href: OllamaSharp.html
+  - name: .
+  - uid: OllamaSharp.Models
+    name: Models
+    href: OllamaSharp.Models.html
+  - name: .
+  - uid: OllamaSharp.Models.Chat
+    name: Chat
+    href: OllamaSharp.Models.Chat.html
+- uid: OllamaSharp.OllamaApiClient.IsRunningAsync*
+  commentId: Overload:OllamaSharp.OllamaApiClient.IsRunningAsync
+  href: OllamaSharp.OllamaApiClient.html#OllamaSharp_OllamaApiClient_IsRunningAsync_System_Threading_CancellationToken_
+  name: IsRunningAsync
+  nameWithType: OllamaApiClient.IsRunningAsync
+  fullName: OllamaSharp.OllamaApiClient.IsRunningAsync
+- uid: OllamaSharp.IOllamaApiClient.IsRunningAsync(System.Threading.CancellationToken)
+  commentId: M:OllamaSharp.IOllamaApiClient.IsRunningAsync(System.Threading.CancellationToken)
+  parent: OllamaSharp.IOllamaApiClient
+  isExternal: true
+  href: OllamaSharp.IOllamaApiClient.html#OllamaSharp_IOllamaApiClient_IsRunningAsync_System_Threading_CancellationToken_
+  name: IsRunningAsync(CancellationToken)
+  nameWithType: IOllamaApiClient.IsRunningAsync(CancellationToken)
+  fullName: OllamaSharp.IOllamaApiClient.IsRunningAsync(System.Threading.CancellationToken)
+  spec.csharp:
+  - uid: OllamaSharp.IOllamaApiClient.IsRunningAsync(System.Threading.CancellationToken)
+    name: IsRunningAsync
+    href: OllamaSharp.IOllamaApiClient.html#OllamaSharp_IOllamaApiClient_IsRunningAsync_System_Threading_CancellationToken_
+  - name: (
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+  spec.vb:
+  - uid: OllamaSharp.IOllamaApiClient.IsRunningAsync(System.Threading.CancellationToken)
+    name: IsRunningAsync
+    href: OllamaSharp.IOllamaApiClient.html#OllamaSharp_IOllamaApiClient_IsRunningAsync_System_Threading_CancellationToken_
+  - name: (
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+- uid: System.Threading.Tasks.Task{System.Boolean}
+  commentId: T:System.Threading.Tasks.Task{System.Boolean}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<bool>
+  nameWithType: Task<bool>
+  fullName: System.Threading.Tasks.Task<bool>
+  nameWithType.vb: Task(Of Boolean)
+  fullName.vb: System.Threading.Tasks.Task(Of Boolean)
+  name.vb: Task(Of Boolean)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: System.Boolean
+    name: bool
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.boolean
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: System.Boolean
+    name: Boolean
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.boolean
+  - name: )
+- uid: System.Version
+  commentId: T:System.Version
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.version
+  name: Version
+  nameWithType: Version
+  fullName: System.Version
+- uid: OllamaSharp.OllamaApiClient.GetVersionAsync*
+  commentId: Overload:OllamaSharp.OllamaApiClient.GetVersionAsync
+  href: OllamaSharp.OllamaApiClient.html#OllamaSharp_OllamaApiClient_GetVersionAsync_System_Threading_CancellationToken_
+  name: GetVersionAsync
+  nameWithType: OllamaApiClient.GetVersionAsync
+  fullName: OllamaSharp.OllamaApiClient.GetVersionAsync
+- uid: OllamaSharp.IOllamaApiClient.GetVersionAsync(System.Threading.CancellationToken)
+  commentId: M:OllamaSharp.IOllamaApiClient.GetVersionAsync(System.Threading.CancellationToken)
+  parent: OllamaSharp.IOllamaApiClient
+  isExternal: true
+  href: OllamaSharp.IOllamaApiClient.html#OllamaSharp_IOllamaApiClient_GetVersionAsync_System_Threading_CancellationToken_
+  name: GetVersionAsync(CancellationToken)
+  nameWithType: IOllamaApiClient.GetVersionAsync(CancellationToken)
+  fullName: OllamaSharp.IOllamaApiClient.GetVersionAsync(System.Threading.CancellationToken)
+  spec.csharp:
+  - uid: OllamaSharp.IOllamaApiClient.GetVersionAsync(System.Threading.CancellationToken)
+    name: GetVersionAsync
+    href: OllamaSharp.IOllamaApiClient.html#OllamaSharp_IOllamaApiClient_GetVersionAsync_System_Threading_CancellationToken_
+  - name: (
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+  spec.vb:
+  - uid: OllamaSharp.IOllamaApiClient.GetVersionAsync(System.Threading.CancellationToken)
+    name: GetVersionAsync
+    href: OllamaSharp.IOllamaApiClient.html#OllamaSharp_IOllamaApiClient_GetVersionAsync_System_Threading_CancellationToken_
+  - name: (
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+- uid: System.Threading.Tasks.Task{System.Version}
+  commentId: T:System.Threading.Tasks.Task{System.Version}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<Version>
+  nameWithType: Task<Version>
+  fullName: System.Threading.Tasks.Task<System.Version>
+  nameWithType.vb: Task(Of Version)
+  fullName.vb: System.Threading.Tasks.Task(Of System.Version)
+  name.vb: Task(Of Version)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: System.Version
+    name: Version
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.version
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: System.Version
+    name: Version
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.version
+  - name: )
+- uid: OllamaSharp.OllamaApiClient.SendToOllamaAsync*
+  commentId: Overload:OllamaSharp.OllamaApiClient.SendToOllamaAsync
+  href: OllamaSharp.OllamaApiClient.html#OllamaSharp_OllamaApiClient_SendToOllamaAsync_System_Net_Http_HttpRequestMessage_OllamaSharp_Models_OllamaRequest_System_Net_Http_HttpCompletionOption_System_Threading_CancellationToken_
+  name: SendToOllamaAsync
+  nameWithType: OllamaApiClient.SendToOllamaAsync
+  fullName: OllamaSharp.OllamaApiClient.SendToOllamaAsync
+- uid: System.Net.Http.HttpRequestMessage
+  commentId: T:System.Net.Http.HttpRequestMessage
+  parent: System.Net.Http
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.net.http.httprequestmessage
+  name: HttpRequestMessage
+  nameWithType: HttpRequestMessage
+  fullName: System.Net.Http.HttpRequestMessage
+- uid: OllamaSharp.Models.OllamaRequest
+  commentId: T:OllamaSharp.Models.OllamaRequest
+  parent: OllamaSharp.Models
+  href: OllamaSharp.Models.OllamaRequest.html
+  name: OllamaRequest
+  nameWithType: OllamaRequest
+  fullName: OllamaSharp.Models.OllamaRequest
+- uid: System.Net.Http.HttpCompletionOption
+  commentId: T:System.Net.Http.HttpCompletionOption
+  parent: System.Net.Http
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.net.http.httpcompletionoption
+  name: HttpCompletionOption
+  nameWithType: HttpCompletionOption
+  fullName: System.Net.Http.HttpCompletionOption
+- uid: System.Threading.Tasks.Task{System.Net.Http.HttpResponseMessage}
+  commentId: T:System.Threading.Tasks.Task{System.Net.Http.HttpResponseMessage}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<HttpResponseMessage>
+  nameWithType: Task<HttpResponseMessage>
+  fullName: System.Threading.Tasks.Task<System.Net.Http.HttpResponseMessage>
+  nameWithType.vb: Task(Of HttpResponseMessage)
+  fullName.vb: System.Threading.Tasks.Task(Of System.Net.Http.HttpResponseMessage)
+  name.vb: Task(Of HttpResponseMessage)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: System.Net.Http.HttpResponseMessage
+    name: HttpResponseMessage
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.net.http.httpresponsemessage
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: System.Net.Http.HttpResponseMessage
+    name: HttpResponseMessage
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.net.http.httpresponsemessage
+  - name: )

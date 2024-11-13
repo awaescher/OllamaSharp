@@ -1,0 +1,739 @@
+### YamlMime:ManagedReference
+items:
+- uid: OllamaSharp.Models.Chat.ChatDoneResponseStream
+  commentId: T:OllamaSharp.Models.Chat.ChatDoneResponseStream
+  id: ChatDoneResponseStream
+  parent: OllamaSharp.Models.Chat
+  children:
+  - OllamaSharp.Models.Chat.ChatDoneResponseStream.DoneReason
+  - OllamaSharp.Models.Chat.ChatDoneResponseStream.EvalCount
+  - OllamaSharp.Models.Chat.ChatDoneResponseStream.EvalDuration
+  - OllamaSharp.Models.Chat.ChatDoneResponseStream.LoadDuration
+  - OllamaSharp.Models.Chat.ChatDoneResponseStream.PromptEvalCount
+  - OllamaSharp.Models.Chat.ChatDoneResponseStream.PromptEvalDuration
+  - OllamaSharp.Models.Chat.ChatDoneResponseStream.TotalDuration
+  langs:
+  - csharp
+  - vb
+  name: ChatDoneResponseStream
+  nameWithType: ChatDoneResponseStream
+  fullName: OllamaSharp.Models.Chat.ChatDoneResponseStream
+  type: Class
+  source:
+    remote:
+      path: src/Models/Chat/ChatDoneResponseStream.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: ChatDoneResponseStream
+    path: src/Models/Chat/ChatDoneResponseStream.cs
+    startLine: 7
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models.Chat
+  summary: Represents the final message in a stream of responses from the /api/chat endpoint.
+  example: []
+  syntax:
+    content: 'public class ChatDoneResponseStream : ChatResponseStream'
+    content.vb: Public Class ChatDoneResponseStream Inherits ChatResponseStream
+  inheritance:
+  - System.Object
+  - OllamaSharp.Models.Chat.ChatResponseStream
+  inheritedMembers:
+  - OllamaSharp.Models.Chat.ChatResponseStream.Model
+  - OllamaSharp.Models.Chat.ChatResponseStream.CreatedAtString
+  - OllamaSharp.Models.Chat.ChatResponseStream.CreatedAt
+  - OllamaSharp.Models.Chat.ChatResponseStream.Message
+  - OllamaSharp.Models.Chat.ChatResponseStream.Done
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.MemberwiseClone
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: OllamaSharp.Models.Chat.ChatDoneResponseStream.TotalDuration
+  commentId: P:OllamaSharp.Models.Chat.ChatDoneResponseStream.TotalDuration
+  id: TotalDuration
+  parent: OllamaSharp.Models.Chat.ChatDoneResponseStream
+  langs:
+  - csharp
+  - vb
+  name: TotalDuration
+  nameWithType: ChatDoneResponseStream.TotalDuration
+  fullName: OllamaSharp.Models.Chat.ChatDoneResponseStream.TotalDuration
+  type: Property
+  source:
+    remote:
+      path: src/Models/Chat/ChatDoneResponseStream.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: TotalDuration
+    path: src/Models/Chat/ChatDoneResponseStream.cs
+    startLine: 12
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models.Chat
+  summary: The time spent generating the response
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("total_duration")]
+
+      public long TotalDuration { get; set; }
+    parameters: []
+    return:
+      type: System.Int64
+    content.vb: >-
+      <JsonPropertyName("total_duration")>
+
+      Public Property TotalDuration As Long
+  overload: OllamaSharp.Models.Chat.ChatDoneResponseStream.TotalDuration*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: total_duration
+- uid: OllamaSharp.Models.Chat.ChatDoneResponseStream.LoadDuration
+  commentId: P:OllamaSharp.Models.Chat.ChatDoneResponseStream.LoadDuration
+  id: LoadDuration
+  parent: OllamaSharp.Models.Chat.ChatDoneResponseStream
+  langs:
+  - csharp
+  - vb
+  name: LoadDuration
+  nameWithType: ChatDoneResponseStream.LoadDuration
+  fullName: OllamaSharp.Models.Chat.ChatDoneResponseStream.LoadDuration
+  type: Property
+  source:
+    remote:
+      path: src/Models/Chat/ChatDoneResponseStream.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: LoadDuration
+    path: src/Models/Chat/ChatDoneResponseStream.cs
+    startLine: 18
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models.Chat
+  summary: The time spent in nanoseconds loading the model
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("load_duration")]
+
+      public long LoadDuration { get; set; }
+    parameters: []
+    return:
+      type: System.Int64
+    content.vb: >-
+      <JsonPropertyName("load_duration")>
+
+      Public Property LoadDuration As Long
+  overload: OllamaSharp.Models.Chat.ChatDoneResponseStream.LoadDuration*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: load_duration
+- uid: OllamaSharp.Models.Chat.ChatDoneResponseStream.PromptEvalCount
+  commentId: P:OllamaSharp.Models.Chat.ChatDoneResponseStream.PromptEvalCount
+  id: PromptEvalCount
+  parent: OllamaSharp.Models.Chat.ChatDoneResponseStream
+  langs:
+  - csharp
+  - vb
+  name: PromptEvalCount
+  nameWithType: ChatDoneResponseStream.PromptEvalCount
+  fullName: OllamaSharp.Models.Chat.ChatDoneResponseStream.PromptEvalCount
+  type: Property
+  source:
+    remote:
+      path: src/Models/Chat/ChatDoneResponseStream.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: PromptEvalCount
+    path: src/Models/Chat/ChatDoneResponseStream.cs
+    startLine: 24
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models.Chat
+  summary: The number of tokens in the prompt
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("prompt_eval_count")]
+
+      public int PromptEvalCount { get; set; }
+    parameters: []
+    return:
+      type: System.Int32
+    content.vb: >-
+      <JsonPropertyName("prompt_eval_count")>
+
+      Public Property PromptEvalCount As Integer
+  overload: OllamaSharp.Models.Chat.ChatDoneResponseStream.PromptEvalCount*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: prompt_eval_count
+- uid: OllamaSharp.Models.Chat.ChatDoneResponseStream.PromptEvalDuration
+  commentId: P:OllamaSharp.Models.Chat.ChatDoneResponseStream.PromptEvalDuration
+  id: PromptEvalDuration
+  parent: OllamaSharp.Models.Chat.ChatDoneResponseStream
+  langs:
+  - csharp
+  - vb
+  name: PromptEvalDuration
+  nameWithType: ChatDoneResponseStream.PromptEvalDuration
+  fullName: OllamaSharp.Models.Chat.ChatDoneResponseStream.PromptEvalDuration
+  type: Property
+  source:
+    remote:
+      path: src/Models/Chat/ChatDoneResponseStream.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: PromptEvalDuration
+    path: src/Models/Chat/ChatDoneResponseStream.cs
+    startLine: 30
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models.Chat
+  summary: The time spent in nanoseconds evaluating the prompt
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("prompt_eval_duration")]
+
+      public long PromptEvalDuration { get; set; }
+    parameters: []
+    return:
+      type: System.Int64
+    content.vb: >-
+      <JsonPropertyName("prompt_eval_duration")>
+
+      Public Property PromptEvalDuration As Long
+  overload: OllamaSharp.Models.Chat.ChatDoneResponseStream.PromptEvalDuration*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: prompt_eval_duration
+- uid: OllamaSharp.Models.Chat.ChatDoneResponseStream.EvalCount
+  commentId: P:OllamaSharp.Models.Chat.ChatDoneResponseStream.EvalCount
+  id: EvalCount
+  parent: OllamaSharp.Models.Chat.ChatDoneResponseStream
+  langs:
+  - csharp
+  - vb
+  name: EvalCount
+  nameWithType: ChatDoneResponseStream.EvalCount
+  fullName: OllamaSharp.Models.Chat.ChatDoneResponseStream.EvalCount
+  type: Property
+  source:
+    remote:
+      path: src/Models/Chat/ChatDoneResponseStream.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: EvalCount
+    path: src/Models/Chat/ChatDoneResponseStream.cs
+    startLine: 36
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models.Chat
+  summary: The number of tokens in the response
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("eval_count")]
+
+      public int EvalCount { get; set; }
+    parameters: []
+    return:
+      type: System.Int32
+    content.vb: >-
+      <JsonPropertyName("eval_count")>
+
+      Public Property EvalCount As Integer
+  overload: OllamaSharp.Models.Chat.ChatDoneResponseStream.EvalCount*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: eval_count
+- uid: OllamaSharp.Models.Chat.ChatDoneResponseStream.EvalDuration
+  commentId: P:OllamaSharp.Models.Chat.ChatDoneResponseStream.EvalDuration
+  id: EvalDuration
+  parent: OllamaSharp.Models.Chat.ChatDoneResponseStream
+  langs:
+  - csharp
+  - vb
+  name: EvalDuration
+  nameWithType: ChatDoneResponseStream.EvalDuration
+  fullName: OllamaSharp.Models.Chat.ChatDoneResponseStream.EvalDuration
+  type: Property
+  source:
+    remote:
+      path: src/Models/Chat/ChatDoneResponseStream.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: EvalDuration
+    path: src/Models/Chat/ChatDoneResponseStream.cs
+    startLine: 42
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models.Chat
+  summary: The time in nanoseconds spent generating the response
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("eval_duration")]
+
+      public long EvalDuration { get; set; }
+    parameters: []
+    return:
+      type: System.Int64
+    content.vb: >-
+      <JsonPropertyName("eval_duration")>
+
+      Public Property EvalDuration As Long
+  overload: OllamaSharp.Models.Chat.ChatDoneResponseStream.EvalDuration*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: eval_duration
+- uid: OllamaSharp.Models.Chat.ChatDoneResponseStream.DoneReason
+  commentId: P:OllamaSharp.Models.Chat.ChatDoneResponseStream.DoneReason
+  id: DoneReason
+  parent: OllamaSharp.Models.Chat.ChatDoneResponseStream
+  langs:
+  - csharp
+  - vb
+  name: DoneReason
+  nameWithType: ChatDoneResponseStream.DoneReason
+  fullName: OllamaSharp.Models.Chat.ChatDoneResponseStream.DoneReason
+  type: Property
+  source:
+    remote:
+      path: src/Models/Chat/ChatDoneResponseStream.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: DoneReason
+    path: src/Models/Chat/ChatDoneResponseStream.cs
+    startLine: 48
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models.Chat
+  summary: The reason for the completion of the chat
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("done_reason")]
+
+      public string? DoneReason { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <JsonPropertyName("done_reason")>
+
+      Public Property DoneReason As String
+  overload: OllamaSharp.Models.Chat.ChatDoneResponseStream.DoneReason*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: done_reason
+references:
+- uid: OllamaSharp.Models.Chat
+  commentId: N:OllamaSharp.Models.Chat
+  href: OllamaSharp.html
+  name: OllamaSharp.Models.Chat
+  nameWithType: OllamaSharp.Models.Chat
+  fullName: OllamaSharp.Models.Chat
+  spec.csharp:
+  - uid: OllamaSharp
+    name: OllamaSharp
+    href: OllamaSharp.html
+  - name: .
+  - uid: OllamaSharp.Models
+    name: Models
+    href: OllamaSharp.Models.html
+  - name: .
+  - uid: OllamaSharp.Models.Chat
+    name: Chat
+    href: OllamaSharp.Models.Chat.html
+  spec.vb:
+  - uid: OllamaSharp
+    name: OllamaSharp
+    href: OllamaSharp.html
+  - name: .
+  - uid: OllamaSharp.Models
+    name: Models
+    href: OllamaSharp.Models.html
+  - name: .
+  - uid: OllamaSharp.Models.Chat
+    name: Chat
+    href: OllamaSharp.Models.Chat.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: OllamaSharp.Models.Chat.ChatResponseStream
+  commentId: T:OllamaSharp.Models.Chat.ChatResponseStream
+  parent: OllamaSharp.Models.Chat
+  href: OllamaSharp.Models.Chat.ChatResponseStream.html
+  name: ChatResponseStream
+  nameWithType: ChatResponseStream
+  fullName: OllamaSharp.Models.Chat.ChatResponseStream
+- uid: OllamaSharp.Models.Chat.ChatResponseStream.Model
+  commentId: P:OllamaSharp.Models.Chat.ChatResponseStream.Model
+  parent: OllamaSharp.Models.Chat.ChatResponseStream
+  href: OllamaSharp.Models.Chat.ChatResponseStream.html#OllamaSharp_Models_Chat_ChatResponseStream_Model
+  name: Model
+  nameWithType: ChatResponseStream.Model
+  fullName: OllamaSharp.Models.Chat.ChatResponseStream.Model
+- uid: OllamaSharp.Models.Chat.ChatResponseStream.CreatedAtString
+  commentId: P:OllamaSharp.Models.Chat.ChatResponseStream.CreatedAtString
+  parent: OllamaSharp.Models.Chat.ChatResponseStream
+  href: OllamaSharp.Models.Chat.ChatResponseStream.html#OllamaSharp_Models_Chat_ChatResponseStream_CreatedAtString
+  name: CreatedAtString
+  nameWithType: ChatResponseStream.CreatedAtString
+  fullName: OllamaSharp.Models.Chat.ChatResponseStream.CreatedAtString
+- uid: OllamaSharp.Models.Chat.ChatResponseStream.CreatedAt
+  commentId: P:OllamaSharp.Models.Chat.ChatResponseStream.CreatedAt
+  parent: OllamaSharp.Models.Chat.ChatResponseStream
+  href: OllamaSharp.Models.Chat.ChatResponseStream.html#OllamaSharp_Models_Chat_ChatResponseStream_CreatedAt
+  name: CreatedAt
+  nameWithType: ChatResponseStream.CreatedAt
+  fullName: OllamaSharp.Models.Chat.ChatResponseStream.CreatedAt
+- uid: OllamaSharp.Models.Chat.ChatResponseStream.Message
+  commentId: P:OllamaSharp.Models.Chat.ChatResponseStream.Message
+  parent: OllamaSharp.Models.Chat.ChatResponseStream
+  href: OllamaSharp.Models.Chat.ChatResponseStream.html#OllamaSharp_Models_Chat_ChatResponseStream_Message
+  name: Message
+  nameWithType: ChatResponseStream.Message
+  fullName: OllamaSharp.Models.Chat.ChatResponseStream.Message
+- uid: OllamaSharp.Models.Chat.ChatResponseStream.Done
+  commentId: P:OllamaSharp.Models.Chat.ChatResponseStream.Done
+  parent: OllamaSharp.Models.Chat.ChatResponseStream
+  href: OllamaSharp.Models.Chat.ChatResponseStream.html#OllamaSharp_Models_Chat_ChatResponseStream_Done
+  name: Done
+  nameWithType: ChatResponseStream.Done
+  fullName: OllamaSharp.Models.Chat.ChatResponseStream.Done
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.MemberwiseClone
+  commentId: M:System.Object.MemberwiseClone
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  name: MemberwiseClone()
+  nameWithType: object.MemberwiseClone()
+  fullName: object.MemberwiseClone()
+  nameWithType.vb: Object.MemberwiseClone()
+  fullName.vb: Object.MemberwiseClone()
+  spec.csharp:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: OllamaSharp.Models.Chat.ChatDoneResponseStream.TotalDuration*
+  commentId: Overload:OllamaSharp.Models.Chat.ChatDoneResponseStream.TotalDuration
+  href: OllamaSharp.Models.Chat.ChatDoneResponseStream.html#OllamaSharp_Models_Chat_ChatDoneResponseStream_TotalDuration
+  name: TotalDuration
+  nameWithType: ChatDoneResponseStream.TotalDuration
+  fullName: OllamaSharp.Models.Chat.ChatDoneResponseStream.TotalDuration
+- uid: System.Int64
+  commentId: T:System.Int64
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.int64
+  name: long
+  nameWithType: long
+  fullName: long
+  nameWithType.vb: Long
+  fullName.vb: Long
+  name.vb: Long
+- uid: OllamaSharp.Models.Chat.ChatDoneResponseStream.LoadDuration*
+  commentId: Overload:OllamaSharp.Models.Chat.ChatDoneResponseStream.LoadDuration
+  href: OllamaSharp.Models.Chat.ChatDoneResponseStream.html#OllamaSharp_Models_Chat_ChatDoneResponseStream_LoadDuration
+  name: LoadDuration
+  nameWithType: ChatDoneResponseStream.LoadDuration
+  fullName: OllamaSharp.Models.Chat.ChatDoneResponseStream.LoadDuration
+- uid: OllamaSharp.Models.Chat.ChatDoneResponseStream.PromptEvalCount*
+  commentId: Overload:OllamaSharp.Models.Chat.ChatDoneResponseStream.PromptEvalCount
+  href: OllamaSharp.Models.Chat.ChatDoneResponseStream.html#OllamaSharp_Models_Chat_ChatDoneResponseStream_PromptEvalCount
+  name: PromptEvalCount
+  nameWithType: ChatDoneResponseStream.PromptEvalCount
+  fullName: OllamaSharp.Models.Chat.ChatDoneResponseStream.PromptEvalCount
+- uid: System.Int32
+  commentId: T:System.Int32
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.int32
+  name: int
+  nameWithType: int
+  fullName: int
+  nameWithType.vb: Integer
+  fullName.vb: Integer
+  name.vb: Integer
+- uid: OllamaSharp.Models.Chat.ChatDoneResponseStream.PromptEvalDuration*
+  commentId: Overload:OllamaSharp.Models.Chat.ChatDoneResponseStream.PromptEvalDuration
+  href: OllamaSharp.Models.Chat.ChatDoneResponseStream.html#OllamaSharp_Models_Chat_ChatDoneResponseStream_PromptEvalDuration
+  name: PromptEvalDuration
+  nameWithType: ChatDoneResponseStream.PromptEvalDuration
+  fullName: OllamaSharp.Models.Chat.ChatDoneResponseStream.PromptEvalDuration
+- uid: OllamaSharp.Models.Chat.ChatDoneResponseStream.EvalCount*
+  commentId: Overload:OllamaSharp.Models.Chat.ChatDoneResponseStream.EvalCount
+  href: OllamaSharp.Models.Chat.ChatDoneResponseStream.html#OllamaSharp_Models_Chat_ChatDoneResponseStream_EvalCount
+  name: EvalCount
+  nameWithType: ChatDoneResponseStream.EvalCount
+  fullName: OllamaSharp.Models.Chat.ChatDoneResponseStream.EvalCount
+- uid: OllamaSharp.Models.Chat.ChatDoneResponseStream.EvalDuration*
+  commentId: Overload:OllamaSharp.Models.Chat.ChatDoneResponseStream.EvalDuration
+  href: OllamaSharp.Models.Chat.ChatDoneResponseStream.html#OllamaSharp_Models_Chat_ChatDoneResponseStream_EvalDuration
+  name: EvalDuration
+  nameWithType: ChatDoneResponseStream.EvalDuration
+  fullName: OllamaSharp.Models.Chat.ChatDoneResponseStream.EvalDuration
+- uid: OllamaSharp.Models.Chat.ChatDoneResponseStream.DoneReason*
+  commentId: Overload:OllamaSharp.Models.Chat.ChatDoneResponseStream.DoneReason
+  href: OllamaSharp.Models.Chat.ChatDoneResponseStream.html#OllamaSharp_Models_Chat_ChatDoneResponseStream_DoneReason
+  name: DoneReason
+  nameWithType: ChatDoneResponseStream.DoneReason
+  fullName: OllamaSharp.Models.Chat.ChatDoneResponseStream.DoneReason
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String

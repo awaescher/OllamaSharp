@@ -1,0 +1,793 @@
+### YamlMime:ManagedReference
+items:
+- uid: OllamaSharp.Models.EmbedRequest
+  commentId: T:OllamaSharp.Models.EmbedRequest
+  id: EmbedRequest
+  parent: OllamaSharp.Models
+  children:
+  - OllamaSharp.Models.EmbedRequest.Input
+  - OllamaSharp.Models.EmbedRequest.KeepAlive
+  - OllamaSharp.Models.EmbedRequest.Model
+  - OllamaSharp.Models.EmbedRequest.Options
+  - OllamaSharp.Models.EmbedRequest.Truncate
+  langs:
+  - csharp
+  - vb
+  name: EmbedRequest
+  nameWithType: EmbedRequest
+  fullName: OllamaSharp.Models.EmbedRequest
+  type: Class
+  source:
+    remote:
+      path: src/Models/Embed.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: EmbedRequest
+    path: src/Models/Embed.cs
+    startLine: 10
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models
+  summary: >-
+    Generate embeddings from a model.
+
+
+    <a href="https://github.com/jmorganca/ollama/blob/main/docs/api.md#generate-embeddings">Ollama API docs</a>
+  example: []
+  syntax:
+    content: 'public class EmbedRequest : OllamaRequest'
+    content.vb: Public Class EmbedRequest Inherits OllamaRequest
+  inheritance:
+  - System.Object
+  - OllamaSharp.Models.OllamaRequest
+  inheritedMembers:
+  - OllamaSharp.Models.OllamaRequest.CustomHeaders
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.MemberwiseClone
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: OllamaSharp.Models.EmbedRequest.Model
+  commentId: P:OllamaSharp.Models.EmbedRequest.Model
+  id: Model
+  parent: OllamaSharp.Models.EmbedRequest
+  langs:
+  - csharp
+  - vb
+  name: Model
+  nameWithType: EmbedRequest.Model
+  fullName: OllamaSharp.Models.EmbedRequest.Model
+  type: Property
+  source:
+    remote:
+      path: src/Models/Embed.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: Model
+    path: src/Models/Embed.cs
+    startLine: 15
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models
+  summary: The name of the model to generate embeddings from
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("model")]
+
+      public string Model { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <JsonPropertyName("model")>
+
+      Public Property Model As String
+  overload: OllamaSharp.Models.EmbedRequest.Model*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: model
+- uid: OllamaSharp.Models.EmbedRequest.Input
+  commentId: P:OllamaSharp.Models.EmbedRequest.Input
+  id: Input
+  parent: OllamaSharp.Models.EmbedRequest
+  langs:
+  - csharp
+  - vb
+  name: Input
+  nameWithType: EmbedRequest.Input
+  fullName: OllamaSharp.Models.EmbedRequest.Input
+  type: Property
+  source:
+    remote:
+      path: src/Models/Embed.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: Input
+    path: src/Models/Embed.cs
+    startLine: 21
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models
+  summary: The text to generate embeddings for
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("input")]
+
+      public List<string> Input { get; set; }
+    parameters: []
+    return:
+      type: System.Collections.Generic.List{System.String}
+    content.vb: >-
+      <JsonPropertyName("input")>
+
+      Public Property Input As List(Of String)
+  overload: OllamaSharp.Models.EmbedRequest.Input*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: input
+- uid: OllamaSharp.Models.EmbedRequest.Options
+  commentId: P:OllamaSharp.Models.EmbedRequest.Options
+  id: Options
+  parent: OllamaSharp.Models.EmbedRequest
+  langs:
+  - csharp
+  - vb
+  name: Options
+  nameWithType: EmbedRequest.Options
+  fullName: OllamaSharp.Models.EmbedRequest.Options
+  type: Property
+  source:
+    remote:
+      path: src/Models/Embed.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: Options
+    path: src/Models/Embed.cs
+    startLine: 28
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models
+  summary: >-
+    Additional model parameters listed in the documentation for the Modelfile
+
+    such as temperature.
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("options")]
+
+      public RequestOptions? Options { get; set; }
+    parameters: []
+    return:
+      type: OllamaSharp.Models.RequestOptions
+    content.vb: >-
+      <JsonPropertyName("options")>
+
+      Public Property Options As RequestOptions
+  overload: OllamaSharp.Models.EmbedRequest.Options*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: options
+- uid: OllamaSharp.Models.EmbedRequest.KeepAlive
+  commentId: P:OllamaSharp.Models.EmbedRequest.KeepAlive
+  id: KeepAlive
+  parent: OllamaSharp.Models.EmbedRequest
+  langs:
+  - csharp
+  - vb
+  name: KeepAlive
+  nameWithType: EmbedRequest.KeepAlive
+  fullName: OllamaSharp.Models.EmbedRequest.KeepAlive
+  type: Property
+  source:
+    remote:
+      path: src/Models/Embed.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: KeepAlive
+    path: src/Models/Embed.cs
+    startLine: 35
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models
+  summary: >-
+    Gets or sets the KeepAlive property, which decides how long a given
+
+    model should stay loaded.
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("keep_alive")]
+
+      [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+
+      public long? KeepAlive { get; set; }
+    parameters: []
+    return:
+      type: System.Nullable{System.Int64}
+    content.vb: >-
+      <JsonPropertyName("keep_alive")>
+
+      <JsonIgnore(Condition:=JsonIgnoreCondition.WhenWritingNull)>
+
+      Public Property KeepAlive As Long?
+  overload: OllamaSharp.Models.EmbedRequest.KeepAlive*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: keep_alive
+  - type: System.Text.Json.Serialization.JsonIgnoreAttribute
+    ctor: System.Text.Json.Serialization.JsonIgnoreAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Condition
+      type: System.Text.Json.Serialization.JsonIgnoreCondition
+      value: 3
+- uid: OllamaSharp.Models.EmbedRequest.Truncate
+  commentId: P:OllamaSharp.Models.EmbedRequest.Truncate
+  id: Truncate
+  parent: OllamaSharp.Models.EmbedRequest
+  langs:
+  - csharp
+  - vb
+  name: Truncate
+  nameWithType: EmbedRequest.Truncate
+  fullName: OllamaSharp.Models.EmbedRequest.Truncate
+  type: Property
+  source:
+    remote:
+      path: src/Models/Embed.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: Truncate
+    path: src/Models/Embed.cs
+    startLine: 43
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models
+  summary: >-
+    Truncates the end of each input to fit within context length.
+
+    Returns error if false and context length is exceeded. Defaults to true
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("truncate")]
+
+      [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+
+      public bool? Truncate { get; set; }
+    parameters: []
+    return:
+      type: System.Nullable{System.Boolean}
+    content.vb: >-
+      <JsonPropertyName("truncate")>
+
+      <JsonIgnore(Condition:=JsonIgnoreCondition.WhenWritingNull)>
+
+      Public Property Truncate As Boolean?
+  overload: OllamaSharp.Models.EmbedRequest.Truncate*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: truncate
+  - type: System.Text.Json.Serialization.JsonIgnoreAttribute
+    ctor: System.Text.Json.Serialization.JsonIgnoreAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Condition
+      type: System.Text.Json.Serialization.JsonIgnoreCondition
+      value: 3
+references:
+- uid: OllamaSharp.Models
+  commentId: N:OllamaSharp.Models
+  href: OllamaSharp.html
+  name: OllamaSharp.Models
+  nameWithType: OllamaSharp.Models
+  fullName: OllamaSharp.Models
+  spec.csharp:
+  - uid: OllamaSharp
+    name: OllamaSharp
+    href: OllamaSharp.html
+  - name: .
+  - uid: OllamaSharp.Models
+    name: Models
+    href: OllamaSharp.Models.html
+  spec.vb:
+  - uid: OllamaSharp
+    name: OllamaSharp
+    href: OllamaSharp.html
+  - name: .
+  - uid: OllamaSharp.Models
+    name: Models
+    href: OllamaSharp.Models.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: OllamaSharp.Models.OllamaRequest
+  commentId: T:OllamaSharp.Models.OllamaRequest
+  parent: OllamaSharp.Models
+  href: OllamaSharp.Models.OllamaRequest.html
+  name: OllamaRequest
+  nameWithType: OllamaRequest
+  fullName: OllamaSharp.Models.OllamaRequest
+- uid: OllamaSharp.Models.OllamaRequest.CustomHeaders
+  commentId: P:OllamaSharp.Models.OllamaRequest.CustomHeaders
+  parent: OllamaSharp.Models.OllamaRequest
+  href: OllamaSharp.Models.OllamaRequest.html#OllamaSharp_Models_OllamaRequest_CustomHeaders
+  name: CustomHeaders
+  nameWithType: OllamaRequest.CustomHeaders
+  fullName: OllamaSharp.Models.OllamaRequest.CustomHeaders
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.MemberwiseClone
+  commentId: M:System.Object.MemberwiseClone
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  name: MemberwiseClone()
+  nameWithType: object.MemberwiseClone()
+  fullName: object.MemberwiseClone()
+  nameWithType.vb: Object.MemberwiseClone()
+  fullName.vb: Object.MemberwiseClone()
+  spec.csharp:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: OllamaSharp.Models.EmbedRequest.Model*
+  commentId: Overload:OllamaSharp.Models.EmbedRequest.Model
+  href: OllamaSharp.Models.EmbedRequest.html#OllamaSharp_Models_EmbedRequest_Model
+  name: Model
+  nameWithType: EmbedRequest.Model
+  fullName: OllamaSharp.Models.EmbedRequest.Model
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: OllamaSharp.Models.EmbedRequest.Input*
+  commentId: Overload:OllamaSharp.Models.EmbedRequest.Input
+  href: OllamaSharp.Models.EmbedRequest.html#OllamaSharp_Models_EmbedRequest_Input
+  name: Input
+  nameWithType: EmbedRequest.Input
+  fullName: OllamaSharp.Models.EmbedRequest.Input
+- uid: System.Collections.Generic.List{System.String}
+  commentId: T:System.Collections.Generic.List{System.String}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.List`1
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  name: List<string>
+  nameWithType: List<string>
+  fullName: System.Collections.Generic.List<string>
+  nameWithType.vb: List(Of String)
+  fullName.vb: System.Collections.Generic.List(Of String)
+  name.vb: List(Of String)
+  spec.csharp:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: <
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: )
+- uid: System.Collections.Generic.List`1
+  commentId: T:System.Collections.Generic.List`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  name: List<T>
+  nameWithType: List<T>
+  fullName: System.Collections.Generic.List<T>
+  nameWithType.vb: List(Of T)
+  fullName.vb: System.Collections.Generic.List(Of T)
+  name.vb: List(Of T)
+  spec.csharp:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: System.Collections.Generic
+  commentId: N:System.Collections.Generic
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Collections.Generic
+  nameWithType: System.Collections.Generic
+  fullName: System.Collections.Generic
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic
+- uid: OllamaSharp.Models.EmbedRequest.Options*
+  commentId: Overload:OllamaSharp.Models.EmbedRequest.Options
+  href: OllamaSharp.Models.EmbedRequest.html#OllamaSharp_Models_EmbedRequest_Options
+  name: Options
+  nameWithType: EmbedRequest.Options
+  fullName: OllamaSharp.Models.EmbedRequest.Options
+- uid: OllamaSharp.Models.RequestOptions
+  commentId: T:OllamaSharp.Models.RequestOptions
+  parent: OllamaSharp.Models
+  href: OllamaSharp.Models.RequestOptions.html
+  name: RequestOptions
+  nameWithType: RequestOptions
+  fullName: OllamaSharp.Models.RequestOptions
+- uid: OllamaSharp.Models.EmbedRequest.KeepAlive*
+  commentId: Overload:OllamaSharp.Models.EmbedRequest.KeepAlive
+  href: OllamaSharp.Models.EmbedRequest.html#OllamaSharp_Models_EmbedRequest_KeepAlive
+  name: KeepAlive
+  nameWithType: EmbedRequest.KeepAlive
+  fullName: OllamaSharp.Models.EmbedRequest.KeepAlive
+- uid: System.Nullable{System.Int64}
+  commentId: T:System.Nullable{System.Int64}
+  parent: System
+  definition: System.Nullable`1
+  href: https://learn.microsoft.com/dotnet/api/system.int64
+  name: long?
+  nameWithType: long?
+  fullName: long?
+  nameWithType.vb: Long?
+  fullName.vb: Long?
+  name.vb: Long?
+  spec.csharp:
+  - uid: System.Int64
+    name: long
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.int64
+  - name: '?'
+  spec.vb:
+  - uid: System.Int64
+    name: Long
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.int64
+  - name: '?'
+- uid: System.Nullable`1
+  commentId: T:System.Nullable`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.nullable-1
+  name: Nullable<T>
+  nameWithType: Nullable<T>
+  fullName: System.Nullable<T>
+  nameWithType.vb: Nullable(Of T)
+  fullName.vb: System.Nullable(Of T)
+  name.vb: Nullable(Of T)
+  spec.csharp:
+  - uid: System.Nullable`1
+    name: Nullable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.nullable-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.Nullable`1
+    name: Nullable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.nullable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: OllamaSharp.Models.EmbedRequest.Truncate*
+  commentId: Overload:OllamaSharp.Models.EmbedRequest.Truncate
+  href: OllamaSharp.Models.EmbedRequest.html#OllamaSharp_Models_EmbedRequest_Truncate
+  name: Truncate
+  nameWithType: EmbedRequest.Truncate
+  fullName: OllamaSharp.Models.EmbedRequest.Truncate
+- uid: System.Nullable{System.Boolean}
+  commentId: T:System.Nullable{System.Boolean}
+  parent: System
+  definition: System.Nullable`1
+  href: https://learn.microsoft.com/dotnet/api/system.boolean
+  name: bool?
+  nameWithType: bool?
+  fullName: bool?
+  nameWithType.vb: Boolean?
+  fullName.vb: Boolean?
+  name.vb: Boolean?
+  spec.csharp:
+  - uid: System.Boolean
+    name: bool
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.boolean
+  - name: '?'
+  spec.vb:
+  - uid: System.Boolean
+    name: Boolean
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.boolean
+  - name: '?'

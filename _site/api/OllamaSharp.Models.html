@@ -1,0 +1,266 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Namespace OllamaSharp.Models | OllamaSharp </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Namespace OllamaSharp.Models | OllamaSharp ">
+      
+      
+      <link rel="icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../logo.svg" alt="OllamaSharp">
+            OllamaSharp
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled="" placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="OllamaSharp.Models">
+
+  <h1 id="OllamaSharp_Models" data-uid="OllamaSharp.Models" class="text-break">Namespace OllamaSharp.Models</h1>
+  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="markdown level0 remarks"></div>
+
+    <h3 id="classes">
+Classes
+</h3>
+    <dl class="jumplist">
+      <dt><a class="xref" href="OllamaSharp.Models.CopyModelRequest.html">CopyModelRequest</a></dt>
+      <dd><p>Copy a model. Creates a model with another name from an existing model.
+<a href="https://ollama.ai/docs/api/#copy-a-model">Ollama API docs</a></p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="OllamaSharp.Models.CreateModelRequest.html">CreateModelRequest</a></dt>
+      <dd><p>Create a model from a Modelfile. It is recommended to set <a class="xref" href="OllamaSharp.Models.CreateModelRequest.html#OllamaSharp_Models_CreateModelRequest_ModelFileContent">ModelFileContent</a> to the
+content of the Modelfile rather than just set path. This is a requirement
+for remote create. Remote model creation must also create any file blobs,
+fields such as FROM and ADAPTER, explicitly with the server using Create a
+Blob and the value to the path indicated in the response.</p>
+<p><a href="https://github.com/jmorganca/ollama/blob/main/docs/api.md#create-a-model">Ollama API docs</a></p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="OllamaSharp.Models.CreateModelResponse.html">CreateModelResponse</a></dt>
+      <dd><p>Represents the response from the /api/create endpoint</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="OllamaSharp.Models.DeleteModelRequest.html">DeleteModelRequest</a></dt>
+      <dd><p>Delete a model and its data.</p>
+<p><a href="https://github.com/jmorganca/ollama/blob/main/docs/api.md#delete-a-model">Ollama API docs</a></p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="OllamaSharp.Models.Details.html">Details</a></dt>
+      <dd><p>Represents additional details about a model.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="OllamaSharp.Models.EmbedRequest.html">EmbedRequest</a></dt>
+      <dd><p>Generate embeddings from a model.</p>
+<p><a href="https://github.com/jmorganca/ollama/blob/main/docs/api.md#generate-embeddings">Ollama API docs</a></p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="OllamaSharp.Models.EmbedResponse.html">EmbedResponse</a></dt>
+      <dd><p>The response from the /api/embed endpoint</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="OllamaSharp.Models.GenerateDoneResponseStream.html">GenerateDoneResponseStream</a></dt>
+      <dd><p>Represents the final response from the /api/generate endpoint</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="OllamaSharp.Models.GenerateRequest.html">GenerateRequest</a></dt>
+      <dd><p>Generate a response for a given prompt with a provided model. This is a
+streaming endpoint, so there will be a series of responses. The final
+response object will include statistics and additional data from the request.</p>
+<p><a href="https://github.com/jmorganca/ollama/blob/main/docs/api.md#generate-a-completion">Ollama API docs</a></p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="OllamaSharp.Models.GenerateResponseStream.html">GenerateResponseStream</a></dt>
+      <dd><p>The response from the /api/generate endpoint when streaming is enabled</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="OllamaSharp.Models.ListModelsResponse.html">ListModelsResponse</a></dt>
+      <dd><p>List models that are available locally.</p>
+<p><a href="https://github.com/jmorganca/ollama/blob/main/docs/api.md#list-local-models">Ollama API docs</a></p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="OllamaSharp.Models.ListRunningModelsResponse.html">ListRunningModelsResponse</a></dt>
+      <dd><p>List models that are currently loaded into memory.</p>
+<p><a href="https://github.com/ollama/ollama/blob/main/docs/api.md#list-running-models">Ollama API docs</a></p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="OllamaSharp.Models.Model.html">Model</a></dt>
+      <dd><p>Represents a model with its associated metadata.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="OllamaSharp.Models.ModelInfo.html">ModelInfo</a></dt>
+      <dd><p>Represents additional model information.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="OllamaSharp.Models.OllamaOption.html">OllamaOption</a></dt>
+      <dd><p>Collection of options available to Ollama</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="OllamaSharp.Models.OllamaRequest.html">OllamaRequest</a></dt>
+      <dd><p>Represents the base class for requests to the Ollama API.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="OllamaSharp.Models.ProjectorInfo.html">ProjectorInfo</a></dt>
+      <dd><p>Represents projector-specific information.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="OllamaSharp.Models.PullModelRequest.html">PullModelRequest</a></dt>
+      <dd><p>Download a model from the ollama library. Cancelled pulls are resumed from
+where they left off, and multiple calls will share the same download progress.</p>
+<p><a href="https://github.com/jmorganca/ollama/blob/main/docs/api.md#pull-a-model">Ollama API docs</a></p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="OllamaSharp.Models.PullModelResponse.html">PullModelResponse</a></dt>
+      <dd><p>Represents the streamed response from the /api/pull endpoint.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="OllamaSharp.Models.PushModelRequest.html">PushModelRequest</a></dt>
+      <dd><p>Upload a model to a model library. Requires registering for ollama.ai and
+adding a public key first.</p>
+<p><a href="https://github.com/ollama/ollama/blob/main/docs/api.md#push-a-model">Ollama API docs</a></p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="OllamaSharp.Models.PushModelResponse.html">PushModelResponse</a></dt>
+      <dd><p>Represents the response from the /api/push endpoint.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="OllamaSharp.Models.RequestOptions.html">RequestOptions</a></dt>
+      <dd><p>The configuration information used for a chat completions request.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="OllamaSharp.Models.RunningModel.html">RunningModel</a></dt>
+      <dd><p>Represents a running model.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="OllamaSharp.Models.ShowModelRequest.html">ShowModelRequest</a></dt>
+      <dd><p>Show information about a model including details, modelfile, template,
+parameters, license, system prompt.</p>
+<p><a href="https://github.com/ollama/ollama/blob/main/docs/api.md#show-model-information">Ollama API docs</a></p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="OllamaSharp.Models.ShowModelResponse.html">ShowModelResponse</a></dt>
+      <dd><p>Represents the response containing detailed model information.</p>
+</dd>
+    </dl>
+
+
+</article>
+
+        <div class="contribution d-print-none">
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

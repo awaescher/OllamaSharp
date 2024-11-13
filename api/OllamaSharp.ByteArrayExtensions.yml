@@ -1,0 +1,565 @@
+### YamlMime:ManagedReference
+items:
+- uid: OllamaSharp.ByteArrayExtensions
+  commentId: T:OllamaSharp.ByteArrayExtensions
+  id: ByteArrayExtensions
+  parent: OllamaSharp
+  children:
+  - OllamaSharp.ByteArrayExtensions.ToBase64(System.Collections.Generic.IEnumerable{System.Byte})
+  - OllamaSharp.ByteArrayExtensions.ToBase64(System.Collections.Generic.IEnumerable{System.Collections.Generic.IEnumerable{System.Byte}})
+  langs:
+  - csharp
+  - vb
+  name: ByteArrayExtensions
+  nameWithType: ByteArrayExtensions
+  fullName: OllamaSharp.ByteArrayExtensions
+  type: Class
+  source:
+    remote:
+      path: src/ByteArrayExtensions.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: ByteArrayExtensions
+    path: src/ByteArrayExtensions.cs
+    startLine: 9
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp
+  summary: Extensions for byte arrays
+  example: []
+  syntax:
+    content: public static class ByteArrayExtensions
+    content.vb: Public Module ByteArrayExtensions
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.MemberwiseClone
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: OllamaSharp.ByteArrayExtensions.ToBase64(System.Collections.Generic.IEnumerable{System.Byte})
+  commentId: M:OllamaSharp.ByteArrayExtensions.ToBase64(System.Collections.Generic.IEnumerable{System.Byte})
+  id: ToBase64(System.Collections.Generic.IEnumerable{System.Byte})
+  isExtensionMethod: true
+  parent: OllamaSharp.ByteArrayExtensions
+  langs:
+  - csharp
+  - vb
+  name: ToBase64(IEnumerable<byte>)
+  nameWithType: ByteArrayExtensions.ToBase64(IEnumerable<byte>)
+  fullName: OllamaSharp.ByteArrayExtensions.ToBase64(System.Collections.Generic.IEnumerable<byte>)
+  type: Method
+  source:
+    remote:
+      path: src/ByteArrayExtensions.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: ToBase64
+    path: src/ByteArrayExtensions.cs
+    startLine: 16
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp
+  summary: Converts a sequence of bytes to its equivalent string representation encoded in base-64.
+  example: []
+  syntax:
+    content: public static string ToBase64(this IEnumerable<byte> bytes)
+    parameters:
+    - id: bytes
+      type: System.Collections.Generic.IEnumerable{System.Byte}
+      description: The sequence of bytes to convert to a base-64 string.
+    return:
+      type: System.String
+      description: A base-64 encoded string representation of the input byte sequence.
+    content.vb: Public Shared Function ToBase64(bytes As IEnumerable(Of Byte)) As String
+  overload: OllamaSharp.ByteArrayExtensions.ToBase64*
+  nameWithType.vb: ByteArrayExtensions.ToBase64(IEnumerable(Of Byte))
+  fullName.vb: OllamaSharp.ByteArrayExtensions.ToBase64(System.Collections.Generic.IEnumerable(Of Byte))
+  name.vb: ToBase64(IEnumerable(Of Byte))
+- uid: OllamaSharp.ByteArrayExtensions.ToBase64(System.Collections.Generic.IEnumerable{System.Collections.Generic.IEnumerable{System.Byte}})
+  commentId: M:OllamaSharp.ByteArrayExtensions.ToBase64(System.Collections.Generic.IEnumerable{System.Collections.Generic.IEnumerable{System.Byte}})
+  id: ToBase64(System.Collections.Generic.IEnumerable{System.Collections.Generic.IEnumerable{System.Byte}})
+  isExtensionMethod: true
+  parent: OllamaSharp.ByteArrayExtensions
+  langs:
+  - csharp
+  - vb
+  name: ToBase64(IEnumerable<IEnumerable<byte>>?)
+  nameWithType: ByteArrayExtensions.ToBase64(IEnumerable<IEnumerable<byte>>?)
+  fullName: OllamaSharp.ByteArrayExtensions.ToBase64(System.Collections.Generic.IEnumerable<System.Collections.Generic.IEnumerable<byte>>?)
+  type: Method
+  source:
+    remote:
+      path: src/ByteArrayExtensions.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: ToBase64
+    path: src/ByteArrayExtensions.cs
+    startLine: 24
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp
+  summary: Converts a collection of byte arrays to a collection of base64 strings.
+  example: []
+  syntax:
+    content: public static IEnumerable<string>? ToBase64(this IEnumerable<IEnumerable<byte>>? byteArrays)
+    parameters:
+    - id: byteArrays
+      type: System.Collections.Generic.IEnumerable{System.Collections.Generic.IEnumerable{System.Byte}}
+      description: The collection of byte arrays to convert to base64 strings.
+    return:
+      type: System.Collections.Generic.IEnumerable{System.String}
+      description: A collection of base64 strings, or null if the input is null.
+    content.vb: Public Shared Function ToBase64(byteArrays As IEnumerable(Of IEnumerable(Of Byte))) As IEnumerable(Of String)
+  overload: OllamaSharp.ByteArrayExtensions.ToBase64*
+  nameWithType.vb: ByteArrayExtensions.ToBase64(IEnumerable(Of IEnumerable(Of Byte)))
+  fullName.vb: OllamaSharp.ByteArrayExtensions.ToBase64(System.Collections.Generic.IEnumerable(Of System.Collections.Generic.IEnumerable(Of Byte)))
+  name.vb: ToBase64(IEnumerable(Of IEnumerable(Of Byte)))
+references:
+- uid: OllamaSharp
+  commentId: N:OllamaSharp
+  href: OllamaSharp.html
+  name: OllamaSharp
+  nameWithType: OllamaSharp
+  fullName: OllamaSharp
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.MemberwiseClone
+  commentId: M:System.Object.MemberwiseClone
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  name: MemberwiseClone()
+  nameWithType: object.MemberwiseClone()
+  fullName: object.MemberwiseClone()
+  nameWithType.vb: Object.MemberwiseClone()
+  fullName.vb: Object.MemberwiseClone()
+  spec.csharp:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: OllamaSharp.ByteArrayExtensions.ToBase64*
+  commentId: Overload:OllamaSharp.ByteArrayExtensions.ToBase64
+  href: OllamaSharp.ByteArrayExtensions.html#OllamaSharp_ByteArrayExtensions_ToBase64_System_Collections_Generic_IEnumerable_System_Byte__
+  name: ToBase64
+  nameWithType: ByteArrayExtensions.ToBase64
+  fullName: OllamaSharp.ByteArrayExtensions.ToBase64
+- uid: System.Collections.Generic.IEnumerable{System.Byte}
+  commentId: T:System.Collections.Generic.IEnumerable{System.Byte}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.IEnumerable`1
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1
+  name: IEnumerable<byte>
+  nameWithType: IEnumerable<byte>
+  fullName: System.Collections.Generic.IEnumerable<byte>
+  nameWithType.vb: IEnumerable(Of Byte)
+  fullName.vb: System.Collections.Generic.IEnumerable(Of Byte)
+  name.vb: IEnumerable(Of Byte)
+  spec.csharp:
+  - uid: System.Collections.Generic.IEnumerable`1
+    name: IEnumerable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1
+  - name: <
+  - uid: System.Byte
+    name: byte
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.byte
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.IEnumerable`1
+    name: IEnumerable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: System.Byte
+    name: Byte
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.byte
+  - name: )
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: System.Collections.Generic.IEnumerable`1
+  commentId: T:System.Collections.Generic.IEnumerable`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1
+  name: IEnumerable<T>
+  nameWithType: IEnumerable<T>
+  fullName: System.Collections.Generic.IEnumerable<T>
+  nameWithType.vb: IEnumerable(Of T)
+  fullName.vb: System.Collections.Generic.IEnumerable(Of T)
+  name.vb: IEnumerable(Of T)
+  spec.csharp:
+  - uid: System.Collections.Generic.IEnumerable`1
+    name: IEnumerable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.IEnumerable`1
+    name: IEnumerable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: System.Collections.Generic
+  commentId: N:System.Collections.Generic
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Collections.Generic
+  nameWithType: System.Collections.Generic
+  fullName: System.Collections.Generic
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic
+- uid: System.Collections.Generic.IEnumerable{System.Collections.Generic.IEnumerable{System.Byte}}
+  commentId: T:System.Collections.Generic.IEnumerable{System.Collections.Generic.IEnumerable{System.Byte}}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.IEnumerable`1
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1
+  name: IEnumerable<IEnumerable<byte>>
+  nameWithType: IEnumerable<IEnumerable<byte>>
+  fullName: System.Collections.Generic.IEnumerable<System.Collections.Generic.IEnumerable<byte>>
+  nameWithType.vb: IEnumerable(Of IEnumerable(Of Byte))
+  fullName.vb: System.Collections.Generic.IEnumerable(Of System.Collections.Generic.IEnumerable(Of Byte))
+  name.vb: IEnumerable(Of IEnumerable(Of Byte))
+  spec.csharp:
+  - uid: System.Collections.Generic.IEnumerable`1
+    name: IEnumerable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1
+  - name: <
+  - uid: System.Collections.Generic.IEnumerable`1
+    name: IEnumerable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1
+  - name: <
+  - uid: System.Byte
+    name: byte
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.byte
+  - name: '>'
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.IEnumerable`1
+    name: IEnumerable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: System.Collections.Generic.IEnumerable`1
+    name: IEnumerable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: System.Byte
+    name: Byte
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.byte
+  - name: )
+  - name: )
+- uid: System.Collections.Generic.IEnumerable{System.String}
+  commentId: T:System.Collections.Generic.IEnumerable{System.String}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.IEnumerable`1
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1
+  name: IEnumerable<string>
+  nameWithType: IEnumerable<string>
+  fullName: System.Collections.Generic.IEnumerable<string>
+  nameWithType.vb: IEnumerable(Of String)
+  fullName.vb: System.Collections.Generic.IEnumerable(Of String)
+  name.vb: IEnumerable(Of String)
+  spec.csharp:
+  - uid: System.Collections.Generic.IEnumerable`1
+    name: IEnumerable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1
+  - name: <
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.IEnumerable`1
+    name: IEnumerable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: )

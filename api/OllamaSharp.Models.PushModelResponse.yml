@@ -1,0 +1,472 @@
+### YamlMime:ManagedReference
+items:
+- uid: OllamaSharp.Models.PushModelResponse
+  commentId: T:OllamaSharp.Models.PushModelResponse
+  id: PushModelResponse
+  parent: OllamaSharp.Models
+  children:
+  - OllamaSharp.Models.PushModelResponse.Digest
+  - OllamaSharp.Models.PushModelResponse.Status
+  - OllamaSharp.Models.PushModelResponse.Total
+  langs:
+  - csharp
+  - vb
+  name: PushModelResponse
+  nameWithType: PushModelResponse
+  fullName: OllamaSharp.Models.PushModelResponse
+  type: Class
+  source:
+    remote:
+      path: src/Models/PushModel.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: PushModelResponse
+    path: src/Models/PushModel.cs
+    startLine: 37
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models
+  summary: Represents the response from the /api/push endpoint.
+  example: []
+  syntax:
+    content: public class PushModelResponse
+    content.vb: Public Class PushModelResponse
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.MemberwiseClone
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: OllamaSharp.Models.PushModelResponse.Status
+  commentId: P:OllamaSharp.Models.PushModelResponse.Status
+  id: Status
+  parent: OllamaSharp.Models.PushModelResponse
+  langs:
+  - csharp
+  - vb
+  name: Status
+  nameWithType: PushModelResponse.Status
+  fullName: OllamaSharp.Models.PushModelResponse.Status
+  type: Property
+  source:
+    remote:
+      path: src/Models/PushModel.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: Status
+    path: src/Models/PushModel.cs
+    startLine: 42
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models
+  summary: Gets or sets the status of the push operation.
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("status")]
+
+      public string Status { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <JsonPropertyName("status")>
+
+      Public Property Status As String
+  overload: OllamaSharp.Models.PushModelResponse.Status*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: status
+- uid: OllamaSharp.Models.PushModelResponse.Digest
+  commentId: P:OllamaSharp.Models.PushModelResponse.Digest
+  id: Digest
+  parent: OllamaSharp.Models.PushModelResponse
+  langs:
+  - csharp
+  - vb
+  name: Digest
+  nameWithType: PushModelResponse.Digest
+  fullName: OllamaSharp.Models.PushModelResponse.Digest
+  type: Property
+  source:
+    remote:
+      path: src/Models/PushModel.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: Digest
+    path: src/Models/PushModel.cs
+    startLine: 48
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models
+  summary: Gets or sets the hash of the model file.
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("digest")]
+
+      public string Digest { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <JsonPropertyName("digest")>
+
+      Public Property Digest As String
+  overload: OllamaSharp.Models.PushModelResponse.Digest*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: digest
+- uid: OllamaSharp.Models.PushModelResponse.Total
+  commentId: P:OllamaSharp.Models.PushModelResponse.Total
+  id: Total
+  parent: OllamaSharp.Models.PushModelResponse
+  langs:
+  - csharp
+  - vb
+  name: Total
+  nameWithType: PushModelResponse.Total
+  fullName: OllamaSharp.Models.PushModelResponse.Total
+  type: Property
+  source:
+    remote:
+      path: src/Models/PushModel.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: Total
+    path: src/Models/PushModel.cs
+    startLine: 54
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models
+  summary: Gets or sets the total number of bytes to push.
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("total")]
+
+      public int Total { get; set; }
+    parameters: []
+    return:
+      type: System.Int32
+    content.vb: >-
+      <JsonPropertyName("total")>
+
+      Public Property Total As Integer
+  overload: OllamaSharp.Models.PushModelResponse.Total*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: total
+references:
+- uid: OllamaSharp.Models
+  commentId: N:OllamaSharp.Models
+  href: OllamaSharp.html
+  name: OllamaSharp.Models
+  nameWithType: OllamaSharp.Models
+  fullName: OllamaSharp.Models
+  spec.csharp:
+  - uid: OllamaSharp
+    name: OllamaSharp
+    href: OllamaSharp.html
+  - name: .
+  - uid: OllamaSharp.Models
+    name: Models
+    href: OllamaSharp.Models.html
+  spec.vb:
+  - uid: OllamaSharp
+    name: OllamaSharp
+    href: OllamaSharp.html
+  - name: .
+  - uid: OllamaSharp.Models
+    name: Models
+    href: OllamaSharp.Models.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.MemberwiseClone
+  commentId: M:System.Object.MemberwiseClone
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  name: MemberwiseClone()
+  nameWithType: object.MemberwiseClone()
+  fullName: object.MemberwiseClone()
+  nameWithType.vb: Object.MemberwiseClone()
+  fullName.vb: Object.MemberwiseClone()
+  spec.csharp:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: OllamaSharp.Models.PushModelResponse.Status*
+  commentId: Overload:OllamaSharp.Models.PushModelResponse.Status
+  href: OllamaSharp.Models.PushModelResponse.html#OllamaSharp_Models_PushModelResponse_Status
+  name: Status
+  nameWithType: PushModelResponse.Status
+  fullName: OllamaSharp.Models.PushModelResponse.Status
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: OllamaSharp.Models.PushModelResponse.Digest*
+  commentId: Overload:OllamaSharp.Models.PushModelResponse.Digest
+  href: OllamaSharp.Models.PushModelResponse.html#OllamaSharp_Models_PushModelResponse_Digest
+  name: Digest
+  nameWithType: PushModelResponse.Digest
+  fullName: OllamaSharp.Models.PushModelResponse.Digest
+- uid: OllamaSharp.Models.PushModelResponse.Total*
+  commentId: Overload:OllamaSharp.Models.PushModelResponse.Total
+  href: OllamaSharp.Models.PushModelResponse.html#OllamaSharp_Models_PushModelResponse_Total
+  name: Total
+  nameWithType: PushModelResponse.Total
+  fullName: OllamaSharp.Models.PushModelResponse.Total
+- uid: System.Int32
+  commentId: T:System.Int32
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.int32
+  name: int
+  nameWithType: int
+  fullName: int
+  nameWithType.vb: Integer
+  fullName.vb: Integer
+  name.vb: Integer

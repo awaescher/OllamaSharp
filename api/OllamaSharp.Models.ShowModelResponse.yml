@@ -1,0 +1,732 @@
+### YamlMime:ManagedReference
+items:
+- uid: OllamaSharp.Models.ShowModelResponse
+  commentId: T:OllamaSharp.Models.ShowModelResponse
+  id: ShowModelResponse
+  parent: OllamaSharp.Models
+  children:
+  - OllamaSharp.Models.ShowModelResponse.Details
+  - OllamaSharp.Models.ShowModelResponse.Info
+  - OllamaSharp.Models.ShowModelResponse.License
+  - OllamaSharp.Models.ShowModelResponse.Modelfile
+  - OllamaSharp.Models.ShowModelResponse.Parameters
+  - OllamaSharp.Models.ShowModelResponse.Projector
+  - OllamaSharp.Models.ShowModelResponse.System
+  - OllamaSharp.Models.ShowModelResponse.Template
+  langs:
+  - csharp
+  - vb
+  name: ShowModelResponse
+  nameWithType: ShowModelResponse
+  fullName: OllamaSharp.Models.ShowModelResponse
+  type: Class
+  source:
+    remote:
+      path: src/Models/ShowModel.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: ShowModelResponse
+    path: src/Models/ShowModel.cs
+    startLine: 24
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models
+  summary: Represents the response containing detailed model information.
+  example: []
+  syntax:
+    content: public class ShowModelResponse
+    content.vb: Public Class ShowModelResponse
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.MemberwiseClone
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: OllamaSharp.Models.ShowModelResponse.License
+  commentId: P:OllamaSharp.Models.ShowModelResponse.License
+  id: License
+  parent: OllamaSharp.Models.ShowModelResponse
+  langs:
+  - csharp
+  - vb
+  name: License
+  nameWithType: ShowModelResponse.License
+  fullName: OllamaSharp.Models.ShowModelResponse.License
+  type: Property
+  source:
+    remote:
+      path: src/Models/ShowModel.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: License
+    path: src/Models/ShowModel.cs
+    startLine: 29
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models
+  summary: Gets or sets the license for the model.
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("license")]
+
+      public string? License { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <JsonPropertyName("license")>
+
+      Public Property License As String
+  overload: OllamaSharp.Models.ShowModelResponse.License*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: license
+- uid: OllamaSharp.Models.ShowModelResponse.Modelfile
+  commentId: P:OllamaSharp.Models.ShowModelResponse.Modelfile
+  id: Modelfile
+  parent: OllamaSharp.Models.ShowModelResponse
+  langs:
+  - csharp
+  - vb
+  name: Modelfile
+  nameWithType: ShowModelResponse.Modelfile
+  fullName: OllamaSharp.Models.ShowModelResponse.Modelfile
+  type: Property
+  source:
+    remote:
+      path: src/Models/ShowModel.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: Modelfile
+    path: src/Models/ShowModel.cs
+    startLine: 35
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models
+  summary: Gets or sets the Modelfile for the model.
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("modelfile")]
+
+      public string? Modelfile { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <JsonPropertyName("modelfile")>
+
+      Public Property Modelfile As String
+  overload: OllamaSharp.Models.ShowModelResponse.Modelfile*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: modelfile
+- uid: OllamaSharp.Models.ShowModelResponse.Parameters
+  commentId: P:OllamaSharp.Models.ShowModelResponse.Parameters
+  id: Parameters
+  parent: OllamaSharp.Models.ShowModelResponse
+  langs:
+  - csharp
+  - vb
+  name: Parameters
+  nameWithType: ShowModelResponse.Parameters
+  fullName: OllamaSharp.Models.ShowModelResponse.Parameters
+  type: Property
+  source:
+    remote:
+      path: src/Models/ShowModel.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: Parameters
+    path: src/Models/ShowModel.cs
+    startLine: 41
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models
+  summary: Gets or sets the parameters for the model.
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("parameters")]
+
+      public string? Parameters { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <JsonPropertyName("parameters")>
+
+      Public Property Parameters As String
+  overload: OllamaSharp.Models.ShowModelResponse.Parameters*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: parameters
+- uid: OllamaSharp.Models.ShowModelResponse.Template
+  commentId: P:OllamaSharp.Models.ShowModelResponse.Template
+  id: Template
+  parent: OllamaSharp.Models.ShowModelResponse
+  langs:
+  - csharp
+  - vb
+  name: Template
+  nameWithType: ShowModelResponse.Template
+  fullName: OllamaSharp.Models.ShowModelResponse.Template
+  type: Property
+  source:
+    remote:
+      path: src/Models/ShowModel.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: Template
+    path: src/Models/ShowModel.cs
+    startLine: 47
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models
+  summary: Gets or sets the template for the model.
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("template")]
+
+      public string? Template { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <JsonPropertyName("template")>
+
+      Public Property Template As String
+  overload: OllamaSharp.Models.ShowModelResponse.Template*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: template
+- uid: OllamaSharp.Models.ShowModelResponse.System
+  commentId: P:OllamaSharp.Models.ShowModelResponse.System
+  id: System
+  parent: OllamaSharp.Models.ShowModelResponse
+  langs:
+  - csharp
+  - vb
+  name: System
+  nameWithType: ShowModelResponse.System
+  fullName: OllamaSharp.Models.ShowModelResponse.System
+  type: Property
+  source:
+    remote:
+      path: src/Models/ShowModel.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: System
+    path: src/Models/ShowModel.cs
+    startLine: 53
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models
+  summary: Gets or sets the system prompt for the model.
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("system")]
+
+      public string? System { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <JsonPropertyName("system")>
+
+      Public Property System As String
+  overload: OllamaSharp.Models.ShowModelResponse.System*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: system
+- uid: OllamaSharp.Models.ShowModelResponse.Details
+  commentId: P:OllamaSharp.Models.ShowModelResponse.Details
+  id: Details
+  parent: OllamaSharp.Models.ShowModelResponse
+  langs:
+  - csharp
+  - vb
+  name: Details
+  nameWithType: ShowModelResponse.Details
+  fullName: OllamaSharp.Models.ShowModelResponse.Details
+  type: Property
+  source:
+    remote:
+      path: src/Models/ShowModel.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: Details
+    path: src/Models/ShowModel.cs
+    startLine: 59
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models
+  summary: Gets or sets additional details about the model.
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("details")]
+
+      public Details Details { get; set; }
+    parameters: []
+    return:
+      type: OllamaSharp.Models.Details
+    content.vb: >-
+      <JsonPropertyName("details")>
+
+      Public Property Details As Details
+  overload: OllamaSharp.Models.ShowModelResponse.Details*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: details
+- uid: OllamaSharp.Models.ShowModelResponse.Info
+  commentId: P:OllamaSharp.Models.ShowModelResponse.Info
+  id: Info
+  parent: OllamaSharp.Models.ShowModelResponse
+  langs:
+  - csharp
+  - vb
+  name: Info
+  nameWithType: ShowModelResponse.Info
+  fullName: OllamaSharp.Models.ShowModelResponse.Info
+  type: Property
+  source:
+    remote:
+      path: src/Models/ShowModel.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: Info
+    path: src/Models/ShowModel.cs
+    startLine: 65
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models
+  summary: Gets or sets extra information about the model.
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("model_info")]
+
+      public ModelInfo Info { get; set; }
+    parameters: []
+    return:
+      type: OllamaSharp.Models.ModelInfo
+    content.vb: >-
+      <JsonPropertyName("model_info")>
+
+      Public Property Info As ModelInfo
+  overload: OllamaSharp.Models.ShowModelResponse.Info*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: model_info
+- uid: OllamaSharp.Models.ShowModelResponse.Projector
+  commentId: P:OllamaSharp.Models.ShowModelResponse.Projector
+  id: Projector
+  parent: OllamaSharp.Models.ShowModelResponse
+  langs:
+  - csharp
+  - vb
+  name: Projector
+  nameWithType: ShowModelResponse.Projector
+  fullName: OllamaSharp.Models.ShowModelResponse.Projector
+  type: Property
+  source:
+    remote:
+      path: src/Models/ShowModel.cs
+      branch: feature/add-documentation
+      repo: https://github.com/JerrettDavis/OllamaSharp.git
+    id: Projector
+    path: src/Models/ShowModel.cs
+    startLine: 71
+  assemblies:
+  - OllamaSharp
+  namespace: OllamaSharp.Models
+  summary: Gets or sets extra information about the projector.
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("projector_info")]
+
+      public ProjectorInfo? Projector { get; set; }
+    parameters: []
+    return:
+      type: OllamaSharp.Models.ProjectorInfo
+    content.vb: >-
+      <JsonPropertyName("projector_info")>
+
+      Public Property Projector As ProjectorInfo
+  overload: OllamaSharp.Models.ShowModelResponse.Projector*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: projector_info
+references:
+- uid: OllamaSharp.Models
+  commentId: N:OllamaSharp.Models
+  href: OllamaSharp.html
+  name: OllamaSharp.Models
+  nameWithType: OllamaSharp.Models
+  fullName: OllamaSharp.Models
+  spec.csharp:
+  - uid: OllamaSharp
+    name: OllamaSharp
+    href: OllamaSharp.html
+  - name: .
+  - uid: OllamaSharp.Models
+    name: Models
+    href: OllamaSharp.Models.html
+  spec.vb:
+  - uid: OllamaSharp
+    name: OllamaSharp
+    href: OllamaSharp.html
+  - name: .
+  - uid: OllamaSharp.Models
+    name: Models
+    href: OllamaSharp.Models.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.MemberwiseClone
+  commentId: M:System.Object.MemberwiseClone
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  name: MemberwiseClone()
+  nameWithType: object.MemberwiseClone()
+  fullName: object.MemberwiseClone()
+  nameWithType.vb: Object.MemberwiseClone()
+  fullName.vb: Object.MemberwiseClone()
+  spec.csharp:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: OllamaSharp.Models.ShowModelResponse.License*
+  commentId: Overload:OllamaSharp.Models.ShowModelResponse.License
+  href: OllamaSharp.Models.ShowModelResponse.html#OllamaSharp_Models_ShowModelResponse_License
+  name: License
+  nameWithType: ShowModelResponse.License
+  fullName: OllamaSharp.Models.ShowModelResponse.License
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: OllamaSharp.Models.ShowModelResponse.Modelfile*
+  commentId: Overload:OllamaSharp.Models.ShowModelResponse.Modelfile
+  href: OllamaSharp.Models.ShowModelResponse.html#OllamaSharp_Models_ShowModelResponse_Modelfile
+  name: Modelfile
+  nameWithType: ShowModelResponse.Modelfile
+  fullName: OllamaSharp.Models.ShowModelResponse.Modelfile
+- uid: OllamaSharp.Models.ShowModelResponse.Parameters*
+  commentId: Overload:OllamaSharp.Models.ShowModelResponse.Parameters
+  href: OllamaSharp.Models.ShowModelResponse.html#OllamaSharp_Models_ShowModelResponse_Parameters
+  name: Parameters
+  nameWithType: ShowModelResponse.Parameters
+  fullName: OllamaSharp.Models.ShowModelResponse.Parameters
+- uid: OllamaSharp.Models.ShowModelResponse.Template*
+  commentId: Overload:OllamaSharp.Models.ShowModelResponse.Template
+  href: OllamaSharp.Models.ShowModelResponse.html#OllamaSharp_Models_ShowModelResponse_Template
+  name: Template
+  nameWithType: ShowModelResponse.Template
+  fullName: OllamaSharp.Models.ShowModelResponse.Template
+- uid: OllamaSharp.Models.ShowModelResponse.System*
+  commentId: Overload:OllamaSharp.Models.ShowModelResponse.System
+  href: OllamaSharp.Models.ShowModelResponse.html#OllamaSharp_Models_ShowModelResponse_System
+  name: System
+  nameWithType: ShowModelResponse.System
+  fullName: OllamaSharp.Models.ShowModelResponse.System
+- uid: OllamaSharp.Models.ShowModelResponse.Details*
+  commentId: Overload:OllamaSharp.Models.ShowModelResponse.Details
+  href: OllamaSharp.Models.ShowModelResponse.html#OllamaSharp_Models_ShowModelResponse_Details
+  name: Details
+  nameWithType: ShowModelResponse.Details
+  fullName: OllamaSharp.Models.ShowModelResponse.Details
+- uid: OllamaSharp.Models.Details
+  commentId: T:OllamaSharp.Models.Details
+  parent: OllamaSharp.Models
+  href: OllamaSharp.Models.Details.html
+  name: Details
+  nameWithType: Details
+  fullName: OllamaSharp.Models.Details
+- uid: OllamaSharp.Models.ShowModelResponse.Info*
+  commentId: Overload:OllamaSharp.Models.ShowModelResponse.Info
+  href: OllamaSharp.Models.ShowModelResponse.html#OllamaSharp_Models_ShowModelResponse_Info
+  name: Info
+  nameWithType: ShowModelResponse.Info
+  fullName: OllamaSharp.Models.ShowModelResponse.Info
+- uid: OllamaSharp.Models.ModelInfo
+  commentId: T:OllamaSharp.Models.ModelInfo
+  parent: OllamaSharp.Models
+  href: OllamaSharp.Models.ModelInfo.html
+  name: ModelInfo
+  nameWithType: ModelInfo
+  fullName: OllamaSharp.Models.ModelInfo
+- uid: OllamaSharp.Models.ShowModelResponse.Projector*
+  commentId: Overload:OllamaSharp.Models.ShowModelResponse.Projector
+  href: OllamaSharp.Models.ShowModelResponse.html#OllamaSharp_Models_ShowModelResponse_Projector
+  name: Projector
+  nameWithType: ShowModelResponse.Projector
+  fullName: OllamaSharp.Models.ShowModelResponse.Projector
+- uid: OllamaSharp.Models.ProjectorInfo
+  commentId: T:OllamaSharp.Models.ProjectorInfo
+  parent: OllamaSharp.Models
+  href: OllamaSharp.Models.ProjectorInfo.html
+  name: ProjectorInfo
+  nameWithType: ProjectorInfo
+  fullName: OllamaSharp.Models.ProjectorInfo

@@ -1,0 +1,437 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Class AbstractionMapper | OllamaSharp </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class AbstractionMapper | OllamaSharp ">
+      
+      <meta name="description" content="Provides mapping functionality between OllamaSharp and Microsoft.Extensions.AI models.">
+      <link rel="icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/JerrettDavis/OllamaSharp/new/feature/add-documentation/apiSpec/new?filename=OllamaSharp_MicrosoftAi_AbstractionMapper.md&amp;value=---%0Auid%3A%20OllamaSharp.MicrosoftAi.AbstractionMapper%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../logo.svg" alt="OllamaSharp">
+            OllamaSharp
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled="" placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="OllamaSharp.MicrosoftAi.AbstractionMapper">
+
+
+
+  <h1 id="OllamaSharp_MicrosoftAi_AbstractionMapper" data-uid="OllamaSharp.MicrosoftAi.AbstractionMapper" class="text-break">
+Class AbstractionMapper  <a class="header-action link-secondary" title="View source" href="https://github.com/JerrettDavis/OllamaSharp/blob/feature/add-documentation/src/MicrosoftAi/AbstractionMapper.cs/#L15"><i class="bi bi-code-slash"></i></a>
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><a class="xref" href="OllamaSharp.html">OllamaSharp</a>.<a class="xref" href="OllamaSharp.MicrosoftAi.html">MicrosoftAi</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>OllamaSharp.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>Provides mapping functionality between OllamaSharp and Microsoft.Extensions.AI models.</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static class AbstractionMapper</code></pre>
+  </div>
+
+
+
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+      <div><span class="xref">AbstractionMapper</span></div>
+    </dd>
+  </dl>
+
+
+
+  <dl class="typelist inheritedMembers">
+    <dt>Inherited Members</dt>
+    <dd>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">object.Equals(object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">object.Equals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gethashcode">object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype">object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone">object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.tostring">object.ToString()</a>
+    </div>
+  </dd></dl>
+
+
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="OllamaSharp_MicrosoftAi_AbstractionMapper_ToChatCompletion_" data-uid="OllamaSharp.MicrosoftAi.AbstractionMapper.ToChatCompletion*"></a>
+
+  <h3 id="OllamaSharp_MicrosoftAi_AbstractionMapper_ToChatCompletion_OllamaSharp_Models_Chat_ChatDoneResponseStream_System_String_" data-uid="OllamaSharp.MicrosoftAi.AbstractionMapper.ToChatCompletion(OllamaSharp.Models.Chat.ChatDoneResponseStream,System.String)">
+  ToChatCompletion(ChatDoneResponseStream?, string?)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/JerrettDavis/OllamaSharp/blob/feature/add-documentation/src/MicrosoftAi/AbstractionMapper.cs/#L23"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Maps a <a class="xref" href="OllamaSharp.Models.Chat.ChatRequest.html">ChatRequest</a> and <a class="xref" href="OllamaSharp.Models.Chat.ChatDoneResponseStream.html">ChatDoneResponseStream</a> to a <span class="xref">Microsoft.Extensions.AI.ChatCompletion</span>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static ChatCompletion? ToChatCompletion(ChatDoneResponseStream? stream, string? usedModel)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>stream</code> <a class="xref" href="OllamaSharp.Models.Chat.ChatDoneResponseStream.html">ChatDoneResponseStream</a></dt>
+    <dd><p>The response stream with completion data.</p>
+</dd>
+    <dt><code>usedModel</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>The used model. This has to be a separate argument because there might be fallbacks from the calling method.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><span class="xref">ChatCompletion</span></dt>
+    <dd><p>A <span class="xref">Microsoft.Extensions.AI.ChatCompletion</span> object containing the mapped data.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="OllamaSharp_MicrosoftAi_AbstractionMapper_ToChatMessage_" data-uid="OllamaSharp.MicrosoftAi.AbstractionMapper.ToChatMessage*"></a>
+
+  <h3 id="OllamaSharp_MicrosoftAi_AbstractionMapper_ToChatMessage_OllamaSharp_Models_Chat_Message_" data-uid="OllamaSharp.MicrosoftAi.AbstractionMapper.ToChatMessage(OllamaSharp.Models.Chat.Message)">
+  ToChatMessage(Message)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/JerrettDavis/OllamaSharp/blob/feature/add-documentation/src/MicrosoftAi/AbstractionMapper.cs/#L343"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Converts a <a class="xref" href="OllamaSharp.Models.Chat.Message.html">Message</a> to a <span class="xref">Microsoft.Extensions.AI.ChatMessage</span>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static ChatMessage ToChatMessage(Message message)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>message</code> <a class="xref" href="OllamaSharp.Models.Chat.Message.html">Message</a></dt>
+    <dd><p>The message to convert.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><span class="xref">ChatMessage</span></dt>
+    <dd><p>A <span class="xref">Microsoft.Extensions.AI.ChatMessage</span> object containing the converted data.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="OllamaSharp_MicrosoftAi_AbstractionMapper_ToGeneratedEmbeddings_" data-uid="OllamaSharp.MicrosoftAi.AbstractionMapper.ToGeneratedEmbeddings*"></a>
+
+  <h3 id="OllamaSharp_MicrosoftAi_AbstractionMapper_ToGeneratedEmbeddings_OllamaSharp_Models_EmbedRequest_OllamaSharp_Models_EmbedResponse_System_String_" data-uid="OllamaSharp.MicrosoftAi.AbstractionMapper.ToGeneratedEmbeddings(OllamaSharp.Models.EmbedRequest,OllamaSharp.Models.EmbedResponse,System.String)">
+  ToGeneratedEmbeddings(EmbedRequest, EmbedResponse, string?)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/JerrettDavis/OllamaSharp/blob/feature/add-documentation/src/MicrosoftAi/AbstractionMapper.cs/#L470"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets Microsoft GeneratedEmbeddings mapped from Ollama embeddings.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static GeneratedEmbeddings&lt;Embedding&lt;float&gt;&gt; ToGeneratedEmbeddings(EmbedRequest ollamaRequest, EmbedResponse ollamaResponse, string? usedModel)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>ollamaRequest</code> <a class="xref" href="OllamaSharp.Models.EmbedRequest.html">EmbedRequest</a></dt>
+    <dd><p>The original Ollama request that was used to generate the embeddings.</p>
+</dd>
+    <dt><code>ollamaResponse</code> <a class="xref" href="OllamaSharp.Models.EmbedResponse.html">EmbedResponse</a></dt>
+    <dd><p>The response from Ollama containing the embeddings.</p>
+</dd>
+    <dt><code>usedModel</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>The used model. This has to be a separate argument because there might be fallbacks from the calling method.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><span class="xref">GeneratedEmbeddings</span>&lt;<span class="xref">Embedding</span>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a>&gt;&gt;</dt>
+    <dd><p>A <span class="xref">Microsoft.Extensions.AI.GeneratedEmbeddings&lt;TEmbedding&gt;</span> object containing the mapped embeddings.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="OllamaSharp_MicrosoftAi_AbstractionMapper_ToOllamaEmbedRequest_" data-uid="OllamaSharp.MicrosoftAi.AbstractionMapper.ToOllamaEmbedRequest*"></a>
+
+  <h3 id="OllamaSharp_MicrosoftAi_AbstractionMapper_ToOllamaEmbedRequest_System_Collections_Generic_IEnumerable_System_String__Microsoft_Extensions_AI_EmbeddingGenerationOptions_" data-uid="OllamaSharp.MicrosoftAi.AbstractionMapper.ToOllamaEmbedRequest(System.Collections.Generic.IEnumerable{System.String},Microsoft.Extensions.AI.EmbeddingGenerationOptions)">
+  ToOllamaEmbedRequest(IEnumerable&lt;string&gt;, EmbeddingGenerationOptions?)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/JerrettDavis/OllamaSharp/blob/feature/add-documentation/src/MicrosoftAi/AbstractionMapper.cs/#L443"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets an <a class="xref" href="OllamaSharp.Models.EmbedRequest.html">EmbedRequest</a> for the Ollama API.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static EmbedRequest ToOllamaEmbedRequest(IEnumerable&lt;string&gt; values, EmbeddingGenerationOptions? options)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>values</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a>&gt;</dt>
+    <dd><p>The values to get embeddings for.</p>
+</dd>
+    <dt><code>options</code> <span class="xref">EmbeddingGenerationOptions</span></dt>
+    <dd><p>The options for the embeddings.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="OllamaSharp.Models.EmbedRequest.html">EmbedRequest</a></dt>
+    <dd><p>An <a class="xref" href="OllamaSharp.Models.EmbedRequest.html">EmbedRequest</a> object containing the request data.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="OllamaSharp_MicrosoftAi_AbstractionMapper_ToOllamaSharpChatRequest_" data-uid="OllamaSharp.MicrosoftAi.AbstractionMapper.ToOllamaSharpChatRequest*"></a>
+
+  <h3 id="OllamaSharp_MicrosoftAi_AbstractionMapper_ToOllamaSharpChatRequest_System_Collections_Generic_IList_Microsoft_Extensions_AI_ChatMessage__Microsoft_Extensions_AI_ChatOptions_System_Boolean_System_Text_Json_JsonSerializerOptions_" data-uid="OllamaSharp.MicrosoftAi.AbstractionMapper.ToOllamaSharpChatRequest(System.Collections.Generic.IList{Microsoft.Extensions.AI.ChatMessage},Microsoft.Extensions.AI.ChatOptions,System.Boolean,System.Text.Json.JsonSerializerOptions)">
+  ToOllamaSharpChatRequest(IList&lt;ChatMessage&gt;, ChatOptions?, bool, JsonSerializerOptions)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/JerrettDavis/OllamaSharp/blob/feature/add-documentation/src/MicrosoftAi/AbstractionMapper.cs/#L52"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Converts Microsoft.Extensions.AI <span class="xref">Microsoft.Extensions.AI.ChatMessage</span> objects and
+an option <span class="xref">Microsoft.Extensions.AI.ChatOptions</span> instance to an OllamaSharp <a class="xref" href="OllamaSharp.Models.Chat.ChatRequest.html">ChatRequest</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static ChatRequest ToOllamaSharpChatRequest(IList&lt;ChatMessage&gt; chatMessages, ChatOptions? options, bool stream, JsonSerializerOptions serializerOptions)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>chatMessages</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ilist-1">IList</a>&lt;<span class="xref">ChatMessage</span>&gt;</dt>
+    <dd><p>A list of chat messages.</p>
+</dd>
+    <dt><code>options</code> <span class="xref">ChatOptions</span></dt>
+    <dd><p>Optional chat options to configure the request.</p>
+</dd>
+    <dt><code>stream</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p>Indicates if the request should be streamed.</p>
+</dd>
+    <dt><code>serializerOptions</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.text.json.jsonserializeroptions">JsonSerializerOptions</a></dt>
+    <dd><p>Serializer options</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="OllamaSharp.Models.Chat.ChatRequest.html">ChatRequest</a></dt>
+    <dd><p>A <a class="xref" href="OllamaSharp.Models.Chat.ChatRequest.html">ChatRequest</a> object containing the converted data.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="OllamaSharp_MicrosoftAi_AbstractionMapper_ToStreamingChatCompletionUpdate_" data-uid="OllamaSharp.MicrosoftAi.AbstractionMapper.ToStreamingChatCompletionUpdate*"></a>
+
+  <h3 id="OllamaSharp_MicrosoftAi_AbstractionMapper_ToStreamingChatCompletionUpdate_OllamaSharp_Models_Chat_ChatResponseStream_" data-uid="OllamaSharp.MicrosoftAi.AbstractionMapper.ToStreamingChatCompletionUpdate(OllamaSharp.Models.Chat.ChatResponseStream)">
+  ToStreamingChatCompletionUpdate(ChatResponseStream?)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/JerrettDavis/OllamaSharp/blob/feature/add-documentation/src/MicrosoftAi/AbstractionMapper.cs/#L321"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Converts a <a class="xref" href="OllamaSharp.Models.Chat.ChatResponseStream.html">ChatResponseStream</a> to a <span class="xref">Microsoft.Extensions.AI.StreamingChatCompletionUpdate</span>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static StreamingChatCompletionUpdate ToStreamingChatCompletionUpdate(ChatResponseStream? response)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>response</code> <a class="xref" href="OllamaSharp.Models.Chat.ChatResponseStream.html">ChatResponseStream</a></dt>
+    <dd><p>The response stream to convert.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><span class="xref">StreamingChatCompletionUpdate</span></dt>
+    <dd><p>A <span class="xref">Microsoft.Extensions.AI.StreamingChatCompletionUpdate</span> object containing the latest chat completion chunk.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/JerrettDavis/OllamaSharp/blob/feature/add-documentation/src/MicrosoftAi/AbstractionMapper.cs/#L15" class="edit-link">Edit this page</a>
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
