@@ -490,6 +490,7 @@ public class AbstractionMapperTests
 				.AddOllamaOption(OllamaOption.PresencePenalty, 0.55f)
 				.AddOllamaOption(OllamaOption.RepeatLastN, 10)
 				.AddOllamaOption(OllamaOption.RepeatPenalty, 0.66f)
+				.AddOllamaOption(OllamaOption.Seed, 11)
 				.AddOllamaOption(OllamaOption.Stop, new string[] { "stop", "quit", "exit" })
 				.AddOllamaOption(OllamaOption.Temperature, 0.77f)
 				.AddOllamaOption(OllamaOption.TfsZ, 0.88f)
