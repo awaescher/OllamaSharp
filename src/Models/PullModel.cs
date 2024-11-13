@@ -3,8 +3,10 @@ using System.Text.Json.Serialization;
 namespace OllamaSharp.Models;
 
 /// <summary>
-/// Represents a request to pull a model from the API.
-/// <see href="https://github.com/jmorganca/ollama/blob/main/docs/api.md#pull-a-model"/>
+/// Download a model from the ollama library. Cancelled pulls are resumed from
+/// where they left off, and multiple calls will share the same download progress.
+/// 
+/// <see href="https://github.com/jmorganca/ollama/blob/main/docs/api.md#pull-a-model">Ollama API docs</see>
 /// </summary>
 public class PullModelRequest : OllamaRequest
 {

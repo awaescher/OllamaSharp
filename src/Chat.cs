@@ -12,6 +12,31 @@ namespace OllamaSharp;
 /// <summary>
 /// A chat helper that handles the chat logic internally and
 /// automatically extends the message history.
+///
+/// <example>
+/// A simple interactive chat can be implemented in just a handful of lines:
+/// <code>
+/// var ollama = new OllamaApiClient("http://localhost:11434", "llama3.2-vision:latest");
+/// var chat = new Chat(ollama);
+/// // ...
+/// while (true)
+/// {
+/// 	Console.Write("You: ");
+/// 	var message = Console.ReadLine()!;
+/// 	Console.Write("Ollama: ");
+/// 	await foreach (var answerToken in chat.SendAsync(message))
+/// 		Console.Write(answerToken);
+///		// ...
+/// 	Console.WriteLine();
+/// }
+/// // ...
+/// // Output:
+/// // You: Write a haiku about AI models
+/// // Ollama: Code whispers secrets
+/// //   Intelligent designs unfold
+/// //   Minds beyond our own
+/// </code>
+/// </example>
 /// </summary>
 public class Chat
 {
@@ -40,7 +65,17 @@ public class Chat
 	/// </summary>
 	/// <param name="client">The Ollama client to use for the chat</param>
 	/// <param name="systemPrompt">An optional system prompt to define the behavior of the chat assistant</param>
-	/// <exception cref="ArgumentNullException"></exception>
+	/// <exception cref="ArgumentNullException">
+	/// If the client is null, an <see cref="ArgumentNullException"/> is thrown.
+	/// </exception>
+	/// <example>
+	/// Setting up a chat with a system prompt:
+	/// <code>
+	///		var client = new OllamaApiClient("http://localhost:11434", "llama3.2-vision:latest");
+	///		var prompt = "You are a helpful assistant that will answer any question you are asked.";
+	///		var chat = new Chat(client, prompt);		
+	/// </code>
+	/// </example>
 	public Chat(IOllamaApiClient client, string systemPrompt = "")
 	{
 		Client = client ?? throw new ArgumentNullException(nameof(client));
@@ -55,6 +90,15 @@ public class Chat
 	/// </summary>
 	/// <param name="message">The message to send</param>
 	/// <param name="cancellationToken">The token to cancel the operation with</param>
+	/// <returns>An <see cref="IAsyncEnumerable{String}"/> that streams the response.</returns>
+	/// <example>
+	/// Getting a response from the model:
+	/// <code>
+	/// var response = await chat.SendAsync("Write a haiku about AI models");
+	/// await foreach (var answerToken in response)
+	///		 Console.WriteLine(answerToken);
+	/// </code>
+	/// </example>
 	public IAsyncEnumerable<string> SendAsync(string message, CancellationToken cancellationToken = default)
 		=> SendAsync(message, tools: null, imagesAsBase64: null, cancellationToken);
 
@@ -64,6 +108,24 @@ public class Chat
 	/// <param name="message">The message to send</param>
 	/// <param name="imagesAsBytes">Images in byte representation to send to the model</param>
 	/// <param name="cancellationToken">The token to cancel the operation with</param>
+	/// <returns>An <see cref="IAsyncEnumerable{String}"/> that streams the response.</returns>
+	/// <example>
+	/// Getting a response from the model with an image:
+	/// <code>
+	///  var client = new HttpClient();
+	///  var cat = await client.GetByteArrayAsync("https://cataas.com/cat");
+	///  var ollama = new OllamaApiClient("http://localhost:11434", "llama3.2-vision:latest");
+	///  var chat = new Chat(ollama);
+	///  var response = chat.SendAsync("What do you see?", [cat]);
+	///  await foreach (var answerToken in response) Console.Write(answerToken);
+	///
+	///  // Output: The image shows a white kitten with black markings on its
+	///  //         head and tail, sitting next to an orange tabby cat. The kitten
+	///  //         is looking at the camera while the tabby cat appears to be
+	///  //         sleeping or resting with its eyes closed. The two cats are
+	///  //         lying in a blanket that has been rumpled up.
+	/// </code>
+	/// </example>
 	public IAsyncEnumerable<string> SendAsync(string message, IEnumerable<IEnumerable<byte>>? imagesAsBytes, CancellationToken cancellationToken = default)
 		=> SendAsync(message, imagesAsBytes?.ToBase64() ?? [], cancellationToken);
 
@@ -73,6 +135,25 @@ public class Chat
 	/// <param name="message">The message to send</param>
 	/// <param name="imagesAsBase64">Base64 encoded images to send to the model</param>
 	/// <param name="cancellationToken">The token to cancel the operation with</param>
+	/// <returns>An <see cref="IAsyncEnumerable{String}"/> that streams the response.</returns>
+	/// <example>
+	/// Getting a response from the model with an image:
+	/// <code>
+	/// var client = new HttpClient();
+	/// var cat = await client.GetByteArrayAsync("https://cataas.com/cat");
+	/// var base64Cat = Convert.ToBase64String(cat);
+	/// var ollama = new OllamaApiClient("http://localhost:11434", "llama3.2-vision:latest");
+	/// var chat = new Chat(ollama);
+	/// var response = chat.SendAsync("What do you see?", [base64Cat]);
+	/// await foreach (var answerToken in response) Console.Write(answerToken);
+    /// 
+	/// // Output:
+	/// // The image shows a cat lying on the floor next to an iPad. The cat is looking
+	/// // at the screen, which displays a game with fish and other sea creatures. The
+	/// // cat's paw is touching the screen, as if it is playing the game. The background
+	/// // of the image is a wooden floor.
+	/// </code>
+	/// </example>
 	public IAsyncEnumerable<string> SendAsync(string message, IEnumerable<string>? imagesAsBase64, CancellationToken cancellationToken = default)
 		=> SendAsync(message, [], imagesAsBase64, cancellationToken);
 

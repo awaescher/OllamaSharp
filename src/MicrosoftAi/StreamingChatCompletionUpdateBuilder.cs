@@ -7,7 +7,7 @@ namespace OllamaSharp.MicrosoftAi;
 /// <summary>
 /// A builder that can append <see cref="StreamingChatCompletionUpdate"/> to one single completion update
 /// </summary>
-public class StreamingChatCompletionUpdateBuilder
+internal class StreamingChatCompletionUpdateBuilder
 {
 	private readonly StringBuilder _contentBuilder = new();
 	private StreamingChatCompletionUpdate? _first;

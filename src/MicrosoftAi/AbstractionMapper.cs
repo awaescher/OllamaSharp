@@ -12,7 +12,7 @@ namespace OllamaSharp.MicrosoftAi;
 /// <summary>
 /// Provides mapping functionality between OllamaSharp and Microsoft.Extensions.AI models.
 /// </summary>
-public static class AbstractionMapper
+internal static class AbstractionMapper
 {
 	/// <summary>
 	/// Maps a <see cref="ChatRequest"/> and <see cref="ChatDoneResponseStream"/> to a <see cref="ChatCompletion"/>.

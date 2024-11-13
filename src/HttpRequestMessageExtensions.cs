@@ -8,7 +8,7 @@ namespace OllamaSharp;
 /// <summary>
 /// Provides extension methods for the <see cref="HttpRequestMessage"/> class.
 /// </summary>
-public static class HttpRequestMessageExtensions
+internal static class HttpRequestMessageExtensions
 {
 	/// <summary>
 	/// Applies custom headers to the <see cref="HttpRequestMessage"/> instance.

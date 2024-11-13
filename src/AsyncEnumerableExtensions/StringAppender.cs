@@ -3,9 +3,9 @@ using System.Text;
 namespace OllamaSharp.AsyncEnumerableExtensions;
 
 /// <summary>
-/// Appender to stream IAsyncEnumerable(string) to build up one single result string
+/// Appender to stream <see cref="System.Collections.Generic.IAsyncEnumerable{String}"/> to build up one single result string
 /// </summary>
-public class StringAppender : IAppender<string, string>
+internal class StringAppender : IAppender<string, string>
 {
 	private readonly StringBuilder _builder = new();
 

@@ -5,7 +5,9 @@ using System.Text.Json.Serialization;
 namespace OllamaSharp.Models;
 
 /// <summary>
-/// A response from the /api/ps endpoint.
+/// List models that are currently loaded into memory.
+///
+/// <see href="https://github.com/ollama/ollama/blob/main/docs/api.md#list-running-models">Ollama API docs</see>
 /// </summary>
 [JsonUnmappedMemberHandling(JsonUnmappedMemberHandling.Skip)]
 public class ListRunningModelsResponse

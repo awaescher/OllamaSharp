@@ -12,7 +12,7 @@ public static class ChatOptionsExtensions
 {
 	/// <summary>
 	/// Adds Ollama specific options to the additional properties of ChatOptions.
-	/// These can be interpreted sent to the Ollama API by OllamaSharp.
+	/// These can be interpreted and sent to the Ollama API by OllamaSharp.
 	/// </summary>
 	/// <param name="chatOptions">The chat options to set Ollama options on</param>
 	/// <param name="option">The Ollama option to set, like OllamaOption.NumCtx for the option 'num_ctx'</param>
