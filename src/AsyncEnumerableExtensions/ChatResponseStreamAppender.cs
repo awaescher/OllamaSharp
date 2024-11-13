@@ -7,7 +7,7 @@ namespace OllamaSharp.AsyncEnumerableExtensions;
 /// Appender to stream <see cref="System.Collections.Generic.IAsyncEnumerable{ChatResponseStream}"/> to
 /// build up one single <see cref="ChatDoneResponseStream"/> object
 /// </summary>
-public class ChatResponseStreamAppender : IAppender<ChatResponseStream?, ChatDoneResponseStream?>
+internal class ChatResponseStreamAppender : IAppender<ChatResponseStream?, ChatDoneResponseStream?>
 {
 	private readonly MessageBuilder _messageBuilder = new();
 	private ChatDoneResponseStream? _lastItem;

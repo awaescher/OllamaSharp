@@ -7,7 +7,7 @@ namespace OllamaSharp;
 /// <summary>
 /// Extensions for byte arrays
 /// </summary>
-public static class ByteArrayExtensions
+internal static class ByteArrayExtensions
 {
 	/// <summary>
 	/// Converts a sequence of bytes to its equivalent string representation encoded in base-64.

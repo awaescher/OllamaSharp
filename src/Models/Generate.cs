@@ -4,7 +4,11 @@ using System.Text.Json.Serialization;
 namespace OllamaSharp.Models;
 
 /// <summary>
-/// https://github.com/jmorganca/ollama/blob/main/docs/api.md#generate-a-completion
+/// Generate a response for a given prompt with a provided model. This is a
+/// streaming endpoint, so there will be a series of responses. The final
+/// response object will include statistics and additional data from the request.
+///
+/// <see href="https://github.com/jmorganca/ollama/blob/main/docs/api.md#generate-a-completion">Ollama API docs</see>
 /// </summary>
 public class GenerateRequest : OllamaRequest
 {

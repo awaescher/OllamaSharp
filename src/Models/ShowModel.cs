@@ -4,7 +4,10 @@ using System.Text.Json.Serialization;
 namespace OllamaSharp.Models;
 
 /// <summary>
-/// Represents a request to show model information.
+/// Show information about a model including details, modelfile, template,
+/// parameters, license, system prompt.
+///
+/// <see href="https://github.com/ollama/ollama/blob/main/docs/api.md#show-model-information">Ollama API docs</see>
 /// </summary>
 [JsonUnmappedMemberHandling(JsonUnmappedMemberHandling.Skip)]
 public class ShowModelRequest : OllamaRequest

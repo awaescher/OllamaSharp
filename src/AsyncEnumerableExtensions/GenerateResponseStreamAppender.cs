@@ -8,7 +8,7 @@ namespace OllamaSharp.AsyncEnumerableExtensions;
 /// Appender to stream <see cref="System.Collections.Generic.IAsyncEnumerable{GenerateDoneResponseStream}"/>
 /// to build up one single <see cref="GenerateDoneResponseStream"/> object
 /// </summary>
-public class GenerateResponseStreamAppender : IAppender<GenerateResponseStream?, GenerateDoneResponseStream?>
+internal class GenerateResponseStreamAppender : IAppender<GenerateResponseStream?, GenerateDoneResponseStream?>
 {
 	private readonly StringBuilder _builder = new();
 	private GenerateDoneResponseStream? _lastItem;

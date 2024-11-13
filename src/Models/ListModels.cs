@@ -5,8 +5,9 @@ using System.Text.Json.Serialization;
 namespace OllamaSharp.Models;
 
 /// <summary>
-/// Represents the response from the API call to list local models.
-/// <see href="https://github.com/jmorganca/ollama/blob/main/docs/api.md#list-local-models"/>
+/// List models that are available locally.
+/// 
+/// <see href="https://github.com/jmorganca/ollama/blob/main/docs/api.md#list-local-models">Ollama API docs</see>
 /// </summary>
 public class ListModelsResponse
 {

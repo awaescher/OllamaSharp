@@ -6,7 +6,7 @@ namespace OllamaSharp.MicrosoftAi;
 /// Appender to stream <see cref="System.Collections.Generic.IAsyncEnumerable{StreamingChatCompletionUpdate}" />
 /// to build up one consolidated <see cref="StreamingChatCompletionUpdate"/> object
 /// </summary>
-public class StreamingChatCompletionUpdateAppender : IAppender<StreamingChatCompletionUpdate?, StreamingChatCompletionUpdate?>
+internal class StreamingChatCompletionUpdateAppender : IAppender<StreamingChatCompletionUpdate?, StreamingChatCompletionUpdate?>
 {
 	private readonly StreamingChatCompletionUpdateBuilder _messageBuilder = new();
 

@@ -48,7 +48,7 @@ public static partial class IAsyncEnumerableExtensions
 	/// <param name="appender">The appender instance used to build up one single response value</param>
 	/// <param name="itemCallback">An optional callback to additionally process every single item from the IAsyncEnumerable</param>
 	/// <returns>A single ChatDoneResponseStream built up from every single IAsyncEnumerable item</returns>
-	public static async Task<Tout> StreamToEndAsync<Tin, Tout>(this IAsyncEnumerable<Tin> stream, IAppender<Tin, Tout> appender, Action<Tin>? itemCallback = null)
+	internal static async Task<Tout> StreamToEndAsync<Tin, Tout>(this IAsyncEnumerable<Tin> stream, IAppender<Tin, Tout> appender, Action<Tin>? itemCallback = null)
 	{
 		await foreach (var item in stream.ConfigureAwait(false))
 		{
