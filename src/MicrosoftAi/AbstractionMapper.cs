@@ -19,6 +19,7 @@ public static class AbstractionMapper
 	/// </summary>
 	/// <param name="stream">The response stream with completion data.</param>
 	/// <param name="usedModel">The used model. This has to be a separate argument because there might be fallbacks from the calling method.</param>
+	/// <returns>A <see cref="ChatCompletion"/> object containing the mapped data.</returns>
 	public static ChatCompletion? ToChatCompletion(ChatDoneResponseStream? stream, string? usedModel)
 	{
 		if (stream is null)
@@ -40,21 +41,23 @@ public static class AbstractionMapper
 	}
 
 	/// <summary>
-	/// Converts Microsoft.Extensions.AI messages and options to an OllamaSharp chat request.
+	/// Converts Microsoft.Extensions.AI <see cref="ChatMessage"/> objects and
+	/// an option <see cref="ChatOptions"/> instance to an OllamaSharp <see cref="ChatRequest"/>.
 	/// </summary>
 	/// <param name="chatMessages">A list of chat messages.</param>
 	/// <param name="options">Optional chat options to configure the request.</param>
 	/// <param name="stream">Indicates if the request should be streamed.</param>
 	/// <param name="serializerOptions">Serializer options</param>
+	/// <returns>A <see cref="ChatRequest"/> object containing the converted data.</returns>
 	public static ChatRequest ToOllamaSharpChatRequest(IList<ChatMessage> chatMessages, ChatOptions? options, bool stream, JsonSerializerOptions serializerOptions)
 	{
 		var request = new ChatRequest
 		{
-			Format = options?.ResponseFormat == ChatResponseFormat.Json ? "json" : null,
+			Format = Equals(options?.ResponseFormat, ChatResponseFormat.Json) ? "json" : null,
 			KeepAlive = null,
 			Messages = ToOllamaSharpMessages(chatMessages, serializerOptions),
 			Model = options?.ModelId ?? "", // will be set OllamaApiClient.SelectedModel if not set
-			Options = new Models.RequestOptions
+			Options = new RequestOptions
 			{
 				FrequencyPenalty = options?.FrequencyPenalty,
 				PresencePenalty = options?.PresencePenalty,
@@ -114,7 +117,7 @@ public static class AbstractionMapper
 	/// <param name="microsoftChatOptions">The chat options from the Microsoft abstraction</param>
 	/// <param name="option">The Ollama setting to add</param>
 	/// <param name="optionSetter">The setter to set the Ollama option if available in the chat options</param>
-	private static void TryAddOllamaOption<T>(ChatOptions microsoftChatOptions, OllamaOption option, Action<object?> optionSetter)
+	private static void TryAddOllamaOption<T>(ChatOptions? microsoftChatOptions, OllamaOption option, Action<object?> optionSetter)
 	{
 		if ((microsoftChatOptions?.AdditionalProperties?.TryGetValue(option.Name, out var value) ?? false) && value is not null)
 			optionSetter(value);
@@ -124,6 +127,7 @@ public static class AbstractionMapper
 	/// Converts a collection of Microsoft.Extensions.AI.<see cref="AITool"/> to a collection of OllamaSharp tools.
 	/// </summary>
 	/// <param name="tools">The tools to convert.</param>
+	/// <returns>An enumeration of <see cref="Tool"/> objects containing the converted data.</returns>
 	private static IEnumerable<Tool>? ToOllamaSharpTools(IEnumerable<AITool>? tools)
 	{
 		return tools?.Select(ToOllamaSharpTool)
@@ -132,9 +136,13 @@ public static class AbstractionMapper
 	}
 
 	/// <summary>
-	/// Converts an Microsoft.Extensions.AI.<see cref="AITool"/> to an OllamaSharp tool.
+	/// Converts a Microsoft.Extensions.AI.<see cref="AITool"/> to an OllamaSharp <see cref="Tool" />.
 	/// </summary>
 	/// <param name="tool">The tool to convert.</param>
+	/// <returns>
+	/// If parseable, a <see cref="Tool"/> object containing the converted data,
+	/// otherwise <see langword="null"/>.
+	/// </returns>
 	private static Tool? ToOllamaSharpTool(AITool tool)
 	{
 		if (tool is AIFunction f)
@@ -147,7 +155,8 @@ public static class AbstractionMapper
 	/// Converts <see cref="AIFunctionMetadata"/> to a <see cref="Tool"/>.
 	/// </summary>
 	/// <param name="functionMetadata">The function metadata to convert.</param>
-	private static Tool? ToOllamaSharpTool(AIFunctionMetadata functionMetadata)
+	/// <returns>A <see cref="Tool"/> object containing the converted data.</returns>
+	private static Tool ToOllamaSharpTool(AIFunctionMetadata functionMetadata)
 	{
 		return new Tool
 		{
@@ -175,7 +184,8 @@ public static class AbstractionMapper
 	/// Converts parameter schema object to a function type string.
 	/// </summary>
 	/// <param name="schema">The schema object holding schema type information.</param>
-	private static IEnumerable<string>? GetPossibleValues(JsonObject? schema)
+	/// <returns>A collection of strings containing the function types.</returns>
+	private static IEnumerable<string> GetPossibleValues(JsonObject? schema)
 	{
 		return []; // TODO others supported?
 	}
@@ -184,6 +194,7 @@ public static class AbstractionMapper
 	/// Converts parameter schema object to a function type string.
 	/// </summary>
 	/// <param name="schema">The schema object holding schema type information.</param>
+	/// <returns>A string containing the function type.</returns>
 	private static string ToFunctionTypeString(JsonObject? schema)
 	{
 		return "string"; // TODO others supported?
@@ -194,6 +205,7 @@ public static class AbstractionMapper
 	/// </summary>
 	/// <param name="chatMessages">The chat messages to convert.</param>
 	/// <param name="serializerOptions">Serializer options</param>
+	/// <returns>An enumeration of <see cref="Message"/> objects containing the converted data.</returns>
 	private static IEnumerable<Message> ToOllamaSharpMessages(IList<ChatMessage> chatMessages, JsonSerializerOptions serializerOptions)
 	{
 		foreach (var cm in chatMessages)
@@ -235,7 +247,8 @@ public static class AbstractionMapper
 	/// Converts a Microsoft.Extensions.AI.<see cref="ImageContent"/> to a base64 image string.
 	/// </summary>
 	/// <param name="content">The data content to convert.</param>
-	private static string ToOllamaImage(ImageContent content)
+	/// <returns>A string containing the base64 image data.</returns>
+	private static string ToOllamaImage(ImageContent? content)
 	{
 		if (content is null)
 			return string.Empty;
@@ -250,6 +263,7 @@ public static class AbstractionMapper
 	/// Converts a Microsoft.Extensions.AI.<see cref="FunctionCallContent"/> to a <see cref="Message.ToolCall"/>.
 	/// </summary>
 	/// <param name="functionCall">The function call content to convert.</param>
+	/// <returns>A <see cref="Message.ToolCall"/> object containing the converted data.</returns>
 	private static Message.ToolCall ToOllamaSharpToolCall(FunctionCallContent functionCall)
 	{
 		return new Message.ToolCall
@@ -266,14 +280,15 @@ public static class AbstractionMapper
 	/// Maps a <see cref="Microsoft.Extensions.AI.ChatRole"/> to an <see cref="OllamaSharp.Models.Chat.ChatRole"/>.
 	/// </summary>
 	/// <param name="role">The chat role to map.</param>
+	/// <returns>A <see cref="OllamaSharp.Models.Chat.ChatRole"/> object containing the mapped role.</returns>
 	private static Models.Chat.ChatRole ToOllamaSharpRole(Microsoft.Extensions.AI.ChatRole role)
 	{
 		return role.Value switch
 		{
-			"assistant" => OllamaSharp.Models.Chat.ChatRole.Assistant,
-			"system" => OllamaSharp.Models.Chat.ChatRole.System,
-			"user" => OllamaSharp.Models.Chat.ChatRole.User,
-			"tool" => OllamaSharp.Models.Chat.ChatRole.Tool,
+			"assistant" => Models.Chat.ChatRole.Assistant,
+			"system" => Models.Chat.ChatRole.System,
+			"user" => Models.Chat.ChatRole.User,
+			"tool" => Models.Chat.ChatRole.Tool,
 			_ => new OllamaSharp.Models.Chat.ChatRole(role.Value),
 		};
 	}
@@ -282,6 +297,7 @@ public static class AbstractionMapper
 	/// Maps an <see cref="OllamaSharp.Models.Chat.ChatRole"/> to a <see cref="Microsoft.Extensions.AI.ChatRole"/>.
 	/// </summary>
 	/// <param name="role">The chat role to map.</param>
+	/// <returns>A <see cref="Microsoft.Extensions.AI.ChatRole"/> object containing the mapped role.</returns>
 	private static Microsoft.Extensions.AI.ChatRole ToAbstractionRole(OllamaSharp.Models.Chat.ChatRole? role)
 	{
 		if (role is null)
@@ -301,6 +317,7 @@ public static class AbstractionMapper
 	/// Converts a <see cref="ChatResponseStream"/> to a <see cref="StreamingChatCompletionUpdate"/>.
 	/// </summary>
 	/// <param name="response">The response stream to convert.</param>
+	/// <returns>A <see cref="StreamingChatCompletionUpdate"/> object containing the latest chat completion chunk.</returns>
 	public static StreamingChatCompletionUpdate ToStreamingChatCompletionUpdate(ChatResponseStream? response)
 	{
 		return new StreamingChatCompletionUpdate
@@ -311,6 +328,7 @@ public static class AbstractionMapper
 			CreatedAt = response?.CreatedAt,
 			FinishReason = response?.Done == true ? ChatFinishReason.Stop : null,
 			RawRepresentation = response,
+			// TODO: Check if "Message" can ever actually be null. If not, remove the null-coalescing operator
 			Text = response?.Message?.Content ?? string.Empty,
 			Role = ToAbstractionRole(response?.Message?.Role),
 			ModelId = response?.Model
@@ -321,6 +339,7 @@ public static class AbstractionMapper
 	/// Converts a <see cref="Message"/> to a <see cref="ChatMessage"/>.
 	/// </summary>
 	/// <param name="message">The message to convert.</param>
+	/// <returns>A <see cref="ChatMessage"/> object containing the converted data.</returns>
 	public static ChatMessage ToChatMessage(Message message)
 	{
 		var contents = new List<AIContent>();
@@ -349,7 +368,8 @@ public static class AbstractionMapper
 	/// Parses additional properties from a <see cref="ChatDoneResponseStream"/>.
 	/// </summary>
 	/// <param name="response">The response to parse.</param>
-	private static AdditionalPropertiesDictionary? ParseOllamaChatResponseProps(ChatDoneResponseStream response)
+	/// <returns>An <see cref="AdditionalPropertiesDictionary"/> object containing the parsed additional properties.</returns>
+	private static AdditionalPropertiesDictionary ParseOllamaChatResponseProps(ChatDoneResponseStream response)
 	{
 		const double NANOSECONDS_PER_MILLISECOND = 1_000_000;
 
@@ -366,7 +386,8 @@ public static class AbstractionMapper
 	/// Parses additional properties from a <see cref="EmbedResponse"/>.
 	/// </summary>
 	/// <param name="response">The response to parse.</param>
-	private static AdditionalPropertiesDictionary? ParseOllamaEmbedResponseProps(EmbedResponse response)
+	/// <returns>An <see cref="AdditionalPropertiesDictionary"/> object containing the parsed additional properties.</returns>
+	private static AdditionalPropertiesDictionary ParseOllamaEmbedResponseProps(EmbedResponse response)
 	{
 		const double NANOSECONDS_PER_MILLISECOND = 1_000_000;
 
@@ -381,6 +402,7 @@ public static class AbstractionMapper
 	/// Maps a string representation of a finish reason to a <see cref="ChatFinishReason"/>.
 	/// </summary>
 	/// <param name="ollamaDoneReason">The finish reason string.</param>
+	/// <returns>A <see cref="ChatFinishReason"/> object containing the chat finish reason.</returns>
 	private static ChatFinishReason? ToFinishReason(string? ollamaDoneReason)
 	{
 		return ollamaDoneReason switch
@@ -413,10 +435,11 @@ public static class AbstractionMapper
 	}
 
 	/// <summary>
-	/// Gets an embedding request for the Ollama API
+	/// Gets an <see cref="EmbedRequest"/> for the Ollama API.
 	/// </summary>
-	/// <param name="values">The values to get embeddings for</param>
-	/// <param name="options">The options for the embeddings</param>
+	/// <param name="values">The values to get embeddings for.</param>
+	/// <param name="options">The options for the embeddings.</param>
+	/// <returns>An <see cref="EmbedRequest"/> object containing the request data.</returns>
 	public static EmbedRequest ToOllamaEmbedRequest(IEnumerable<string> values, EmbeddingGenerationOptions? options)
 	{
 		var request = new EmbedRequest()
@@ -438,13 +461,15 @@ public static class AbstractionMapper
 	}
 
 	/// <summary>
-	/// Gets Microsoft GeneratedEmbeddings mapped from Ollama embeddings
+	/// Gets Microsoft GeneratedEmbeddings mapped from Ollama embeddings.
 	/// </summary>
-	/// <param name="ollamaRequest">The original Ollama request that was used to generate the embeddings</param>
-	/// <param name="ollamaResponse">The response from Ollama containing the embeddings</param>
+	/// <param name="ollamaRequest">The original Ollama request that was used to generate the embeddings.</param>
+	/// <param name="ollamaResponse">The response from Ollama containing the embeddings.</param>
 	/// <param name="usedModel">The used model. This has to be a separate argument because there might be fallbacks from the calling method.</param>
+	/// <returns>A <see cref="GeneratedEmbeddings{T}"/> object containing the mapped embeddings.</returns>
 	public static GeneratedEmbeddings<Embedding<float>> ToGeneratedEmbeddings(EmbedRequest ollamaRequest, EmbedResponse ollamaResponse, string? usedModel)
 	{
+		// TODO: Check if this can ever actually be null. If not, remove the null-coalescing operator
 		var mapped = (ollamaResponse.Embeddings ?? []).Select(vector => new Embedding<float>(vector)
 		{
 			CreatedAt = DateTimeOffset.UtcNow,
