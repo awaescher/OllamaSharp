@@ -28,7 +28,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\src\OllamaSharp.csproj"/>
+        <ProjectReference Include="..\src\OllamaSharp.csproj" />
     </ItemGroup>
 
 </Project>
