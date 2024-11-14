@@ -39,7 +39,7 @@
 
 	<ItemGroup>
 		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
-			<_Parameter1>Tests, PublicKey=a180b353776c8e9e</_Parameter1>
+			<_Parameter1>Tests, PublicKey=0024000004800000940000000602000000240000525341310004000001000100a171f1618f5d4caf94ac5e1323ed80e3e2b686509951a686b66491108cf673ec16a8507ae06e7a4cc81ac14b057659e84401f1d56e17023037c160f4e3e35f6de81c479a778c78a184d15b4ccce943d2202eeeaec0c63028e1061ef5ca236b7a7d7fc52eef66d1fc65ebb89560b8dffb2353dfd2394ef2b1ec41bc3accab7df0</_Parameter1>
 		</AssemblyAttribute>
 	</ItemGroup>
 
