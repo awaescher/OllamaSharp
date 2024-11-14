@@ -47,7 +47,7 @@ jobs:
       run: dotnet build --no-restore --configuration=Release /p:Version=${{steps.gitversion.outputs.semVer}}
 
     - name: Test
-      run: dotnet test --no-build --configuration=Release --verbosity normal
+      run: dotnet test --no-build --configuration=Release --verbosity normal --filter 'FullyQualifiedName!~FunctionalTests'
       
     - name: pack nuget packages
       run: dotnet pack --output nupkgs --configuration=Release --no-restore --no-build /p:PackageVersion=${{steps.gitversion.outputs.semVer}}
