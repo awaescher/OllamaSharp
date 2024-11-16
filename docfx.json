@@ -9,7 +9,7 @@
           ]
         }
       ],
-      "dest": "apidoc"
+      "dest": "api"
     }
   ],
   "build": {
