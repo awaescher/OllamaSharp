@@ -400,4 +400,4 @@ FodyWeavers.xsd
 
 # DocFX
 _site/
-apidoc/
+api/
