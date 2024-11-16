@@ -9,7 +9,7 @@
           ]
         }
       ],
-      "dest": "api"
+      "dest": "apidoc"
     }
   ],
   "build": {
@@ -23,6 +23,11 @@
         ]
       }
     ],
+    "markdownEngineProperties": {
+      "markdigExtensions": [
+        "CustomContainers"
+      ]
+    },
     "resource": [
       {
         "files": [
@@ -33,11 +38,13 @@
     "output": "_site",
     "template": [
       "default",
-      "modern"
+      "modern",
+      "doc-template"
     ],
     "globalMetadata": {
       "_appName": "OllamaSharp",
       "_appTitle": "OllamaSharp",
+      "_appLogoPath": "images/logo-sharp-nobg.png",
       "_enableSearch": true,
       "pdf": true
     }

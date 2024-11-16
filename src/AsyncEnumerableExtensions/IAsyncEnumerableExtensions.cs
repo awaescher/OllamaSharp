@@ -19,7 +19,7 @@ public static partial class IAsyncEnumerableExtensions
 	/// </summary>
 	/// <param name="stream">The IAsyncEnumerable to stream</param>
 	/// <param name="itemCallback">An optional callback to additionally process every single item from the IAsyncEnumerable</param>
-	/// <returns>A single response stream appened from every IAsyncEnumerable item</returns>
+	/// <returns>A single response stream append from every IAsyncEnumerable item</returns>
 	public static Task<string> StreamToEndAsync(this IAsyncEnumerable<string> stream, Action<string>? itemCallback = null)
 		=> stream.StreamToEndAsync(new StringAppender(), itemCallback);
 
