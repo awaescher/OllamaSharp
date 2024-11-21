@@ -407,12 +407,12 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 	}
 
 	/// <inheritdoc/>
-	TService? IChatClient.GetService<TService>(object? key) where TService : class
-		=> key is null ? this as TService : null;
+	object? IChatClient.GetService(Type serviceKey, object? key) =>
+		key is null && serviceKey?.IsInstanceOfType(this) is true ? this : null;
 
 	/// <inheritdoc />
-	TService? IEmbeddingGenerator<string, Embedding<float>>.GetService<TService>(object? key) where TService : class
-		=> key is null ? this as TService : null;
+	object? IEmbeddingGenerator<string, Embedding<float>>.GetService(Type serviceKey, object? key) =>
+		key is null && serviceKey?.IsInstanceOfType(this) is true ? this : null;
 
 	/// <summary>
 	/// Releases the resources used by the <see cref="OllamaApiClient"/> instance.
