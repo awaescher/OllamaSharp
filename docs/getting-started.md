@@ -2,11 +2,11 @@
 
 The [OllamaSharp](https://github.com/awaescher/OllamaSharp) library provides complete 
 coverage of the [Ollama](https://ollama.com/) API through simple, asynchronous
-streaming interfaces. The library further ads convenience classes and functions
+streaming interfaces. The library further adds convenience classes and functions
 to simplify common use cases.
 
 Getting started with OllamaSharp only requires a running Ollama server and a 
-supporter version of [.NET](https://dotnet.microsoft.com/en-us/download).
+supported version of [.NET](https://dotnet.microsoft.com/en-us/download).
 
 ## Prerequisites
 

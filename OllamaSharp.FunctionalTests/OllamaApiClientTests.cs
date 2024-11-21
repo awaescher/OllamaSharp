@@ -54,23 +54,23 @@ public class OllamaApiClientTests
 				.ToListAsync();
 	}
 
-	// For the sake of my bandwidth, I'm commenting out this test
-	// [Test, Order(1)]
-	// public async Task PullModel()
-	// {
-	// 	// Act
-	// 	var response = await _client
-	// 		.PullModelAsync(new PullModelRequest { Model = _model })
-	// 		.ToListAsync();
-	//
-	// 	// Assert
-	// 	var models = await _client.ListLocalModelsAsync();
-	// 	models.Should().Contain(m => m.Name == _model);
-	//
-	// 	response.Should().NotBeEmpty();
-	// 	response.Should().Contain(r => r!.Status == "pulling manifest");
-	// 	response.Should().Contain(r => r!.Status == "success");
-	// }
+
+	[Test, Order(1), Ignore("Prevent the model from being downloaded each test run")]
+	public async Task PullModel()
+	{
+		// Act
+		var response = await _client
+			.PullModelAsync(new PullModelRequest { Model = _model })
+			.ToListAsync();
+	
+		// Assert
+		var models = await _client.ListLocalModelsAsync();
+		models.Should().Contain(m => m.Name == _model);
+	
+		response.Should().NotBeEmpty();
+		response.Should().Contain(r => r!.Status == "pulling manifest");
+		response.Should().Contain(r => r!.Status == "success");
+	}
 
 	[Test, Order(2)]
 	public async Task CreateModel()
