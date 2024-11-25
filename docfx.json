@@ -44,7 +44,7 @@
     "globalMetadata": {
       "_appName": "OllamaSharp",
       "_appTitle": "OllamaSharp",
-      "_appLogoPath": "images/logo-sharp-nobg.png",
+      "_appLogoPath": "images/logo@0.1x.png",
       "_enableSearch": true,
       "pdf": true
     }
