@@ -146,7 +146,7 @@ public class Chat
 	/// var chat = new Chat(ollama);
 	/// var response = chat.SendAsync("What do you see?", [base64Cat]);
 	/// await foreach (var answerToken in response) Console.Write(answerToken);
-    /// 
+	/// 
 	/// // Output:
 	/// // The image shows a cat lying on the floor next to an iPad. The cat is looking
 	/// // at the screen, which displays a game with fish and other sea creatures. The

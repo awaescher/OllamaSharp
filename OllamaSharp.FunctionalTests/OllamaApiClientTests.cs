@@ -62,11 +62,11 @@ public class OllamaApiClientTests
 		var response = await _client
 			.PullModelAsync(new PullModelRequest { Model = _model })
 			.ToListAsync();
-	
+
 		// Assert
 		var models = await _client.ListLocalModelsAsync();
 		models.Should().Contain(m => m.Name == _model);
-	
+
 		response.Should().NotBeEmpty();
 		response.Should().Contain(r => r!.Status == "pulling manifest");
 		response.Should().Contain(r => r!.Status == "success");
@@ -206,7 +206,8 @@ public class OllamaApiClientTests
 		await PullIfNotExists(_localModel);
 		await _client.CopyModelAsync(new CopyModelRequest
 		{
-			Source = _localModel, Destination = $"{_localModel}-copy"
+			Source = _localModel,
+			Destination = $"{_localModel}-copy"
 		});
 
 		var exists = (await _client.ListLocalModelsAsync())
@@ -236,14 +237,14 @@ public class OllamaApiClientTests
 				"What is the meaning to life, the universe, and everything according to the Hitchhikers Guide to the Galaxy?"
 		})
 		.ToListAsync();
-		
+
 		var joined = string.Join("", response.Select(r => r.Response));
-		
+
 		// Assert
 		response.Should().NotBeEmpty();
 		joined.Should().Contain("42");
 	}
-	
+
 	[Test]
 	public async Task ChatAsync()
 	{
@@ -281,7 +282,7 @@ public class OllamaApiClientTests
 		response.Should().NotBeEmpty();
 		joined.Should().Contain("Douglas Adams");
 	}
-	
+
 	[Test]
 	public async Task IsRunningAsync()
 	{
@@ -291,7 +292,7 @@ public class OllamaApiClientTests
 		// Assert
 		response.Should().BeTrue();
 	}
-	
+
 	[Test]
 	public async Task GetVersionAsync()
 	{

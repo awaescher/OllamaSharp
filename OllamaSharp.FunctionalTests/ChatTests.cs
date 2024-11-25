@@ -42,9 +42,9 @@ public class ChatTests
 		// Act
 		var response = await _chat
 			.SendAsync("What is the ultimate answer to " +
-			           "life, the universe, and everything, as specified in " +
-			           "a Hitchhikers Guide to the Galaxy. " +
-			           "Provide only the answer.",
+					   "life, the universe, and everything, as specified in " +
+					   "a Hitchhikers Guide to the Galaxy. " +
+					   "Provide only the answer.",
 				CancellationToken.None)
 			.StreamToEndAsync();
 
