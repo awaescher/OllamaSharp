@@ -1,39 +1,33 @@
 # Getting Started
 
-The [OllamaSharp](https://github.com/awaescher/OllamaSharp) library provides complete 
-coverage of the [Ollama](https://ollama.com/) API through simple, asynchronous
-streaming interfaces. The library further adds convenience classes and functions
-to simplify common use cases.
+[OllamaSharp](https://github.com/awaescher/OllamaSharp) provides .NET bindings for the Ollama API, simplifying interactions with Ollama both locally and remotely. It provides asynchronous streaming, progress reporting and convenience classes and functions to simplify common use cases.
 
-Getting started with OllamaSharp only requires a running Ollama server and a 
-supported version of [.NET](https://dotnet.microsoft.com/en-us/download).
+Getting started with OllamaSharp only requires a running Ollama server and a supported version of [.NET](https://dotnet.microsoft.com/en-us/download).
 
 ## Prerequisites
 
 - [Ollama](https://ollama.com/)
 - [.NET](https://dotnet.microsoft.com/en-us/download)
 
-## Pulling Your First Model
+## Pulling a model
 
-You can't talk to Ollama without a model. To get started, you can pull a model
-from the Ollama repository. The following code snippet demonstrates how to 
-connect to an Ollama server and pull a model.
+To use Ollama, you will need  to specify a large language model to talk with. You can download a model from the [Ollama model hub](https://ollama.com/models). Below is a code snippet illustrating how to connect to an Ollama server and pull a model from there:
 
 ```csharp
 using OllamaSharp;
 
-// If you are running Ollama locally on the default port:
+// if you are running Ollama locally on the default port:
 var uri = new Uri("http://localhost:11434");
 var ollama = new OllamaApiClient(uri);
 
-// Pull the model, and print the status of the pull operation.
+// pull the model, and print the status of the pull operation.
 await foreach (var status in ollama.PullModelAsync("llama3.2-vision"))
     Console.WriteLine($"{status.Percent}% {status.Status}");
 
 Console.WriteLine("Model pulled successfully.");
 ```
 
-If everything goes well, you should see something like the following output:
+This should result in an output like this:
 
 ```
 100% pulling manifest
@@ -49,12 +43,9 @@ If everything goes well, you should see something like the following output:
 Model pulled successfully.
 ```
 
-## Getting Serenaded by Llamas
+## Taking to a model
 
-Once you have a model, you can start conversing wih Ollama. The following code
-snippet demonstrates how to connect to an Ollama server, load a model, and start
-a conversation.
-
+After obtaining a model, you can begin interacting with Ollama. The following code snippet demonstrates how to connect to an Ollama server, load a model, and initiate a conversation:
 
 ```csharp
 using OllamaSharp;
@@ -70,5 +61,4 @@ await foreach (var stream in ollama.GenerateAsync(request))
     Console.Write(stream.Response);
 ```
 
-If all went to plan, you should be swept off your feet by the smooth, dulcet tones
-of the Ollama AI.
+The model's answer should be streamed directly into your Console window.
