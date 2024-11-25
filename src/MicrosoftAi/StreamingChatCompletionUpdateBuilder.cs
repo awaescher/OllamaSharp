@@ -5,9 +5,9 @@ using Microsoft.Extensions.AI;
 namespace OllamaSharp.MicrosoftAi;
 
 /// <summary>
-/// A builder that can append streamed completion updates to one single completion update
+/// A builder that can append <see cref="StreamingChatCompletionUpdate"/> to one single completion update
 /// </summary>
-public class StreamingChatCompletionUpdateBuilder
+internal class StreamingChatCompletionUpdateBuilder
 {
 	private readonly StringBuilder _contentBuilder = new();
 	private StreamingChatCompletionUpdate? _first;
@@ -36,13 +36,16 @@ public class StreamingChatCompletionUpdateBuilder
 		//_first.Contents and .Text will be set in Complete() with values collected from each update
 		//_first.RawRepresentation makes no sense 
 
+		// TODO: Check if this can ever be null. The docs imply not.
 		if (update.Contents is not null)
 			Contents.AddRange(update.Contents);
 	}
 
 	/// <summary>
-	/// Builds the final completion update out of the streamed updates that were appended before
+	/// Builds the final consolidated <see cref="StreamingChatCompletionUpdate"/> out of the streamed
+	/// updates that were appended before
 	/// </summary>
+	/// <returns>The final consolidated <see cref="StreamingChatCompletionUpdate"/> object</returns>
 	public StreamingChatCompletionUpdate? Complete()
 	{
 		if (_first is null)
@@ -57,5 +60,6 @@ public class StreamingChatCompletionUpdateBuilder
 	/// <summary>
 	/// Gets or sets the list of all content elements received from completion updates
 	/// </summary>
+	/// <value>A <see cref="List{AIContent}"/> of <see cref="AIContent"/> elements</value>
 	public List<AIContent> Contents { get; set; } = [];
 }

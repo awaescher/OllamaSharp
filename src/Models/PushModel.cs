@@ -3,7 +3,10 @@ using System.Text.Json.Serialization;
 namespace OllamaSharp.Models;
 
 /// <summary>
-/// Represents a request to push a model.
+/// Upload a model to a model library. Requires registering for ollama.ai and
+/// adding a public key first.
+///
+/// <see href="https://github.com/ollama/ollama/blob/main/docs/api.md#push-a-model">Ollama API docs</see>
 /// </summary>
 public class PushModelRequest : OllamaRequest
 {

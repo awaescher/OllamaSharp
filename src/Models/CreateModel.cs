@@ -3,7 +3,14 @@ using System.Text.Json.Serialization;
 namespace OllamaSharp.Models;
 
 /// <summary>
-/// https://github.com/jmorganca/ollama/blob/main/docs/api.md#create-a-model
+/// Create a model from a Modelfile. It is recommended to set <see cref="ModelFileContent"/> to the
+/// content of the Modelfile rather than just set path. This is a requirement
+/// for remote create. Remote model creation must also create any file blobs,
+/// fields such as FROM and ADAPTER, explicitly with the server using Create a
+/// Blob and the value to the path indicated in the response.
+///
+/// <see href="https://github.com/jmorganca/ollama/blob/main/docs/api.md#create-a-model">Ollama API docs</see>
+/// 
 /// </summary>
 [JsonUnmappedMemberHandling(JsonUnmappedMemberHandling.Skip)]
 public class CreateModelRequest : OllamaRequest

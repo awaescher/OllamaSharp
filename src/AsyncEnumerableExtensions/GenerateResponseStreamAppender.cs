@@ -5,15 +5,16 @@ using OllamaSharp.Models;
 namespace OllamaSharp.AsyncEnumerableExtensions;
 
 /// <summary>
-/// Appender to stream IAsyncEnumerable(GenerateResponseStream) to build up one single GenerateDoneResponseStream object
+/// Appender to stream <see cref="System.Collections.Generic.IAsyncEnumerable{GenerateDoneResponseStream}"/>
+/// to build up one single <see cref="GenerateDoneResponseStream"/> object
 /// </summary>
-public class GenerateResponseStreamAppender : IAppender<GenerateResponseStream?, GenerateDoneResponseStream?>
+internal class GenerateResponseStreamAppender : IAppender<GenerateResponseStream?, GenerateDoneResponseStream?>
 {
 	private readonly StringBuilder _builder = new();
 	private GenerateDoneResponseStream? _lastItem;
 
 	/// <summary>
-	/// Appends a given GenerateResponseStream item to build a single return object
+	/// Appends a given <see cref="GenerateResponseStream"/> item to build a single return object
 	/// </summary>
 	/// <param name="item">The item to append</param>
 	public void Append(GenerateResponseStream? item)
@@ -25,8 +26,10 @@ public class GenerateResponseStreamAppender : IAppender<GenerateResponseStream?,
 	}
 
 	/// <summary>
-	/// Builds up one single GenerateDoneResponseStream object from the previously streamed GenerateResponseStream items
+	/// Builds up one single <see cref="GenerateDoneResponseStream"/> object
+	/// from the previously streamed <see cref="GenerateResponseStream"/> items
 	/// </summary>
+	/// <returns>The completed, consolidated <see cref="GenerateDoneResponseStream"/> object</returns>
 	public GenerateDoneResponseStream? Complete()
 	{
 		if (_lastItem is null)

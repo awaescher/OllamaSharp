@@ -5,7 +5,7 @@ namespace OllamaSharp.AsyncEnumerableExtensions;
 /// </summary>
 /// <typeparam name="Tin">The type of the items of the IAsyncEnumerable</typeparam>
 /// <typeparam name="Tout">The return type after the IAsyncEnumerable was streamed to the end</typeparam>
-public interface IAppender<in Tin, out Tout>
+internal interface IAppender<in Tin, out Tout>
 {
 	/// <summary>
 	/// Appends an item to build up the return value
