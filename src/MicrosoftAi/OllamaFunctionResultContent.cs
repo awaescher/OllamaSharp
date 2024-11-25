@@ -11,7 +11,7 @@ internal sealed class OllamaFunctionResultContent
 	/// The function call ID for which this is the result.
 	/// </summary>
 	public string? CallId { get; set; }
-	
+
 	/// <summary>
 	/// This element value may be <see langword="null" /> if the function returned <see langword="null" />,
 	/// if the function was void-returning and thus had no result, or if the function call failed.
