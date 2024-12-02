@@ -1,3 +1,4 @@
+using System.IO;
 using System.Net;
 using System.Text;
 using System.Text.Json;
@@ -408,6 +409,7 @@ public class OllamaApiClientTests
 			var chat = new ChatRequest
 			{
 				Model = "llama3.1:latest",
+				Stream = false,
 				Messages = [
 					new(ChatRole.User, "How is the weather in LA?"),
 				],
@@ -466,6 +468,66 @@ public class OllamaApiClientTests
 
 			toolsFunction.Arguments.ElementAt(2).Key.Should().Be("number");
 			toolsFunction.Arguments.ElementAt(2).Value.ToString().Should().Be("42");
+		}
+
+		[Test, NonParallelizable]
+		public async Task Response_Streaming_Message_With_ToolsCalls_Throws_Not_Supported()
+		{
+			_response = new HttpResponseMessage
+			{
+				StatusCode = HttpStatusCode.OK,
+				Content = new StringContent(string.Empty)
+			};
+
+			var request = new ChatRequest
+			{
+				Model = "llama3.1:latest",
+				Messages = [
+					new(ChatRole.User, "How is the weather in LA?"),
+				],
+				Tools = [
+					new Tool
+					{
+						Function = new Function
+						{
+							Description = "Get the current weather for a location",
+							Name = "get_current_weather",
+							Parameters = new Parameters
+							{
+								Properties = new Dictionary<string, Properties>
+								{
+									["location"] = new()
+									{
+										Type = "string",
+										Description = "The location to get the weather for, e.g. San Francisco, CA"
+									},
+									["format"] = new()
+									{
+										Type = "string",
+										Description = "The format to return the weather in, e.g. 'celsius' or 'fahrenheit'",
+										Enum = ["celsius", "fahrenheit"]
+									},
+									["number"] = new()
+									{
+										Type = "integer",
+										Description = "The number of the day to get the weather for, e.g. 42"
+									}
+								},
+								Required = ["location", "format"],
+							}
+						},
+						Type = "function"
+					}
+				]
+			};
+
+			var act = async () =>
+			{
+				var enumerator = _client.ChatAsync(request, CancellationToken.None).GetAsyncEnumerator();
+				await enumerator.MoveNextAsync();
+			};
+
+			await act.Should().ThrowAsync<NotSupportedException>();
 		}
 	}
 
@@ -528,7 +590,7 @@ public class OllamaApiClientTests
 				Content = new StringContent("{ error: llama2 does not support tools }")
 			};
 
-			var act = () => _client.ChatAsync(new ChatRequest(), CancellationToken.None).StreamToEndAsync();
+			var act = () => _client.ChatAsync(new ChatRequest() { Stream = false }, CancellationToken.None).StreamToEndAsync();
 			await act.Should().ThrowAsync<ModelDoesNotSupportToolsException>();
 		}
 
