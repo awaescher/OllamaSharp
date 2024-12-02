@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -182,6 +183,12 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 	{
 		if (string.IsNullOrEmpty(request.Model))
 			request.Model = SelectedModel;
+
+		if (request.Stream && (request.Tools?.Any() ?? false))
+			throw new NotSupportedException("""
+				Currently, Ollama does not support function calls in streaming mode.
+				See Ollama docs at https://github.com/ollama/ollama/blob/main/docs/api.md#parameters-1 to see whether support has since been added.
+				""");
 
 		using var requestMessage = new HttpRequestMessage(HttpMethod.Post, "api/chat")
 		{
