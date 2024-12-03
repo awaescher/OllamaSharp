@@ -1,0 +1,52 @@
+{
+  "metadata": [
+    {
+      "src": [
+        {
+          "src": "./src",
+          "files": [
+            "**/*.csproj"
+          ]
+        }
+      ],
+      "dest": "api"
+    }
+  ],
+  "build": {
+    "content": [
+      {
+        "files": [
+          "**/*.{md,yml}"
+        ],
+        "exclude": [
+          "_site/**"
+        ]
+      }
+    ],
+    "markdownEngineProperties": {
+      "markdigExtensions": [
+        "CustomContainers"
+      ]
+    },
+    "resource": [
+      {
+        "files": [
+          "images/**"
+        ]
+      }
+    ],
+    "output": "_site",
+    "template": [
+      "default",
+      "modern",
+      "doc-template"
+    ],
+    "globalMetadata": {
+      "_appName": "OllamaSharp",
+      "_appTitle": "OllamaSharp",
+      "_appLogoPath": "images/0.png",
+      "_enableSearch": true,
+      "pdf": true
+    }
+  }
+}
