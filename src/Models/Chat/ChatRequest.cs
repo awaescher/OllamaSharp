@@ -43,11 +43,11 @@ public class ChatRequest : OllamaRequest
 	public string? KeepAlive { get; set; }
 
 	/// <summary>
-	/// Gets or sets the format to return a response in. Currently only accepts "json" or null.
+	/// The format to return a response in. Currently accepts "json" and JsonSchema or null.
 	/// </summary>
 	[JsonPropertyName("format")]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-	public string? Format { get; set; }
+	public object? Format { get; set; }
 
 	/// <summary>
 	/// Gets or sets a value indicating whether the response will be returned as a single response object rather than a stream of objects.
