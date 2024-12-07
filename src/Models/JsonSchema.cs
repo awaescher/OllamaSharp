@@ -27,6 +27,7 @@ public class JsonSchema
 	/// Gets or sets a list of required fields within the schema.
 	///	</summary>
 	[JsonPropertyName("required")]
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public IEnumerable<string>? Required { get; set; }
 
 	/// <summary>
@@ -42,21 +43,19 @@ public class JsonSchema
 			var propertyName = property.Name;
 			var propertyType = property.PropertyType;
 
-			var isEnumerable = typeof(IEnumerable).IsAssignableFrom(propertyType) && propertyType != typeof(string);
-			var isNullable = Nullable.GetUnderlyingType(propertyType) != null;
-			if (isNullable)
-				propertyType = Nullable.GetUnderlyingType(propertyType);
+			var isEnumerable = type.IsArray || (typeof(IEnumerable).IsAssignableFrom(propertyType) && propertyType != typeof(string));
+			var isNullable = type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>);
 
 			properties.Add(propertyName,
 				new Property
 				{
-					Type = isEnumerable ? "array" : propertyType.Name.ToLower(),
+					Type = GetTypeName(propertyType),
 					Items = isEnumerable
 						? new Item
 						{
-							Type = (propertyType.IsArray
+							Type = GetTypeName(propertyType.IsArray
 								? propertyType.GetElementType()
-								: propertyType.GetGenericArguments().First()).Name.ToLower()
+								: propertyType.GetGenericArguments().First())
 						}
 						: null
 				});
@@ -66,6 +65,44 @@ public class JsonSchema
 		}
 
 		return new JsonSchema { Properties = properties, Required = required };
+	}
+
+	private static string GetTypeName(Type type)
+	{
+		if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
+		{
+			var underlyingType = type.GetGenericArguments().First();
+			return GetTypeName(underlyingType);
+		}
+
+		var typeCode = System.Type.GetTypeCode(type);
+
+		switch (typeCode)
+		{
+			case TypeCode.Int32:
+			case TypeCode.Int16:
+			case TypeCode.Byte:
+			case TypeCode.SByte:
+			case TypeCode.Int64:
+			case TypeCode.UInt16:
+			case TypeCode.UInt32:
+			case TypeCode.UInt64:
+				return "integer";
+			case TypeCode.Single:
+			case TypeCode.Double:
+			case TypeCode.Decimal:
+				return "number";
+			case TypeCode.Boolean:
+				return "boolean";
+			case TypeCode.String:
+				return "string";
+			case TypeCode.Object:
+				if (type.IsArray || typeof(IEnumerable).IsAssignableFrom(type))
+					return "array";
+				return "object";
+			default:
+				return "object";
+		}
 	}
 }
 
@@ -83,6 +120,20 @@ public class Property
 	[JsonPropertyName("items")]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public Item? Items { get; set; }
+
+	/// <summary>
+	/// Gets or sets the description of the property.
+	/// </summary>
+	[JsonPropertyName("description")]
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public string? Description { get; set; }
+
+	/// <summary>
+	/// Gets or sets the Enum of the property.
+	/// </summary>
+	[JsonPropertyName("enum")]
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public List<string>? Enum { get; set; }
 }
 
 public class Item
