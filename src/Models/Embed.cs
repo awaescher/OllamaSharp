@@ -4,7 +4,9 @@ using System.Text.Json.Serialization;
 namespace OllamaSharp.Models;
 
 /// <summary>
-/// https://github.com/jmorganca/ollama/blob/main/docs/api.md#generate-embeddings
+/// Generate embeddings from a model.
+///
+/// <see href="https://github.com/jmorganca/ollama/blob/main/docs/api.md#generate-embeddings">Ollama API docs</see>
 /// </summary>
 public class EmbedRequest : OllamaRequest
 {

@@ -93,7 +93,7 @@ public class ToolConsole(IOllamaApiClient ollama) : OllamaConsole(ollama)
 		}
 	}
 
-	private static IEnumerable<Tool> GetTools() => [new WeatherTool(), new NewsTool()];
+	private static Tool[] GetTools() => [new WeatherTool(), new NewsTool()];
 
 	private sealed class WeatherTool : Tool
 	{

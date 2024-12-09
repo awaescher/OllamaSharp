@@ -1,20 +1,21 @@
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using OllamaSharp.Models;
 
 namespace OllamaSharp;
 
 /// <summary>
-/// Extension methods for the http request message
+/// Provides extension methods for the <see cref="HttpRequestMessage"/> class.
 /// </summary>
-public static class HttpRequestMessageExtensions
+internal static class HttpRequestMessageExtensions
 {
 	/// <summary>
-	/// Applies default headers from the OllamaApiClient and optional Ollama requests
+	/// Applies custom headers to the <see cref="HttpRequestMessage"/> instance.
 	/// </summary>
-	/// <param name="requestMessage">The http request message to set the headers on</param>
-	/// <param name="headers">The headers to set on the request message</param>
-	/// <param name="ollamaRequest">The request to the Ollama API to get the custom headers from</param>
+	/// <param name="requestMessage">The <see cref="HttpRequestMessage"/> to set the headers on.</param>
+	/// <param name="headers">A dictionary containing the headers to set on the request message.</param>
+	/// <param name="ollamaRequest">An optional <see cref="OllamaRequest"/> to get additional custom headers from.</param>
 	public static void ApplyCustomHeaders(this HttpRequestMessage requestMessage, Dictionary<string, string> headers, OllamaRequest? ollamaRequest)
 	{
 		foreach (var header in headers)
@@ -27,7 +28,13 @@ public static class HttpRequestMessageExtensions
 		}
 	}
 
-	private static void AddOrUpdateHeaderValue(System.Net.Http.Headers.HttpRequestHeaders requestMessageHeaders, string headerKey, string headerValue)
+	/// <summary>
+	/// Adds or updates a header value in the <see cref="HttpRequestHeaders"/> collection.
+	/// </summary>
+	/// <param name="requestMessageHeaders">The <see cref="HttpRequestHeaders"/> collection to update.</param>
+	/// <param name="headerKey">The key of the header to add or update.</param>
+	/// <param name="headerValue">The value of the header to add or update.</param>
+	private static void AddOrUpdateHeaderValue(HttpRequestHeaders requestMessageHeaders, string headerKey, string headerValue)
 	{
 		if (requestMessageHeaders.Contains(headerKey))
 			requestMessageHeaders.Remove(headerKey);

@@ -1,0 +1,5 @@
+# Introduction
+
+[Ollama](https://ollama.com/) is a [Go](https://go.dev/)-based, open-source server for interacting with local large language models using Georgi Gerganov's [llama.cpp](https://github.com/ggerganov/llama.cpp) library. Ollama provides first-class support for various models, including [llama3.2](https://ollama.com/library/llama3.2), [phi3.5](https://ollama.com/library/phi3.5), [mistral](https://ollama.com/library/mistral), and many more. It provides support for pulling, running, creating, pushing, and interacting with models.
+
+[OllamaSharp](https://github.com/awaescher/OllamaSharp) provides .NET bindings for the Ollama API, simplifying interactions with Ollama both locally and remotely. It provides asynchronous streaming, progress reporting and convenience classes and functions to simplify common use cases.
