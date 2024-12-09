@@ -1,7 +1,9 @@
 using FluentAssertions;
 using Microsoft.Extensions.AI;
+using NUnit.Framework;
+using OllamaSharp;
 
-namespace OllamaSharp.FunctionalTests;
+namespace Tests.FunctionalTests;
 
 public class ChatTests
 {
@@ -20,7 +22,10 @@ public class ChatTests
 		_client = new OllamaApiClient(_baseUri);
 		_chat = new Chat(_client);
 
-		await _client.PullIfNotExistsAsync(_model);
+		var modelExists = (await _client.ListLocalModelsAsync()).Any(m => m.Name == _model);
+
+		if (!modelExists)
+			await _client.PullModelAsync(_model).ToListAsync();
 	}
 
 	[TearDown]

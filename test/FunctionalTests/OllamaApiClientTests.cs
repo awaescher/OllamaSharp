@@ -1,10 +1,12 @@
 using FluentAssertions;
 using Microsoft.Extensions.AI;
+using NUnit.Framework;
+using OllamaSharp;
 using OllamaSharp.Models;
 using OllamaSharp.Models.Chat;
 using ChatRole = OllamaSharp.Models.Chat.ChatRole;
 
-namespace OllamaSharp.FunctionalTests;
+namespace Tests.FunctionalTests;
 
 public class OllamaApiClientTests
 {
@@ -55,7 +57,7 @@ public class OllamaApiClientTests
 	}
 
 
-	[Test, Order(1), Ignore("Prevent the model from being downloaded each test run")]
+	[Test, Category("Ft"), Order(1), Ignore("Prevent the model from being downloaded each test run")]
 	public async Task PullModel()
 	{
 		// Act
