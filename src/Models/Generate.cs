@@ -72,11 +72,11 @@ public class GenerateRequest : OllamaRequest
 	public string? KeepAlive { get; set; }
 
 	/// <summary>
-	/// The format to return a response in. Currently only accepts "json" or null.
+	/// Gets or sets the format to return a response in. Currently accepts "json" and JsonSchema or null.
 	/// </summary>
 	[JsonPropertyName("format")]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-	public string? Format { get; set; }
+	public object? Format { get; set; }
 
 	/// <summary>
 	/// If false the response will be returned as a single response object,
