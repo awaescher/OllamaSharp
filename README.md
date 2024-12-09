@@ -1,5 +1,9 @@
+<a href="https://www.nuget.org/packages/OllamaSharp"><img src="https://img.shields.io/nuget/v/OllamaSharp" alt="nuget version"></a>
+<a href="https://www.nuget.org/packages/OllamaSharp"><img src="https://img.shields.io/nuget/dt/OllamaSharp.svg" alt="nuget downloads"></a>
+<a href="https://awaescher.github.io/OllamaSharp"><img src="https://img.shields.io/badge/api_docs-8A2BE2" alt="Api docs"></a>
+  
 <p align="center">
- <img alt="ollama" height="200px" src="https://github.com/awaescher/OllamaSharp/blob/main/Ollama.png">
+  <img alt="ollama" height="200px" src="https://github.com/awaescher/OllamaSharp/blob/main/Ollama.png">
 </p>
 
 # OllamaSharp 🦙
