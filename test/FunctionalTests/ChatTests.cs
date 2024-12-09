@@ -18,12 +18,10 @@ public class ChatTests
 	[SetUp]
 	public async Task Setup()
 	{
-		// Set up the test environment
 		_client = new OllamaApiClient(_baseUri);
 		_chat = new Chat(_client);
 
 		var modelExists = (await _client.ListLocalModelsAsync()).Any(m => m.Name == _model);
-
 		if (!modelExists)
 			await _client.PullModelAsync(_model).ToListAsync();
 	}
@@ -31,9 +29,7 @@ public class ChatTests
 	[TearDown]
 	public Task Teardown()
 	{
-		// Clean up the test environment
 		((IChatClient?)_client)?.Dispose();
-
 		return Task.CompletedTask;
 	}
 
@@ -41,10 +37,8 @@ public class ChatTests
 	[Test]
 	public async Task SendAsync_ShouldSucceed()
 	{
-		// Arrange
 		_client.SelectedModel = _model;
 
-		// Act
 		var response = await _chat
 			.SendAsync("What is the ultimate answer to " +
 					   "life, the universe, and everything, as specified in " +
@@ -53,7 +47,6 @@ public class ChatTests
 				CancellationToken.None)
 			.StreamToEndAsync();
 
-		// Assert
 		response.Should().NotBeNullOrEmpty();
 		response.Should().ContainAny("42", "forty-two", "forty two");
 	}
