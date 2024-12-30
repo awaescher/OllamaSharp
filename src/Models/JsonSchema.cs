@@ -143,4 +143,5 @@ public class Item
 	/// </summary>
 	[JsonPropertyName("type")]
 	public string? Type { get; set; }
+	/// Gets or sets a list of required fields within the schema.
 }
