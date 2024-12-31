@@ -163,9 +163,10 @@ public class Chat
 	/// <param name="message">The message to send</param>
 	/// <param name="tools">Tools that the model can make use of, see https://ollama.com/blog/tool-support. By using tools, response streaming is automatically turned off</param>
 	/// <param name="imagesAsBase64">Base64 encoded images to send to the model</param>
+	/// <param name="format">Currently accepts "json" or JsonSchema or null.</param>
 	/// <param name="cancellationToken">The token to cancel the operation with</param>
-	public IAsyncEnumerable<string> SendAsync(string message, IReadOnlyCollection<Tool>? tools, IEnumerable<string>? imagesAsBase64 = default, CancellationToken cancellationToken = default)
-		=> SendAsAsync(ChatRole.User, message, tools, imagesAsBase64, cancellationToken);
+	public IAsyncEnumerable<string> SendAsync(string message, IEnumerable<Tool>? tools, IEnumerable<string>? imagesAsBase64 = null, object? format = null, CancellationToken cancellationToken = default)
+		=> SendAsAsync(ChatRole.User, message, tools, imagesAsBase64, format, cancellationToken);
 
 	/// <summary>
 	/// Sends a message in a given role to the currently selected model and streams its response
@@ -203,8 +204,9 @@ public class Chat
 	/// <param name="message">The message to send</param>
 	/// <param name="tools">Tools that the model can make use of, see https://ollama.com/blog/tool-support. By using tools, response streaming is automatically turned off</param>
 	/// <param name="imagesAsBase64">Base64 encoded images to send to the model</param>
+	/// <param name="format">Currently accepts "json" or JsonSchema or null.</param>
 	/// <param name="cancellationToken">The token to cancel the operation with</param>
-	public async IAsyncEnumerable<string> SendAsAsync(ChatRole role, string message, IReadOnlyCollection<Tool>? tools, IEnumerable<string>? imagesAsBase64 = default, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+	public async IAsyncEnumerable<string> SendAsAsync(ChatRole role, string message, IEnumerable<Tool>? tools, IEnumerable<string>? imagesAsBase64 = null, object? format = null, [EnumeratorCancellation] CancellationToken cancellationToken = default)
 	{
 		Messages.Add(new Message(role, message, imagesAsBase64?.ToArray()));
 
@@ -216,6 +218,7 @@ public class Chat
 			Model = Model,
 			Stream = !hasTools, // cannot stream if tools should be used
 			Tools = tools,
+			Format = format,
 			Options = Options
 		};
 
