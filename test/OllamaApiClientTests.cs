@@ -50,7 +50,7 @@ public class OllamaApiClientTests
 	[OneTimeTearDown]
 	public void OneTimeTearDown()
 	{
-		((IDisposable)_client).Dispose();
+		_client.Dispose();
 	}
 
 	/// <summary>

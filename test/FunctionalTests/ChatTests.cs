@@ -29,7 +29,7 @@ public class ChatTests
 	[TearDown]
 	public Task Teardown()
 	{
-		((IChatClient?)_client)?.Dispose();
+		_client?.Dispose();
 		return Task.CompletedTask;
 	}
 

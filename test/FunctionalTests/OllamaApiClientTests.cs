@@ -30,7 +30,7 @@ public class OllamaApiClientTests
 	public async Task Teardown()
 	{
 		await CleanupModel(_localModel);
-		((IChatClient?)_client)?.Dispose();
+		_client?.Dispose();
 	}
 
 	private async Task CleanupModel(string? model = null)
