@@ -1,5 +1,4 @@
 using FluentAssertions;
-using Microsoft.Extensions.AI;
 using NUnit.Framework;
 using OllamaSharp;
 using OllamaSharp.Models;
@@ -15,9 +14,7 @@ public class OllamaApiClientTests
 	private readonly string _localModel = "OllamaSharpTest";
 	private readonly string _embeddingModel = "all-minilm:22m";
 
-#pragma warning disable NUnit1032
 	private OllamaApiClient _client = null!;
-#pragma warning restore NUnit1032
 
 	[SetUp]
 	public async Task Setup()

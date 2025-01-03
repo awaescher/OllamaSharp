@@ -2,12 +2,9 @@
 
 	<PropertyGroup>
 		<TargetFramework>net9.0</TargetFramework>
-                <LangVersion>latest</LangVersion>
-		<ImplicitUsings>enable</ImplicitUsings>
-		<Nullable>enable</Nullable>
+		<NoWarn>CS8604;CS8602</NoWarn>
 		<IsPackable>false</IsPackable>
 		<IsTestProject>true</IsTestProject>
-		<NoWarn>IDE0065;IDE0055;IDE0011;CS8602;CS8604;S6608</NoWarn>
 		<SignAssembly>True</SignAssembly>
 		<AssemblyOriginatorKeyFile>..\OllamaSharp.snk</AssemblyOriginatorKeyFile>
 	</PropertyGroup>
