@@ -100,7 +100,7 @@ public class Chat
 	/// </code>
 	/// </example>
 	public IAsyncEnumerable<string> SendAsync(string message, CancellationToken cancellationToken = default)
-		=> SendAsync(message, tools: null, imagesAsBase64: null, cancellationToken);
+		=> SendAsync(message, tools: null, imagesAsBase64: null, format: null, cancellationToken: cancellationToken);
 
 	/// <summary>
 	/// Sends a message to the currently selected model and streams its response
@@ -127,7 +127,7 @@ public class Chat
 	/// </code>
 	/// </example>
 	public IAsyncEnumerable<string> SendAsync(string message, IEnumerable<IEnumerable<byte>>? imagesAsBytes, CancellationToken cancellationToken = default)
-		=> SendAsync(message, imagesAsBytes?.ToBase64() ?? [], cancellationToken);
+		=> SendAsync(message, imagesAsBase64: imagesAsBytes?.ToBase64() ?? [], cancellationToken: cancellationToken);
 
 	/// <summary>
 	/// Sends a message to the currently selected model and streams its response
@@ -155,7 +155,7 @@ public class Chat
 	/// </code>
 	/// </example>
 	public IAsyncEnumerable<string> SendAsync(string message, IEnumerable<string>? imagesAsBase64, CancellationToken cancellationToken = default)
-		=> SendAsync(message, [], imagesAsBase64, cancellationToken);
+		=> SendAsync(message, tools: [], imagesAsBase64: imagesAsBase64, cancellationToken: cancellationToken);
 
 	/// <summary>
 	/// Sends a message to the currently selected model and streams its response
@@ -163,9 +163,10 @@ public class Chat
 	/// <param name="message">The message to send</param>
 	/// <param name="tools">Tools that the model can make use of, see https://ollama.com/blog/tool-support. By using tools, response streaming is automatically turned off</param>
 	/// <param name="imagesAsBase64">Base64 encoded images to send to the model</param>
+	/// <param name="format">Currently accepts "json" or JsonSchema or null.</param>
 	/// <param name="cancellationToken">The token to cancel the operation with</param>
-	public IAsyncEnumerable<string> SendAsync(string message, IReadOnlyCollection<Tool>? tools, IEnumerable<string>? imagesAsBase64 = default, CancellationToken cancellationToken = default)
-		=> SendAsAsync(ChatRole.User, message, tools, imagesAsBase64, cancellationToken);
+	public IAsyncEnumerable<string> SendAsync(string message, IEnumerable<Tool>? tools, IEnumerable<string>? imagesAsBase64 = null, object? format = null, CancellationToken cancellationToken = default)
+		=> SendAsAsync(ChatRole.User, message, tools: tools, imagesAsBase64: imagesAsBase64, format: format, cancellationToken: cancellationToken);
 
 	/// <summary>
 	/// Sends a message in a given role to the currently selected model and streams its response
@@ -174,7 +175,7 @@ public class Chat
 	/// <param name="message">The message to send</param>
 	/// <param name="cancellationToken">The token to cancel the operation with</param>
 	public IAsyncEnumerable<string> SendAsAsync(ChatRole role, string message, CancellationToken cancellationToken = default)
-		=> SendAsAsync(role, message, tools: null, imagesAsBase64: null, cancellationToken);
+		=> SendAsAsync(role, message, tools: null, imagesAsBase64: null, cancellationToken: cancellationToken);
 
 	/// <summary>
 	/// Sends a message in a given role to the currently selected model and streams its response
@@ -184,7 +185,7 @@ public class Chat
 	/// <param name="imagesAsBytes">Images in byte representation to send to the model</param>
 	/// <param name="cancellationToken">The token to cancel the operation with</param>
 	public IAsyncEnumerable<string> SendAsAsync(ChatRole role, string message, IEnumerable<IEnumerable<byte>>? imagesAsBytes, CancellationToken cancellationToken = default)
-		=> SendAsAsync(role, message, imagesAsBytes?.ToBase64() ?? [], cancellationToken);
+		=> SendAsAsync(role, message, imagesAsBase64: imagesAsBytes?.ToBase64() ?? [], cancellationToken: cancellationToken);
 
 	/// <summary>
 	/// Sends a message in a given role to the currently selected model and streams its response
@@ -194,7 +195,7 @@ public class Chat
 	/// <param name="imagesAsBase64">Base64 encoded images to send to the model</param>
 	/// <param name="cancellationToken">The token to cancel the operation with</param>
 	public IAsyncEnumerable<string> SendAsAsync(ChatRole role, string message, IEnumerable<string>? imagesAsBase64, CancellationToken cancellationToken = default)
-		=> SendAsAsync(role, message, [], imagesAsBase64, cancellationToken);
+		=> SendAsAsync(role, message, tools: [], imagesAsBase64: imagesAsBase64, cancellationToken: cancellationToken);
 
 	/// <summary>
 	/// Sends a message in a given role to the currently selected model and streams its response
@@ -203,9 +204,13 @@ public class Chat
 	/// <param name="message">The message to send</param>
 	/// <param name="tools">Tools that the model can make use of, see https://ollama.com/blog/tool-support. By using tools, response streaming is automatically turned off</param>
 	/// <param name="imagesAsBase64">Base64 encoded images to send to the model</param>
+	/// <param name="format">Currently accepts "json" or JsonSchema or null.</param>
 	/// <param name="cancellationToken">The token to cancel the operation with</param>
-	public async IAsyncEnumerable<string> SendAsAsync(ChatRole role, string message, IReadOnlyCollection<Tool>? tools, IEnumerable<string>? imagesAsBase64 = default, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+	public async IAsyncEnumerable<string> SendAsAsync(ChatRole role, string message, IEnumerable<Tool>? tools, IEnumerable<string>? imagesAsBase64 = null, object? format = null, [EnumeratorCancellation] CancellationToken cancellationToken = default)
 	{
+		if (format is CancellationToken)
+			throw new NotSupportedException($"Argument \"{nameof(format)}\" cannot be of type {nameof(CancellationToken)}. Make sure you use the correct method overload of {nameof(Chat)}{nameof(SendAsync)}() or {nameof(Chat)}{nameof(SendAsAsync)}().");
+
 		Messages.Add(new Message(role, message, imagesAsBase64?.ToArray()));
 
 		var hasTools = tools?.Any() ?? false;
@@ -216,6 +221,7 @@ public class Chat
 			Model = Model,
 			Stream = !hasTools, // cannot stream if tools should be used
 			Tools = tools,
+			Format = format,
 			Options = Options
 		};
 

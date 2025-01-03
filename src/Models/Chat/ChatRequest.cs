@@ -43,7 +43,7 @@ public class ChatRequest : OllamaRequest
 	public string? KeepAlive { get; set; }
 
 	/// <summary>
-	/// Gets or sets the format to return a response in. Currently accepts "json" and JsonSchema or null.
+	/// Gets or sets the format to return a response in. Currently accepts "json" or JsonSchema or null.
 	/// </summary>
 	[JsonPropertyName("format")]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -124,7 +124,7 @@ public class Parameters
 	/// Gets or sets the properties of the parameters with their respective types and descriptions.
 	/// </summary>
 	[JsonPropertyName("properties")]
-	public Dictionary<string, Properties>? Properties { get; set; }
+	public Dictionary<string, Property>? Properties { get; set; }
 
 	/// <summary>
 	/// Gets or sets a list of required fields within the parameters.
@@ -136,7 +136,7 @@ public class Parameters
 /// <summary>
 /// Represents a property within a function's parameters, including its type, description, and possible values.
 /// </summary>
-public class Properties
+public class Property
 {
 	/// <summary>
 	/// Gets or sets the type of the property.

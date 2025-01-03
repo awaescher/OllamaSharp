@@ -33,38 +33,62 @@ public class JsonSchema
 	/// <summary>
 	/// Get the JsonSchema from Type, use typeof(Class) to get the Type of Class.
 	/// </summary>
-
 	public static JsonSchema ToJsonSchema(Type type)
 	{
-		var required = new List<string>();
-		var properties = new Dictionary<string, Property>();
-		foreach (var property in type.GetProperties())
-		{
-			var propertyName = property.Name;
-			var propertyType = property.PropertyType;
+		var properties = type.GetProperties().ToDictionary(
+			prop => prop.Name,
+			prop => new Property
+			{
+				Type = GetTypeName(prop.PropertyType),
+				Items = typeof(IEnumerable).IsAssignableFrom(prop.PropertyType) && prop.PropertyType != typeof(string)
+					? new Item
+					{
+						Type = IsPrimitiveType(prop.PropertyType.IsArray
+							? prop.PropertyType.GetElementType()
+							: prop.PropertyType.GetGenericArguments().First())
+							? GetTypeName(prop.PropertyType.IsArray
+								? prop.PropertyType.GetElementType()
+								: prop.PropertyType.GetGenericArguments().First())
+							: "object",
+						Properties = IsPrimitiveType(prop.PropertyType.IsArray
+							? prop.PropertyType.GetElementType()
+							: prop.PropertyType.GetGenericArguments().First())
+							? null
+							: ToJsonSchema(prop.PropertyType.IsArray
+								? prop.PropertyType.GetElementType()
+								: prop.PropertyType.GetGenericArguments().First()).Properties,
+						Required = IsPrimitiveType(prop.PropertyType.IsArray
+							? prop.PropertyType.GetElementType()
+							: prop.PropertyType.GetGenericArguments().First())
+							? null
+							: (prop.PropertyType.IsArray
+								? prop.PropertyType.GetElementType()
+								: prop.PropertyType.GetGenericArguments().First()).GetProperties()
+							.Where(info =>
+								!info.PropertyType.IsGenericType ||
+								info.PropertyType.GetGenericTypeDefinition() != typeof(Nullable<>) ||
+								Nullable.GetUnderlyingType(info.PropertyType) != null)
+							.Select(info => info.Name)
+							.ToList()
+					}
+					: null
+			}
+		);
 
-			var isEnumerable = type.IsArray || (typeof(IEnumerable).IsAssignableFrom(propertyType) && propertyType != typeof(string));
-			var isNullable = type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>);
-
-			properties.Add(propertyName,
-				new Property
-				{
-					Type = GetTypeName(propertyType),
-					Items = isEnumerable
-						? new Item
-						{
-							Type = GetTypeName(propertyType.IsArray
-								? propertyType.GetElementType()
-								: propertyType.GetGenericArguments().First())
-						}
-						: null
-				});
-
-			if (!isNullable)
-				required.Add(propertyName);
-		}
+		var required = type.GetProperties()
+			.Where(prop =>
+				!prop.PropertyType.IsGenericType ||
+				prop.PropertyType.GetGenericTypeDefinition() != typeof(Nullable<>) ||
+				Nullable.GetUnderlyingType(prop.PropertyType) != null)
+			.Select(prop => prop.Name)
+			.ToList();
 
 		return new JsonSchema { Properties = properties, Required = required };
+	}
+
+	private static bool IsPrimitiveType(Type type)
+	{
+		return type.IsPrimitive || type == typeof(string) || type == typeof(decimal);
 	}
 
 	private static string GetTypeName(Type type)
@@ -94,6 +118,7 @@ public class JsonSchema
 				return "number";
 			case TypeCode.Boolean:
 				return "boolean";
+			case TypeCode.DateTime:
 			case TypeCode.String:
 				return "string";
 			case TypeCode.Object:
@@ -141,6 +166,21 @@ public class Item
 	/// <summary>
 	/// Gets or sets the type of the item.
 	/// </summary>
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	[JsonPropertyName("type")]
 	public string? Type { get; set; }
+
+	/// <summary>
+	/// Gets or sets the properties of the item.
+	/// </summary>
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	[JsonPropertyName("properties")]
+	public Dictionary<string, Property>? Properties { get; set; }
+
+	/// <summary>
+	/// Gets or sets a list of required fields within the item.
+	///	</summary>
+	[JsonPropertyName("required")]
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public IEnumerable<string>? Required { get; set; }
 }

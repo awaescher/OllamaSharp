@@ -105,7 +105,7 @@ public class ToolConsole(IOllamaApiClient ollama) : OllamaConsole(ollama)
 				Name = "get_current_weather",
 				Parameters = new Parameters
 				{
-					Properties = new Dictionary<string, Properties>
+					Properties = new Dictionary<string, Property>
 					{
 						["location"] = new() { Type = "string", Description = "The location to get the weather for, e.g. San Francisco, CA" },
 						["format"] = new() { Type = "string", Description = "The format to return the weather in, e.g. 'celsius' or 'fahrenheit'", Enum = ["celsius", "fahrenheit"] },
@@ -127,7 +127,7 @@ public class ToolConsole(IOllamaApiClient ollama) : OllamaConsole(ollama)
 				Name = "get_current_news",
 				Parameters = new Parameters
 				{
-					Properties = new Dictionary<string, Properties>
+					Properties = new Dictionary<string, Property>
 					{
 						["location"] = new() { Type = "string", Description = "The location to get the news for, e.g. San Francisco, CA" },
 						["category"] = new() { Type = "string", Description = "The optional category to filter the news, can be left empty to return all.", Enum = ["politics", "economy", "sports", "entertainment", "health", "technology", "science"] },
