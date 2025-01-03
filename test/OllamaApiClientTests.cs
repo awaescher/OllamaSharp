@@ -421,7 +421,7 @@ public class OllamaApiClientTests
 							Name = "get_current_weather",
 							Parameters = new Parameters
 							{
-								Properties = new Dictionary<string, Properties>
+								Properties = new Dictionary<string, OllamaSharp.Models.Chat.Property>
 								{
 									["location"] = new()
 									{
@@ -493,7 +493,7 @@ public class OllamaApiClientTests
 							Name = "get_current_weather",
 							Parameters = new Parameters
 							{
-								Properties = new Dictionary<string, Properties>
+								Properties = new Dictionary<string, OllamaSharp.Models.Chat.Property>
 								{
 									["location"] = new()
 									{

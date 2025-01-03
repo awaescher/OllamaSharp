@@ -167,7 +167,7 @@ internal static class AbstractionMapper
 				Name = functionMetadata.Name,
 				Parameters = new Parameters
 				{
-					Properties = functionMetadata.Parameters.ToDictionary(p => p.Name, p => new Properties
+					Properties = functionMetadata.Parameters.ToDictionary(p => p.Name, p => new Models.Chat.Property
 					{
 						Description = p.Description,
 						Enum = GetPossibleValues(p.Schema as JsonObject),
