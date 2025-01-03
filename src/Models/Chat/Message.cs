@@ -97,6 +97,12 @@ public class Message
 	public class Function
 	{
 		/// <summary>
+		/// Gets or sets the index of the function.
+		/// </summary>
+		[JsonPropertyName("index")]
+		public int? Index { get; set; }
+
+		/// <summary>
 		/// Gets or sets the name of the function.
 		/// </summary>
 		[JsonPropertyName("name")]
