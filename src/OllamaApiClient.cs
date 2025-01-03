@@ -426,7 +426,7 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 	/// Releases the resources used by the <see cref="OllamaApiClient"/> instance.
 	/// Disposes the internal HTTP client if it was created internally.
 	/// </summary>
-	void IDisposable.Dispose()
+	public void Dispose()
 	{
 		if (_disposeHttpClient)
 			_client?.Dispose();
