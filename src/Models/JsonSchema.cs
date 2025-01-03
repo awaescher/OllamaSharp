@@ -44,25 +44,25 @@ public class JsonSchema
 					? new Item
 					{
 						Type = IsPrimitiveType(prop.PropertyType.IsArray
-							? prop.PropertyType.GetElementType()
+							? prop.PropertyType.GetElementType()!
 							: prop.PropertyType.GetGenericArguments().First())
 							? GetTypeName(prop.PropertyType.IsArray
-								? prop.PropertyType.GetElementType()
+								? prop.PropertyType.GetElementType()!
 								: prop.PropertyType.GetGenericArguments().First())
 							: "object",
 						Properties = IsPrimitiveType(prop.PropertyType.IsArray
-							? prop.PropertyType.GetElementType()
+							? prop.PropertyType.GetElementType()!
 							: prop.PropertyType.GetGenericArguments().First())
 							? null
 							: ToJsonSchema(prop.PropertyType.IsArray
-								? prop.PropertyType.GetElementType()
+								? prop.PropertyType.GetElementType()!
 								: prop.PropertyType.GetGenericArguments().First()).Properties,
 						Required = IsPrimitiveType(prop.PropertyType.IsArray
-							? prop.PropertyType.GetElementType()
+							? prop.PropertyType.GetElementType()!
 							: prop.PropertyType.GetGenericArguments().First())
 							? null
 							: (prop.PropertyType.IsArray
-								? prop.PropertyType.GetElementType()
+								? prop.PropertyType.GetElementType()!
 								: prop.PropertyType.GetGenericArguments().First()).GetProperties()
 							.Where(info =>
 								!info.PropertyType.IsGenericType ||
