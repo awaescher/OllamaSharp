@@ -163,7 +163,7 @@ public class Chat
 	/// <param name="message">The message to send</param>
 	/// <param name="tools">Tools that the model can make use of, see https://ollama.com/blog/tool-support. By using tools, response streaming is automatically turned off</param>
 	/// <param name="imagesAsBase64">Base64 encoded images to send to the model</param>
-	/// <param name="format">Currently accepts "json" or JsonSchema or null.</param>
+	/// <param name="format">Accepts <c>"json"</c> or an object created with <c>JsonSerializerOptions.Default.GetJsonSchemaAsNode</c></param>
 	/// <param name="cancellationToken">The token to cancel the operation with</param>
 	public IAsyncEnumerable<string> SendAsync(string message, IEnumerable<Tool>? tools, IEnumerable<string>? imagesAsBase64 = null, object? format = null, CancellationToken cancellationToken = default)
 		=> SendAsAsync(ChatRole.User, message, tools: tools, imagesAsBase64: imagesAsBase64, format: format, cancellationToken: cancellationToken);
@@ -204,7 +204,7 @@ public class Chat
 	/// <param name="message">The message to send</param>
 	/// <param name="tools">Tools that the model can make use of, see https://ollama.com/blog/tool-support. By using tools, response streaming is automatically turned off</param>
 	/// <param name="imagesAsBase64">Base64 encoded images to send to the model</param>
-	/// <param name="format">Currently accepts "json" or JsonSchema or null.</param>
+	/// <param name="format">Accepts <c>"json"</c> or an object created with <c>JsonSerializerOptions.Default.GetJsonSchemaAsNode</c></param>
 	/// <param name="cancellationToken">The token to cancel the operation with</param>
 	public async IAsyncEnumerable<string> SendAsAsync(ChatRole role, string message, IEnumerable<Tool>? tools, IEnumerable<string>? imagesAsBase64 = null, object? format = null, [EnumeratorCancellation] CancellationToken cancellationToken = default)
 	{
