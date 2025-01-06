@@ -133,7 +133,7 @@ public static class OllamaApiClientExtensions
 			Prompt = prompt,
 			Model = client.SelectedModel,
 			Stream = true,
-			Context = context?.Context ?? []
+			Context = context?.Context
 		};
 		return client.GenerateAsync(request, cancellationToken);
 	}

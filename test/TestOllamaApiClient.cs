@@ -5,7 +5,7 @@ using OllamaSharp.Models.Chat;
 
 namespace Tests;
 
-#pragma warning disable CS8424 // The EnumeratorCancellationAttribute will have no effect. The attribute is only effective on a parameter of type CancellationToken in an async-iterator method returning IAsyncEnumerable
+#pragma warning disable CS8424
 
 public class TestOllamaApiClient : IOllamaApiClient
 {

@@ -127,7 +127,7 @@ public class Chat
 	/// </code>
 	/// </example>
 	public IAsyncEnumerable<string> SendAsync(string message, IEnumerable<IEnumerable<byte>>? imagesAsBytes, CancellationToken cancellationToken = default)
-		=> SendAsync(message, imagesAsBase64: imagesAsBytes?.ToBase64() ?? [], cancellationToken: cancellationToken);
+		=> SendAsync(message, imagesAsBase64: imagesAsBytes?.ToBase64(), cancellationToken: cancellationToken);
 
 	/// <summary>
 	/// Sends a message to the currently selected model and streams its response
@@ -155,7 +155,7 @@ public class Chat
 	/// </code>
 	/// </example>
 	public IAsyncEnumerable<string> SendAsync(string message, IEnumerable<string>? imagesAsBase64, CancellationToken cancellationToken = default)
-		=> SendAsync(message, tools: [], imagesAsBase64: imagesAsBase64, cancellationToken: cancellationToken);
+		=> SendAsync(message, tools: null, imagesAsBase64: imagesAsBase64, cancellationToken: cancellationToken);
 
 	/// <summary>
 	/// Sends a message to the currently selected model and streams its response
@@ -185,7 +185,7 @@ public class Chat
 	/// <param name="imagesAsBytes">Images in byte representation to send to the model</param>
 	/// <param name="cancellationToken">The token to cancel the operation with</param>
 	public IAsyncEnumerable<string> SendAsAsync(ChatRole role, string message, IEnumerable<IEnumerable<byte>>? imagesAsBytes, CancellationToken cancellationToken = default)
-		=> SendAsAsync(role, message, imagesAsBase64: imagesAsBytes?.ToBase64() ?? [], cancellationToken: cancellationToken);
+		=> SendAsAsync(role, message, imagesAsBase64: imagesAsBytes?.ToBase64(), cancellationToken: cancellationToken);
 
 	/// <summary>
 	/// Sends a message in a given role to the currently selected model and streams its response
@@ -195,7 +195,7 @@ public class Chat
 	/// <param name="imagesAsBase64">Base64 encoded images to send to the model</param>
 	/// <param name="cancellationToken">The token to cancel the operation with</param>
 	public IAsyncEnumerable<string> SendAsAsync(ChatRole role, string message, IEnumerable<string>? imagesAsBase64, CancellationToken cancellationToken = default)
-		=> SendAsAsync(role, message, tools: [], imagesAsBase64: imagesAsBase64, cancellationToken: cancellationToken);
+		=> SendAsAsync(role, message, tools: null, imagesAsBase64: imagesAsBase64, cancellationToken: cancellationToken);
 
 	/// <summary>
 	/// Sends a message in a given role to the currently selected model and streams its response

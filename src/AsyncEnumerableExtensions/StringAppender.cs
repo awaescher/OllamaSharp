@@ -1,9 +1,10 @@
 using System.Text;
+using System.Collections.Generic;
 
 namespace OllamaSharp.AsyncEnumerableExtensions;
 
 /// <summary>
-/// Appender to stream <see cref="System.Collections.Generic.IAsyncEnumerable{String}"/> to build up one single result string
+/// Appender to stream <see cref="IAsyncEnumerable{String}"/> to build up one single result string
 /// </summary>
 internal class StringAppender : IAppender<string, string>
 {

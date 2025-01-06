@@ -1,11 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.Text;
 using OllamaSharp.Models;
 
 namespace OllamaSharp.AsyncEnumerableExtensions;
 
 /// <summary>
-/// Appender to stream <see cref="System.Collections.Generic.IAsyncEnumerable{GenerateDoneResponseStream}"/>
+/// Appender to stream <see cref="IAsyncEnumerable{GenerateDoneResponseStream}"/>
 /// to build up one single <see cref="GenerateDoneResponseStream"/> object
 /// </summary>
 internal class GenerateResponseStreamAppender : IAppender<GenerateResponseStream?, GenerateDoneResponseStream?>
