@@ -310,7 +310,7 @@ internal static class AbstractionMapper
 			"system" => Microsoft.Extensions.AI.ChatRole.System,
 			"user" => Microsoft.Extensions.AI.ChatRole.User,
 			"tool" => Microsoft.Extensions.AI.ChatRole.Tool,
-			_ => new Microsoft.Extensions.AI.ChatRole(role.ToString()),
+			_ => new Microsoft.Extensions.AI.ChatRole(role.ToString()!),
 		};
 	}
 
