@@ -16,7 +16,6 @@ internal static class ByteArrayExtensions
 	/// <returns>A base-64 encoded string representation of the input byte sequence.</returns>
 	public static string ToBase64(this IEnumerable<byte> bytes) => Convert.ToBase64String(bytes.ToArray());
 
-
 	/// <summary>
 	/// Converts a collection of byte arrays to a collection of base64 strings.
 	/// </summary>

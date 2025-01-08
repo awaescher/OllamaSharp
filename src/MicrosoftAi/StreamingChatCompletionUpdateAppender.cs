@@ -3,7 +3,7 @@ using OllamaSharp.AsyncEnumerableExtensions;
 namespace OllamaSharp.MicrosoftAi;
 
 /// <summary>
-/// Appender to stream <see cref="System.Collections.Generic.IAsyncEnumerable{StreamingChatCompletionUpdate}" />
+/// Appender to stream <see cref="IAsyncEnumerable{StreamingChatCompletionUpdate}" />
 /// to build up one consolidated <see cref="StreamingChatCompletionUpdate"/> object
 /// </summary>
 internal class StreamingChatCompletionUpdateAppender : IAppender<StreamingChatCompletionUpdate?, StreamingChatCompletionUpdate?>

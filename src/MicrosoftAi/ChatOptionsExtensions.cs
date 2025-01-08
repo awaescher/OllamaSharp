@@ -1,9 +1,7 @@
 using Microsoft.Extensions.AI;
 using OllamaSharp.Models;
 
-#pragma warning disable IDE0130 // Namespace does not match folder structure
 namespace OllamaSharp;
-#pragma warning restore IDE0130 // Namespace does not match folder structure
 
 /// <summary>
 /// Extension methods to stream IAsyncEnumerable to its end and return one single result value

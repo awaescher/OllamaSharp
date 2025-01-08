@@ -1,10 +1,9 @@
-using System;
 using OllamaSharp.Models.Chat;
 
 namespace OllamaSharp.AsyncEnumerableExtensions;
 
 /// <summary>
-/// Appender to stream <see cref="System.Collections.Generic.IAsyncEnumerable{ChatResponseStream}"/> to
+/// Appender to stream <see cref="IAsyncEnumerable{ChatResponseStream}"/> to
 /// build up one single <see cref="ChatDoneResponseStream"/> object
 /// </summary>
 internal class ChatResponseStreamAppender : IAppender<ChatResponseStream?, ChatDoneResponseStream?>

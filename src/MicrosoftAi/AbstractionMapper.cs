@@ -290,7 +290,7 @@ internal static class AbstractionMapper
 			"system" => Models.Chat.ChatRole.System,
 			"user" => Models.Chat.ChatRole.User,
 			"tool" => Models.Chat.ChatRole.Tool,
-			_ => new OllamaSharp.Models.Chat.ChatRole(role.Value),
+			_ => new Models.Chat.ChatRole(role.Value),
 		};
 	}
 
