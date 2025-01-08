@@ -1,5 +1,4 @@
 using FluentAssertions;
-using Microsoft.Extensions.AI;
 using NUnit.Framework;
 using OllamaSharp;
 

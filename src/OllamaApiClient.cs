@@ -23,8 +23,6 @@ namespace OllamaSharp;
 /// </summary>
 public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerator<string, Embedding<float>>
 {
-	private readonly bool _disposeHttpClient;
-
 	/// <summary>
 	/// Gets the default request headers that are sent to the Ollama API.
 	/// </summary>
@@ -46,15 +44,19 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 	public Configuration Config { get; }
 
 	/// <inheritdoc />
-	public Uri Uri => _client.BaseAddress;
+	public Uri Uri => _client.BaseAddress!;
 
 	/// <inheritdoc />
 	public string SelectedModel { get; set; }
 
 	/// <summary>
-	/// Gets the <see cref="HttpClient" /> used to communicate with the Ollama API.
+	/// Gets the <see cref="HttpClient"/> used to communicate with the Ollama API.
 	/// </summary>
 	private readonly HttpClient _client;
+	/// <summary>
+	/// If true, the <see cref="HttpClient"/> will be disposed when the <see cref="OllamaApiClient"/> is disposed.
+	/// </summary>
+	private readonly bool _disposeHttpClient;
 
 	/// <summary>
 	/// Creates a new instance of the Ollama API client.
@@ -297,7 +299,7 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 
 		while (!reader.EndOfStream && !cancellationToken.IsCancellationRequested)
 		{
-			var line = await reader.ReadLineAsync().ConfigureAwait(false);
+			var line = await reader.ReadLineAsync().ConfigureAwait(false) ?? "";
 			yield return JsonSerializer.Deserialize<TLine?>(line, IncomingJsonSerializerOptions);
 		}
 	}
@@ -309,7 +311,7 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 
 		while (!reader.EndOfStream && !cancellationToken.IsCancellationRequested)
 		{
-			var line = await reader.ReadLineAsync().ConfigureAwait(false);
+			var line = await reader.ReadLineAsync().ConfigureAwait(false) ?? "";
 			var streamedResponse = JsonSerializer.Deserialize<GenerateResponseStream>(line, IncomingJsonSerializerOptions);
 
 			yield return streamedResponse?.Done ?? false
@@ -325,7 +327,7 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 
 		while (!reader.EndOfStream && !cancellationToken.IsCancellationRequested)
 		{
-			var line = await reader.ReadLineAsync().ConfigureAwait(false);
+			var line = await reader.ReadLineAsync().ConfigureAwait(false) ?? "";
 			var streamedResponse = JsonSerializer.Deserialize<ChatResponseStream>(line, IncomingJsonSerializerOptions);
 
 			yield return streamedResponse?.Done ?? false
@@ -428,6 +430,8 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 	/// </summary>
 	public void Dispose()
 	{
+		GC.SuppressFinalize(this);
+
 		if (_disposeHttpClient)
 			_client?.Dispose();
 	}
