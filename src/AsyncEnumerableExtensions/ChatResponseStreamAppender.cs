@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using OllamaSharp.Models.Chat;
 
 namespace OllamaSharp.AsyncEnumerableExtensions;
@@ -21,7 +19,7 @@ internal class ChatResponseStreamAppender : IAppender<ChatResponseStream?, ChatD
 	{
 		_messageBuilder.Append(item);
 
-		if (item is not null && item.Done)
+		if (item?.Done ?? false)
 			_lastItem = (ChatDoneResponseStream)item;
 	}
 

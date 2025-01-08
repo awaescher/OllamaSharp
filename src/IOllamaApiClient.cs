@@ -1,12 +1,8 @@
-using System;
-using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-using System.Threading;
-using System.Threading.Tasks;
 using OllamaSharp.Models;
 using OllamaSharp.Models.Chat;
 
-#pragma warning disable CS8424
+#pragma warning disable CS8424 // The EnumeratorCancellationAttribute will have no effect. The attribute is only effective on a parameter of type CancellationToken in an async-iterator method returning IAsyncEnumerable
 
 namespace OllamaSharp;
 

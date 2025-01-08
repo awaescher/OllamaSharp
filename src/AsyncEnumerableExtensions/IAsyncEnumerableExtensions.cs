@@ -1,13 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using OllamaSharp.AsyncEnumerableExtensions;
 using OllamaSharp.Models;
 using OllamaSharp.Models.Chat;
 
-#pragma warning disable IDE0130 // Namespace does not match folder structure
 namespace OllamaSharp;
-#pragma warning restore IDE0130 // Namespace does not match folder structure
 
 /// <summary>
 /// Extension methods to stream IAsyncEnumerable to its end and return one single result value
