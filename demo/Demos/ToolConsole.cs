@@ -1,9 +1,4 @@
-using System.Reflection;
-using System.Text.Json;
-using System.Text.Json.Schema;
-using CSharpToJsonSchema;
 using OllamaSharp;
-using OllamaSharp.Models.Chat;
 using OllamaSharp.Models.Exceptions;
 using Spectre.Console;
 
@@ -96,81 +91,28 @@ public class ToolConsole(IOllamaApiClient ollama) : OllamaConsole(ollama)
 		}
 	}
 
-	//private static object[] GetTools() => [MyOllamaTools.GeneratedOllamaTools.ToolsJson]; // [GeneratedOllamaTools.ToolsJson, JsonSerializerOptions.Default.GetJsonSchemaAsNode(typeof(WeatherTool))];
-
-	private static object[] GetTools() => [new Weather2Tool().AsTools()]; // [GeneratedOllamaTools.ToolsJson, JsonSerializerOptions.Default.GetJsonSchemaAsNode(typeof(WeatherTool))];
-
-
-	//private sealed class WeatherTool : Tool
-	//{
-	//	public WeatherTool()
-	//	{
-	//		Function = new Function
-	//		{
-	//			Description = "Get the current weather for a location",
-	//			Name = "get_current_weather",
-	//			Parameters = new Parameters
-	//			{
-	//				Properties = new Dictionary<string, Property>
-	//				{
-	//					["location"] = new() { Type = "string", Description = "The location to get the weather for, e.g. San Francisco, CA" },
-	//					["format"] = new() { Type = "string", Description = "The format to return the weather in, e.g. 'celsius' or 'fahrenheit'", Enum = ["celsius", "fahrenheit"] },
-	//				},
-	//				Required = ["location", "format"],
-	//			}
-	//		};
-	//		Type = "function";
-	//	}
-	//}
-
-	//private sealed class NewsTool : Tool
-	//{
-	//	public NewsTool()
-	//	{
-	//		Function = new Function
-	//		{
-	//			Description = "Get the current news for a location",
-	//			Name = "get_current_news",
-	//			Parameters = new Parameters
-	//			{
-	//				Properties = new Dictionary<string, Property>
-	//				{
-	//					["location"] = new() { Type = "string", Description = "The location to get the news for, e.g. San Francisco, CA" },
-	//					["category"] = new() { Type = "string", Description = "The optional category to filter the news, can be left empty to return all.", Enum = ["politics", "economy", "sports", "entertainment", "health", "technology", "science"] },
-	//				},
-	//				Required = ["location"],
-	//			}
-	//		};
-	//		Type = "function";
-	//	}
-	//}
-}
-
-[GenerateJsonSchema]
-public interface IWeather2Tool
-{
-	string GetWeather(string location, Unit unit);
+	private static object[] GetTools() => [new GetWeatherTool(), new GetUserTool(), new GoogleTool()];
 
 	public enum Unit
 	{
 		Celsius,
 		Fahrenheit
 	}
-}
 
-public class Weather2Tool : IWeather2Tool
-{
-	public string GetWeather(string location, IWeather2Tool.Unit unit) => $"It's cold at only 6° {unit} in {location}.";
-}
-
-public class WeatherTool
-{
 	/// <summary>
 	/// Gets the current weather for a given location.
 	/// </summary>
 	/// <param name="location">The location or city to get the weather for</param>
 	/// <param name="unit">The unit to measure the temperature in</param>
-	/// <returns></returns>
+	/// <returns>The weather for the given location</returns>
 	[OllamaTool]
-	public static string GetWeather(string location, IWeather2Tool.Unit unit) => $"It's cold at only 6° {unit} in {location}.";
+	public static string GetWeather(string location, Unit unit) => $"It's cold at only 6° {unit} in {location}.";
+
+	[OllamaTool]
+	public static string GetUser(string name, int userId = -1) => $"{name} ({userId}) is unknown.";
+
+	[OllamaTool]
+	public static GoogleResult Google(string query) => new(["Match 1", "Match 2", "Match 3"], 2);
+
+	public record GoogleResult(string[] Matches, int Pages);
 }
