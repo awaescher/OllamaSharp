@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using OllamaSharp.Constants;
 
 namespace OllamaSharp.Models.Chat;
 
@@ -10,13 +11,13 @@ public class ChatDoneResponseStream : ChatResponseStream
 	/// <summary>
 	/// The time spent generating the response
 	/// </summary>
-	[JsonPropertyName("total_duration")]
+	[JsonPropertyName(Application.TotalDuration)]
 	public long TotalDuration { get; set; }
 
 	/// <summary>
 	/// The time spent in nanoseconds loading the model
 	/// </summary>
-	[JsonPropertyName("load_duration")]
+	[JsonPropertyName(Application.LoadDuration)]
 	public long LoadDuration { get; set; }
 
 	/// <summary>
@@ -28,7 +29,7 @@ public class ChatDoneResponseStream : ChatResponseStream
 	/// <summary>
 	/// The time spent in nanoseconds evaluating the prompt
 	/// </summary>
-	[JsonPropertyName("prompt_eval_duration")]
+	[JsonPropertyName(Application.PromptEvalDuration)]
 	public long PromptEvalDuration { get; set; }
 
 	/// <summary>
@@ -40,7 +41,7 @@ public class ChatDoneResponseStream : ChatResponseStream
 	/// <summary>
 	/// The time in nanoseconds spent generating the response
 	/// </summary>
-	[JsonPropertyName("eval_duration")]
+	[JsonPropertyName(Application.EvalDuration)]
 	public long EvalDuration { get; set; }
 
 	/// <summary>
