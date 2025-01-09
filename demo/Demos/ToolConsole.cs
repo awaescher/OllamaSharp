@@ -1,4 +1,6 @@
 using System.Reflection;
+using System.Text.Json;
+using System.Text.Json.Schema;
 using OllamaSharp;
 using OllamaSharp.Models.Chat;
 using OllamaSharp.Models.Exceptions;
@@ -93,51 +95,69 @@ public class ToolConsole(IOllamaApiClient ollama) : OllamaConsole(ollama)
 		}
 	}
 
-	private static Tool[] GetTools() => [new WeatherTool(), new NewsTool()];
+	private static object[] GetTools() => [MyOllamaTools.GeneratedOllamaTools.ToolsJson, JsonSerializerOptions.Default.GetJsonSchemaAsNode(typeof(WeatherTool))];
 
-	private sealed class WeatherTool : Tool
+	private class WeatherTool
 	{
-		public WeatherTool()
+		/// <summary>
+		/// Gets the current weather for a given location.
+		/// </summary>
+		/// <param name="location">The location or city to get the weather for</param>
+		/// <param name="unit">The unit to measure the temperature in</param>
+		/// <returns></returns>
+		[OllamaTool]
+		public static string GetWeather(string location, Unit unit) => $"It's cold at only 6° {unit} in {location}.";
+
+		public enum Unit
 		{
-			Function = new Function
-			{
-				Description = "Get the current weather for a location",
-				Name = "get_current_weather",
-				Parameters = new Parameters
-				{
-					Properties = new Dictionary<string, Property>
-					{
-						["location"] = new() { Type = "string", Description = "The location to get the weather for, e.g. San Francisco, CA" },
-						["format"] = new() { Type = "string", Description = "The format to return the weather in, e.g. 'celsius' or 'fahrenheit'", Enum = ["celsius", "fahrenheit"] },
-					},
-					Required = ["location", "format"],
-				}
-			};
-			Type = "function";
+			Celsius,
+			Fahrenheit
 		}
 	}
 
-	private sealed class NewsTool : Tool
-	{
-		public NewsTool()
-		{
-			Function = new Function
-			{
-				Description = "Get the current news for a location",
-				Name = "get_current_news",
-				Parameters = new Parameters
-				{
-					Properties = new Dictionary<string, Property>
-					{
-						["location"] = new() { Type = "string", Description = "The location to get the news for, e.g. San Francisco, CA" },
-						["category"] = new() { Type = "string", Description = "The optional category to filter the news, can be left empty to return all.", Enum = ["politics", "economy", "sports", "entertainment", "health", "technology", "science"] },
-					},
-					Required = ["location"],
-				}
-			};
-			Type = "function";
-		}
-	}
+	//private sealed class WeatherTool : Tool
+	//{
+	//	public WeatherTool()
+	//	{
+	//		Function = new Function
+	//		{
+	//			Description = "Get the current weather for a location",
+	//			Name = "get_current_weather",
+	//			Parameters = new Parameters
+	//			{
+	//				Properties = new Dictionary<string, Property>
+	//				{
+	//					["location"] = new() { Type = "string", Description = "The location to get the weather for, e.g. San Francisco, CA" },
+	//					["format"] = new() { Type = "string", Description = "The format to return the weather in, e.g. 'celsius' or 'fahrenheit'", Enum = ["celsius", "fahrenheit"] },
+	//				},
+	//				Required = ["location", "format"],
+	//			}
+	//		};
+	//		Type = "function";
+	//	}
+	//}
+
+	//private sealed class NewsTool : Tool
+	//{
+	//	public NewsTool()
+	//	{
+	//		Function = new Function
+	//		{
+	//			Description = "Get the current news for a location",
+	//			Name = "get_current_news",
+	//			Parameters = new Parameters
+	//			{
+	//				Properties = new Dictionary<string, Property>
+	//				{
+	//					["location"] = new() { Type = "string", Description = "The location to get the news for, e.g. San Francisco, CA" },
+	//					["category"] = new() { Type = "string", Description = "The optional category to filter the news, can be left empty to return all.", Enum = ["politics", "economy", "sports", "entertainment", "health", "technology", "science"] },
+	//				},
+	//				Required = ["location"],
+	//			}
+	//		};
+	//		Type = "function";
+	//	}
+	//}
 
 	private static class FunctionHelper
 	{

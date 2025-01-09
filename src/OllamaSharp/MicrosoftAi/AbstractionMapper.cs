@@ -127,11 +127,9 @@ internal static class AbstractionMapper
 	/// </summary>
 	/// <param name="tools">The tools to convert.</param>
 	/// <returns>An enumeration of <see cref="Tool"/> objects containing the converted data.</returns>
-	private static IEnumerable<Tool>? ToOllamaSharpTools(IEnumerable<AITool>? tools)
+	private static IEnumerable<object>? ToOllamaSharpTools(IEnumerable<AITool>? tools)
 	{
-		return tools?.Select(ToOllamaSharpTool)
-					 .Where(t => t is not null)
-					 .Cast<Tool>();
+		return tools?.Select(ToOllamaSharpTool).Where(t => t is not null);
 	}
 
 	/// <summary>
@@ -142,7 +140,7 @@ internal static class AbstractionMapper
 	/// If parseable, a <see cref="Tool"/> object containing the converted data,
 	/// otherwise <see langword="null"/>.
 	/// </returns>
-	private static Tool? ToOllamaSharpTool(AITool tool)
+	private static object? ToOllamaSharpTool(AITool tool)
 	{
 		if (tool is AIFunction f)
 			return ToOllamaSharpTool(f.Metadata);
@@ -155,28 +153,29 @@ internal static class AbstractionMapper
 	/// </summary>
 	/// <param name="functionMetadata">The function metadata to convert.</param>
 	/// <returns>A <see cref="Tool"/> object containing the converted data.</returns>
-	private static Tool ToOllamaSharpTool(AIFunctionMetadata functionMetadata)
+	private static object ToOllamaSharpTool(AIFunctionMetadata functionMetadata)
 	{
-		return new Tool
-		{
-			Function = new Function
-			{
-				Description = functionMetadata.Description,
-				Name = functionMetadata.Name,
-				Parameters = new Parameters
-				{
-					Properties = functionMetadata.Parameters.ToDictionary(p => p.Name, p => new Property
-					{
-						Description = p.Description,
-						Enum = GetPossibleValues(p.Schema as JsonObject),
-						Type = ToFunctionTypeString(p.Schema as JsonObject)
-					}),
-					Required = functionMetadata.Parameters.Where(p => p.IsRequired).Select(p => p.Name),
-					Type = Application.Object
-				}
-			},
-			Type = Application.Function
-		};
+		return null;
+		//return new Tool
+		//{
+		//	Function = new Function
+		//	{
+		//		Description = functionMetadata.Description,
+		//		Name = functionMetadata.Name,
+		//		Parameters = new Parameters
+		//		{
+		//			Properties = functionMetadata.Parameters.ToDictionary(p => p.Name, p => new Property
+		//			{
+		//				Description = p.Description,
+		//				Enum = GetPossibleValues(p.Schema as JsonObject),
+		//				Type = ToFunctionTypeString(p.Schema as JsonObject)
+		//			}),
+		//			Required = functionMetadata.Parameters.Where(p => p.IsRequired).Select(p => p.Name),
+		//			Type = Application.Object
+		//		}
+		//	},
+		//	Type = Application.Function
+		//};
 	}
 
 	/// <summary>
