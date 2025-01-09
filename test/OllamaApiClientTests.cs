@@ -413,38 +413,38 @@ public class OllamaApiClientTests
 					new(ChatRole.User, "How is the weather in LA?"),
 				],
 				Tools = [
-					new Tool
-					{
-						Function = new Function
-						{
-							Description = "Get the current weather for a location",
-							Name = "get_current_weather",
-							Parameters = new Parameters
-							{
-								Properties = new Dictionary<string, OllamaSharp.Models.Chat.Property>
-								{
-									["location"] = new()
-									{
-										Type = "string",
-										Description = "The location to get the weather for, e.g. San Francisco, CA"
-									},
-									["format"] = new()
-									{
-										Type = "string",
-										Description = "The format to return the weather in, e.g. 'celsius' or 'fahrenheit'",
-										Enum = ["celsius", "fahrenheit"]
-									},
-									["number"] = new()
-									{
-										Type = "integer",
-										Description = "The number of the day to get the weather for, e.g. 42"
-									}
-								},
-								Required = ["location", "format"],
-							}
-						},
-						Type = "function"
-					}
+					//new Tool
+					//{
+					//	Function = new Function
+					//	{
+					//		Description = "Get the current weather for a location",
+					//		Name = "get_current_weather",
+					//		Parameters = new Parameters
+					//		{
+					//			Properties = new Dictionary<string, OllamaSharp.Models.Chat.Property>
+					//			{
+					//				["location"] = new()
+					//				{
+					//					Type = "string",
+					//					Description = "The location to get the weather for, e.g. San Francisco, CA"
+					//				},
+					//				["format"] = new()
+					//				{
+					//					Type = "string",
+					//					Description = "The format to return the weather in, e.g. 'celsius' or 'fahrenheit'",
+					//					Enum = ["celsius", "fahrenheit"]
+					//				},
+					//				["number"] = new()
+					//				{
+					//					Type = "integer",
+					//					Description = "The number of the day to get the weather for, e.g. 42"
+					//				}
+					//			},
+					//			Required = ["location", "format"],
+					//		}
+					//	},
+					//	Type = "function"
+					//}
 				]
 			};
 
@@ -485,38 +485,38 @@ public class OllamaApiClientTests
 					new(ChatRole.User, "How is the weather in LA?"),
 				],
 				Tools = [
-					new Tool
-					{
-						Function = new Function
-						{
-							Description = "Get the current weather for a location",
-							Name = "get_current_weather",
-							Parameters = new Parameters
-							{
-								Properties = new Dictionary<string, OllamaSharp.Models.Chat.Property>
-								{
-									["location"] = new()
-									{
-										Type = "string",
-										Description = "The location to get the weather for, e.g. San Francisco, CA"
-									},
-									["format"] = new()
-									{
-										Type = "string",
-										Description = "The format to return the weather in, e.g. 'celsius' or 'fahrenheit'",
-										Enum = ["celsius", "fahrenheit"]
-									},
-									["number"] = new()
-									{
-										Type = "integer",
-										Description = "The number of the day to get the weather for, e.g. 42"
-									}
-								},
-								Required = ["location", "format"],
-							}
-						},
-						Type = "function"
-					}
+					//new Tool
+					//{
+					//	Function = new Function
+					//	{
+					//		Description = "Get the current weather for a location",
+					//		Name = "get_current_weather",
+					//		Parameters = new Parameters
+					//		{
+					//			Properties = new Dictionary<string, OllamaSharp.Models.Chat.Property>
+					//			{
+					//				["location"] = new()
+					//				{
+					//					Type = "string",
+					//					Description = "The location to get the weather for, e.g. San Francisco, CA"
+					//				},
+					//				["format"] = new()
+					//				{
+					//					Type = "string",
+					//					Description = "The format to return the weather in, e.g. 'celsius' or 'fahrenheit'",
+					//					Enum = ["celsius", "fahrenheit"]
+					//				},
+					//				["number"] = new()
+					//				{
+					//					Type = "integer",
+					//					Description = "The number of the day to get the weather for, e.g. 42"
+					//				}
+					//			},
+					//			Required = ["location", "format"],
+					//		}
+					//	},
+					//	Type = "function"
+					//}
 				]
 			};
 

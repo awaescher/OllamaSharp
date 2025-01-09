@@ -12,7 +12,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\src\OllamaSharp.csproj" />
+		<ProjectReference Include="..\src\OllamaSharp\OllamaSharp.csproj" />
+		<ProjectReference Include="..\src\ToolGenerator\OllamaSharp.ToolGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false"/>
 	</ItemGroup>
 
 </Project>
+ 

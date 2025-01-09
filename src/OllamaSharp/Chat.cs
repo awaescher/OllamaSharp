@@ -226,7 +226,7 @@ public class Chat
 	/// }
 	/// </code>
 	/// </example>
-	public IAsyncEnumerable<string> SendAsync(string message, IEnumerable<Tool>? tools,
+	public IAsyncEnumerable<string> SendAsync(string message, IEnumerable<object>? tools,
 		IEnumerable<string>? imagesAsBase64 = null, object? format = null,
 		CancellationToken cancellationToken = default)
 		=> SendAsAsync(ChatRole.User, message, tools: tools, imagesAsBase64: imagesAsBase64, format: format,
@@ -378,7 +378,7 @@ public class Chat
 	/// }
 	/// </code>
 	/// </example>
-	public async IAsyncEnumerable<string> SendAsAsync(ChatRole role, string message, IEnumerable<Tool>? tools,
+	public async IAsyncEnumerable<string> SendAsAsync(ChatRole role, string message, IEnumerable<object>? tools,
 		IEnumerable<string>? imagesAsBase64 = null, object? format = null,
 		[EnumeratorCancellation] CancellationToken cancellationToken = default)
 	{
@@ -403,10 +403,11 @@ public class Chat
 		var messageBuilder = new MessageBuilder();
 		await foreach (var answer in Client.ChatAsync(request, cancellationToken).ConfigureAwait(false))
 		{
-			if (answer is null) continue;
-			
+			if (answer is null)
+				continue;
+
 			messageBuilder.Append(answer);
-			
+
 			yield return answer.Message.Content ?? string.Empty;
 		}
 
