@@ -3,6 +3,7 @@ using FluentAssertions;
 using Microsoft.Extensions.AI;
 using NUnit.Framework;
 using OllamaSharp;
+using OllamaSharp.Constants;
 using OllamaSharp.MicrosoftAi;
 using OllamaSharp.Models;
 using OllamaSharp.Models.Chat;
@@ -562,10 +563,10 @@ public class AbstractionMapperTests
 			var chatCompletion = AbstractionMapper.ToChatCompletion(stream, usedModel: null);
 
 			chatCompletion.AdditionalProperties.Should().NotBeNull();
-			chatCompletion.AdditionalProperties["eval_duration"].Should().Be(TimeSpan.FromSeconds(2.222222222));
-			chatCompletion.AdditionalProperties["load_duration"].Should().Be(TimeSpan.FromSeconds(3.333333333));
-			chatCompletion.AdditionalProperties["total_duration"].Should().Be(TimeSpan.FromSeconds(6.666666666));
-			chatCompletion.AdditionalProperties["prompt_eval_duration"].Should().Be(TimeSpan.FromSeconds(5.555555555));
+			chatCompletion.AdditionalProperties[Application.EvalDuration].Should().Be(TimeSpan.FromSeconds(2.222222222));
+			chatCompletion.AdditionalProperties[Application.LoadDuration].Should().Be(TimeSpan.FromSeconds(3.333333333));
+			chatCompletion.AdditionalProperties[Application.TotalDuration].Should().Be(TimeSpan.FromSeconds(6.666666666));
+			chatCompletion.AdditionalProperties[Application.PromptEvalDuration].Should().Be(TimeSpan.FromSeconds(5.555555555));
 			chatCompletion.Choices.Should().HaveCount(1);
 			chatCompletion.Choices.Single().Text.Should().Be("Hi.");
 			chatCompletion.CompletionId.Should().Be(ollamaCreatedStamp);

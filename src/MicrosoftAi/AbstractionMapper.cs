@@ -1,11 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using Microsoft.Extensions.AI;
+using OllamaSharp.Constants;
 using OllamaSharp.Models;
 using OllamaSharp.Models.Chat;
+using ChatRole = OllamaSharp.Models.Chat.ChatRole;
 
 namespace OllamaSharp.MicrosoftAi;
 
@@ -53,7 +52,7 @@ internal static class AbstractionMapper
 	{
 		var request = new ChatRequest
 		{
-			Format = Equals(options?.ResponseFormat, ChatResponseFormat.Json) ? "json" : null,
+			Format = Equals(options?.ResponseFormat, ChatResponseFormat.Json) ? Application.Json : null,
 			KeepAlive = null,
 			Messages = ToOllamaSharpMessages(chatMessages, serializerOptions),
 			Model = options?.ModelId ?? "", // will be set OllamaApiClient.SelectedModel if not set
@@ -167,17 +166,17 @@ internal static class AbstractionMapper
 				Name = functionMetadata.Name,
 				Parameters = new Parameters
 				{
-					Properties = functionMetadata.Parameters.ToDictionary(p => p.Name, p => new Models.Chat.Property
+					Properties = functionMetadata.Parameters.ToDictionary(p => p.Name, p => new Property
 					{
 						Description = p.Description,
 						Enum = GetPossibleValues(p.Schema as JsonObject),
 						Type = ToFunctionTypeString(p.Schema as JsonObject)
 					}),
 					Required = functionMetadata.Parameters.Where(p => p.IsRequired).Select(p => p.Name),
-					Type = "object"
+					Type = Application.Object
 				}
 			},
-			Type = "function"
+			Type = Application.Function
 		};
 	}
 
@@ -238,7 +237,7 @@ internal static class AbstractionMapper
 						CallId = frc.CallId,
 						Result = jsonResult,
 					}, serializerOptions),
-					Role = Models.Chat.ChatRole.Tool,
+					Role = ChatRole.Tool,
 				};
 			}
 		}
@@ -282,15 +281,15 @@ internal static class AbstractionMapper
 	/// </summary>
 	/// <param name="role">The chat role to map.</param>
 	/// <returns>A <see cref="OllamaSharp.Models.Chat.ChatRole"/> object containing the mapped role.</returns>
-	private static Models.Chat.ChatRole ToOllamaSharpRole(Microsoft.Extensions.AI.ChatRole role)
+	private static ChatRole ToOllamaSharpRole(Microsoft.Extensions.AI.ChatRole role)
 	{
 		return role.Value switch
 		{
-			"assistant" => Models.Chat.ChatRole.Assistant,
-			"system" => Models.Chat.ChatRole.System,
-			"user" => Models.Chat.ChatRole.User,
-			"tool" => Models.Chat.ChatRole.Tool,
-			_ => new Models.Chat.ChatRole(role.Value),
+			Application.Assistant => ChatRole.Assistant,
+			Application.System => ChatRole.System,
+			Application.User => ChatRole.User,
+			Application.Tool => ChatRole.Tool,
+			_ => new ChatRole(role.Value),
 		};
 	}
 
@@ -299,17 +298,17 @@ internal static class AbstractionMapper
 	/// </summary>
 	/// <param name="role">The chat role to map.</param>
 	/// <returns>A <see cref="Microsoft.Extensions.AI.ChatRole"/> object containing the mapped role.</returns>
-	private static Microsoft.Extensions.AI.ChatRole ToAbstractionRole(OllamaSharp.Models.Chat.ChatRole? role)
+	private static Microsoft.Extensions.AI.ChatRole ToAbstractionRole(ChatRole? role)
 	{
 		if (role is null)
 			return new Microsoft.Extensions.AI.ChatRole("unknown");
 
 		return role.ToString() switch
 		{
-			"assistant" => Microsoft.Extensions.AI.ChatRole.Assistant,
-			"system" => Microsoft.Extensions.AI.ChatRole.System,
-			"user" => Microsoft.Extensions.AI.ChatRole.User,
-			"tool" => Microsoft.Extensions.AI.ChatRole.Tool,
+			Application.Assistant => Microsoft.Extensions.AI.ChatRole.Assistant,
+			Application.System => Microsoft.Extensions.AI.ChatRole.System,
+			Application.User => Microsoft.Extensions.AI.ChatRole.User,
+			Application.Tool => Microsoft.Extensions.AI.ChatRole.Tool,
 			_ => new Microsoft.Extensions.AI.ChatRole(role.ToString()!),
 		};
 	}
@@ -352,7 +351,7 @@ internal static class AbstractionMapper
 				if (toolCall.Function is { } function)
 				{
 					var id = Guid.NewGuid().ToString().Substring(0, 8);
-					contents.Add(new FunctionCallContent(id, function.Name ?? "n/a", function.Arguments) { RawRepresentation = toolCall });
+					contents.Add(new FunctionCallContent(id, function.Name ?? Application.NotApplicable, function.Arguments) { RawRepresentation = toolCall });
 				}
 			}
 		}
@@ -376,10 +375,10 @@ internal static class AbstractionMapper
 
 		return new AdditionalPropertiesDictionary
 		{
-			["load_duration"] = TimeSpan.FromMilliseconds(response.LoadDuration / NANOSECONDS_PER_MILLISECOND),
-			["total_duration"] = TimeSpan.FromMilliseconds(response.TotalDuration / NANOSECONDS_PER_MILLISECOND),
-			["prompt_eval_duration"] = TimeSpan.FromMilliseconds(response.PromptEvalDuration / NANOSECONDS_PER_MILLISECOND),
-			["eval_duration"] = TimeSpan.FromMilliseconds(response.EvalDuration / NANOSECONDS_PER_MILLISECOND)
+			[Application.LoadDuration] = TimeSpan.FromMilliseconds(response.LoadDuration / NANOSECONDS_PER_MILLISECOND),
+			[Application.TotalDuration] = TimeSpan.FromMilliseconds(response.TotalDuration / NANOSECONDS_PER_MILLISECOND),
+			[Application.PromptEvalDuration] = TimeSpan.FromMilliseconds(response.PromptEvalDuration / NANOSECONDS_PER_MILLISECOND),
+			[Application.EvalDuration] = TimeSpan.FromMilliseconds(response.EvalDuration / NANOSECONDS_PER_MILLISECOND)
 		};
 	}
 
@@ -394,8 +393,8 @@ internal static class AbstractionMapper
 
 		return new AdditionalPropertiesDictionary
 		{
-			["load_duration"] = TimeSpan.FromMilliseconds((response.LoadDuration ?? 0) / NANOSECONDS_PER_MILLISECOND),
-			["total_duration"] = TimeSpan.FromMilliseconds((response.TotalDuration ?? 0) / NANOSECONDS_PER_MILLISECOND)
+			[Application.LoadDuration] = TimeSpan.FromMilliseconds((response.LoadDuration ?? 0) / NANOSECONDS_PER_MILLISECOND),
+			[Application.TotalDuration] = TimeSpan.FromMilliseconds((response.TotalDuration ?? 0) / NANOSECONDS_PER_MILLISECOND)
 		};
 	}
 
@@ -409,8 +408,8 @@ internal static class AbstractionMapper
 		return ollamaDoneReason switch
 		{
 			null => null,
-			"length" => ChatFinishReason.Length,
-			"stop" => ChatFinishReason.Stop,
+			Application.Length => ChatFinishReason.Length,
+			Application.Stop => ChatFinishReason.Stop,
 			_ => new ChatFinishReason(ollamaDoneReason),
 		};
 	}
@@ -451,10 +450,10 @@ internal static class AbstractionMapper
 
 		if (options?.AdditionalProperties is { } requestProps)
 		{
-			if (requestProps.TryGetValue("keep_alive", out long keepAlive))
+			if (requestProps.TryGetValue(Application.KeepAlive, out long keepAlive))
 				request.KeepAlive = keepAlive;
 
-			if (requestProps.TryGetValue("truncate", out bool truncate))
+			if (requestProps.TryGetValue(Application.Truncate, out bool truncate))
 				request.Truncate = truncate;
 		}
 

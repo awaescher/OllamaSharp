@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
+using OllamaSharp.Constants;
 
 namespace OllamaSharp.Models;
 
@@ -60,13 +60,13 @@ public class EmbedResponse
 	/// <summary>
 	/// The time spent generating the response
 	/// </summary>
-	[JsonPropertyName("total_duration")]
+	[JsonPropertyName(Application.TotalDuration)]
 	public long? TotalDuration { get; set; }
 
 	/// <summary>
 	/// The time spent in nanoseconds loading the model
 	/// </summary>
-	[JsonPropertyName("load_duration")]
+	[JsonPropertyName(Application.LoadDuration)]
 	public long? LoadDuration { get; set; }
 
 	/// <summary>
