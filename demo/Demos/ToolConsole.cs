@@ -1,6 +1,7 @@
 using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Schema;
+using CSharpToJsonSchema;
 using OllamaSharp;
 using OllamaSharp.Models.Chat;
 using OllamaSharp.Models.Exceptions;
@@ -80,11 +81,11 @@ public class ToolConsole(IOllamaApiClient ollama) : OllamaConsole(ollama)
 
 							if (function is not null)
 							{
-								var result = FunctionHelper.ExecuteFunction(function);
-								AnsiConsole.MarkupLineInterpolated($"    - [purple]return value[/]: [purple]\"{result}\"[/]");
+								//var result = FunctionHelper.ExecuteFunction(function);
+								//AnsiConsole.MarkupLineInterpolated($"    - [purple]return value[/]: [purple]\"{result}\"[/]");
 
-								await foreach (var answerToken in chat.SendAsAsync(ChatRole.Tool, result, GetTools()))
-									AnsiConsole.MarkupInterpolated($"[{AiTextColor}]{answerToken}[/]");
+								//await foreach (var answerToken in chat.SendAsAsync(ChatRole.Tool, result, GetTools()))
+								//	AnsiConsole.MarkupInterpolated($"[{AiTextColor}]{answerToken}[/]");
 							}
 						}
 					}
@@ -95,25 +96,10 @@ public class ToolConsole(IOllamaApiClient ollama) : OllamaConsole(ollama)
 		}
 	}
 
-	private static object[] GetTools() => [MyOllamaTools.GeneratedOllamaTools.ToolsJson, JsonSerializerOptions.Default.GetJsonSchemaAsNode(typeof(WeatherTool))];
+	//private static object[] GetTools() => [MyOllamaTools.GeneratedOllamaTools.ToolsJson]; // [GeneratedOllamaTools.ToolsJson, JsonSerializerOptions.Default.GetJsonSchemaAsNode(typeof(WeatherTool))];
 
-	private class WeatherTool
-	{
-		/// <summary>
-		/// Gets the current weather for a given location.
-		/// </summary>
-		/// <param name="location">The location or city to get the weather for</param>
-		/// <param name="unit">The unit to measure the temperature in</param>
-		/// <returns></returns>
-		[OllamaTool]
-		public static string GetWeather(string location, Unit unit) => $"It's cold at only 6° {unit} in {location}.";
+	private static object[] GetTools() => [new Weather2Tool().AsTools()]; // [GeneratedOllamaTools.ToolsJson, JsonSerializerOptions.Default.GetJsonSchemaAsNode(typeof(WeatherTool))];
 
-		public enum Unit
-		{
-			Celsius,
-			Fahrenheit
-		}
-	}
 
 	//private sealed class WeatherTool : Tool
 	//{
@@ -158,51 +144,33 @@ public class ToolConsole(IOllamaApiClient ollama) : OllamaConsole(ollama)
 	//		Type = "function";
 	//	}
 	//}
+}
 
-	private static class FunctionHelper
+[GenerateJsonSchema]
+public interface IWeather2Tool
+{
+	string GetWeather(string location, Unit unit);
+
+	public enum Unit
 	{
-		public static string ExecuteFunction(Message.Function function)
-		{
-			var toolFunction = _availableFunctions[function.Name!];
-			var parameters = MapParameters(toolFunction.Method, function.Arguments!);
-			return toolFunction.DynamicInvoke(parameters)?.ToString()!;
-		}
-
-		private static readonly Dictionary<string, Func<string, string?, string>> _availableFunctions = new()
-		{
-			["get_current_weather"] = (location, format) =>
-			{
-				var (temperature, unit) = format switch
-				{
-					"fahrenheit" => (Random.Shared.Next(23, 104), "°F"),
-					_ => (Random.Shared.Next(-5, 40), "°C"),
-				};
-
-				return $"{temperature} {unit} in {location}";
-			},
-			["get_current_news"] = (location, category) =>
-			{
-				category = string.IsNullOrEmpty(category) ? "all" : category;
-				return $"Could not find news for {location} (category: {category}).";
-			}
-		};
-
-		private static object[] MapParameters(MethodBase method, IDictionary<string, object> namedParameters)
-		{
-			var paramNames = method.GetParameters().Select(p => p.Name).ToArray();
-			var parameters = new object[paramNames.Length];
-
-			for (var i = 0; i < parameters.Length; ++i)
-				parameters[i] = Type.Missing;
-
-			foreach (var (paramName, value) in namedParameters)
-			{
-				var paramIndex = Array.IndexOf(paramNames, paramName);
-				if (paramIndex >= 0)
-					parameters[paramIndex] = value?.ToString() ?? "";
-			}
-
-			return parameters;
-		}
+		Celsius,
+		Fahrenheit
 	}
+}
+
+public class Weather2Tool : IWeather2Tool
+{
+	public string GetWeather(string location, IWeather2Tool.Unit unit) => $"It's cold at only 6° {unit} in {location}.";
+}
+
+public class WeatherTool
+{
+	/// <summary>
+	/// Gets the current weather for a given location.
+	/// </summary>
+	/// <param name="location">The location or city to get the weather for</param>
+	/// <param name="unit">The unit to measure the temperature in</param>
+	/// <returns></returns>
+	[OllamaTool]
+	public static string GetWeather(string location, IWeather2Tool.Unit unit) => $"It's cold at only 6° {unit} in {location}.";
 }
