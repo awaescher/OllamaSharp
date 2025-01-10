@@ -388,13 +388,11 @@ public class Chat
 
 		Messages.Add(new Message(role, message, imagesAsBase64?.ToArray()));
 
-		var hasTools = tools?.Any() ?? false;
-
 		var request = new ChatRequest
 		{
 			Messages = Messages,
 			Model = Model,
-			Stream = !hasTools, // cannot stream if tools should be used
+			Stream = true,
 			Tools = tools,
 			Format = format,
 			Options = Options
