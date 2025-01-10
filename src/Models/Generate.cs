@@ -1,5 +1,4 @@
-using System;
-using System.Net.Mime;
+using System.Globalization;
 using System.Text.Json.Serialization;
 using OllamaSharp.Constants;
 
@@ -17,19 +16,19 @@ public class GenerateRequest : OllamaRequest
 	/// <summary>
 	/// The model name (required)
 	/// </summary>
-	[JsonPropertyName("model")]
+	[JsonPropertyName(Application.Model)]
 	public string Model { get; set; } = null!;
 
 	/// <summary>
 	/// The prompt to generate a response for
 	/// </summary>
-	[JsonPropertyName("prompt")]
+	[JsonPropertyName(Application.Prompt)]
 	public string Prompt { get; set; } = null!;
 
 	/// <summary>
 	/// Suffix for Fill-In-the-Middle generate
 	/// </summary>
-	[JsonPropertyName("suffix")]
+	[JsonPropertyName(Application.Suffix)]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public string Suffix { get; set; } = null!;
 
@@ -37,28 +36,28 @@ public class GenerateRequest : OllamaRequest
 	/// Additional model parameters listed in the documentation for the
 	/// Modelfile such as temperature
 	/// </summary>
-	[JsonPropertyName("options")]
+	[JsonPropertyName(Application.Options)]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public RequestOptions? Options { get; set; }
 
 	/// <summary>
 	/// Base64-encoded images (for multimodal models such as llava)
 	/// </summary>
-	[JsonPropertyName("images")]
+	[JsonPropertyName(Application.Images)]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public string[]? Images { get; set; }
 
 	/// <summary>
 	/// System prompt to (overrides what is defined in the Modelfile)
 	/// </summary>
-	[JsonPropertyName("system")]
+	[JsonPropertyName(Application.System)]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public string? System { get; set; }
 
 	/// <summary>
 	/// The full prompt or prompt template (overrides what is defined in the Modelfile)
 	/// </summary>
-	[JsonPropertyName("template")]
+	[JsonPropertyName(Application.Template)]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public string? Template { get; set; }
 
@@ -66,21 +65,21 @@ public class GenerateRequest : OllamaRequest
 	/// The context parameter returned from a previous request to /generate,
 	/// this can be used to keep a short conversational memory
 	/// </summary>
-	[JsonPropertyName("context")]
+	[JsonPropertyName(Application.Context)]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public long[]? Context { get; set; }
 
 	/// <summary>
 	/// Gets or sets the KeepAlive property, which decides how long a given model should stay loaded.
 	/// </summary>
-	[JsonPropertyName("keep_alive")]
+	[JsonPropertyName(Application.KeepAlive)]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public string? KeepAlive { get; set; }
 
 	/// <summary>
 	/// Gets or sets the format to return a response in. Currently accepts "json" or JsonSchema or null.
 	/// </summary>
-	[JsonPropertyName("format")]
+	[JsonPropertyName(Application.Format)]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public object? Format { get; set; }
 
@@ -88,14 +87,14 @@ public class GenerateRequest : OllamaRequest
 	/// If false the response will be returned as a single response object,
 	/// rather than a stream of objects
 	/// </summary>
-	[JsonPropertyName("stream")]
+	[JsonPropertyName(Application.Stream)]
 	public bool Stream { get; set; } = true;
 
 	/// <summary>
 	/// In some cases you may wish to bypass the templating system and provide
 	/// a full prompt. In this case, you can use the raw parameter to disable formatting.
 	/// </summary>
-	[JsonPropertyName("raw")]
+	[JsonPropertyName(Application.Raw)]
 	public bool Raw { get; set; }
 }
 
@@ -123,7 +122,10 @@ public class GenerateResponseStream
 		set
 		{
 			_createdAtString = value;
-			_createdAt = DateTimeOffset.TryParse(value, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out var createdAt) ? createdAt : null;
+			_createdAt =
+				DateTimeOffset.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.None, out var createdAt)
+					? createdAt
+					: null;
 		}
 	}
 

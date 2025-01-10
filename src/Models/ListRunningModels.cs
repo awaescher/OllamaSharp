@@ -1,6 +1,6 @@
-using System;
 using System.Diagnostics;
 using System.Text.Json.Serialization;
+using OllamaSharp.Constants;
 
 namespace OllamaSharp.Models;
 
@@ -15,7 +15,7 @@ public class ListRunningModelsResponse
 	/// <summary>
 	/// An array of running models.
 	/// </summary>
-	[JsonPropertyName("models")]
+	[JsonPropertyName(Application.Models)]
 	public RunningModel[] RunningModels { get; set; } = null!;
 }
 
@@ -29,12 +29,12 @@ public class RunningModel : Model
 	/// <summary>
 	/// The amount of vram (in bytes) used by the model.
 	/// </summary>
-	[JsonPropertyName("size_vram")]
+	[JsonPropertyName(Application.SizeVram)]
 	public long SizeVram { get; set; }
 
 	/// <summary>
 	/// The time the model will be unloaded from memory.
 	/// </summary>
-	[JsonPropertyName("expires_at")]
+	[JsonPropertyName(Application.ExpiresAt)]
 	public DateTime ExpiresAt { get; set; }
 }

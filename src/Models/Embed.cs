@@ -13,27 +13,27 @@ public class EmbedRequest : OllamaRequest
 	/// <summary>
 	/// The name of the model to generate embeddings from
 	/// </summary>
-	[JsonPropertyName("model")]
+	[JsonPropertyName(Application.Model)]
 	public string Model { get; set; } = null!;
 
 	/// <summary>
 	/// The text to generate embeddings for
 	/// </summary>
-	[JsonPropertyName("input")]
+	[JsonPropertyName(Application.Input)]
 	public List<string> Input { get; set; } = null!;
 
 	/// <summary>
 	/// Additional model parameters listed in the documentation for the Modelfile
 	/// such as temperature.
 	/// </summary>
-	[JsonPropertyName("options")]
+	[JsonPropertyName(Application.Options)]
 	public RequestOptions? Options { get; set; }
 
 	/// <summary>
 	/// Gets or sets the KeepAlive property, which decides how long a given
 	/// model should stay loaded.
 	/// </summary>
-	[JsonPropertyName("keep_alive")]
+	[JsonPropertyName(Application.KeepAlive)]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public long? KeepAlive { get; set; }
 
@@ -41,7 +41,7 @@ public class EmbedRequest : OllamaRequest
 	/// Truncates the end of each input to fit within context length.
 	/// Returns error if false and context length is exceeded. Defaults to true
 	/// </summary>
-	[JsonPropertyName("truncate")]
+	[JsonPropertyName(Application.Truncate)]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public bool? Truncate { get; set; }
 }
@@ -54,7 +54,7 @@ public class EmbedResponse
 	/// <summary>
 	/// An array of embeddings for the input text
 	/// </summary>
-	[JsonPropertyName("embeddings")]
+	[JsonPropertyName(Application.Embeddings)]
 	public List<float[]> Embeddings { get; set; } = null!;
 
 	/// <summary>
@@ -72,6 +72,6 @@ public class EmbedResponse
 	/// <summary>
 	/// The number of tokens in the input text
 	/// </summary>
-	[JsonPropertyName("prompt_eval_count")]
+	[JsonPropertyName(Application.PromptEvalCount)]
 	public int? PromptEvalCount { get; set; }
 }
