@@ -55,7 +55,6 @@ internal static class Application
 	public const string ParentModel = "parent_model";
 	public const string Family = "family";
 	public const string Families = "families";
-	public const string ParameterCount = "parameter_count";
 	public const string QuantizationLevel = "quantization_level";
 	public const string SizeVram = "size_vram";
 	public const string ExpiresAt = "expires_at";
@@ -101,4 +100,5 @@ internal static class Application
 	public const string Total = "total";
 	public const string Completed = "completed";
 	public const string Embeddings = "embeddings";
+	public const string ParameterSize = "parameter_size";
 }

@@ -87,7 +87,7 @@ public class Details
 	/// <summary>
 	/// Gets or sets the number of parameters in the model.
 	/// </summary>
-	[JsonPropertyName(Application.ParameterCount)]
+	[JsonPropertyName(Application.ParameterSize)]
 	public string ParameterSize { get; set; } = null!;
 
 	/// <summary>
