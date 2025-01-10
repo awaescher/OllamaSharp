@@ -1,8 +1,8 @@
-// Datei: OllamaSourceGenerator.cs
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -10,360 +10,528 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace OllamaSharp
 {
 	/// <summary>
-	/// Ein Beispiel für einen Source-Generator, der Tool-Klassen
-	/// basierend auf Methoden mit [OllamaToolAttribute] generiert.
+	/// A source generator that produces Tool-classes (with an InvokeMethodAsync) from methods marked with [OllamaToolAttribute].
 	/// </summary>
 	[Generator]
-	public class OllamaSourceGenerator : ISourceGenerator
+	public class ToolSourceGenerator : ISourceGenerator
 	{
 		public void Initialize(GeneratorInitializationContext context)
 		{
-			// Hier könnte man ggf. Syntax-Receiver registrieren, etc.
-			// Für dieses Beispiel genügt es aber, alles in Execute zu machen.
+			// Optional init logic
 		}
 
 		public void Execute(GeneratorExecutionContext context)
 		{
-			try
+			var compilation = context.Compilation;
+
+			foreach (var syntaxTree in compilation.SyntaxTrees)
 			{
-				// Alle SyntaxTrees durchlaufen
-				foreach (var syntaxTree in context.Compilation.SyntaxTrees)
+				var semanticModel = compilation.GetSemanticModel(syntaxTree);
+				var root = syntaxTree.GetRoot(context.CancellationToken);
+
+				// Suche nach Methoden mit [OllamaToolAttribute].
+				var methodNodes = root.DescendantNodes()
+					.OfType<MethodDeclarationSyntax>()
+					.Where(md => md.AttributeLists
+						.SelectMany(al => al.Attributes)
+						.Any(a => IsOllamaToolAttribute(a, semanticModel)));
+
+				foreach (var methodNode in methodNodes)
 				{
-					var semanticModel = context.Compilation.GetSemanticModel(syntaxTree);
+					var methodSymbol = semanticModel.GetDeclaredSymbol(methodNode, context.CancellationToken);
+					if (methodSymbol == null)
+						continue;
 
-					// Alle Klassen (ClassDeclarationSyntax) im SyntaxTree abfragen:
-					var classNodes = syntaxTree
-						.GetRoot()
-						.DescendantNodes()
-						.OfType<ClassDeclarationSyntax>();
+					var containingNamespace = methodSymbol.ContainingType.ContainingNamespace?.ToString() ?? "";
+					var containingClassName = methodSymbol.ContainingType.Name;
+					var toolClassName = methodSymbol.Name + "Tool";
 
-					foreach (var classNode in classNodes)
+					// Hole XML-Doku (Summary, Param) aus dem Symbol
+					var docCommentXml = methodSymbol.GetDocumentationCommentXml();
+					var (methodSummary, paramComments) = ExtractDocComments(docCommentXml);
+
+					// Generiere den Code für Properties/Required
+					var (propertiesCode, requiredParams) = GeneratePropertiesCode(methodSymbol.Parameters, paramComments);
+
+					// Gen. Code für die InvokeMethodAsync
+					var invokeMethodCode = GenerateInvokeMethodCode(methodSymbol);
+
+					// Erzeuge finalen Code
+					var sourceCode = GenerateToolClassCode(
+						containingNamespace,
+						containingClassName,
+						toolClassName,
+						methodSymbol.Name,
+						methodSummary,
+						propertiesCode,
+						requiredParams,
+						invokeMethodCode
+					);
+
+					var hintName = containingNamespace + "." + containingClassName + "." + toolClassName + ".g.cs";
+					context.AddSource(hintName, sourceCode);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Checks if a given attribute is named "OllamaToolAttribute".
+		/// </summary>
+		private bool IsOllamaToolAttribute(AttributeSyntax attributeSyntax, SemanticModel semanticModel)
+		{
+			var typeInfo = semanticModel.GetTypeInfo(attributeSyntax);
+			var name = typeInfo.Type?.ToDisplayString() ?? "";
+			return name.EndsWith("OllamaToolAttribute", StringComparison.Ordinal);
+		}
+
+		/// <summary>
+		/// Extract summary and param descriptions from XML doc comments.
+		/// </summary>
+		private (string methodSummary, Dictionary<string, string> paramComments) ExtractDocComments(string xmlDoc)
+		{
+			var summaryText = "";
+			var paramDict = new Dictionary<string, string>();
+
+			if (!string.IsNullOrEmpty(xmlDoc))
+			{
+				// Summary
+				var summaryStart = xmlDoc.IndexOf("<summary>", StringComparison.OrdinalIgnoreCase);
+				var summaryEnd = xmlDoc.IndexOf("</summary>", StringComparison.OrdinalIgnoreCase);
+				if (summaryStart != -1 && summaryEnd != -1)
+				{
+					summaryText = xmlDoc.Substring(
+						summaryStart + "<summary>".Length,
+						summaryEnd - (summaryStart + "<summary>".Length)
+					).Trim();
+				}
+
+				// Param
+				var paramTag = "<param name=\"";
+				var currentIndex = 0;
+				while (true)
+				{
+					var paramStart = xmlDoc.IndexOf(paramTag, currentIndex, StringComparison.OrdinalIgnoreCase);
+					if (paramStart == -1)
+						break;
+
+					var quoteEnd = xmlDoc.IndexOf("\"", paramStart + paramTag.Length, StringComparison.OrdinalIgnoreCase);
+					if (quoteEnd == -1)
+						break;
+					var paramName = xmlDoc.Substring(paramStart + paramTag.Length, quoteEnd - (paramStart + paramTag.Length));
+
+					var closeTag = "</param>";
+					var paramEnd = xmlDoc.IndexOf(closeTag, quoteEnd, StringComparison.OrdinalIgnoreCase);
+					if (paramEnd == -1)
+						break;
+
+					var contentStart = xmlDoc.IndexOf(">", quoteEnd, StringComparison.OrdinalIgnoreCase);
+					if (contentStart == -1)
+						break;
+
+					var paramContent = xmlDoc.Substring(contentStart + 1, paramEnd - (contentStart + 1)).Trim();
+					paramDict[paramName] = paramContent;
+
+					currentIndex = paramEnd + closeTag.Length;
+				}
+			}
+
+			return (summaryText, paramDict);
+		}
+
+		/// <summary>
+		/// Generates the code for the parameter 'properties' dictionary and 'required' fields from method parameters.
+		/// </summary>
+		private (string propertiesCode, string requiredParams) GeneratePropertiesCode(
+			IReadOnlyList<IParameterSymbol> parameters,
+			Dictionary<string, string> paramComments)
+		{
+			var sbProps = new StringBuilder();
+			var requiredList = new List<string>();
+
+			foreach (var param in parameters)
+			{
+				var paramName = param.Name;
+				var paramType = param.Type;
+				var paramTypeName = paramType.Name;
+				var description = paramComments.ContainsKey(paramName) ? paramComments[paramName] : "No description.";
+				var jsonType = "string";  // default
+				IEnumerable<string>? enumValues = null;
+
+				// Enum
+				if (paramType.TypeKind == TypeKind.Enum)
+				{
+					jsonType = "string";
+					var enumSym = paramType as INamedTypeSymbol;
+					if (enumSym != null)
 					{
-						// Namespace herausfinden
-						var ns = GetNamespace(classNode);
-
-						// Für jede statische (oder auch nicht-statische) Methode prüfen, ob das [OllamaTool]-Attribut vorhanden ist
-						var methodNodes = classNode
-							.DescendantNodes()
-							.OfType<MethodDeclarationSyntax>()
-							.Where(m => m.AttributeLists
-										  .SelectMany(a => a.Attributes)
-										  .Any(a => HasOllamaToolAttribute(a, semanticModel)));
-
-						foreach (var methodNode in methodNodes)
-						{
-							GenerateToolClassForMethod(context, semanticModel, ns, classNode, methodNode);
-						}
+						enumValues = enumSym.GetMembers()
+							.OfType<IFieldSymbol>()
+							.Where(f => f.ConstantValue != null)
+							.Select(f => f.Name);
 					}
 				}
-			}
-			catch (Exception ex)
-			{
-				// Falls du Debug-Infos brauchst, kannst du sie hier in den Generator ausgeben
-				context.ReportDiagnostic(Diagnostic.Create(
-					new DiagnosticDescriptor(
-						"OLLAMA001",
-						"Generator Error",
-						"Fehler im OllamaSourceGenerator: {0}",
-						"OllamaSourceGenerator",
-						DiagnosticSeverity.Error,
-						isEnabledByDefault: true),
-					Location.None,
-					ex.Message));
-			}
-		}
-
-		/// <summary>
-		/// Erzeugt die Tool-Klasse (z.B. GetWeatherTool) passend zur angegebenen Methode.
-		/// </summary>
-		private void GenerateToolClassForMethod(
-			GeneratorExecutionContext context,
-			SemanticModel semanticModel,
-			string namespaceName,
-			ClassDeclarationSyntax classNode,
-			MethodDeclarationSyntax methodNode)
-		{
-			// Name der Methode z.B. "GetWeather"
-			var methodName = methodNode.Identifier.Text;
-
-			// Name der generierten Tool-Klasse z.B. "GetWeatherTool"
-			var toolClassName = methodName + "Tool";
-
-			// Summary aus DocComment
-			// Dazu extrahieren wir den Kommentar über der Methode
-			var summaryText = ExtractSummaryFromMethod(methodNode);
-
-			// Parameter (Name, Typ, Kommentar, ggf. Enum etc.)
-			var parameterInfos = GetParameterInfos(methodNode, semanticModel);
-
-			// Generieren wir den Quellcode für die Tool-Klasse
-			var sourceCode = CreateToolClassSource(namespaceName, toolClassName, methodName, summaryText, parameterInfos);
-
-			// An das Kompilat anhängen
-			context.AddSource(toolClassName + ".g.cs", sourceCode);
-		}
-
-		/// <summary>
-		/// Erzeugt den C#-Code für die Tool-Klasse.
-		/// </summary>
-		private string CreateToolClassSource(
-			string namespaceName,
-			string toolClassName,
-			string methodName,
-			string summaryText,
-			List<ParameterInfo> parameters)
-		{
-			// Code, der am Ende generiert wird
-			// Du kannst natürlich noch mehr Formatierungen, Einrückungen etc. ergänzen
-			var sb = new StringBuilder();
-
-			sb.Append("namespace ").Append(namespaceName).AppendLine();
-			sb.AppendLine("{");
-			sb.Append("    internal sealed partial class ").Append(toolClassName)
-			  .Append(" : OllamaSharp.Models.Chat.Tool").AppendLine();
-			sb.AppendLine("    {");
-			sb.AppendLine("        public ").Append(toolClassName).Append("()");
-			sb.AppendLine("        {");
-			sb.AppendLine("            this.Function = new OllamaSharp.Models.Chat.Function");
-			sb.AppendLine("            {");
-			sb.Append("                Name = \"").Append(methodName).AppendLine("\",");
-			// Beschreibung in Anführungszeichen säubern
-			sb.Append("                Description = \"").Append(EscapeString(summaryText)).AppendLine("\",");
-			sb.AppendLine("                Parameters = new OllamaSharp.Models.Chat.Parameters");
-			sb.AppendLine("                {");
-			sb.AppendLine("                    Type = \"object\",");
-			sb.AppendLine("                    Properties = new System.Collections.Generic.Dictionary<string, OllamaSharp.Models.Chat.Property>");
-			sb.AppendLine("                    {");
-
-			for (int i = 0; i < parameters.Count; i++)
-			{
-				var p = parameters[i];
-				sb.Append("                        { \"").Append(p.Name).Append("\", new OllamaSharp.Models.Chat.Property");
-				sb.AppendLine(" {");
-				sb.Append("                            Type = \"").Append(p.Type).Append("\",");
-				sb.Append(" Description = \"").Append(EscapeString(p.DocComment)).Append("\"");
-
-				// Falls es ein Enum ist, fügen wir hier noch das "enum"-Feld hinzu
-				if (p.EnumValues.Any())
+				// Numeric
+				else if (paramTypeName.Equals("Int32", StringComparison.OrdinalIgnoreCase)
+					  || paramTypeName.Equals("Int64", StringComparison.OrdinalIgnoreCase)
+					  || paramTypeName.Equals("Double", StringComparison.OrdinalIgnoreCase)
+					  || paramTypeName.Equals("Single", StringComparison.OrdinalIgnoreCase))
 				{
-					sb.Append(", Enum = new string[] { ");
-					sb.Append(string.Join(", ", p.EnumValues.Select(e => "\"" + e + "\"")));
-					sb.Append(" }");
+					jsonType = "number";
+				}
+				// bool oder andere Fälle ggf. ergänzen
+
+				// required?
+				if (!param.IsOptional)
+				{
+					requiredList.Add("\"" + paramName + "\"");
 				}
 
-				sb.AppendLine(" } },");
+				sbProps.Append("                    { \"");
+				sbProps.Append(paramName);
+				sbProps.Append("\", new Property { Type = \"");
+				sbProps.Append(jsonType);
+				sbProps.Append("\", Description = \"");
+				sbProps.Append(EscapeString(description));
+				sbProps.Append("\"");
+
+				if (enumValues != null)
+				{
+					sbProps.Append(", Enum = new[] {");
+					bool first = true;
+					foreach (var val in enumValues)
+					{
+						if (!first)
+							sbProps.Append(", ");
+						sbProps.Append("\"");
+						sbProps.Append(val);
+						sbProps.Append("\"");
+						first = false;
+					}
+					sbProps.Append("}");
+				}
+
+				sbProps.Append(" } },\r\n");
 			}
 
-			sb.AppendLine("                    },");
-			// Required Felder: alles, was nicht optional ist. Im Beispiel ignorieren wir optional vs. required.
-			// Du könntest hier Logik ergänzen, falls du Parameter defaulten möchtest o.ä.
-			var requiredNames = parameters.Select(x => x.Name).ToArray();
-			sb.Append("                    Required = new string[] { ");
-			sb.Append(string.Join(", ", requiredNames.Select(r => "\"" + r + "\"")));
-			sb.AppendLine(" }");
+			var propStr = sbProps.ToString().TrimEnd('\r', '\n', ',');
+			var reqStr = requiredList.Count > 0
+				? "new[] {" + string.Join(", ", requiredList) + "}"
+				: "Array.Empty<string>()";
 
-			sb.AppendLine("                }");
-			sb.AppendLine("            };");
-			sb.AppendLine("        }"); // Ende Konstruktor
-			sb.AppendLine("    }"); // Ende class
-			sb.AppendLine("}"); // Ende namespace
+			return (propStr, reqStr);
+		}
 
+		/// <summary>
+		/// Generates code for an async invocation method that calls the original method with the correct parameters.
+		/// </summary>
+		/// <param name="methodSymbol">Symbol for the original method.</param>
+		private string GenerateInvokeMethodCode(IMethodSymbol methodSymbol)
+		{
+			// Methode: static string|Task|Task<T>|T ...
+			// Wir erzeugen "InvokeMethodAsync(IDictionary<string, object?> args)"
+			//  1) Parameter entpacken
+			//  2) Originalmethode aufrufen
+			//  3) Rückgabewert (ggf. await)
+			//  4) Als object? zurück
+
+			var parameters = methodSymbol.Parameters;
+			var methodName = methodSymbol.Name;
+			var className = methodSymbol.ContainingType.ToDisplayString(); // inkl. Namespace
+			var isAsync = false;
+			var returnType = methodSymbol.ReturnType;
+
+			// Prüfen auf Task oder Task<T>
+			string? resultType = null;
+			if (returnType.Name.Equals("Task", StringComparison.OrdinalIgnoreCase))
+			{
+				// Entweder Task oder Task<T>
+				if (returnType is INamedTypeSymbol namedType && namedType.IsGenericType)
+				{
+					// Task<T>
+					var typeArg = namedType.TypeArguments.FirstOrDefault();
+					if (typeArg != null)
+					{
+						isAsync = true;
+						resultType = typeArg.ToDisplayString(); // z.B. "GoogleResult"
+					}
+				}
+				else
+				{
+					// plain Task
+					isAsync = true;
+					resultType = null; // void
+				}
+			}
+			else
+			{
+				// kein Task => sync
+				isAsync = false;
+				resultType = returnType.ToDisplayString(); // z.B. "String" oder "GoogleResult"
+			}
+
+			// Bilde Aufrufzeile "className.methodName(...params...)"
+			var sb = new StringBuilder();
+			// Signatur
+			sb.Append("        public ");
+			if (isAsync)
+				sb.Append("async Task<object?> InvokeMethodAsync(IDictionary<string, object?>? args)\r\n");
+			else
+				sb.Append("object? InvokeMethod(IDictionary<string, object?>? args)\r\n");
+			sb.Append("        {\r\n");
+			sb.Append("            if (args == null) args = new Dictionary<string, object?>();\r\n");
+
+			// Parameter entpacken
+			var argList = new List<string>();
+			foreach (var p in parameters)
+			{
+				// z.B.: string location = (string?)args["location"] ?? "";
+				// bei Enums => Enum.Parse
+				// bei optional => Default
+				// bei int => Convert.ToInt32
+				var paramName = p.Name;
+				var pType = p.Type;
+				var pTypeName = pType.Name;
+
+				var safeParamName = ToValidIdentifier(paramName);
+
+				sb.Append("            ");
+
+				// wenn Enum
+				if (pType.TypeKind == TypeKind.Enum)
+				{
+					// z.B.: var unit = args.ContainsKey("unit") ? (Unit)Enum.Parse(typeof(Unit), args["unit"]?.ToString() ?? "Celsius") : Unit.Celsius;
+					sb.Append(pType.ToDisplayString());
+					sb.Append(" ");
+					sb.Append(safeParamName);
+					sb.Append(" = ");
+					if (p.IsOptional)
+					{
+						// default-Wert ermitteln
+						sb.Append("(" + pType.ToDisplayString() + ")");
+						sb.Append("Enum.Parse(typeof(" + pType.ToDisplayString() + "), args.ContainsKey(\"");
+						sb.Append(paramName);
+						sb.Append("\") ? args[\"");
+						sb.Append(paramName);
+						sb.Append("\"]?.ToString() ?? \"");
+						sb.Append(p.ExplicitDefaultValue?.ToString() ?? pType.GetMembers().OfType<IFieldSymbol>().FirstOrDefault()?.Name);
+						sb.Append("\", true) : \"");
+						sb.Append(p.ExplicitDefaultValue?.ToString() ?? pType.GetMembers().OfType<IFieldSymbol>().FirstOrDefault()?.Name);
+						sb.Append("\", true);\r\n");
+					}
+					else
+					{
+						sb.Append("(" + pType.ToDisplayString() + ")");
+						sb.Append("Enum.Parse(typeof(" + pType.ToDisplayString() + "), args[\"");
+						sb.Append(paramName);
+						sb.Append("\"]?.ToString() ?? \"\", true);\r\n");
+					}
+				}
+				// Numeric (int, long, double, etc.)
+				else if (pTypeName.Equals("Int32", StringComparison.OrdinalIgnoreCase) ||
+						 pTypeName.Equals("Int64", StringComparison.OrdinalIgnoreCase) ||
+						 pTypeName.Equals("Double", StringComparison.OrdinalIgnoreCase) ||
+						 pTypeName.Equals("Single", StringComparison.OrdinalIgnoreCase))
+				{
+					// var userId = args.ContainsKey("userId") ? Convert.ToInt32(args["userId"]) : -1;
+					sb.Append(pType.ToDisplayString());
+					sb.Append(" ");
+					sb.Append(safeParamName);
+					sb.Append(" = ");
+					if (p.IsOptional)
+					{
+						sb.Append("args.ContainsKey(\"");
+						sb.Append(paramName);
+						sb.Append("\") ? Convert.To");
+						sb.Append(pType.Name);
+						sb.Append("(args[\"");
+						sb.Append(paramName);
+						sb.Append("\"]) : ");
+						sb.Append(p.ExplicitDefaultValue ?? 0);
+						sb.Append(";\r\n");
+					}
+					else
+					{
+						sb.Append("Convert.To");
+						sb.Append(pType.Name);
+						sb.Append("(args[\"");
+						sb.Append(paramName);
+						sb.Append("\"]);\r\n");
+					}
+				}
+				// string, bool, etc. -> nur cast
+				else
+				{
+					// string => z.B. var location = (string?)args["location"] ?? "";
+					sb.Append(pType.ToDisplayString());
+					sb.Append(" ");
+					sb.Append(safeParamName);
+					sb.Append(" = ");
+					if (pTypeName.Equals("String", StringComparison.OrdinalIgnoreCase))
+					{
+						// string?
+						sb.Append("(" + pType.ToDisplayString() + "?)args[\"");
+						sb.Append(paramName);
+						sb.Append("\"]");
+						if (p.IsOptional)
+						{
+							// Falls default = null => "??" ... 
+							// oder falls default != null => z.B. "?? \"XYZ\""
+							sb.Append(" ?? ");
+							if (p.ExplicitDefaultValue == null)
+								sb.Append("\"\"");
+							else
+								sb.Append("\"" + p.ExplicitDefaultValue.ToString() + "\"");
+							sb.Append(";\r\n");
+						}
+						else
+						{
+							sb.Append(" ?? \"\";\r\n");
+						}
+					}
+					else
+					{
+						// bool, custom classes, etc. => Best guess
+						sb.Append("(" + pType.ToDisplayString() + "?)args[\"");
+						sb.Append(paramName);
+						sb.Append("\"]");
+						if (p.IsOptional && p.ExplicitDefaultValue != null)
+						{
+							sb.Append(" ?? ");
+							sb.Append("(" + pType.ToDisplayString() + ")");
+							sb.Append(p.ExplicitDefaultValue);
+						}
+						sb.Append(";\r\n");
+					}
+				}
+
+				argList.Add(safeParamName);
+			}
+
+			// Originalmethode aufrufen
+			sb.Append("\r\n            ");
+			if (isAsync)
+			{
+				sb.Append("var result = await ");
+				sb.Append(className);
+				sb.Append(".");
+				sb.Append(methodName);
+				sb.Append("(");
+				sb.Append(string.Join(", ", argList));
+				sb.Append(");\r\n");
+				sb.Append("            return result;\r\n");
+			}
+			else
+			{
+				if (returnType.SpecialType == SpecialType.System_Void)
+				{
+					// void
+					sb.Append(className + "." + methodName);
+					sb.Append("(" + string.Join(", ", argList) + ");\r\n");
+					sb.Append("            return null;\r\n");
+				}
+				else
+				{
+					sb.Append("var result = ");
+					sb.Append(className);
+					sb.Append(".");
+					sb.Append(methodName);
+					sb.Append("(");
+					sb.Append(string.Join(", ", argList));
+					sb.Append(");\r\n");
+					sb.Append("            return result;\r\n");
+				}
+			}
+
+			sb.Append("        }\r\n");
 			return sb.ToString();
 		}
 
 		/// <summary>
-		/// Prüft, ob es sich beim angegebenen Attribut um [OllamaTool] handelt.
+		/// Generates the final code for the tool class including the invoke method.
 		/// </summary>
-		private bool HasOllamaToolAttribute(AttributeSyntax attributeSyntax, SemanticModel semanticModel)
+		private string GenerateToolClassCode(
+			string containingNamespace,
+			string containingClass,
+			string toolClassName,
+			string originalMethodName,
+			string methodSummary,
+			string propertiesCode,
+			string requiredParams,
+			string invokeMethodCode)
 		{
-			var attributeSymbol = semanticModel.GetSymbolInfo(attributeSyntax).Symbol as IMethodSymbol;
-			if (attributeSymbol == null)
-			{
-				return false;
-			}
-			var attrContainingType = attributeSymbol.ContainingType;
-			return attrContainingType.ToDisplayString() == "OllamaSharp.OllamaToolAttribute";
-		}
-
-		/// <summary>
-		/// Ermittelt den Namespace, in dem sich die Klasse befindet (kann verschachtelt sein).
-		/// </summary>
-		private static string GetNamespace(SyntaxNode classNode)
-		{
-			var current = classNode;
-			while (current != null && !(current is NamespaceDeclarationSyntax) && !(current is FileScopedNamespaceDeclarationSyntax))
-			{
-				current = current.Parent;
-			}
-
-			if (current is NamespaceDeclarationSyntax ns)
-			{
-				return ns.Name.ToString();
-			}
-
-			if (current is FileScopedNamespaceDeclarationSyntax fs)
-			{
-				return fs.Name.ToString();
-			}
-
-			// Falls keiner gefunden wird, Default-Namespace nehmen (oder leer)
-			return "GlobalNamespace";
-		}
-
-		/// <summary>
-		/// DocComment-XML parsen, um den Summary-Teil zu extrahieren.
-		/// </summary>
-		private static string ExtractSummaryFromMethod(MethodDeclarationSyntax methodNode)
-		{
-			var rawXml = methodNode.GetLeadingTrivia()
-				.Select(trivia => trivia.GetStructure())
-				.OfType<DocumentationCommentTriviaSyntax>()
-				.FirstOrDefault();
-
-			if (rawXml == null)
-			{
-				return string.Empty;
-			}
-
-			// summary-Element finden
-			var summaryElement = rawXml.DescendantNodes()
-				.OfType<XmlElementSyntax>()
-				.FirstOrDefault(x => x.StartTag.Name.LocalName.Text == "summary");
-
-			if (summaryElement == null)
-				return string.Empty;
+			var isAsync = invokeMethodCode.Contains("async Task");
 
 			var sb = new StringBuilder();
-			foreach (var node in summaryElement.Content)
-			{
-				sb.Append(node.ToString().Trim());
-				sb.Append(" ");
-			}
-			return sb.ToString().Trim();
+			sb.Append("using System;\r\n");
+			sb.Append("using System.Collections.Generic;\r\n");
+			sb.Append("using System.ComponentModel;\r\n");
+			sb.Append("using System.Text.Json.Serialization;\r\n");
+			sb.Append("using System.Threading.Tasks;\r\n");
+			sb.Append("using OllamaSharp.Models.Chat;\r\n");
+			sb.Append("\r\n");
+			sb.Append("namespace ");
+			sb.Append(containingNamespace);
+			sb.Append("\r\n{\r\n");
+			sb.Append("    /// <summary>\r\n");
+			sb.Append("    /// This class was auto-generated by the OllamaSharp ToolSourceGenerator.\r\n");
+			sb.Append("    /// </summary>\r\n");
+			sb.Append("    public class ");
+			sb.Append(toolClassName);
+			sb.Append($" : Tool, {(isAsync ? "IAsyncInvokableTool" : "IInvokableTool")}\r\n");
+			sb.Append("    {\r\n");
+			sb.Append("        /// <summary>\r\n");
+			sb.Append("        /// Initializes a new instance with metadata about the original method.\r\n");
+			sb.Append("        /// </summary>\r\n");
+			sb.Append("        public ");
+			sb.Append(toolClassName);
+			sb.Append("()\r\n");
+			sb.Append("        {\r\n");
+			sb.Append("            this.Function = new Function {\r\n");
+			sb.Append("                Name = \"");
+			sb.Append(originalMethodName);
+			sb.Append("\",\r\n");
+			sb.Append("                Description = \"");
+			sb.Append(EscapeString(methodSummary));
+			sb.Append("\",\r\n");
+			sb.Append("            };\r\n");
+			sb.Append("\r\n");
+			sb.Append("            this.Function.Parameters = new Parameters {\r\n");
+			sb.Append("                Properties = new Dictionary<string, Property> {\r\n");
+			sb.Append(propertiesCode);
+			sb.Append("\r\n                },\r\n");
+			sb.Append("                Required = ");
+			sb.Append(requiredParams);
+			sb.Append("\r\n");
+			sb.Append("            };\r\n");
+			sb.Append("        }\r\n");
+			sb.Append("\r\n");
+			// Füge die InvokeMethodAsync ein
+			sb.Append(invokeMethodCode);
+			sb.Append("    }\r\n");
+			sb.Append("}\r\n");
+
+			return sb.ToString();
 		}
 
-		/// <summary>
-		/// Liest für jede Methode die Parameter ein (Typ, Name, Doc-Comment).
-		/// </summary>
-		private List<ParameterInfo> GetParameterInfos(MethodDeclarationSyntax methodNode, SemanticModel semanticModel)
+		private string EscapeString(string input)
 		{
-			var result = new List<ParameterInfo>();
-
-			var rawXml = methodNode.GetLeadingTrivia()
-				.Select(trivia => trivia.GetStructure())
-				.OfType<DocumentationCommentTriviaSyntax>()
-				.FirstOrDefault();
-
-			// Mapping von Parameternamen -> Param-Dokumentation
-			var paramDocMap = new Dictionary<string, string>();
-			if (rawXml != null)
-			{
-				var paramElements = rawXml.DescendantNodes()
-					.OfType<XmlElementSyntax>()
-					.Where(x => x.StartTag.Name.LocalName.Text == "param");
-
-				foreach (var p in paramElements)
-				{
-					// Attribut "name" aus dem <param name="...">
-					var nameAttr = p.StartTag.Attributes
-						.OfType<XmlNameAttributeSyntax>()
-						.FirstOrDefault(a => a.Name.LocalName.Text == "name");
-
-					if (nameAttr != null)
-					{
-						var paramName = nameAttr.Identifier.Identifier.Text;
-						var commentText = string.Concat(p.Content.Select(c => c.ToString())).Trim();
-						paramDocMap[paramName] = commentText;
-					}
-				}
-			}
-
-			// Parameter durchgehen
-			foreach (var p in methodNode.ParameterList.Parameters)
-			{
-				var paramName = p.Identifier.Text;
-				var typeInfo = semanticModel.GetTypeInfo(p.Type!).Type;
-				var paramDoc = paramDocMap.ContainsKey(paramName) ? paramDocMap[paramName] : "";
-
-				// Standardmäßig "string", "number", etc. angeben.
-				// Für Enums sammelst du die Values und gibst "type=string" mit "enum" an.
-				if (typeInfo != null && typeInfo.TypeKind == TypeKind.Enum)
-				{
-					var enumMembers = typeInfo.GetMembers()
-						.Where(m => m.Kind == SymbolKind.Field && m is IFieldSymbol)
-						.Select(m => m.Name)
-						.ToList();
-
-					result.Add(new ParameterInfo
-					{
-						Name = paramName,
-						Type = "string",
-						DocComment = paramDoc,
-						EnumValues = enumMembers
-					});
-				}
-				else
-				{
-					// Minimallogik, die man natürlich anpassen kann
-					var simpleType = MapToJsonSchemaType(typeInfo?.Name ?? "object");
-					result.Add(new ParameterInfo
-					{
-						Name = paramName,
-						Type = simpleType,
-						DocComment = paramDoc
-					});
-				}
-			}
-
-			return result;
-		}
-
-		/// <summary>
-		/// Hilfsfunktion, um simple .NET-Typen auf mögliche JSON-Schema-Typen abzubilden.
-		/// </summary>
-		private static string MapToJsonSchemaType(string dotNetTypeName)
-		{
-			switch (dotNetTypeName.ToLowerInvariant())
-			{
-				case "string":
-					return "string";
-				case "int32":
-				case "int64":
-				case "double":
-				case "float":
-				case "decimal":
-					return "number";
-				case "boolean":
-					return "boolean";
-				default:
-					return "string"; // Fallback
-			}
-		}
-
-		/// <summary>
-		/// Entfernt im Text störende Zeichen und Backslashes, damit wir den Text sicher in Anführungszeichen einschließen können.
-		/// </summary>
-		private static string EscapeString(string text)
-		{
-			if (string.IsNullOrEmpty(text))
-			{
-				return string.Empty;
-			}
-
-			return text
+			return input
 				.Replace("\\", "\\\\")
 				.Replace("\"", "\\\"");
 		}
 
 		/// <summary>
-		/// Container für Parameterinformationen.
+		/// Make sure param-names don't collide with keywords, etc.
 		/// </summary>
-		private class ParameterInfo
+		private string ToValidIdentifier(string name)
 		{
-			public string Name { get; set; } = "";
-			public string Type { get; set; } = "";
-			public string DocComment { get; set; } = "";
-			public List<string> EnumValues { get; set; } = new List<string>();
+			// Minimalbeispiel: wir hängen einen Underscore an, wenn's unguenstig ist
+			// (Bsp. "class", "return", etc.)
+			if (SyntaxFacts.GetKeywordKind(name) != SyntaxKind.None)
+			{
+				return "_" + name;
+			}
+			return name;
 		}
 	}
 }
