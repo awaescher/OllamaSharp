@@ -47,6 +47,8 @@ public class ToolConsole(IOllamaApiClient ollama) : OllamaConsole(ollama)
 						break;
 					}
 
+					var currentMessageCount = chat.Messages.Count;
+
 					try
 					{
 						await foreach (var answerToken in chat.SendAsync(message, GetTools()))
@@ -57,32 +59,30 @@ public class ToolConsole(IOllamaApiClient ollama) : OllamaConsole(ollama)
 						AnsiConsole.MarkupLineInterpolated($"[{ErrorTextColor}]{ex.Message}[/]");
 					}
 
-					var toolCalls = chat.Messages.LastOrDefault()?.ToolCalls?.ToArray() ?? [];
-					if (toolCalls.Any())
+					// find the latest message from the assistant and possible tools
+					var newMessages = chat.Messages.Skip(currentMessageCount);
+
+					foreach (var newMessage in newMessages)
 					{
-						AnsiConsole.MarkupLine("\n[purple]Tools used:[/]");
-
-						foreach (var function in toolCalls.Where(t => t.Function != null).Select(t => t.Function))
+						if (newMessage.ToolCalls?.Any() ?? false)
 						{
-							AnsiConsole.MarkupLineInterpolated($"  - [purple]{function!.Name}[/]");
+							AnsiConsole.MarkupLine("\n[purple]Tools used:[/]");
 
-							AnsiConsole.MarkupLineInterpolated($"    - [purple]parameters[/]");
-
-							if (function?.Arguments is not null)
+							foreach (var function in newMessage.ToolCalls.Where(t => t.Function != null).Select(t => t.Function))
 							{
-								foreach (var argument in function.Arguments)
-									AnsiConsole.MarkupLineInterpolated($"      - [purple]{argument.Key}[/]: [purple]{argument.Value}[/]");
-							}
+								AnsiConsole.MarkupLineInterpolated($"  - [purple]{function!.Name}[/]");
+								AnsiConsole.MarkupLineInterpolated($"    - [purple]parameters[/]");
 
-							if (function is not null)
-							{
-								//var result = FunctionHelper.ExecuteFunction(function);
-								//AnsiConsole.MarkupLineInterpolated($"    - [purple]return value[/]: [purple]\"{result}\"[/]");
-
-								//await foreach (var answerToken in chat.SendAsAsync(ChatRole.Tool, result, GetTools()))
-								//	AnsiConsole.MarkupInterpolated($"[{AiTextColor}]{answerToken}[/]");
+								if (function?.Arguments is not null)
+								{
+									foreach (var argument in function.Arguments)
+										AnsiConsole.MarkupLineInterpolated($"      - [purple]{argument.Key}[/]: [purple]{argument.Value}[/]");
+								}
 							}
 						}
+
+						if (newMessage.Role.GetValueOrDefault() == OllamaSharp.Models.Chat.ChatRole.Tool)
+							AnsiConsole.MarkupLineInterpolated($"    [blue]-> \"{newMessage.Content}\"[/]");
 					}
 
 					AnsiConsole.WriteLine();
@@ -112,7 +112,10 @@ public class ToolConsole(IOllamaApiClient ollama) : OllamaConsole(ollama)
 	public static string GetUser(string name, int userId = -1) => $"{name} ({userId}) is unknown.";
 
 	[OllamaTool]
-	public static GoogleResult Google(string query) => new(["Match 1", "Match 2", "Match 3"], 2);
-
 	public record GoogleResult(string[] Matches, int Pages);
+
+	[OllamaTool]
+	public static Task<GoogleResult> Google(string query) => Task.FromResult(new GoogleResult(["Match 1", "Match 2", "Match 3"], 2));
+
+	// TODO: only static? passing arguments? enum argments may crash if not provided
 }
