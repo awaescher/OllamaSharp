@@ -23,7 +23,7 @@ public class ChatDoneResponseStream : ChatResponseStream
 	/// <summary>
 	/// The number of tokens in the prompt
 	/// </summary>
-	[JsonPropertyName("prompt_eval_count")]
+	[JsonPropertyName(Application.PromptEvalCount)]
 	public int PromptEvalCount { get; set; }
 
 	/// <summary>
@@ -35,7 +35,7 @@ public class ChatDoneResponseStream : ChatResponseStream
 	/// <summary>
 	/// The number of tokens in the response
 	/// </summary>
-	[JsonPropertyName("eval_count")]
+	[JsonPropertyName(Application.EvalCount)]
 	public int EvalCount { get; set; }
 
 	/// <summary>
@@ -47,6 +47,6 @@ public class ChatDoneResponseStream : ChatResponseStream
 	/// <summary>
 	/// The reason for the completion of the chat
 	/// </summary>
-	[JsonPropertyName("done_reason")]
+	[JsonPropertyName(Application.DoneReason)]
 	public string? DoneReason { get; set; }
 }

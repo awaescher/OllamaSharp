@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using OllamaSharp.Constants;
 
 namespace OllamaSharp.Models;
 
@@ -11,7 +12,7 @@ public class RequestOptions
 	/// Enable Mirostat sampling for controlling perplexity.
 	/// (default: 0, 0 = disabled, 1 = Mirostat, 2 = Mirostat 2.0)
 	/// </summary>
-	[JsonPropertyName("mirostat")]
+	[JsonPropertyName(Application.MiroStat)]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public int? MiroStat { get; set; }
 
@@ -21,7 +22,7 @@ public class RequestOptions
 	/// while a higher learning rate will make the algorithm more responsive.
 	/// (Default: 0.1)
 	/// </summary>
-	[JsonPropertyName("mirostat_eta")]
+	[JsonPropertyName(Application.MiroStatEta)]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public float? MiroStatEta { get; set; }
 
@@ -30,7 +31,7 @@ public class RequestOptions
 	/// A lower value will result in more focused and coherent text.
 	/// (Default: 5.0)
 	/// </summary>
-	[JsonPropertyName("mirostat_tau")]
+	[JsonPropertyName(Application.MiroStatTau)]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public float? MiroStatTau { get; set; }
 
@@ -38,7 +39,7 @@ public class RequestOptions
 	/// Sets the size of the context window used to generate the next token.
 	/// (Default: 2048)
 	/// </summary>
-	[JsonPropertyName("num_ctx")]
+	[JsonPropertyName(Application.NumCtx)]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public int? NumCtx { get; set; }
 
@@ -46,7 +47,7 @@ public class RequestOptions
 	/// The number of GQA groups in the transformer layer. Required for some
 	/// models, for example it is 8 for llama2:70b
 	/// </summary>
-	[JsonPropertyName("num_gqa")]
+	[JsonPropertyName(Application.NumGqa)]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public int? NumGqa { get; set; }
 
@@ -54,7 +55,7 @@ public class RequestOptions
 	/// The number of layers to send to the GPU(s). On macOS it defaults to
 	/// 1 to enable metal support, 0 to disable.
 	/// </summary>
-	[JsonPropertyName("num_gpu")]
+	[JsonPropertyName(Application.NumGpu)]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public int? NumGpu { get; set; }
 
@@ -64,7 +65,7 @@ public class RequestOptions
 	/// use slightly more VRAM to store a scratch buffer for temporary results.
 	/// By default, GPU 0 is used.
 	/// </summary>
-	[JsonPropertyName("main_gpu")]
+	[JsonPropertyName(Application.MainGpu)]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public int? MainGpu { get; set; }
 
@@ -72,7 +73,7 @@ public class RequestOptions
 	/// Prompt processing maximum batch size.
 	/// (Default: 512)
 	/// </summary>
-	[JsonPropertyName("num_batch")]
+	[JsonPropertyName(Application.NumBatch)]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public int? NumBatch { get; set; }
 
@@ -82,7 +83,7 @@ public class RequestOptions
 	/// It is recommended to set this value to the number of physical CPU cores
 	/// your system has (as opposed to the logical number of cores).
 	/// </summary>
-	[JsonPropertyName("num_thread")]
+	[JsonPropertyName(Application.NumThread)]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public int? NumThread { get; set; }
 
@@ -90,7 +91,7 @@ public class RequestOptions
 	/// Number of tokens to keep from the initial prompt.
 	/// (Default: 4, -1 = all)
 	/// </summary>
-	[JsonPropertyName("num_keep")]
+	[JsonPropertyName(Application.NumKeep)]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public int? NumKeep { get; set; }
 
@@ -98,7 +99,7 @@ public class RequestOptions
 	/// Sets how far back for the model to look back to prevent repetition.
 	/// (Default: 64, 0 = disabled, -1 = num_ctx)
 	/// </summary>
-	[JsonPropertyName("repeat_last_n")]
+	[JsonPropertyName(Application.RepeatLastN)]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public int? RepeatLastN { get; set; }
 
@@ -107,7 +108,7 @@ public class RequestOptions
 	/// A higher value (e.g., 1.5) will penalize repetitions more strongly,
 	/// while a lower value (e.g., 0.9) will be more lenient. (Default: 1.1)
 	/// </summary>
-	[JsonPropertyName("repeat_penalty")]
+	[JsonPropertyName(Application.RepeatPenalty)]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public float? RepeatPenalty { get; set; }
 
@@ -115,7 +116,7 @@ public class RequestOptions
 	/// The penalty to apply to tokens based on their presence in the prompt.
 	/// (Default: 0.0)
 	/// </summary>
-	[JsonPropertyName("presence_penalty")]
+	[JsonPropertyName(Application.PresencePenalty)]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public float? PresencePenalty { get; set; }
 
@@ -123,7 +124,7 @@ public class RequestOptions
 	/// The penalty to apply to tokens based on their frequency in the prompt.
 	/// (Default: 0.0)
 	/// </summary>
-	[JsonPropertyName("frequency_penalty")]
+	[JsonPropertyName(Application.FrequencyPenalty)]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public float? FrequencyPenalty { get; set; }
 
@@ -131,7 +132,7 @@ public class RequestOptions
 	/// The temperature of the model. Increasing the temperature will make the
 	/// model answer more creatively. (Default: 0.8)
 	/// </summary>
-	[JsonPropertyName("temperature")]
+	[JsonPropertyName(Application.Temperature)]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public float? Temperature { get; set; }
 
@@ -140,7 +141,7 @@ public class RequestOptions
 	/// Setting this to a specific number will make the model generate the same
 	/// text for the same prompt. (Default: 0)
 	/// </summary>
-	[JsonPropertyName("seed")]
+	[JsonPropertyName(Application.Seed)]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public int? Seed { get; set; }
 
@@ -149,7 +150,7 @@ public class RequestOptions
 	/// LLM will stop generating text and return. Multiple stop patterns may
 	/// be set by specifying multiple separate stop parameters in a modelfile.
 	/// </summary>
-	[JsonPropertyName("stop")]
+	[JsonPropertyName(Application.Stop)]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public string[]? Stop { get; set; }
 
@@ -158,7 +159,7 @@ public class RequestOptions
 	/// tokens from the output. A higher value (e.g., 2.0) will reduce the
 	/// impact more, while a value of 1.0 disables this setting. (default: 1)
 	/// </summary>
-	[JsonPropertyName("tfs_z")]
+	[JsonPropertyName(Application.TfsZ)]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public float? TfsZ { get; set; }
 
@@ -166,7 +167,7 @@ public class RequestOptions
 	/// Maximum number of tokens to predict when generating text.
 	/// (Default: 128, -1 = infinite generation, -2 = fill context)
 	/// </summary>
-	[JsonPropertyName("num_predict")]
+	[JsonPropertyName(Application.NumPredict)]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public int? NumPredict { get; set; }
 
@@ -175,7 +176,7 @@ public class RequestOptions
 	/// (e.g. 100) will give more diverse answers, while a lower value (e.g. 10)
 	/// will be more conservative. (Default: 40)
 	/// </summary>
-	[JsonPropertyName("top_k")]
+	[JsonPropertyName(Application.TopK)]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public int? TopK { get; set; }
 
@@ -184,7 +185,7 @@ public class RequestOptions
 	/// more diverse text, while a lower value (e.g., 0.5) will generate more
 	/// focused and conservative text. (Default: 0.9)
 	/// </summary>
-	[JsonPropertyName("top_p")]
+	[JsonPropertyName(Application.TopP)]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public float? TopP { get; set; }
 
@@ -194,7 +195,7 @@ public class RequestOptions
 	/// example, with min_p=0.05 and the most likely token having a probability of 0.9, logits with a value less
 	/// than 0.05*0.9=0.045 are filtered out. (Default: 0.0)
 	/// </summary>
-	[JsonPropertyName("min_p")]
+	[JsonPropertyName(Application.MinP)]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public float? MinP { get; set; }
 
@@ -202,14 +203,14 @@ public class RequestOptions
 	/// The typical-p value to use for sampling. Locally Typical Sampling implementation described in the paper
 	/// https://arxiv.org/abs/2202.00666. (Default: 1.0)
 	/// </summary>
-	[JsonPropertyName("typical_p")]
+	[JsonPropertyName(Application.TypicalP)]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public float? TypicalP { get; set; }
 
 	/// <summary>
 	/// Penalize newline tokens (Default: True)
 	/// </summary>
-	[JsonPropertyName("penalize_newline")]
+	[JsonPropertyName(Application.PenalizeNewline)]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public bool? PenalizeNewline { get; set; }
 
@@ -220,7 +221,7 @@ public class RequestOptions
 	/// bigger than your RAM, turning off mmap stops it from loading.
 	/// (Default: True)
 	/// </summary>
-	[JsonPropertyName("use_mmap")]
+	[JsonPropertyName(Application.UseMmap)]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public bool? UseMmap { get; set; }
 
@@ -229,7 +230,7 @@ public class RequestOptions
 	/// performance, but it uses more RAM and may slow down loading.
 	/// (Default: False)
 	/// </summary>
-	[JsonPropertyName("use_mlock")]
+	[JsonPropertyName(Application.UseMlock)]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public bool? UseMlock { get; set; }
 
@@ -237,7 +238,7 @@ public class RequestOptions
 	/// Enable low VRAM mode.
 	/// (Default: False)
 	/// </summary>
-	[JsonPropertyName("low_vram")]
+	[JsonPropertyName(Application.LowVram)]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public bool? LowVram { get; set; }
 
@@ -245,7 +246,7 @@ public class RequestOptions
 	/// Enable f16 key/value.
 	/// (Default: False)
 	/// </summary>
-	[JsonPropertyName("f16_kv")]
+	[JsonPropertyName(Application.F16kv)]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public bool? F16kv { get; set; }
 
@@ -253,7 +254,7 @@ public class RequestOptions
 	/// Return logits for all the tokens, not just the last one.
 	/// (Default: False)
 	/// </summary>
-	[JsonPropertyName("logits_all")]
+	[JsonPropertyName(Application.LogitsAll)]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public bool? LogitsAll { get; set; }
 
@@ -261,7 +262,7 @@ public class RequestOptions
 	/// Load only the vocabulary, not the weights.
 	/// (Default: False)
 	/// </summary>
-	[JsonPropertyName("vocab_only")]
+	[JsonPropertyName(Application.VocabOnly)]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public bool? VocabOnly { get; set; }
 
@@ -269,7 +270,7 @@ public class RequestOptions
 	///  Enable NUMA support.
 	/// (Default: False)
 	/// </summary>
-	[JsonPropertyName("numa")]
+	[JsonPropertyName(Application.Numa)]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public bool? Numa { get; set; }
 }

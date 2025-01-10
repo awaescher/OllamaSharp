@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using OllamaSharp.Constants;
 
 namespace OllamaSharp.Models;
 
@@ -18,32 +19,32 @@ public class CreateModelRequest : OllamaRequest
 	/// <summary>
 	/// Name of the model to create
 	/// </summary>
-	[JsonPropertyName("model")]
+	[JsonPropertyName(Application.Model)]
 	public string? Model { get; set; }
 
 	/// <summary>
 	/// Contents of the Modelfile
 	/// See https://github.com/jmorganca/ollama/blob/main/docs/modelfile.md
 	/// </summary>
-	[JsonPropertyName("modelfile")]
+	[JsonPropertyName(Application.ModelFile)]
 	public string ModelFileContent { get; set; } = null!;
 
 	/// <summary>
 	/// Path to the Modelfile (optional)
 	/// </summary>
-	[JsonPropertyName("path")]
+	[JsonPropertyName(Application.Path)]
 	public string? Path { get; set; }
 
 	/// <summary>
 	/// If false the response will be returned as a single response object, rather than a stream of objects (optional)
 	/// </summary>
-	[JsonPropertyName("stream")]
+	[JsonPropertyName(Application.Stream)]
 	public bool Stream { get; set; }
 
 	/// <summary>
 	/// Set the quantization level for quantize model when importing (e.g. q4_0, optional)
 	/// </summary>
-	[JsonPropertyName("quantize")]
+	[JsonPropertyName(Application.Quantize)]
 	public string? Quantize { get; set; }
 }
 
@@ -55,6 +56,6 @@ public class CreateModelResponse
 	/// <summary>
 	/// Represents the status of a model creation.
 	/// </summary>
-	[JsonPropertyName("status")]
+	[JsonPropertyName(Application.Status)]
 	public string Status { get; set; } = null!;
 }

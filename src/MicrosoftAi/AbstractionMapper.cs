@@ -55,7 +55,7 @@ internal static class AbstractionMapper
 			Format = Equals(options?.ResponseFormat, ChatResponseFormat.Json) ? Application.Json : null,
 			KeepAlive = null,
 			Messages = ToOllamaSharpMessages(chatMessages, serializerOptions),
-			Model = options?.ModelId ?? "", // will be set OllamaApiClient.SelectedModel if not set
+			Model = options?.ModelId ?? string.Empty, // will be set OllamaApiClient.SelectedModel if not set
 			Options = new RequestOptions
 			{
 				FrequencyPenalty = options?.FrequencyPenalty,
@@ -95,8 +95,7 @@ internal static class AbstractionMapper
 			TryAddOllamaOption<int?>(options, OllamaOption.RepeatLastN, v => request.Options.RepeatLastN = (int?)v);
 			TryAddOllamaOption<float?>(options, OllamaOption.RepeatPenalty, v => request.Options.RepeatPenalty = (float?)v);
 			TryAddOllamaOption<int?>(options, OllamaOption.Seed, v => request.Options.Seed = (int?)v);
-			TryAddOllamaOption<string[]?>(options, OllamaOption.Stop,
-				v => request.Options.Stop = (v as IEnumerable<string>)?.ToArray());
+			TryAddOllamaOption<string[]?>(options, OllamaOption.Stop, v => request.Options.Stop = (v as IEnumerable<string>)?.ToArray());
 			TryAddOllamaOption<float?>(options, OllamaOption.Temperature, v => request.Options.Temperature = (float?)v);
 			TryAddOllamaOption<float?>(options, OllamaOption.TfsZ, v => request.Options.TfsZ = (float?)v);
 			TryAddOllamaOption<int?>(options, OllamaOption.TopK, v => request.Options.TopK = (int?)v);

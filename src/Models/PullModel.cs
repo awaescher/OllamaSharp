@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using OllamaSharp.Constants;
 
 namespace OllamaSharp.Models;
 
@@ -13,21 +14,21 @@ public class PullModelRequest : OllamaRequest
 	/// <summary>
 	/// Gets or sets the name of the model to pull.
 	/// </summary>
-	[JsonPropertyName("model")]
+	[JsonPropertyName(Application.Model)]
 	public string? Model { get; set; }
 
 	/// <summary>
 	/// Gets or sets a value indicating whether to allow insecure connections to the library.
 	/// Only use this if you are pulling from your own library during development.
 	/// </summary>
-	[JsonPropertyName("insecure")]
+	[JsonPropertyName(Application.Insecure)]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public bool? Insecure { get; set; }
 
 	/// <summary>
 	/// Gets or sets a value indicating whether to stream the response.
 	/// </summary>
-	[JsonPropertyName("stream")]
+	[JsonPropertyName(Application.Stream)]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public bool? Stream { get; set; }
 }
@@ -40,25 +41,25 @@ public class PullModelResponse
 	/// <summary>
 	/// Gets or sets the status of the pull operation.
 	/// </summary>
-	[JsonPropertyName("status")]
+	[JsonPropertyName(Application.Status)]
 	public string Status { get; set; } = null!;
 
 	/// <summary>
 	/// Gets or sets the hash of the model file.
 	/// </summary>
-	[JsonPropertyName("digest")]
+	[JsonPropertyName(Application.Digest)]
 	public string Digest { get; set; } = null!;
 
 	/// <summary>
 	/// Gets or sets the total number of bytes to pull.
 	/// </summary>
-	[JsonPropertyName("total")]
+	[JsonPropertyName(Application.Total)]
 	public long Total { get; set; }
 
 	/// <summary>
 	/// Gets or sets the number of bytes pulled so far.
 	/// </summary>
-	[JsonPropertyName("completed")]
+	[JsonPropertyName(Application.Completed)]
 	public long Completed { get; set; }
 
 	/// <summary>

@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using OllamaSharp.Constants;
 
 namespace OllamaSharp.Models;
 
@@ -13,6 +14,6 @@ public class DeleteModelRequest : OllamaRequest
 	/// <summary>
 	/// The name of the model to delete
 	/// </summary>
-	[JsonPropertyName("model")]
+	[JsonPropertyName(Application.Model)]
 	public string? Model { get; set; }
 }

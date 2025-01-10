@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using OllamaSharp.Constants;
 
 namespace OllamaSharp.Models;
 
@@ -11,12 +12,12 @@ public class CopyModelRequest : OllamaRequest
 	/// <summary>
 	/// The source model name
 	/// </summary>
-	[JsonPropertyName("source")]
+	[JsonPropertyName(Application.Source)]
 	public string Source { get; set; } = null!;
 
 	/// <summary>
 	/// The destination model name
 	/// </summary>
-	[JsonPropertyName("destination")]
+	[JsonPropertyName(Application.Destination)]
 	public string Destination { get; set; } = null!;
 }

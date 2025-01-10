@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
+using OllamaSharp.Constants;
 
 namespace OllamaSharp.Models;
 
@@ -13,7 +13,7 @@ public class ShowModelRequest : OllamaRequest
 	/// <summary>
 	/// Gets or sets the name of the model to show.
 	/// </summary>
-	[JsonPropertyName("model")]
+	[JsonPropertyName(Application.Model)]
 	public string? Model { get; set; }
 }
 
@@ -25,49 +25,49 @@ public class ShowModelResponse
 	/// <summary>
 	/// Gets or sets the license for the model.
 	/// </summary>
-	[JsonPropertyName("license")]
+	[JsonPropertyName(Application.License)]
 	public string? License { get; set; }
 
 	/// <summary>
 	/// Gets or sets the Modelfile for the model.
 	/// </summary>
-	[JsonPropertyName("modelfile")]
+	[JsonPropertyName(Application.ModelFile)]
 	public string? Modelfile { get; set; }
 
 	/// <summary>
 	/// Gets or sets the parameters for the model.
 	/// </summary>
-	[JsonPropertyName("parameters")]
+	[JsonPropertyName(Application.Parameters)]
 	public string? Parameters { get; set; }
 
 	/// <summary>
 	/// Gets or sets the template for the model.
 	/// </summary>
-	[JsonPropertyName("template")]
+	[JsonPropertyName(Application.Template)]
 	public string? Template { get; set; }
 
 	/// <summary>
 	/// Gets or sets the system prompt for the model.
 	/// </summary>
-	[JsonPropertyName("system")]
+	[JsonPropertyName(Application.System)]
 	public string? System { get; set; }
 
 	/// <summary>
 	/// Gets or sets additional details about the model.
 	/// </summary>
-	[JsonPropertyName("details")]
+	[JsonPropertyName(Application.Details)]
 	public Details Details { get; set; } = null!;
 
 	/// <summary>
 	/// Gets or sets extra information about the model.
 	/// </summary>
-	[JsonPropertyName("model_info")]
+	[JsonPropertyName(Application.ModelInfo)]
 	public ModelInfo Info { get; set; } = null!;
 
 	/// <summary>
 	/// Gets or sets extra information about the projector.
 	/// </summary>
-	[JsonPropertyName("projector_info")]
+	[JsonPropertyName(Application.Projector)]
 	public ProjectorInfo? Projector { get; set; } = null!;
 }
 
@@ -79,25 +79,25 @@ public class ModelInfo
 	/// <summary>
 	/// Gets or sets the architecture of the model.
 	/// </summary>
-	[JsonPropertyName("general.architecture")]
+	[JsonPropertyName(Application.GeneralArchitecture)]
 	public string? Architecture { get; set; }
 
 	/// <summary>
 	/// Gets or sets the file type of the model.
 	/// </summary>
-	[JsonPropertyName("general.file_type")]
+	[JsonPropertyName(Application.GeneralFileType)]
 	public int? FileType { get; set; }
 
 	/// <summary>
 	/// Gets or sets the parameter count of the model.
 	/// </summary>
-	[JsonPropertyName("general.parameter_count")]
+	[JsonPropertyName(Application.GeneralParameterCount)]
 	public long? ParameterCount { get; set; }
 
 	/// <summary>
 	/// Gets or sets the quantization version of the model.
 	/// </summary>
-	[JsonPropertyName("general.quantization_version")]
+	[JsonPropertyName(Application.GeneralQuantizationVersion)]
 	public int? QuantizationVersion { get; set; }
 
 	/// <summary>
