@@ -140,6 +140,7 @@ public interface IOllamaApiClient
 	/// <param name="bytes">The bytes data of the file.</param>
 	/// <param name="cancellationToken">The token to cancel the operation with.</param>
 	Task PushBolbAsync(string digest, byte[] bytes, CancellationToken cancellationToken = default);
+
 	/// <summary>
 	/// Ensures that the file blob (Binary Large Object) used with create a model exists on the server. This checks your Ollama server and not ollama.com.
 	/// </summary>
