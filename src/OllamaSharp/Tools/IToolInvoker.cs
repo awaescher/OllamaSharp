@@ -1,6 +1,6 @@
 using OllamaSharp.Models.Chat;
 
-namespace OllamaSharp;
+namespace OllamaSharp.Tools;
 
 /// <summary>
 /// Defines an interface for invoking tools asynchronously.

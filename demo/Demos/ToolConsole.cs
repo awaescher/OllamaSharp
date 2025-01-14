@@ -91,7 +91,7 @@ public class ToolConsole(IOllamaApiClient ollama) : OllamaConsole(ollama)
 		}
 	}
 
-	private static object[] GetTools() => [new GetWeatherTool()];
+	private static object[] GetTools() => [new GetWeatherTool(), new GetLatLonAsyncTool()];
 
 	public enum Unit
 	{
@@ -107,6 +107,18 @@ public class ToolConsole(IOllamaApiClient ollama) : OllamaConsole(ollama)
 	/// <returns>The weather for the given location</returns>
 	[OllamaTool]
 	public static string GetWeather(string location, Unit unit) => $"It's cold at only 6° {unit} in {location}.";
+
+	/// <summary>
+	/// Gets the latitude and longitude for a given location.
+	/// </summary>
+	/// <param name="location">The location to get the latitude and longitude for</param>
+	/// <returns>The weather for the given location</returns>
+	[OllamaTool]
+	public async static Task<string> GetLatLonAsync(string location)
+	{
+		await Task.Delay(1000).ConfigureAwait(false);
+		return $"{new Random().Next(20, 50)}.4711, {new Random().Next(3, 15)}.0815";
+	}
 
 	// TODO:
 	// only static?

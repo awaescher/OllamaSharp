@@ -63,16 +63,6 @@ public class ChatRequest : OllamaRequest
 	public IEnumerable<object>? Tools { get; set; }
 }
 
-public interface IAsyncInvokableTool
-{
-	Task<object?> InvokeMethodAsync(IDictionary<string, object?>? args);
-}
-
-public interface IInvokableTool
-{
-	object? InvokeMethod(IDictionary<string, object?>? args);
-}
-
 /// <summary>
 /// Represents a tool that the model can use, if supported.
 /// </summary>
