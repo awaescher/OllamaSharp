@@ -6,84 +6,126 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace OllamaSharp;
 
 /// <summary>
-/// A source generator that produces Tool-classes (with an InvokeMethodAsync) from methods marked with [OllamaToolAttribute].
+/// A source generator that produces Tool-classes (with an InvokeMethodAsync) 
+/// from methods marked with [OllamaToolAttribute], using IIncrementalGenerator.
 /// </summary>
 [Generator]
-public class OllamaToolGenerator : ISourceGenerator
+public class ToolSourceGenerator : IIncrementalGenerator
 {
-	public void Initialize(GeneratorInitializationContext context)
+	public void Initialize(IncrementalGeneratorInitializationContext context)
 	{
-		// Optional init logic
+		// 1) Syntax-Provider einrichten
+		var methodCandidates = context.SyntaxProvider
+			.CreateSyntaxProvider(
+				static (syntaxNode, cancellationToken) => IsCandidateMethod(syntaxNode),
+				static (ctx, cancellationToken) => GetMethodSymbolIfMarked(ctx)
+			)
+			.Where(static methodSymbol => methodSymbol is not null)!;
+		// remove nulls
+
+		// 2) Kombiniere die gefundene Methodensymbole mit der Compilation
+		var compilationAndMethods = context.CompilationProvider.Combine(methodCandidates.Collect());
+
+		// 3) Register Source Output
+		context.RegisterSourceOutput(
+			compilationAndMethods,
+			(spc, source) => ExecuteGeneration(spc, source.Left, source.Right)
+		);
 	}
 
-	public void Execute(GeneratorExecutionContext context)
+	/// <summary>
+	/// Erzeugt den finalen Code basierend auf den gefundenen Methoden-Symbolen.
+	/// </summary>
+	private static void ExecuteGeneration(
+		SourceProductionContext context,
+		Compilation compilation,
+		IReadOnlyList<IMethodSymbol> methods
+	)
 	{
-		var compilation = context.Compilation;
-
-		foreach (var syntaxTree in compilation.SyntaxTrees)
+		// Für jede gefundene [OllamaTool]-Methode generieren wir eine Tool-Klasse
+		foreach (var methodSymbol in methods)
 		{
-			var semanticModel = compilation.GetSemanticModel(syntaxTree);
-			var root = syntaxTree.GetRoot(context.CancellationToken);
+			var containingNamespace = methodSymbol.ContainingType.ContainingNamespace?.ToString() ?? "";
+			var containingClassName = methodSymbol.ContainingType.Name;
+			var toolClassName = methodSymbol.Name + "Tool";
 
-			// Suche nach Methoden mit [OllamaToolAttribute].
-			var methodNodes = root.DescendantNodes()
-				.OfType<MethodDeclarationSyntax>()
-				.Where(md => md.AttributeLists
-					.SelectMany(al => al.Attributes)
-					.Any(a => IsOllamaToolAttribute(a, semanticModel)));
+			// Hole XML-Doku (Summary, Param) aus dem Symbol
+			var docCommentXml = methodSymbol.GetDocumentationCommentXml();
+			var (methodSummary, paramComments) = ExtractDocComments(docCommentXml);
 
-			foreach (var methodNode in methodNodes)
-			{
-				var methodSymbol = semanticModel.GetDeclaredSymbol(methodNode, context.CancellationToken);
-				if (methodSymbol == null)
-					continue;
+			// Generiere den Code für Properties/Required
+			var (propertiesCode, requiredParams) = GeneratePropertiesCode(methodSymbol.Parameters, paramComments);
 
-				var containingNamespace = methodSymbol.ContainingType.ContainingNamespace?.ToString() ?? "";
-				var containingClassName = methodSymbol.ContainingType.Name;
-				var toolClassName = methodSymbol.Name + "Tool";
+			// Gen. Code für die InvokeMethodAsync
+			var invokeMethodCode = GenerateInvokeMethodCode(methodSymbol);
 
-				// Hole XML-Doku (Summary, Param) aus dem Symbol
-				var docCommentXml = methodSymbol.GetDocumentationCommentXml();
-				var (methodSummary, paramComments) = ExtractDocComments(docCommentXml);
+			// Erzeuge finalen Code
+			var sourceCode = GenerateToolClassCode(
+				containingNamespace,
+				containingClassName,
+				toolClassName,
+				methodSymbol.Name,
+				methodSummary,
+				propertiesCode,
+				requiredParams,
+				invokeMethodCode
+			);
 
-				// Generiere den Code für Properties/Required
-				var (propertiesCode, requiredParams) = GeneratePropertiesCode(methodSymbol.Parameters, paramComments);
-
-				// Gen. Code für die InvokeMethodAsync
-				var invokeMethodCode = GenerateInvokeMethodCode(methodSymbol);
-
-				// Erzeuge finalen Code
-				var sourceCode = GenerateToolClassCode(
-					containingNamespace,
-					containingClassName,
-					toolClassName,
-					methodSymbol.Name,
-					methodSummary,
-					propertiesCode,
-					requiredParams,
-					invokeMethodCode
-				);
-
-				var hintName = containingNamespace + "." + containingClassName + "." + toolClassName + ".g.cs";
-				context.AddSource(hintName, sourceCode);
-			}
+			var hintName = containingNamespace + "." + containingClassName + "." + toolClassName + ".g.cs";
+			context.AddSource(hintName, sourceCode);
 		}
 	}
 
 	/// <summary>
-	/// Checks if a given attribute is named "OllamaToolAttribute".
+	/// Prüft grob, ob das SyntaxNode ein Methodendeclaration ist, 
+	/// das das Attribut [OllamaToolAttribute] enthalten könnte.
 	/// </summary>
-	private bool IsOllamaToolAttribute(AttributeSyntax attributeSyntax, SemanticModel semanticModel)
+	private static bool IsCandidateMethod(SyntaxNode node)
 	{
-		var typeInfo = semanticModel.GetTypeInfo(attributeSyntax);
+		// Schnelle Prüfung, ob es eine MethodDeclaration sein kann
+		if (node is MethodDeclarationSyntax { AttributeLists.Count: > 0 })
+			return true;
+
+		return false;
+	}
+
+	/// <summary>
+	/// Liest bei einem MethodDeclarationSyntax per SemanticModel, 
+	/// ob [OllamaToolAttribute] gesetzt ist. Liefert dann das IMethodSymbol.
+	/// </summary>
+	private static IMethodSymbol? GetMethodSymbolIfMarked(
+		GeneratorSyntaxContext context
+	)
+	{
+		var methodDecl = (MethodDeclarationSyntax)context.Node;
+		var semanticModel = context.SemanticModel;
+
+		// Prüfe, ob Attribut [OllamaToolAttribute] vorliegt
+		var hasOllamaToolAttribute = methodDecl.AttributeLists
+			.SelectMany(al => al.Attributes)
+			.Any(a => IsOllamaToolAttribute(a, semanticModel));
+
+		if (!hasOllamaToolAttribute)
+			return null;
+
+		// Dann hole das IMethodSymbol
+		return semanticModel.GetDeclaredSymbol(methodDecl);
+	}
+
+	/// <summary>
+	/// Stellt fest, ob ein Attribut "OllamaToolAttribute" heißt.
+	/// </summary>
+	private static bool IsOllamaToolAttribute(AttributeSyntax attr, SemanticModel model)
+	{
+		var typeInfo = model.GetTypeInfo(attr);
 		var name = typeInfo.Type?.ToDisplayString() ?? "";
 		return name.EndsWith("OllamaToolAttribute", StringComparison.Ordinal);
 	}
 
 	/// <summary>
-	/// Extract summary and param descriptions from XML doc comments.
+	/// Extrahiert Summary und Param-Kommentare aus der XML-Doku.
 	/// </summary>
-	private (string methodSummary, Dictionary<string, string> paramComments) ExtractDocComments(string xmlDoc)
+	private static (string methodSummary, Dictionary<string, string> paramComments) ExtractDocComments(string xmlDoc)
 	{
 		var summaryText = "";
 		var paramDict = new Dictionary<string, string>();
@@ -135,9 +177,9 @@ public class OllamaToolGenerator : ISourceGenerator
 	}
 
 	/// <summary>
-	/// Generates the code for the parameter 'properties' dictionary and 'required' fields from method parameters.
+	/// Erzeugt "properties" (Dictionary) und "required" Felder basierend auf den Method-Parametern.
 	/// </summary>
-	private (string propertiesCode, string requiredParams) GeneratePropertiesCode(
+	private static (string propertiesCode, string requiredParams) GeneratePropertiesCode(
 		IReadOnlyList<IParameterSymbol> parameters,
 		Dictionary<string, string> paramComments)
 	{
@@ -153,12 +195,11 @@ public class OllamaToolGenerator : ISourceGenerator
 			var jsonType = "string";  // default
 			IEnumerable<string>? enumValues = null;
 
-			// Enum
+			// Enum?
 			if (paramType.TypeKind == TypeKind.Enum)
 			{
 				jsonType = "string";
-				var enumSym = paramType as INamedTypeSymbol;
-				if (enumSym != null)
+				if (paramType is INamedTypeSymbol enumSym)
 				{
 					enumValues = enumSym.GetMembers()
 						.OfType<IFieldSymbol>()
@@ -166,7 +207,7 @@ public class OllamaToolGenerator : ISourceGenerator
 						.Select(f => f.Name);
 				}
 			}
-			// Numeric
+			// Numeric (int, long, double, float, etc.)
 			else if (paramTypeName.Equals("Int32", StringComparison.OrdinalIgnoreCase)
 				  || paramTypeName.Equals("Int64", StringComparison.OrdinalIgnoreCase)
 				  || paramTypeName.Equals("Double", StringComparison.OrdinalIgnoreCase)
@@ -174,9 +215,8 @@ public class OllamaToolGenerator : ISourceGenerator
 			{
 				jsonType = "number";
 			}
-			// bool oder andere Fälle ggf. ergänzen
+			// bool oder weitere Typen nach Bedarf ergänzen
 
-			// required?
 			if (!param.IsOptional)
 			{
 				requiredList.Add("\"" + paramName + "\"");
@@ -184,7 +224,7 @@ public class OllamaToolGenerator : ISourceGenerator
 
 			sbProps.Append("                    { \"");
 			sbProps.Append(paramName);
-			sbProps.Append("\", new Property { Type = \"");
+			sbProps.Append("\", new OllamaSharp.Models.Chat.Property { Type = \"");
 			sbProps.Append(jsonType);
 			sbProps.Append("\", Description = \"");
 			sbProps.Append(EscapeString(description));
@@ -218,25 +258,18 @@ public class OllamaToolGenerator : ISourceGenerator
 	}
 
 	/// <summary>
-	/// Generates code for an async invocation method that calls the original method with the correct parameters.
+	/// Generiert die Methode zum tatsächlichen Aufruf der Originalmethode:
+	/// InvokeMethodAsync(IDictionary<string, object?>? args).
 	/// </summary>
-	/// <param name="methodSymbol">Symbol for the original method.</param>
-	private string GenerateInvokeMethodCode(IMethodSymbol methodSymbol)
+	private static string GenerateInvokeMethodCode(IMethodSymbol methodSymbol)
 	{
-		// Methode: static string|Task|Task<T>|T ...
-		// Wir erzeugen "InvokeMethodAsync(IDictionary<string, object?> args)"
-		//  1) Parameter entpacken
-		//  2) Originalmethode aufrufen
-		//  3) Rückgabewert (ggf. await)
-		//  4) Als object? zurück
-
 		var parameters = methodSymbol.Parameters;
 		var methodName = methodSymbol.Name;
 		var className = methodSymbol.ContainingType.ToDisplayString(); // inkl. Namespace
 		var isAsync = false;
 		var returnType = methodSymbol.ReturnType;
 
-		// Prüfen auf Task oder Task<T>
+		// Prüfen, ob returnType Task oder Task<T> ist
 		string? resultType = null;
 		if (returnType.Name.Equals("Task", StringComparison.OrdinalIgnoreCase))
 		{
@@ -255,7 +288,7 @@ public class OllamaToolGenerator : ISourceGenerator
 			{
 				// plain Task
 				isAsync = true;
-				resultType = null; // void
+				resultType = null;
 			}
 		}
 		else
@@ -265,9 +298,8 @@ public class OllamaToolGenerator : ISourceGenerator
 			resultType = returnType.ToDisplayString(); // z.B. "String" oder "GoogleResult"
 		}
 
-		// Bilde Aufrufzeile "className.methodName(...params...)"
+		// Baue die InvokeMethodAsync
 		var sb = new StringBuilder();
-		// Signatur
 		sb.Append("        public ");
 		if (isAsync)
 			sb.Append("async Task<object?> InvokeMethodAsync(IDictionary<string, object?>? args)\r\n");
@@ -276,33 +308,27 @@ public class OllamaToolGenerator : ISourceGenerator
 		sb.Append("        {\r\n");
 		sb.Append("            if (args == null) args = new Dictionary<string, object?>();\r\n");
 
-		// Parameter entpacken
 		var argList = new List<string>();
 		foreach (var p in parameters)
 		{
-			// z.B.: string location = (string?)args["location"] ?? "";
-			// bei Enums => Enum.Parse
-			// bei optional => Default
-			// bei int => Convert.ToInt32
 			var paramName = p.Name;
 			var pType = p.Type;
 			var pTypeName = pType.Name;
-
 			var safeParamName = ToValidIdentifier(paramName);
 
 			sb.Append("            ");
 
-			// wenn Enum
+			// enum?
 			if (pType.TypeKind == TypeKind.Enum)
 			{
-				// z.B.: var unit = args.ContainsKey("unit") ? (Unit)Enum.Parse(typeof(Unit), args["unit"]?.ToString() ?? "Celsius") : Unit.Celsius;
+				// (Unit)Enum.Parse(typeof(Unit), ...)
 				sb.Append(pType.ToDisplayString());
 				sb.Append(" ");
 				sb.Append(safeParamName);
 				sb.Append(" = ");
 				if (p.IsOptional)
 				{
-					// default-Wert ermitteln
+					// default fallback
 					sb.Append("(" + pType.ToDisplayString() + ")");
 					sb.Append("Enum.Parse(typeof(" + pType.ToDisplayString() + "), args.ContainsKey(\"");
 					sb.Append(paramName);
@@ -322,13 +348,12 @@ public class OllamaToolGenerator : ISourceGenerator
 					sb.Append("\"]?.ToString() ?? \"\", true);\r\n");
 				}
 			}
-			// Numeric (int, long, double, etc.)
+			// Numeric
 			else if (pTypeName.Equals("Int32", StringComparison.OrdinalIgnoreCase) ||
 					 pTypeName.Equals("Int64", StringComparison.OrdinalIgnoreCase) ||
 					 pTypeName.Equals("Double", StringComparison.OrdinalIgnoreCase) ||
 					 pTypeName.Equals("Single", StringComparison.OrdinalIgnoreCase))
 			{
-				// var userId = args.ContainsKey("userId") ? Convert.ToInt32(args["userId"]) : -1;
 				sb.Append(pType.ToDisplayString());
 				sb.Append(" ");
 				sb.Append(safeParamName);
@@ -338,7 +363,7 @@ public class OllamaToolGenerator : ISourceGenerator
 					sb.Append("args.ContainsKey(\"");
 					sb.Append(paramName);
 					sb.Append("\") ? Convert.To");
-					sb.Append(pType.Name);
+					sb.Append(pTypeName);
 					sb.Append("(args[\"");
 					sb.Append(paramName);
 					sb.Append("\"]) : ");
@@ -348,35 +373,32 @@ public class OllamaToolGenerator : ISourceGenerator
 				else
 				{
 					sb.Append("Convert.To");
-					sb.Append(pType.Name);
+					sb.Append(pTypeName);
 					sb.Append("(args[\"");
 					sb.Append(paramName);
 					sb.Append("\"]);\r\n");
 				}
 			}
-			// string, bool, etc. -> nur cast
+			// string oder andere Typen
 			else
 			{
-				// string => z.B. var location = (string?)args["location"] ?? "";
+				// string => (string?)args["xyz"] ?? "default"
 				sb.Append(pType.ToDisplayString());
 				sb.Append(" ");
 				sb.Append(safeParamName);
 				sb.Append(" = ");
 				if (pTypeName.Equals("String", StringComparison.OrdinalIgnoreCase))
 				{
-					// string?
 					sb.Append("(" + pType.ToDisplayString() + "?)args[\"");
 					sb.Append(paramName);
 					sb.Append("\"]");
 					if (p.IsOptional)
 					{
-						// Falls default = null => "??" ... 
-						// oder falls default != null => z.B. "?? \"XYZ\""
 						sb.Append(" ?? ");
 						if (p.ExplicitDefaultValue == null)
 							sb.Append("\"\"");
 						else
-							sb.Append("\"" + p.ExplicitDefaultValue.ToString() + "\"");
+							sb.Append("\"" + p.ExplicitDefaultValue + "\"");
 						sb.Append(";\r\n");
 					}
 					else
@@ -386,14 +408,15 @@ public class OllamaToolGenerator : ISourceGenerator
 				}
 				else
 				{
-					// bool, custom classes, etc. => Best guess
+					// fallback => cast + optional handling
 					sb.Append("(" + pType.ToDisplayString() + "?)args[\"");
 					sb.Append(paramName);
 					sb.Append("\"]");
 					if (p.IsOptional && p.ExplicitDefaultValue != null)
 					{
-						sb.Append(" ?? ");
-						sb.Append("(" + pType.ToDisplayString() + ")");
+						sb.Append(" ?? (");
+						sb.Append(pType.ToDisplayString());
+						sb.Append(")");
 						sb.Append(p.ExplicitDefaultValue);
 					}
 					sb.Append(";\r\n");
@@ -418,6 +441,7 @@ public class OllamaToolGenerator : ISourceGenerator
 		}
 		else
 		{
+			// sync
 			if (returnType.SpecialType == SpecialType.System_Void)
 			{
 				// void
@@ -428,12 +452,8 @@ public class OllamaToolGenerator : ISourceGenerator
 			else
 			{
 				sb.Append("var result = ");
-				sb.Append(className);
-				sb.Append(".");
-				sb.Append(methodName);
-				sb.Append("(");
-				sb.Append(string.Join(", ", argList));
-				sb.Append(");\r\n");
+				sb.Append(className + "." + methodName);
+				sb.Append("(" + string.Join(", ", argList) + ");\r\n");
 				sb.Append("            return result;\r\n");
 			}
 		}
@@ -443,9 +463,9 @@ public class OllamaToolGenerator : ISourceGenerator
 	}
 
 	/// <summary>
-	/// Generates the final code for the tool class including the invoke method.
+	/// Erzeugt die komplette generierte Tool-Klasse (inkl. Konstruktor und InvokeMethodAsync).
 	/// </summary>
-	private string GenerateToolClassCode(
+	private static string GenerateToolClassCode(
 		string containingNamespace,
 		string containingClass,
 		string toolClassName,
@@ -463,7 +483,6 @@ public class OllamaToolGenerator : ISourceGenerator
 		sb.Append("using System.ComponentModel;\r\n");
 		sb.Append("using System.Text.Json.Serialization;\r\n");
 		sb.Append("using System.Threading.Tasks;\r\n");
-		sb.Append("using OllamaSharp.Models.Chat;\r\n");
 		sb.Append("\r\n");
 		sb.Append("namespace ");
 		sb.Append(containingNamespace);
@@ -473,7 +492,7 @@ public class OllamaToolGenerator : ISourceGenerator
 		sb.Append("    /// </summary>\r\n");
 		sb.Append("    public class ");
 		sb.Append(toolClassName);
-		sb.Append($" : Tool, {(isAsync ? "IAsyncInvokableTool" : "IInvokableTool")}\r\n");
+		sb.Append($" : OllamaSharp.Models.Chat.Tool, {(isAsync ? "OllamaSharp.Tools.IAsyncInvokableTool" : "OllamaSharp.Tools.IInvokableTool")}\r\n");
 		sb.Append("    {\r\n");
 		sb.Append("        /// <summary>\r\n");
 		sb.Append("        /// Initializes a new instance with metadata about the original method.\r\n");
@@ -482,17 +501,17 @@ public class OllamaToolGenerator : ISourceGenerator
 		sb.Append(toolClassName);
 		sb.Append("()\r\n");
 		sb.Append("        {\r\n");
-		sb.Append("            this.Function = new Function {\r\n");
+		sb.Append("            this.Function = new OllamaSharp.Models.Chat.Function {\r\n");
 		sb.Append("                Name = \"");
 		sb.Append(originalMethodName);
 		sb.Append("\",\r\n");
 		sb.Append("                Description = \"");
 		sb.Append(EscapeString(methodSummary));
-		sb.Append("\",\r\n");
+		sb.Append("\"\r\n");
 		sb.Append("            };\r\n");
 		sb.Append("\r\n");
-		sb.Append("            this.Function.Parameters = new Parameters {\r\n");
-		sb.Append("                Properties = new Dictionary<string, Property> {\r\n");
+		sb.Append("            this.Function.Parameters = new OllamaSharp.Models.Chat.Parameters {\r\n");
+		sb.Append("                Properties = new Dictionary<string, OllamaSharp.Models.Chat.Property> {\r\n");
 		sb.Append(propertiesCode);
 		sb.Append("\r\n                },\r\n");
 		sb.Append("                Required = ");
@@ -501,7 +520,6 @@ public class OllamaToolGenerator : ISourceGenerator
 		sb.Append("            };\r\n");
 		sb.Append("        }\r\n");
 		sb.Append("\r\n");
-		// Füge die InvokeMethodAsync ein
 		sb.Append(invokeMethodCode);
 		sb.Append("    }\r\n");
 		sb.Append("}\r\n");
@@ -509,7 +527,10 @@ public class OllamaToolGenerator : ISourceGenerator
 		return sb.ToString();
 	}
 
-	private string EscapeString(string input)
+	/// <summary>
+	/// Minimales String-Escaping.
+	/// </summary>
+	private static string EscapeString(string input)
 	{
 		return input
 			.Replace("\\", "\\\\")
@@ -517,12 +538,10 @@ public class OllamaToolGenerator : ISourceGenerator
 	}
 
 	/// <summary>
-	/// Make sure param-names don't collide with keywords, etc.
+	/// Sorgt dafür, dass man z.B. keine Parameter-Namen hat, die Keywords sind.
 	/// </summary>
-	private string ToValidIdentifier(string name)
+	private static string ToValidIdentifier(string name)
 	{
-		// Minimalbeispiel: wir hängen einen Underscore an, wenn's unguenstig ist
-		// (Bsp. "class", "return", etc.)
 		if (SyntaxFacts.GetKeywordKind(name) != SyntaxKind.None)
 		{
 			return "_" + name;
