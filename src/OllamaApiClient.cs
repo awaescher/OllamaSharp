@@ -220,7 +220,7 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 	}
 
 	/// <inheritdoc />
-	public async Task PushBolbAsync(string digest, byte[] bytes, CancellationToken cancellationToken = default)
+	public async Task PushBlobAsync(string digest, byte[] bytes, CancellationToken cancellationToken = default)
 	{
 		using var requestMessage = new HttpRequestMessage(HttpMethod.Post, "api/blobs/" + digest);
 		requestMessage.Content = new ByteArrayContent(bytes);
@@ -229,7 +229,7 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 	}
 
 	/// <inheritdoc />
-	public async Task<bool> IsBolbExistsAsync(string digest, CancellationToken cancellationToken = default)
+	public async Task<bool> IsBlobExistsAsync(string digest, CancellationToken cancellationToken = default)
 	{
 		using var requestMessage = new HttpRequestMessage(HttpMethod.Head, "api/blobs/" + digest);
 		requestMessage.ApplyCustomHeaders(DefaultRequestHeaders, null);

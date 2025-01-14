@@ -106,6 +106,6 @@ public static class OllamaApiClientExtensions
 	/// <param name="client">The client used to execute the command.</param>
 	/// <param name="bytes">The bytes data of the file.</param>
 	/// <param name="cancellationToken">The token to cancel the operation with.</param>
-	public static Task PushBolbAsync(this IOllamaApiClient client, byte[] bytes, CancellationToken cancellationToken = default)
-		=> client.PushBolbAsync($"sha256:{BitConverter.ToString(SHA256.Create().ComputeHash(bytes)).Replace("-", string.Empty).ToLower()}", bytes, cancellationToken);
+	public static Task PushBlobAsync(this IOllamaApiClient client, byte[] bytes, CancellationToken cancellationToken = default)
+		=> client.PushBlobAsync($"sha256:{BitConverter.ToString(SHA256.Create().ComputeHash(bytes)).Replace("-", string.Empty).ToLower()}", bytes, cancellationToken);
 }
