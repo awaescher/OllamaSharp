@@ -1,3 +1,4 @@
+using System.Security.Cryptography;
 using OllamaSharp.Models;
 
 namespace OllamaSharp;
@@ -98,4 +99,13 @@ public static class OllamaApiClientExtensions
 	/// <returns>A task that represents the asynchronous operation. The task result contains the <see cref="ShowModelResponse"/> with the model information.</returns>
 	public static Task<ShowModelResponse> ShowModelAsync(this IOllamaApiClient client, string model, CancellationToken cancellationToken = default)
 		=> client.ShowModelAsync(new ShowModelRequest { Model = model }, cancellationToken);
+
+	/// <summary>
+	/// Push a file to the Ollama server to create a "blob" (Binary Large Object).
+	/// </summary>
+	/// <param name="client">The client used to execute the command.</param>
+	/// <param name="bytes">The bytes data of the file.</param>
+	/// <param name="cancellationToken">The token to cancel the operation with.</param>
+	public static Task PushBolbAsync(this IOllamaApiClient client, byte[] bytes, CancellationToken cancellationToken = default)
+		=> client.PushBolbAsync($"sha256:{BitConverter.ToString(SHA256.Create().ComputeHash(bytes)).Replace("-", string.Empty).ToLower()}", bytes, cancellationToken);
 }
