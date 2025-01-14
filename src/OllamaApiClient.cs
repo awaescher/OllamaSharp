@@ -236,15 +236,28 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 	private async Task<TResponse> GetAsync<TResponse>(string endpoint, CancellationToken cancellationToken)
 	{
 		using var requestMessage = CreateRequestMessage(HttpMethod.Get, endpoint);
-		
 		using var response = await SendToOllamaAsync(requestMessage, null, HttpCompletionOption.ResponseContentRead, cancellationToken).ConfigureAwait(false);
-		
 		using var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
-
 		return (await JsonSerializer.DeserializeAsync<TResponse>(responseStream, IncomingJsonSerializerOptions, cancellationToken))!;
 	}
-	
 
+	/// <inheritdoc />
+	public async Task PushBolbAsync(string digest, byte[] bytes, CancellationToken cancellationToken = default)
+	{
+		using var requestMessage = new HttpRequestMessage(HttpMethod.Post, "api/blobs/" + digest);
+		requestMessage.Content = new ByteArrayContent(bytes);
+		using var response = await SendToOllamaAsync(requestMessage, null, HttpCompletionOption.ResponseContentRead, cancellationToken).ConfigureAwait(false);
+		response.EnsureSuccessStatusCode();
+	}
+
+	/// <inheritdoc />
+	public async Task<bool> IsBolbExistsAsync(string digest, CancellationToken cancellationToken = default)
+	{
+		using var requestMessage = new HttpRequestMessage(HttpMethod.Head, "api/blobs/" + digest);
+		requestMessage.ApplyCustomHeaders(DefaultRequestHeaders, null);
+		var response = await _client.SendAsync(requestMessage, cancellationToken).ConfigureAwait(false);
+		return response.StatusCode == HttpStatusCode.OK;
+	}
 
 	private async Task PostAsync<TRequest>(string endpoint, TRequest ollamaRequest, CancellationToken cancellationToken) where TRequest : OllamaRequest
 	{

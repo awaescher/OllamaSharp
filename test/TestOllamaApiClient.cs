@@ -69,6 +69,16 @@ public class TestOllamaApiClient : IOllamaApiClient
 		throw new NotImplementedException();
 	}
 
+	public Task PushBolbAsync(string digest, byte[] bytes, CancellationToken cancellationToken = default)
+	{
+		throw new NotImplementedException();
+	}
+
+	public Task<bool> IsBolbExistsAsync(string digest, CancellationToken cancellationToken = default)
+	{
+		throw new NotImplementedException();
+	}
+
 	public Task<bool> IsRunningAsync(CancellationToken cancellationToken = default)
 	{
 		throw new NotImplementedException();
