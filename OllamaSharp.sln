@@ -14,7 +14,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OllamaApiConsole", "demo\OllamaApiConsole.csproj", "{755670DB-33A4-441A-99C2-642A04D08953}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OllamaSharp.ToolGenerator", "src\ToolGenerator\OllamaSharp.ToolGenerator.csproj", "{5E82D0E3-0A62-4D84-8ED0-5F928885D8FB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OllamaSharp.SourceGenerators", "src\SourceGenerators\OllamaSharp.SourceGenerators.csproj", "{5E82D0E3-0A62-4D84-8ED0-5F928885D8FB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

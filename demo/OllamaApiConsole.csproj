@@ -6,15 +6,14 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="CSharpToJsonSchema" Version="3.10.1" />
 		<PackageReference Include="SixLabors.ImageSharp" Version="3.1.6" />
 		<PackageReference Include="Spectre.Console" Version="0.49.1" />
 		<PackageReference Include="Spectre.Console.ImageSharp" Version="0.49.1" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\src\OllamaSharp\OllamaSharp.csproj" />
-		<ProjectReference Include="..\src\ToolGenerator\OllamaSharp.ToolGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+	  <ProjectReference Include="..\src\OllamaSharp\OllamaSharp.csproj" />
+	  <ProjectReference Include="..\src\SourceGenerators\OllamaSharp.SourceGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
 	</ItemGroup>
 
 </Project>

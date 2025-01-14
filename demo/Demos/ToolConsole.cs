@@ -91,7 +91,7 @@ public class ToolConsole(IOllamaApiClient ollama) : OllamaConsole(ollama)
 		}
 	}
 
-	private static object[] GetTools() => [new GetWeatherTool(), new GetUserTool(), new GoogleTool()];
+	private static object[] GetTools() => [new GetWeatherTool()];
 
 	public enum Unit
 	{
@@ -108,14 +108,10 @@ public class ToolConsole(IOllamaApiClient ollama) : OllamaConsole(ollama)
 	[OllamaTool]
 	public static string GetWeather(string location, Unit unit) => $"It's cold at only 6° {unit} in {location}.";
 
-	[OllamaTool]
-	public static string GetUser(string name, int userId = -1) => $"{name} ({userId}) is unknown.";
-
-	[OllamaTool]
-	public record GoogleResult(string[] Matches, int Pages);
-
-	[OllamaTool]
-	public static Task<GoogleResult> Google(string query) => Task.FromResult(new GoogleResult(["Match 1", "Match 2", "Match 3"], 2));
-
-	// TODO: only static? passing arguments? enum argments may crash if not provided
+	// TODO:
+	// only static?
+	// passing arguments?
+	// enum argments may crash if not provided
+	// not automatically excute tools -> Interfaces?
+	// image as tool result, as ImagesAsBase64 in Chat.ToolInvoker?
 }

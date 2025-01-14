@@ -56,6 +56,11 @@ public class Chat
 	public RequestOptions? Options { get; set; }
 
 	/// <summary>
+	/// Gets or sets the class instance that invokes provided tools requested by the AI model
+	/// </summary>
+	public IToolInvoker ToolInvoker { get; set; }
+
+	/// <summary>
 	/// Initializes a new instance of the <see cref="Chat"/> class.
 	/// This basic constructor sets up the chat without a predefined system prompt.
 	/// </summary>
@@ -79,6 +84,9 @@ public class Chat
 	{
 		Client = client ?? throw new ArgumentNullException(nameof(client));
 		Model = Client.SelectedModel;
+
+		// continues the conversation with automatically sending messages (role=tool) from the results of the tools into the chat
+		ToolInvoker = new ChatContinuingToolInvoker(this);
 	}
 
 	/// <summary>
@@ -366,7 +374,7 @@ public class Chat
 	/// Thrown if the <paramref name="format"/> argument is of type <see cref="CancellationToken"/> by mistake, or if any unsupported types are passed.
 	/// </exception>
 	/// <example>
-	/// Using the <see cref="SendAsAsync(ChatRole, string, IEnumerable{Tool},IEnumerable{string})"/> method to send a message and stream the model's response:
+	/// Using the <see cref="SendAsAsync(ChatRole, string, IEnumerable{object}, IEnumerable{string}, object, CancellationToken)"/> method to send a message and stream the model's response:
 	/// <code>
 	/// var chat = new Chat(client);
 	/// var role = new ChatRole("assistant");
@@ -414,38 +422,9 @@ public class Chat
 			var answerMessage = messageBuilder.ToMessage();
 			Messages.Add(answerMessage);
 
-			var callableTools = tools?.OfType<Tool>().ToArray() ?? [];
-			foreach (var toolCall in answerMessage.ToolCalls ?? [])
-			{
-				var toolToCall = callableTools.FirstOrDefault(t => (t.Function?.Name ?? string.Empty).Equals((toolCall?.Function?.Name ?? string.Empty), StringComparison.OrdinalIgnoreCase));
-
-				object? answer = null;
-
-				var normalizedArguments = new Dictionary<string, object?>();
-
-				if (toolCall?.Function?.Arguments is not null)
-				{
-					// make sure to translate JsonElements to strings
-					foreach (var pair in toolCall.Function.Arguments)
-					{
-						if (pair.Value is System.Text.Json.JsonElement je)
-							normalizedArguments[pair.Key] = je.ToString();
-						else
-							normalizedArguments[pair.Key] = pair.Value;
-					}
-				}
-
-				if (toolToCall is IInvokableTool i)
-					answer = i.InvokeMethod(normalizedArguments);
-				else if (toolToCall is IAsyncInvokableTool ai)
-					answer = await ai.InvokeMethodAsync(normalizedArguments).ConfigureAwait(false);
-
-				if (answer?.ToString() is string answerString && !string.IsNullOrEmpty(answerString))
-				{
-					await foreach (var answer2 in SendAsAsync(ChatRole.Tool, answerString, tools: tools, imagesAsBase64: imagesAsBase64, format: format, cancellationToken: cancellationToken).ConfigureAwait(false))
-						yield return answer2;
-				}
-			}
+			// call tools if available and requested by the AI model and yield the results
+			await foreach (var answer2 in ToolInvoker.InvokeAsync(answerMessage.ToolCalls ?? [], tools ?? [], cancellationToken).ConfigureAwait(false))
+				yield return answer2;
 		}
 	}
 }
