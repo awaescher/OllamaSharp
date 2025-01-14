@@ -1,6 +1,7 @@
 using System.Runtime.CompilerServices;
 using OllamaSharp.Models;
 using OllamaSharp.Models.Chat;
+using OllamaSharp.Tools;
 
 namespace OllamaSharp;
 

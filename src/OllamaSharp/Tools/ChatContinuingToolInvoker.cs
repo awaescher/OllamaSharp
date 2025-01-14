@@ -1,7 +1,7 @@
 using System.Runtime.CompilerServices;
 using OllamaSharp.Models.Chat;
 
-namespace OllamaSharp;
+namespace OllamaSharp.Tools;
 
 /// <summary>
 /// A tool invoker that continues a chat conversation by sending results from invoked tools back to the chat.
@@ -15,7 +15,7 @@ public class ChatContinuingToolInvoker(Chat chat) : IToolInvoker
 		var callableTools = tools?.OfType<Tool>().ToArray() ?? [];
 		foreach (var toolCall in toolCalls)
 		{
-			var toolToCall = callableTools.FirstOrDefault(t => (t.Function?.Name ?? string.Empty).Equals((toolCall?.Function?.Name ?? string.Empty), StringComparison.OrdinalIgnoreCase));
+			var toolToCall = callableTools.FirstOrDefault(t => (t.Function?.Name ?? string.Empty).Equals(toolCall?.Function?.Name ?? string.Empty, StringComparison.OrdinalIgnoreCase));
 
 			object? toolResult = null;
 
