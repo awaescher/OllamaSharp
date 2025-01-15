@@ -132,4 +132,19 @@ public interface IOllamaApiClient
 	/// <param name="cancellationToken">The token to cancel the operation with.</param>
 	/// <returns>A task that represents the asynchronous operation. The task result contains the <see cref="Version"/>.</returns>
 	Task<Version> GetVersionAsync(CancellationToken cancellationToken = default);
+
+	/// <summary>
+	/// Push a file to the Ollama server to create a "blob" (Binary Large Object).
+	/// </summary>
+	/// <param name="digest">The expected SHA256 digest of the file.</param>
+	/// <param name="bytes">The bytes data of the file.</param>
+	/// <param name="cancellationToken">The token to cancel the operation with.</param>
+	Task PushBlobAsync(string digest, byte[] bytes, CancellationToken cancellationToken = default);
+
+	/// <summary>
+	/// Ensures that the file blob (Binary Large Object) used with create a model exists on the server. This checks your Ollama server and not ollama.com.
+	/// </summary>
+	/// <param name="digest">The expected SHA256 digest of the file.</param>
+	/// <param name="cancellationToken">The token to cancel the operation with.</param>
+	Task<bool> IsBlobExistsAsync(string digest, CancellationToken cancellationToken = default);
 }
