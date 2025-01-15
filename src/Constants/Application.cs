@@ -101,4 +101,8 @@ internal static class Application
 	public const string Completed = "completed";
 	public const string Embeddings = "embeddings";
 	public const string ParameterSize = "parameter_size";
+	public const string Messages = "message";
+	public const string Adapters = "adapters";
+	public const string Files = "files";
+	public const string From = "from";
 }

@@ -1,14 +1,17 @@
 using System.Text.Json.Serialization;
 using OllamaSharp.Constants;
+using OllamaSharp.Models.Chat;
 
 namespace OllamaSharp.Models;
 
 /// <summary>
-/// Create a model from a Modelfile. It is recommended to set <see cref="ModelFileContent"/> to the
-/// content of the Modelfile rather than just set path. This is a requirement
-/// for remote create. Remote model creation must also create any file blobs,
-/// fields such as FROM and ADAPTER, explicitly with the server using Create a
-/// Blob and the value to the path indicated in the response.
+/// Create a model from:
+/// another model;
+/// a safetensors directory; or
+/// a GGUF file.
+/// If you are creating a model from a safetensors directory or from a GGUF file,
+/// you must [create a blob] for each of the files and then use the file name and SHA256
+/// digest associated with each blob in the `files` field.
 ///
 /// <see href="https://github.com/jmorganca/ollama/blob/main/docs/api.md#create-a-model">Ollama API docs</see>
 /// 
@@ -23,17 +26,52 @@ public class CreateModelRequest : OllamaRequest
 	public string? Model { get; set; }
 
 	/// <summary>
-	/// Contents of the Modelfile
-	/// See https://github.com/jmorganca/ollama/blob/main/docs/modelfile.md
+	/// Name of an existing model to create the new model from (optional)
 	/// </summary>
-	[JsonPropertyName(Application.ModelFile)]
-	public string ModelFileContent { get; set; } = null!;
+	[JsonPropertyName(Application.From)]
+	public string? From { get; set; }
 
 	/// <summary>
-	/// Path to the Modelfile (optional)
+	/// A dictionary of file names to SHA256 digests of blobs to create the model from (optional)
 	/// </summary>
-	[JsonPropertyName(Application.Path)]
-	public string? Path { get; set; }
+	[JsonPropertyName(Application.Files)]
+	public Dictionary<string, string>? Files { get; set; }
+
+	/// <summary>
+	/// A dictionary of file names to SHA256 digests of blobs for LORA adapters (optional)
+	/// </summary>
+	[JsonPropertyName(Application.Adapters)]
+	public Dictionary<string, string>? Adapters { get; set; }
+
+	/// <summary>
+	/// The prompt template for the model (optional)
+	/// </summary>
+	[JsonPropertyName(Application.Template)]
+	public string? Template { get; set; }
+
+	/// <summary>
+	/// A string or list of strings containing the license or licenses for the model (optional)
+	/// </summary>
+	[JsonPropertyName(Application.License)]
+	public object? License { get; set; }
+
+	/// <summary>
+	/// A string containing the system prompt for the model (optional)
+	/// </summary>
+	[JsonPropertyName(Application.System)]
+	public string? System { get; set; }
+
+	/// <summary>
+	/// A dictionary of parameters for the model (optional)
+	/// </summary>
+	[JsonPropertyName(Application.Parameters)]
+	public Dictionary<string, string>? Parameters { get; set; }
+
+	/// <summary>
+	/// A list of message objects used to create a conversation (optional)
+	/// </summary>
+	[JsonPropertyName(Application.Messages)]
+	public IEnumerable<Message>? Messages { get; set; }
 
 	/// <summary>
 	/// If false the response will be returned as a single response object, rather than a stream of objects (optional)

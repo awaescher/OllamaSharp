@@ -70,15 +70,7 @@ public class OllamaApiClientTests
 		var model = new CreateModelRequest
 		{
 			Model = _localModel,
-			ModelFileContent =
-				"""
-				FROM llama3.2
-				PARAMETER temperature 0.3
-				PARAMETER num_ctx 100
-
-				# sets a custom system message to specify the behavior of the chat assistant
-				SYSTEM You are a concise model that tries to return yes or no answers.
-				"""
+			From = _model
 		};
 
 		var response = await _client
