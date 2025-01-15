@@ -1,3 +1,4 @@
+using System.Security.Cryptography;
 using OllamaSharp.Models;
 
 namespace OllamaSharp;
@@ -17,52 +18,6 @@ public static class OllamaApiClientExtensions
 	/// <returns>A task that represents the asynchronous operation.</returns>
 	public static Task CopyModelAsync(this IOllamaApiClient client, string source, string destination, CancellationToken cancellationToken = default)
 		=> client.CopyModelAsync(new CopyModelRequest { Source = source, Destination = destination }, cancellationToken);
-
-	/// <summary>
-	/// Sends a request to the /api/create endpoint to create a model.
-	/// </summary>
-	/// <param name="client">The client used to execute the command.</param>
-	/// <param name="name">The name for the new model.</param>
-	/// <param name="modelFileContent">
-	/// The file content for the model file the new model should be built with.
-	/// See <see href="https://github.com/jmorganca/ollama/blob/main/docs/modelfile.md"/>.
-	/// </param>
-	/// <param name="cancellationToken">The token to cancel the operation with.</param>
-	/// <returns>An async enumerable that can be used to iterate over the streamed responses. See <see cref="CreateModelResponse"/>.</returns>
-	public static IAsyncEnumerable<CreateModelResponse?> CreateModelAsync(this IOllamaApiClient client, string name, string modelFileContent, CancellationToken cancellationToken = default)
-	{
-		var request = new CreateModelRequest
-		{
-			Model = name,
-			ModelFileContent = modelFileContent,
-			Stream = true
-		};
-		return client.CreateModelAsync(request, cancellationToken);
-	}
-
-	/// <summary>
-	/// Sends a request to the /api/create endpoint to create a model.
-	/// </summary>
-	/// <param name="client">The client used to execute the command.</param>
-	/// <param name="name">The name for the new model.</param>
-	/// <param name="modelFileContent">
-	/// The file content for the model file the new model should be built with.
-	/// See <see href="https://github.com/jmorganca/ollama/blob/main/docs/modelfile.md"/>.
-	/// </param>
-	/// <param name="path">The name path to the model file.</param>
-	/// <param name="cancellationToken">The token to cancel the operation with.</param>
-	/// <returns>An async enumerable that can be used to iterate over the streamed responses. See <see cref="CreateModelResponse"/>.</returns>
-	public static IAsyncEnumerable<CreateModelResponse?> CreateModelAsync(this IOllamaApiClient client, string name, string modelFileContent, string path, CancellationToken cancellationToken = default)
-	{
-		var request = new CreateModelRequest
-		{
-			Model = name,
-			ModelFileContent = modelFileContent,
-			Path = path,
-			Stream = true
-		};
-		return client.CreateModelAsync(request, cancellationToken);
-	}
 
 	/// <summary>
 	/// Sends a request to the /api/delete endpoint to delete a model.
@@ -144,4 +99,13 @@ public static class OllamaApiClientExtensions
 	/// <returns>A task that represents the asynchronous operation. The task result contains the <see cref="ShowModelResponse"/> with the model information.</returns>
 	public static Task<ShowModelResponse> ShowModelAsync(this IOllamaApiClient client, string model, CancellationToken cancellationToken = default)
 		=> client.ShowModelAsync(new ShowModelRequest { Model = model }, cancellationToken);
+
+	/// <summary>
+	/// Push a file to the Ollama server to create a "blob" (Binary Large Object).
+	/// </summary>
+	/// <param name="client">The client used to execute the command.</param>
+	/// <param name="bytes">The bytes data of the file.</param>
+	/// <param name="cancellationToken">The token to cancel the operation with.</param>
+	public static Task PushBlobAsync(this IOllamaApiClient client, byte[] bytes, CancellationToken cancellationToken = default)
+		=> client.PushBlobAsync($"sha256:{BitConverter.ToString(SHA256.Create().ComputeHash(bytes)).Replace("-", string.Empty).ToLower()}", bytes, cancellationToken);
 }

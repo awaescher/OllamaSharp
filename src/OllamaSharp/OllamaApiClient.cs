@@ -213,6 +213,24 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 		return Version.Parse(versionString);
 	}
 
+	/// <inheritdoc />
+	public async Task PushBlobAsync(string digest, byte[] bytes, CancellationToken cancellationToken = default)
+	{
+		using var requestMessage = new HttpRequestMessage(HttpMethod.Post, "api/blobs/" + digest);
+		requestMessage.Content = new ByteArrayContent(bytes);
+		using var response = await SendToOllamaAsync(requestMessage, null, HttpCompletionOption.ResponseContentRead, cancellationToken).ConfigureAwait(false);
+		response.EnsureSuccessStatusCode();
+	}
+
+	/// <inheritdoc />
+	public async Task<bool> IsBlobExistsAsync(string digest, CancellationToken cancellationToken = default)
+	{
+		using var requestMessage = new HttpRequestMessage(HttpMethod.Head, "api/blobs/" + digest);
+		requestMessage.ApplyCustomHeaders(DefaultRequestHeaders, null);
+		var response = await _client.SendAsync(requestMessage, cancellationToken).ConfigureAwait(false);
+		return response.StatusCode == HttpStatusCode.OK;
+	}
+
 	private async IAsyncEnumerable<GenerateResponseStream?> GenerateCompletionAsync(GenerateRequest generateRequest, [EnumeratorCancellation] CancellationToken cancellationToken)
 	{
 		using var requestMessage = CreateRequestMessage(HttpMethod.Post, Endpoints.Generate, generateRequest);
@@ -230,14 +248,14 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 	private async Task<TResponse> GetAsync<TResponse>(string endpoint, CancellationToken cancellationToken)
 	{
 		using var requestMessage = CreateRequestMessage(HttpMethod.Get, endpoint);
-
+		
 		using var response = await SendToOllamaAsync(requestMessage, null, HttpCompletionOption.ResponseContentRead, cancellationToken).ConfigureAwait(false);
-
+		
 		using var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
 
 		return (await JsonSerializer.DeserializeAsync<TResponse>(responseStream, IncomingJsonSerializerOptions, cancellationToken))!;
 	}
-
+	
 
 
 	private async Task PostAsync<TRequest>(string endpoint, TRequest ollamaRequest, CancellationToken cancellationToken) where TRequest : OllamaRequest
