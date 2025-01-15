@@ -155,27 +155,26 @@ internal static class AbstractionMapper
 	/// <returns>A <see cref="Tool"/> object containing the converted data.</returns>
 	private static object ToOllamaSharpTool(AIFunctionMetadata functionMetadata)
 	{
-		return null;
-		//return new Tool
-		//{
-		//	Function = new Function
-		//	{
-		//		Description = functionMetadata.Description,
-		//		Name = functionMetadata.Name,
-		//		Parameters = new Parameters
-		//		{
-		//			Properties = functionMetadata.Parameters.ToDictionary(p => p.Name, p => new Property
-		//			{
-		//				Description = p.Description,
-		//				Enum = GetPossibleValues(p.Schema as JsonObject),
-		//				Type = ToFunctionTypeString(p.Schema as JsonObject)
-		//			}),
-		//			Required = functionMetadata.Parameters.Where(p => p.IsRequired).Select(p => p.Name),
-		//			Type = Application.Object
-		//		}
-		//	},
-		//	Type = Application.Function
-		//};
+		return new Tool
+		{
+			Function = new Function
+			{
+				Description = functionMetadata.Description,
+				Name = functionMetadata.Name,
+				Parameters = new Parameters
+				{
+					Properties = functionMetadata.Parameters.ToDictionary(p => p.Name, p => new Property
+					{
+						Description = p.Description,
+						Enum = GetPossibleValues(p.Schema as JsonObject),
+						Type = ToFunctionTypeString(p.Schema as JsonObject)
+					}),
+					Required = functionMetadata.Parameters.Where(p => p.IsRequired).Select(p => p.Name),
+					Type = Application.Object
+				}
+			},
+			Type = Application.Function
+		};
 	}
 
 	/// <summary>
