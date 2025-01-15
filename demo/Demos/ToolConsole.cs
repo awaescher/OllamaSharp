@@ -119,11 +119,4 @@ public class ToolConsole(IOllamaApiClient ollama) : OllamaConsole(ollama)
 		await Task.Delay(1000).ConfigureAwait(false);
 		return $"{new Random().Next(20, 50)}.4711, {new Random().Next(3, 15)}.0815";
 	}
-
-	// TODO:
-	// only static?
-	// passing arguments?
-	// enum argments may crash if not provided
-	// not automatically excute tools -> Interfaces?
-	// image as tool result, as ImagesAsBase64 in Chat.ToolInvoker?
 }
