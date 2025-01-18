@@ -435,6 +435,7 @@ public class AbstractionMapperTests
 			chatRequest.Options.Seed.Should().Be(11);
 			chatRequest.Stream.Should().BeTrue();
 			chatRequest.Template.Should().BeNull();
+			chatRequest.Options.NumPredict.Should().Be(1000);
 
 			// not defined in ChatOptions
 			chatRequest.CustomHeaders.Should().BeEmpty();
@@ -453,7 +454,6 @@ public class AbstractionMapperTests
 			chatRequest.Options.NumGpu.Should().BeNull();
 			chatRequest.Options.NumGqa.Should().BeNull();
 			chatRequest.Options.NumKeep.Should().BeNull();
-			chatRequest.Options.NumPredict.Should().BeNull();
 			chatRequest.Options.NumThread.Should().BeNull();
 			chatRequest.Options.PenalizeNewline.Should().BeNull();
 			chatRequest.Options.RepeatLastN.Should().BeNull();

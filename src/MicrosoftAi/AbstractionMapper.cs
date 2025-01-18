@@ -65,6 +65,7 @@ internal static class AbstractionMapper
 				Temperature = options?.Temperature,
 				TopP = options?.TopP,
 				TopK = options?.TopK,
+				NumPredict = options?.MaxOutputTokens
 			},
 			Stream = stream,
 			Template = null,
