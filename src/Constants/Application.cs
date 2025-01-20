@@ -76,6 +76,7 @@ internal static class Application
 	public const string Seed = "seed";
 	public const string TfsZ = "tfs_z";
 	public const string NumPredict = "num_predict";
+	public const string MaxOutputTokens = "max_output_tokens";
 	public const string TopK = "top_k";
 	public const string TopP = "top_p";
 	public const string MinP = "min_p";
