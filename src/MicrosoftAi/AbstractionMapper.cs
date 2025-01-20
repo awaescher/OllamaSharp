@@ -73,6 +73,7 @@ internal static class AbstractionMapper
 		};
 
 		if (!(options?.AdditionalProperties?.Any() ?? false)) return request;
+		
 		TryAddOllamaOption<bool?>(options, OllamaOption.F16kv, v => request.Options.F16kv = (bool?)v);
 		TryAddOllamaOption<float?>(options, OllamaOption.FrequencyPenalty, v => request.Options.FrequencyPenalty = (float?)v);
 		TryAddOllamaOption<bool?>(options, OllamaOption.LogitsAll, v => request.Options.LogitsAll = (bool?)v);
