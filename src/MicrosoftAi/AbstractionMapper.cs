@@ -72,7 +72,9 @@ internal static class AbstractionMapper
 			Tools = ToOllamaSharpTools(options?.Tools)
 		};
 
-		if (!(options?.AdditionalProperties?.Any() ?? false)) return request;
+		var hasAdditionalProperties = options?.AdditionalProperties?.Any() ?? false;
+		if (!hasAdditionalProperties)
+			return request;
 		
 		TryAddOllamaOption<bool?>(options, OllamaOption.F16kv, v => request.Options.F16kv = (bool?)v);
 		TryAddOllamaOption<float?>(options, OllamaOption.FrequencyPenalty, v => request.Options.FrequencyPenalty = (float?)v);
