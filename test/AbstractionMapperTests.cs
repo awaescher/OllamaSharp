@@ -250,6 +250,105 @@ public class AbstractionMapperTests
 			tool.Type.Should().Be("function");
 		}
 
+		[Test]
+		public void Maps_All_Options_With_AdditionalProperties()
+		{
+		    // Arrange
+		    List<ChatMessage> chatMessages = [];
+		    
+		    var options = new ChatOptions
+		    {
+		        AdditionalProperties = new AdditionalPropertiesDictionary()
+		        {
+		            // Boolean options
+		            [OllamaOption.F16kv.Name] = true,
+		            [OllamaOption.LogitsAll.Name] = true,
+		            [OllamaOption.LowVram.Name] = true,
+		            [OllamaOption.Numa.Name] = true,
+		            [OllamaOption.PenalizeNewline.Name] = true,
+		            [OllamaOption.UseMlock.Name] = true,
+		            [OllamaOption.UseMmap.Name] = true,
+		            [OllamaOption.VocabOnly.Name] = true,
+		            
+		            // Float options
+		            [OllamaOption.FrequencyPenalty.Name] = 0.5f,
+		            [OllamaOption.MinP.Name] = 0.1f,
+		            [OllamaOption.MiroStatEta.Name] = 0.1f,
+		            [OllamaOption.MiroStatTau.Name] = 0.2f,
+		            [OllamaOption.PresencePenalty.Name] = 0.3f,
+		            [OllamaOption.RepeatPenalty.Name] = 0.4f,
+		            [OllamaOption.Temperature.Name] = 0.7f,
+		            [OllamaOption.TfsZ.Name] = 0.8f,
+		            [OllamaOption.TopP.Name] = 0.9f,
+		            [OllamaOption.TypicalP.Name] = 0.95f,
+		            
+		            // Integer options
+		            [OllamaOption.MainGpu.Name] = 0,
+		            [OllamaOption.MiroStat.Name] = 1,
+		            [OllamaOption.NumBatch.Name] = 512,
+		            [OllamaOption.NumCtx.Name] = 4096,
+		            [OllamaOption.NumGpu.Name] = 1,
+		            [OllamaOption.NumGqa.Name] = 8,
+		            [OllamaOption.NumKeep.Name] = 64,
+		            [OllamaOption.NumPredict.Name] = 1024,
+		            [OllamaOption.MaxOutputTokens.Name] = 2048,
+		            [OllamaOption.NumThread.Name] = 8,
+		            [OllamaOption.RepeatLastN.Name] = 64,
+		            [OllamaOption.Seed.Name] = 42,
+		            [OllamaOption.TopK.Name] = 40,
+		            
+		            // String array options
+		            [OllamaOption.Stop.Name] = new[] { "stop1", "stop2" }
+		        }
+		    };
+
+		    // Act
+		    var chatRequest = AbstractionMapper.ToOllamaSharpChatRequest(chatMessages, options, stream: true, JsonSerializerOptions.Default);
+
+		    // Assert
+		    chatRequest.Options.Should().NotBeNull();
+		    
+		    // Boolean assertions
+		    chatRequest.Options!.F16kv.Should().BeTrue();
+		    chatRequest.Options!.LogitsAll.Should().BeTrue();
+		    chatRequest.Options!.LowVram.Should().BeTrue();
+		    chatRequest.Options!.Numa.Should().BeTrue();
+		    chatRequest.Options!.PenalizeNewline.Should().BeTrue();
+		    chatRequest.Options!.UseMlock.Should().BeTrue();
+		    chatRequest.Options!.UseMmap.Should().BeTrue();
+		    chatRequest.Options!.VocabOnly.Should().BeTrue();
+		    
+		    // Float assertions
+		    chatRequest.Options!.FrequencyPenalty.Should().Be(0.5f);
+		    chatRequest.Options!.MinP.Should().Be(0.1f);
+		    chatRequest.Options!.MiroStatEta.Should().Be(0.1f);
+		    chatRequest.Options!.MiroStatTau.Should().Be(0.2f);
+		    chatRequest.Options!.PresencePenalty.Should().Be(0.3f);
+		    chatRequest.Options!.RepeatPenalty.Should().Be(0.4f);
+		    chatRequest.Options!.Temperature.Should().Be(0.7f);
+		    chatRequest.Options!.TfsZ.Should().Be(0.8f);
+		    chatRequest.Options!.TopP.Should().Be(0.9f);
+		    chatRequest.Options!.TypicalP.Should().Be(0.95f);
+		    
+		    // Integer assertions
+		    chatRequest.Options!.MainGpu.Should().Be(0);
+		    chatRequest.Options!.MiroStat.Should().Be(1);
+		    chatRequest.Options!.NumBatch.Should().Be(512);
+		    chatRequest.Options!.NumCtx.Should().Be(4096);
+		    chatRequest.Options!.NumGpu.Should().Be(1);
+		    chatRequest.Options!.NumGqa.Should().Be(8);
+		    chatRequest.Options!.NumKeep.Should().Be(64);
+		    chatRequest.Options!.NumPredict.Should().Be(2048);
+		    chatRequest.Options!.NumThread.Should().Be(8);
+		    chatRequest.Options!.RepeatLastN.Should().Be(64);
+		    chatRequest.Options!.Seed.Should().Be(42);
+		    chatRequest.Options!.TopK.Should().Be(40);
+		    
+		    // String array assertions
+		    chatRequest.Options!.Stop.Should().NotBeNull();
+		    chatRequest.Options!.Stop.Should().BeEquivalentTo("stop1", "stop2");
+		}
+
 		[TestCaseSource(nameof(StopSequencesTestData))]
 		public void Maps_Messages_With_IEnumerable_StopSequences(object? enumerable)
 		{
@@ -435,6 +534,7 @@ public class AbstractionMapperTests
 			chatRequest.Options.Seed.Should().Be(11);
 			chatRequest.Stream.Should().BeTrue();
 			chatRequest.Template.Should().BeNull();
+			chatRequest.Options.NumPredict.Should().Be(1000);
 
 			// not defined in ChatOptions
 			chatRequest.CustomHeaders.Should().BeEmpty();
@@ -453,7 +553,6 @@ public class AbstractionMapperTests
 			chatRequest.Options.NumGpu.Should().BeNull();
 			chatRequest.Options.NumGqa.Should().BeNull();
 			chatRequest.Options.NumKeep.Should().BeNull();
-			chatRequest.Options.NumPredict.Should().BeNull();
 			chatRequest.Options.NumThread.Should().BeNull();
 			chatRequest.Options.PenalizeNewline.Should().BeNull();
 			chatRequest.Options.RepeatLastN.Should().BeNull();
