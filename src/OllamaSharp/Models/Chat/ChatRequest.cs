@@ -60,7 +60,7 @@ public class ChatRequest : OllamaRequest
 	/// </summary>
 	[JsonPropertyName("tools")]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-	public IEnumerable<Tool>? Tools { get; set; }
+	public IEnumerable<object>? Tools { get; set; }
 }
 
 /// <summary>

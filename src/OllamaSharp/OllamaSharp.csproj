@@ -16,20 +16,20 @@
 		<PackageTags>ollama;ollama-api;api;llm;openai;ai;localllama;llama;streaming;gpt;llamacpp;ichatclient</PackageTags>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 		<SignAssembly>True</SignAssembly>
-		<AssemblyOriginatorKeyFile>..\OllamaSharp.snk</AssemblyOriginatorKeyFile>
+		<AssemblyOriginatorKeyFile>..\..\OllamaSharp.snk</AssemblyOriginatorKeyFile>
 		<NoWarn>IDE0065;IDE0055;IDE0011;S3881</NoWarn>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<None Include="..\Ollama.png">
+		<None Include="..\..\Ollama.png">
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
 		</None>
-		<None Include="..\LICENSE">
+		<None Include="..\..\LICENSE">
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
 		</None>
-		<None Include="..\README.md">
+		<None Include="..\..\README.md">
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
 		</None>

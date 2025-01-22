@@ -1,6 +1,7 @@
 using System.Runtime.CompilerServices;
 using OllamaSharp.Models;
 using OllamaSharp.Models.Chat;
+using OllamaSharp.Tools;
 
 namespace OllamaSharp;
 
@@ -56,6 +57,11 @@ public class Chat
 	public RequestOptions? Options { get; set; }
 
 	/// <summary>
+	/// Gets or sets the class instance that invokes provided tools requested by the AI model
+	/// </summary>
+	public IToolInvoker ToolInvoker { get; set; }
+
+	/// <summary>
 	/// Initializes a new instance of the <see cref="Chat"/> class.
 	/// This basic constructor sets up the chat without a predefined system prompt.
 	/// </summary>
@@ -79,6 +85,9 @@ public class Chat
 	{
 		Client = client ?? throw new ArgumentNullException(nameof(client));
 		Model = Client.SelectedModel;
+
+		// continues the conversation with automatically sending messages (role=tool) from the results of the tools into the chat
+		ToolInvoker = new ChatContinuingToolInvoker(this);
 	}
 
 	/// <summary>
@@ -226,7 +235,7 @@ public class Chat
 	/// }
 	/// </code>
 	/// </example>
-	public IAsyncEnumerable<string> SendAsync(string message, IEnumerable<Tool>? tools,
+	public IAsyncEnumerable<string> SendAsync(string message, IEnumerable<object>? tools,
 		IEnumerable<string>? imagesAsBase64 = null, object? format = null,
 		CancellationToken cancellationToken = default)
 		=> SendAsAsync(ChatRole.User, message, tools: tools, imagesAsBase64: imagesAsBase64, format: format,
@@ -366,7 +375,7 @@ public class Chat
 	/// Thrown if the <paramref name="format"/> argument is of type <see cref="CancellationToken"/> by mistake, or if any unsupported types are passed.
 	/// </exception>
 	/// <example>
-	/// Using the <see cref="SendAsAsync(ChatRole, string, IEnumerable{Tool},IEnumerable{string})"/> method to send a message and stream the model's response:
+	/// Using the <see cref="SendAsAsync(ChatRole, string, IEnumerable{object}, IEnumerable{string}, object, CancellationToken)"/> method to send a message and stream the model's response:
 	/// <code>
 	/// var chat = new Chat(client);
 	/// var role = new ChatRole("assistant");
@@ -378,7 +387,7 @@ public class Chat
 	/// }
 	/// </code>
 	/// </example>
-	public async IAsyncEnumerable<string> SendAsAsync(ChatRole role, string message, IEnumerable<Tool>? tools,
+	public async IAsyncEnumerable<string> SendAsAsync(ChatRole role, string message, IEnumerable<object>? tools,
 		IEnumerable<string>? imagesAsBase64 = null, object? format = null,
 		[EnumeratorCancellation] CancellationToken cancellationToken = default)
 	{
@@ -388,13 +397,11 @@ public class Chat
 
 		Messages.Add(new Message(role, message, imagesAsBase64?.ToArray()));
 
-		var hasTools = tools?.Any() ?? false;
-
 		var request = new ChatRequest
 		{
 			Messages = Messages,
 			Model = Model,
-			Stream = !hasTools, // cannot stream if tools should be used
+			Stream = true,
 			Tools = tools,
 			Format = format,
 			Options = Options
@@ -403,14 +410,22 @@ public class Chat
 		var messageBuilder = new MessageBuilder();
 		await foreach (var answer in Client.ChatAsync(request, cancellationToken).ConfigureAwait(false))
 		{
-			if (answer is null) continue;
-			
+			if (answer is null)
+				continue;
+
 			messageBuilder.Append(answer);
-			
+
 			yield return answer.Message.Content ?? string.Empty;
 		}
 
 		if (messageBuilder.HasValue)
-			Messages.Add(messageBuilder.ToMessage());
+		{
+			var answerMessage = messageBuilder.ToMessage();
+			Messages.Add(answerMessage);
+
+			// call tools if available and requested by the AI model and yield the results
+			await foreach (var answer2 in ToolInvoker.InvokeAsync(answerMessage.ToolCalls ?? [], tools ?? [], cancellationToken).ConfigureAwait(false))
+				yield return answer2;
+		}
 	}
 }

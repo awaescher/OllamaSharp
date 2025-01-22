@@ -130,11 +130,9 @@ internal static class AbstractionMapper
 	/// </summary>
 	/// <param name="tools">The tools to convert.</param>
 	/// <returns>An enumeration of <see cref="Tool"/> objects containing the converted data.</returns>
-	private static IEnumerable<Tool>? ToOllamaSharpTools(IEnumerable<AITool>? tools)
+	private static IEnumerable<object>? ToOllamaSharpTools(IEnumerable<AITool>? tools)
 	{
-		return tools?.Select(ToOllamaSharpTool)
-					 .Where(t => t is not null)
-					 .Cast<Tool>();
+		return tools?.Select(ToOllamaSharpTool).Where(t => t is not null);
 	}
 
 	/// <summary>
@@ -145,7 +143,7 @@ internal static class AbstractionMapper
 	/// If parseable, a <see cref="Tool"/> object containing the converted data,
 	/// otherwise <see langword="null"/>.
 	/// </returns>
-	private static Tool? ToOllamaSharpTool(AITool tool)
+	private static object? ToOllamaSharpTool(AITool tool)
 	{
 		if (tool is AIFunction f)
 			return ToOllamaSharpTool(f.Metadata);
@@ -158,7 +156,7 @@ internal static class AbstractionMapper
 	/// </summary>
 	/// <param name="functionMetadata">The function metadata to convert.</param>
 	/// <returns>A <see cref="Tool"/> object containing the converted data.</returns>
-	private static Tool ToOllamaSharpTool(AIFunctionMetadata functionMetadata)
+	private static object ToOllamaSharpTool(AIFunctionMetadata functionMetadata)
 	{
 		return new Tool
 		{
