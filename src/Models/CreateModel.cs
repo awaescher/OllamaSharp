@@ -65,7 +65,7 @@ public class CreateModelRequest : OllamaRequest
 	/// A dictionary of parameters for the model (optional)
 	/// </summary>
 	[JsonPropertyName(Application.Parameters)]
-	public Dictionary<string, string>? Parameters { get; set; }
+	public Dictionary<string, object>? Parameters { get; set; }
 
 	/// <summary>
 	/// A list of message objects used to create a conversation (optional)
