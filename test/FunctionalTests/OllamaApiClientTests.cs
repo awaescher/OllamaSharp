@@ -16,26 +16,26 @@ public class OllamaApiClientTests
 
 	private OllamaApiClient _client = null!;
 
-	[SetUp]
+	[OneTimeSetUp]
 	public async Task Setup()
 	{
 		_client = new OllamaApiClient(_baseUri);
 		await CleanupModel(_localModel);
 	}
 
-	[TearDown]
+	[OneTimeTearDown]
 	public async Task Teardown()
 	{
-		await CleanupModel(_localModel);
+		await CleanupModel(_localModel + ":latest");
 		_client?.Dispose();
 	}
 
-	private async Task CleanupModel(string? model = null)
+	private async Task CleanupModel(string model)
 	{
-		var modelExists = (await _client.ListLocalModelsAsync()).Any(m => m.Name == (model ?? _model));
+		var modelExists = (await _client.ListLocalModelsAsync()).Any(m => m.Name == model);
 
 		if (modelExists)
-			await _client.DeleteModelAsync(new DeleteModelRequest { Model = model ?? _model });
+			await _client.DeleteModelAsync(new DeleteModelRequest { Model = model });
 	}
 
 	private async Task PullIfNotExists(string model)
@@ -65,23 +65,28 @@ public class OllamaApiClientTests
 	[Test, Order(2)]
 	public async Task CreateModel()
 	{
-		await PullIfNotExists(_localModel);
+		await PullIfNotExists(_model);
 
 		var model = new CreateModelRequest
 		{
 			Model = _localModel,
-			From = _model
+			From = _model,
+			Parameters = new Dictionary<string, object>()
+			{
+				 { "num_ctx", 4096 },
+				 {"temperature", 0.31 }
+			 }
 		};
 
 		var response = await _client
 			.CreateModelAsync(model)
 			.ToListAsync();
 
-		var models = await _client.ListLocalModelsAsync();
-		models.Should().Contain(m => m.Name.StartsWith(_localModel));
-
 		response.Should().NotBeEmpty();
 		response.Should().Contain(r => r!.Status == "success");
+
+		var models = await _client.ListLocalModelsAsync();
+		models.Should().Contain(m => m.Name.StartsWith(_localModel));
 	}
 
 	[Test, Order(3)]
