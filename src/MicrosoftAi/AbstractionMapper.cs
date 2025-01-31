@@ -50,9 +50,14 @@ internal static class AbstractionMapper
 	/// <returns>A <see cref="ChatRequest"/> object containing the converted data.</returns>
 	public static ChatRequest ToOllamaSharpChatRequest(IList<ChatMessage> chatMessages, ChatOptions? options, bool stream, JsonSerializerOptions serializerOptions)
 	{
+		object? format = null;
+
+		if (options?.ResponseFormat is ChatResponseFormatJson jsonFormat)
+			format = jsonFormat.Schema.HasValue ? jsonFormat.Schema.Value : Application.Json;
+
 		var request = new ChatRequest
 		{
-			Format = Equals(options?.ResponseFormat, ChatResponseFormat.Json) ? Application.Json : null,
+			Format = format,
 			KeepAlive = null,
 			Messages = ToOllamaSharpMessages(chatMessages, serializerOptions),
 			Model = options?.ModelId ?? string.Empty, // will be set OllamaApiClient.SelectedModel if not set
