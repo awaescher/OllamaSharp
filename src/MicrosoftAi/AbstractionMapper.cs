@@ -53,10 +53,7 @@ internal static class AbstractionMapper
 		object? format = null;
 
 		if (options?.ResponseFormat is ChatResponseFormatJson jsonFormat)
-			if (jsonFormat.Schema is null)
-				format = Application.Json;
-			else
-				format = jsonFormat.Schema;
+			format = jsonFormat.Schema.HasValue ? jsonFormat.Schema.Value : Application.Json;
 
 		var request = new ChatRequest
 		{
