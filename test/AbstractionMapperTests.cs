@@ -1,4 +1,6 @@
+using System;
 using System.Text.Json;
+using System.Text.Json.Schema;
 using FluentAssertions;
 using Microsoft.Extensions.AI;
 using NUnit.Framework;
@@ -563,6 +565,41 @@ public class AbstractionMapperTests
 			chatRequest.Options.UseMlock.Should().BeNull();
 			chatRequest.Options.UseMmap.Should().BeNull();
 			chatRequest.Options.VocabOnly.Should().BeNull();
+		}
+
+		[Test]
+		public void Maps_JsonWithoutSchema()
+		{
+			var chatMessages = new List<Microsoft.Extensions.AI.ChatMessage>();
+
+			var options = new Microsoft.Extensions.AI.ChatOptions
+			{
+				ResponseFormat = ChatResponseFormat.Json
+			};
+
+			var chatRequest = AbstractionMapper.ToOllamaSharpChatRequest(chatMessages, options, stream: true, JsonSerializerOptions.Default);
+			chatRequest.Format.Should().Be("json");
+		}
+
+		[Test]
+		public void Maps_JsonWithSchema()
+		{
+			var chatMessages = new List<Microsoft.Extensions.AI.ChatMessage>();
+			var schemaElement = AIJsonUtilities.CreateJsonSchema(type: typeof(Sword));
+
+			var options = new Microsoft.Extensions.AI.ChatOptions
+			{
+				ResponseFormat = ChatResponseFormat.ForJsonSchema(schemaElement)
+			};
+
+			var chatRequest = AbstractionMapper.ToOllamaSharpChatRequest(chatMessages, options, stream: true, JsonSerializerOptions.Default);
+			chatRequest.Format.Should().Be(schemaElement);
+		}
+
+		private class Sword
+		{
+			public required string Name { get; set; }
+			public required int Damage { get; set; }
 		}
 
 		[Test]
