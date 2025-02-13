@@ -98,6 +98,57 @@ private static IChatClient CreateChatClient(Arguments arguments)
 > [!NOTE]
 > `IOllamaApiClient` provides many Ollama specific methods that `IChatClient` and `IEmbeddingGenerator` miss. Because these are abstractions, `IChatClient` and `IEmbeddingGenerator` will never implement the full Ollama API specification. However, `OllamaApiClient` implements three interfaces: the native `IOllamaApiClient` and Microsoft `IChatClient` and `IEmbeddingGenerator<string, Embedding<float>>` which allows you to cast it to any of these two interfaces as you need them at any time.
 
+## Observability with OpenTelemetry
+
+> Note: The OllamaSharp OpenTelemetry integration is still in development, currently it only covers the Chat API.
+
+OllamaSharp is instrumented with distributed tracing and metrics using .NET [tracing](https://learn.microsoft.com/dotnet/core/diagnostics/distributed-tracing)
+and [metrics](https://learn.microsoft.com/dotnet/core/diagnostics/metrics-instrumentation) API and supports [OpenTelemetry](https://learn.microsoft.com/dotnet/core/diagnostics/observability-with-otel).
+
+OllamaSharp instrumentation follows [OpenTelemetry Semantic Conventions for Generative AI systems](https://github.com/open-telemetry/semantic-conventions/tree/main/docs/gen-ai).
+
+### How to enable
+
+The instrumentation is **experimental** - volume and semantics of the telemetry items may change.
+
+To enable the instrumentation:
+
+1. Set instrumentation feature-flag using one of the following options:
+
+   - set the `OLLAMASHARP_EXPERIMENTAL_ENABLE_OPEN_TELEMETRY` environment variable to `"true"`
+   - set the `OllamaSharp.Experimental.EnableOpenTelemetry` context switch to true in your application code when application
+     is starting and before initializing any OllamaSharp clients. For example:
+
+     ```csharp
+     AppContext.SetSwitch("OllamaSharp.Experimental.EnableOpenTelemetry", true);
+     ```
+
+2. Enable OllamaSharp telemetry:
+
+   ```csharp
+   builder.Services.AddOpenTelemetry()
+       .WithTracing(b =>
+       {
+           b.AddSource("OllamaSharp.*")
+             ...
+            .AddOtlpExporter();
+       })
+       .WithMetrics(b =>
+       {
+           b.AddMeter("OllamaSharp.*")
+            ...
+            .AddOtlpExporter();
+       });
+   ```
+
+   Distributed tracing is enabled with `AddSource("OllamaSharp.*")` which tells OpenTelemetry to listen to all [ActivitySources](https://learn.microsoft.com/dotnet/api/system.diagnostics.activitysource) with names starting with `OllamaSharp.*`.
+
+   Similarly, metrics are configured with `AddMeter("OllamaSharp.*")` which enables all OllamaSharp-related [Meters](https://learn.microsoft.com/dotnet/api/system.diagnostics.metrics.meter).
+
+Consider enabling [HTTP client instrumentation](https://www.nuget.org/packages/OpenTelemetry.Instrumentation.Http) to see all HTTP client
+calls made by your application including those done by the OllamaSharp.
+Check out [OpenTelemetry documentation](https://opentelemetry.io/docs/languages/net/getting-started/) for more details.
+
 ## Credits
 
 The icon and name were reused from the amazing [Ollama project](https://github.com/jmorganca/ollama).

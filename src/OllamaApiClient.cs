@@ -10,6 +10,7 @@ using OllamaSharp.MicrosoftAi;
 using OllamaSharp.Models;
 using OllamaSharp.Models.Chat;
 using OllamaSharp.Models.Exceptions;
+using OllamaSharp.Telemetry;
 
 namespace OllamaSharp;
 
@@ -53,6 +54,10 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 	/// If true, the <see cref="HttpClient"/> will be disposed when the <see cref="OllamaApiClient"/> is disposed.
 	/// </summary>
 	private readonly bool _disposeHttpClient;
+	/// <summary>
+	/// The telemetry source for the Ollama API client.
+	/// </summary>
+	private readonly OpenTelemetrySource _telemetry;
 
 	/// <summary>
 	/// Creates a new instance of the Ollama API client.
@@ -99,6 +104,7 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 			Model = defaultModel
 		};
 		SelectedModel = defaultModel;
+		_telemetry = new OpenTelemetrySource(Config.Uri);
 	}
 
 	/// <inheritdoc />
@@ -185,7 +191,7 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 				Currently, Ollama does not support function calls in streaming mode.
 				See Ollama docs at https://github.com/ollama/ollama/blob/main/docs/api.md#parameters-1 to see whether support has since been added.
 				""");
-
+		using OpenTelemetryScope? scope = _telemetry.StartChatScope(request);
 		using var requestMessage = new HttpRequestMessage(HttpMethod.Post, Endpoints.Chat);
 		requestMessage.Content = new StringContent(JsonSerializer.Serialize(request, OutgoingJsonSerializerOptions), Encoding.UTF8, MimeTypes.Json);
 
@@ -195,7 +201,7 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 
 		using var response = await SendToOllamaAsync(requestMessage, request, completion, cancellationToken).ConfigureAwait(false);
 
-		await foreach (var result in ProcessStreamedChatResponseAsync(response, cancellationToken).ConfigureAwait(false))
+		await foreach (var result in ProcessStreamedChatResponseAsync(response, scope, cancellationToken).ConfigureAwait(false))
 			yield return result;
 	}
 
@@ -272,7 +278,7 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 	private async Task<TResponse> PostAsync<TRequest, TResponse>(string endpoint, TRequest ollamaRequest, CancellationToken cancellationToken) where TRequest : OllamaRequest
 	{
 		using var requestMessage = CreateRequestMessage(HttpMethod.Post, endpoint, ollamaRequest);
-		
+
 		using var response = await SendToOllamaAsync(requestMessage, ollamaRequest, HttpCompletionOption.ResponseContentRead, cancellationToken).ConfigureAwait(false);
 
 		using var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
@@ -289,8 +295,8 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 		await foreach (var result in ProcessStreamedResponseAsync<TResponse>(response, cancellationToken).ConfigureAwait(false))
 			yield return result;
 	}
-	
-	
+
+
 	private HttpRequestMessage CreateRequestMessage(HttpMethod method, string endpoint) => new(method, endpoint);
 
 	private HttpRequestMessage CreateRequestMessage<TRequest>(HttpMethod method, string endpoint, TRequest ollamaRequest) where TRequest : OllamaRequest
@@ -299,8 +305,8 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 		requestMessage.Content = GetJsonContent(ollamaRequest);
 		return requestMessage;
 	}
-	
-	private StringContent GetJsonContent<TRequest>(TRequest ollamaRequest) where TRequest : OllamaRequest => 
+
+	private StringContent GetJsonContent<TRequest>(TRequest ollamaRequest) where TRequest : OllamaRequest =>
 		new(JsonSerializer.Serialize(ollamaRequest, OutgoingJsonSerializerOptions), Encoding.UTF8, MimeTypes.Json);
 
 	private async IAsyncEnumerable<TLine?> ProcessStreamedResponseAsync<TLine>(HttpResponseMessage response, [EnumeratorCancellation] CancellationToken cancellationToken)
@@ -331,7 +337,7 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 		}
 	}
 
-	private async IAsyncEnumerable<ChatResponseStream?> ProcessStreamedChatResponseAsync(HttpResponseMessage response, [EnumeratorCancellation] CancellationToken cancellationToken)
+	private async IAsyncEnumerable<ChatResponseStream?> ProcessStreamedChatResponseAsync(HttpResponseMessage response, OpenTelemetryScope? scope, [EnumeratorCancellation] CancellationToken cancellationToken)
 	{
 		using var stream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
 		using var reader = new StreamReader(stream);
@@ -341,9 +347,13 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 			var line = await reader.ReadLineAsync().ConfigureAwait(false) ?? "";
 			var streamedResponse = JsonSerializer.Deserialize<ChatResponseStream>(line, IncomingJsonSerializerOptions);
 
-			yield return streamedResponse?.Done ?? false
+			var parsedStreamResponse = streamedResponse?.Done ?? false
 				? JsonSerializer.Deserialize<ChatDoneResponseStream>(line, IncomingJsonSerializerOptions)!
 				: streamedResponse;
+
+			scope?.RecordChatCompletion(parsedStreamResponse);
+
+			yield return parsedStreamResponse;
 		}
 	}
 
