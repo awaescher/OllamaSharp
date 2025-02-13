@@ -202,13 +202,18 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 	/// <inheritdoc />
 	public async Task<bool> IsRunningAsync(CancellationToken cancellationToken = default)
 	{
-		using var requestMessage = new HttpRequestMessage(HttpMethod.Get, string.Empty); // without route returns "Ollama is running"
-
-		using var response = await SendToOllamaAsync(requestMessage, null, HttpCompletionOption.ResponseContentRead, cancellationToken).ConfigureAwait(false);
-
-		var stringContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-		return !string.IsNullOrWhiteSpace(stringContent);
+ 		using var requestMessage = new HttpRequestMessage(HttpMethod.Get, string.Empty); // without route returns "Ollama is running"
+ 		try
+	    {
+	        using var response = await SendToOllamaAsync(requestMessage, null, HttpCompletionOption.ResponseContentRead, cancellationToken).ConfigureAwait(false);
+			using HttpResponseMessage response = await SendToOllamaAsync(requestMessage, null, HttpCompletionOption.ResponseContentRead, cancellationToken).ConfigureAwait(continueOnCapturedContext: false);
+			return !string.IsNullOrWhiteSpace(await response.Content.ReadAsStringAsync().ConfigureAwait(continueOnCapturedContext: false));
+	    }
+	    catch (Exception ex)
+	    {
+	        // If the Ollama service is not enabled, HTTP requests will be abnormal.
+	        return false;
+	    }
 	}
 
 	/// <inheritdoc />
