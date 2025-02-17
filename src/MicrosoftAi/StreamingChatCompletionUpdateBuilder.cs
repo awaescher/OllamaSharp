@@ -4,18 +4,18 @@ using Microsoft.Extensions.AI;
 namespace OllamaSharp.MicrosoftAi;
 
 /// <summary>
-/// A builder that can append <see cref="StreamingChatCompletionUpdate"/> to one single completion update
+/// A builder that can append <see cref="ChatResponseUpdate"/> to one single completion update
 /// </summary>
-internal class StreamingChatCompletionUpdateBuilder
+internal class ChatResponseUpdateBuilder
 {
 	private readonly StringBuilder _contentBuilder = new();
-	private StreamingChatCompletionUpdate? _first;
+	private ChatResponseUpdate? _first;
 
 	/// <summary>
 	/// Appends a completion update to build one single completion update item
 	/// </summary>
 	/// <param name="update">The completion update to append to the final completion update</param>
-	public void Append(StreamingChatCompletionUpdate? update)
+	public void Append(ChatResponseUpdate? update)
 	{
 		if (update is null)
 			return;
@@ -27,9 +27,9 @@ internal class StreamingChatCompletionUpdateBuilder
 		_first.AdditionalProperties = update.AdditionalProperties;
 		_first.AuthorName = update.AuthorName;
 		_first.ChoiceIndex = update.ChoiceIndex;
-		_first.CompletionId = update.CompletionId;
 		_first.CreatedAt = update.CreatedAt;
 		_first.FinishReason = update.FinishReason;
+		_first.ResponseId = update.ResponseId;
 		_first.Role = update.Role;
 
 		//_first.Contents and .Text will be set in Complete() with values collected from each update
@@ -45,7 +45,7 @@ internal class StreamingChatCompletionUpdateBuilder
 	/// updates that were appended before
 	/// </summary>
 	/// <returns>The final consolidated <see cref="StreamingChatCompletionUpdate"/> object</returns>
-	public StreamingChatCompletionUpdate? Complete()
+	public ChatResponseUpdate? Complete()
 	{
 		if (_first is null)
 			return null;

@@ -13,6 +13,6 @@ public static partial class IAsyncEnumerableExtensions
 	/// <param name="stream">The <see cref="IAsyncEnumerable{StreamingChatCompletionUpdate}"/> to stream.</param>
 	/// <param name="itemCallback">An optional callback to additionally process every single item from the IAsyncEnumerable.</param>
 	/// <returns>A single <see cref="StreamingChatCompletionUpdate"/> built up from every single IAsyncEnumerable item.</returns>
-	public static Task<StreamingChatCompletionUpdate?> StreamToEndAsync(this IAsyncEnumerable<StreamingChatCompletionUpdate?> stream, Action<StreamingChatCompletionUpdate?>? itemCallback = null)
+	public static Task<ChatResponseUpdate?> StreamToEndAsync(this IAsyncEnumerable<ChatResponseUpdate?> stream, Action<ChatResponseUpdate?>? itemCallback = null)
 		=> stream.StreamToEndAsync(new MicrosoftAi.StreamingChatCompletionUpdateAppender(), itemCallback);
 }
