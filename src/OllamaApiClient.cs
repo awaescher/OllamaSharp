@@ -272,7 +272,7 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 	private async Task<TResponse> PostAsync<TRequest, TResponse>(string endpoint, TRequest ollamaRequest, CancellationToken cancellationToken) where TRequest : OllamaRequest
 	{
 		using var requestMessage = CreateRequestMessage(HttpMethod.Post, endpoint, ollamaRequest);
-		
+
 		using var response = await SendToOllamaAsync(requestMessage, ollamaRequest, HttpCompletionOption.ResponseContentRead, cancellationToken).ConfigureAwait(false);
 
 		using var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
@@ -289,8 +289,8 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 		await foreach (var result in ProcessStreamedResponseAsync<TResponse>(response, cancellationToken).ConfigureAwait(false))
 			yield return result;
 	}
-	
-	
+
+
 	private HttpRequestMessage CreateRequestMessage(HttpMethod method, string endpoint) => new(method, endpoint);
 
 	private HttpRequestMessage CreateRequestMessage<TRequest>(HttpMethod method, string endpoint, TRequest ollamaRequest) where TRequest : OllamaRequest
@@ -299,8 +299,8 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 		requestMessage.Content = GetJsonContent(ollamaRequest);
 		return requestMessage;
 	}
-	
-	private StringContent GetJsonContent<TRequest>(TRequest ollamaRequest) where TRequest : OllamaRequest => 
+
+	private StringContent GetJsonContent<TRequest>(TRequest ollamaRequest) where TRequest : OllamaRequest =>
 		new(JsonSerializer.Serialize(ollamaRequest, OutgoingJsonSerializerOptions), Encoding.UTF8, MimeTypes.Json);
 
 	private async IAsyncEnumerable<TLine?> ProcessStreamedResponseAsync<TLine>(HttpResponseMessage response, [EnumeratorCancellation] CancellationToken cancellationToken)
@@ -397,22 +397,19 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 
 	#region IChatClient and IEmbeddingGenerator implementation
 
-	/// <inheritdoc/>
-	ChatClientMetadata IChatClient.Metadata => new(Application.Ollama, Uri, SelectedModel);
+	private ChatClientMetadata _chatClientMetadata;
+	private EmbeddingGeneratorMetadata _embeddingGeneratorMetadata;
 
 	/// <inheritdoc/>
-	EmbeddingGeneratorMetadata IEmbeddingGenerator<string, Embedding<float>>.Metadata => new(Application.Ollama, Uri, SelectedModel);
-
-	/// <inheritdoc/>
-	async Task<ChatCompletion> IChatClient.CompleteAsync(IList<ChatMessage> chatMessages, ChatOptions? options, CancellationToken cancellationToken)
+	async Task<ChatResponse> IChatClient.GetResponseAsync(IList<ChatMessage> chatMessages, ChatOptions? options, CancellationToken cancellationToken)
 	{
 		var request = AbstractionMapper.ToOllamaSharpChatRequest(chatMessages, options, stream: false, OutgoingJsonSerializerOptions);
 		var response = await ChatAsync(request, cancellationToken).StreamToEndAsync().ConfigureAwait(false);
-		return AbstractionMapper.ToChatCompletion(response, response?.Model ?? request.Model ?? SelectedModel) ?? new ChatCompletion([]);
+		return AbstractionMapper.ToChatResponse(response, response?.Model ?? request.Model ?? SelectedModel) ?? new ChatResponse([]);
 	}
 
 	/// <inheritdoc/>
-	async IAsyncEnumerable<StreamingChatCompletionUpdate> IChatClient.CompleteStreamingAsync(IList<ChatMessage> chatMessages, ChatOptions? options, [EnumeratorCancellation] CancellationToken cancellationToken)
+	async IAsyncEnumerable<ChatResponseUpdate> IChatClient.GetStreamingResponseAsync(IList<ChatMessage> chatMessages, ChatOptions? options, [EnumeratorCancellation] CancellationToken cancellationToken)
 	{
 		var request = AbstractionMapper.ToOllamaSharpChatRequest(chatMessages, options, stream: true, OutgoingJsonSerializerOptions);
 		await foreach (var response in ChatAsync(request, cancellationToken).ConfigureAwait(false))
@@ -429,11 +426,17 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 
 	/// <inheritdoc/>
 	object? IChatClient.GetService(Type serviceKey, object? key) =>
-		key is null && serviceKey?.IsInstanceOfType(this) is true ? this : null;
+		key is not null ? null :
+		serviceKey == typeof(ChatClientMetadata) ? (_chatClientMetadata = new(Application.Ollama, Uri, SelectedModel)) :
+		serviceKey?.IsInstanceOfType(this) is true ? this :
+		null;
 
 	/// <inheritdoc />
 	object? IEmbeddingGenerator<string, Embedding<float>>.GetService(Type serviceKey, object? key) =>
-		key is null && serviceKey?.IsInstanceOfType(this) is true ? this : null;
+		key is not null ? null :
+		serviceKey == typeof(EmbeddingGeneratorMetadata) ? (_embeddingGeneratorMetadata = new(Application.Ollama, Uri, SelectedModel)) :
+		serviceKey?.IsInstanceOfType(this) is true ? this :
+		null;
 
 	/// <summary>
 	/// Releases the resources used by the <see cref="OllamaApiClient"/> instance.

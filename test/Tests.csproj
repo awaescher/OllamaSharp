@@ -24,6 +24,7 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="System.Linq.Async" Version="6.0.1" />
+		<PackageReference Include="Microsoft.Extensions.AI" Version="9.3.0-preview.1.25114.11" />
 	</ItemGroup>
 
 	<ItemGroup>
