@@ -48,7 +48,7 @@
 
 	<ItemGroup>
 		<!-- add the reference to the source generators to make sure the project gets built before OllamaSharp -->
-		<ProjectReference Include="..\SourceGenerators\OllamaSharp.SourceGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" />
+		<ProjectReference Include="..\SourceGenerators\OllamaSharp.SourceGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
 	</ItemGroup>
 
 	<ItemGroup>
