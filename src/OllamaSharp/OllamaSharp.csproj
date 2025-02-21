@@ -45,4 +45,18 @@
 		<PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="9.0.0" />
 		<PackageReference Include="Microsoft.Extensions.AI.Abstractions" Version="9.3.0-preview.1.25114.11" />
 	</ItemGroup>
+
+	<ItemGroup>
+		<!-- add the reference to the source generators to make sure the project gets built before OllamaSharp -->
+		<ProjectReference Include="..\SourceGenerators\OllamaSharp.SourceGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<!-- make sure to include the source generator dll to the nuget package under analyzers/dotnet/cs -->
+		<None Include="..\SourceGenerators\bin\$(Configuration)\netstandard2.0\OllamaSharp.SourceGenerators.dll"
+					Pack="true"
+					PackagePath="analyzers/dotnet/cs"
+					Visible="false" />
+	</ItemGroup>
+
 </Project>

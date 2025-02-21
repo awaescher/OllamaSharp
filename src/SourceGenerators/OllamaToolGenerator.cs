@@ -81,13 +81,13 @@ public class ToolSourceGenerator : IIncrementalGenerator
 		return name.EndsWith("OllamaToolAttribute", StringComparison.Ordinal);
 	}
 
-	private static (string methodSummary, Dictionary<string, string> paramComments) ExtractDocComments(string xmlDoc)
+	private static (string methodSummary, Dictionary<string, string> paramComments) ExtractDocComments(string? xmlDoc)
 	{
 		var summary = "";
 		var paramDict = new Dictionary<string, string>();
 		if (!string.IsNullOrEmpty(xmlDoc))
 		{
-			var sStart = xmlDoc.IndexOf("<summary>", StringComparison.OrdinalIgnoreCase);
+			var sStart = xmlDoc!.IndexOf("<summary>", StringComparison.OrdinalIgnoreCase);
 			var sEnd = xmlDoc.IndexOf("</summary>", StringComparison.OrdinalIgnoreCase);
 			if (sStart != -1 && sEnd != -1)
 			{
