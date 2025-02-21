@@ -78,9 +78,11 @@ public class ModelManagerConsole(IOllamaApiClient ollama) : OllamaConsole(ollama
 	private async Task CreateModel()
 	{
 		var createName = ReadInput("Enter a name for your new model:");
-		var fromModel = ReadInput("Enter the name of the model to create from:",
-			$"[{HintTextColor}]See [/][{AccentTextColor}][link]https://ollama.ai/library[/][/][{HintTextColor}] for available models[/]");
+
+		var fromModel = ReadInput("Enter the name of the model to create from:", $"[{HintTextColor}]See [/][{AccentTextColor}][link]https://ollama.ai/library[/][/][{HintTextColor}] for available models[/]");
+
 		var systemPrompt = ReadInput("Set a new system prompt word for the model:");
+		
 		await foreach (var status in Ollama.CreateModelAsync(new CreateModelRequest { From = fromModel, System = systemPrompt, Model = createName }))
 			AnsiConsole.MarkupLineInterpolated($"{status?.Status ?? ""}");
 	}
