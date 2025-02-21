@@ -1,22 +1,15 @@
 namespace OllamaSharp;
 
+/// <summary>
+/// Specifies that the class or method is a tool for Ollama.
+/// OllamaSharp will generate an implementation of this class or method with the name suffix -Tool.
+/// If your method is named "GetWeather", the generated class will be named "GetWeatherTool".
+/// </summary>
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
 public class OllamaToolAttribute : Attribute
 {
+	/// <summary>
+	/// Initializes a new instance of the <see cref="OllamaToolAttribute"/> class.
+	/// </summary>
 	public OllamaToolAttribute() { }
 }
-
-//// Extension-Klasse, um im Execute() auf IMethodSymbol zuzugreifen
-//// (Sinnvoll: an passender Stelle in Execute() "fixen")
-//public static class GeneratorExtensions
-//{
-//	public static void FixCandidateMethods(this OllamaToolGenerator.SyntaxReceiver receiver, Compilation compilation)
-//	{
-//		for (int i = 0; i < receiver.CandidateMethods.Count; i++)
-//		{
-//			// Falls wir den Placeholder null! gesetzt hatten, hier „reparieren“:
-//			// Nicht in diesem Minimal-Beispiel gezeigt,
-//			// weil wir das Symbolmatching gleich direkt beim Visit machen könnten.
-//		}
-//	}
-//}
