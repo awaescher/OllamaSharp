@@ -7,6 +7,9 @@
       <FixtureTestSelector>
         <FixtureName>Tests.FunctionalTests.OllamaApiClientTests</FixtureName>
       </FixtureTestSelector>
+      <FixtureTestSelector>
+        <FixtureName>Tests.FunctionalTests.JsonSchemaTests</FixtureName>
+      </FixtureTestSelector>
     </IgnoredTests>
   </Settings>
 </ProjectConfiguration>
