@@ -161,7 +161,7 @@ internal static class AbstractionMapper
 	/// </summary>
 	/// <param name="function">The function to convert.</param>
 	/// <returns>A <see cref="Tool"/> object containing the converted data.</returns>
-	private static object ToOllamaSharpTool(AIFunctionMetadata functionMetadata)
+	private static Tool ToOllamaSharpTool(AIFunction function)
 	{
 		return new Tool
 		{
@@ -239,7 +239,7 @@ internal static class AbstractionMapper
 	}
 
 	/// <summary>
-	/// Converts a Microsoft.Extensions.AI.<see cref="ImageContent"/> to a base64 image string.
+	/// Converts a Microsoft.Extensions.AI.<see cref="DataContent"/> to a base64 image string.
 	/// </summary>
 	/// <param name="content">The data content to convert.</param>
 	/// <returns>A string containing the base64 image data.</returns>
