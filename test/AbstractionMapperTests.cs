@@ -1,6 +1,4 @@
-using System;
 using System.Text.Json;
-using System.Text.Json.Schema;
 using FluentAssertions;
 using Microsoft.Extensions.AI;
 using NUnit.Framework;
@@ -721,7 +719,7 @@ public class AbstractionMapperTests
 		}
 	}
 
-	public class ToStreamingChatCompletionUpdateMethod : AbstractionMapperTests
+	public class ToChatResponseUpdateMethod : AbstractionMapperTests
 	{
 		[Test]
 		public void Maps_Known_Properties()
@@ -738,7 +736,7 @@ public class AbstractionMapperTests
 				Model = "llama3.1:8b"
 			};
 
-			var streamingChatCompletion = AbstractionMapper.ToStreamingChatCompletionUpdate(stream);
+			var streamingChatCompletion = AbstractionMapper.ToChatResponseUpdate(stream);
 
 			streamingChatCompletion.AdditionalProperties.Should().BeNull();
 			streamingChatCompletion.AuthorName.Should().BeNull();

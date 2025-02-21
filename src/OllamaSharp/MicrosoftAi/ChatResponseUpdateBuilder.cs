@@ -41,10 +41,10 @@ internal class ChatResponseUpdateBuilder
 	}
 
 	/// <summary>
-	/// Builds the final consolidated <see cref="StreamingChatCompletionUpdate"/> out of the streamed
+	/// Builds the final consolidated <see cref="ChatResponseUpdate"/> out of the streamed
 	/// updates that were appended before
 	/// </summary>
-	/// <returns>The final consolidated <see cref="StreamingChatCompletionUpdate"/> object</returns>
+	/// <returns>The final consolidated <see cref="ChatResponseUpdate"/> object</returns>
 	public ChatResponseUpdate? Complete()
 	{
 		if (_first is null)

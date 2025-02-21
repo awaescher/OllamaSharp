@@ -393,8 +393,8 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 
 	#region IChatClient and IEmbeddingGenerator implementation
 
-	private ChatClientMetadata _chatClientMetadata;
-	private EmbeddingGeneratorMetadata _embeddingGeneratorMetadata;
+	private ChatClientMetadata? _chatClientMetadata;
+	private EmbeddingGeneratorMetadata? _embeddingGeneratorMetadata;
 
 	/// <inheritdoc/>
 	async Task<ChatResponse> IChatClient.GetResponseAsync(IList<ChatMessage> chatMessages, ChatOptions? options, CancellationToken cancellationToken)
@@ -409,7 +409,7 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 	{
 		var request = AbstractionMapper.ToOllamaSharpChatRequest(chatMessages, options, stream: true, OutgoingJsonSerializerOptions);
 		await foreach (var response in ChatAsync(request, cancellationToken).ConfigureAwait(false))
-			yield return AbstractionMapper.ToStreamingChatCompletionUpdate(response);
+			yield return AbstractionMapper.ToChatResponseUpdate(response);
 	}
 
 	/// <inheritdoc/>

@@ -141,7 +141,7 @@ public class MessageBuilder
 	/// Console.WriteLine(string.Join(", ", resultMessage.Images)); // Output: example_image.png
 	/// </code>
 	/// </example>
-	public IReadOnlyCollection<string> Images { get; }
+	public IReadOnlyCollection<string>? Images { get; }
 
 	/// <summary>
 	/// Represents the collection of tool calls associated with a chat message.
@@ -176,8 +176,7 @@ public class MessageBuilder
 	/// Console.WriteLine(messageBuilder.ToolCalls.Count); // Output: 1
 	/// </code>
 	/// </example>
-	public IReadOnlyCollection<Message.ToolCall> ToolCalls { get; }
-
+	public IReadOnlyCollection<Message.ToolCall>? ToolCalls { get; }
 
 	/// <summary>
 	/// Indicates whether the current <see cref="MessageBuilder"/> instance contains any content, images, or tool calls.
