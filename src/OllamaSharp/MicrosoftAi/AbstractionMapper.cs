@@ -18,23 +18,23 @@ internal static class AbstractionMapper
 	/// </summary>
 	/// <param name="stream">The response stream with completion data.</param>
 	/// <param name="usedModel">The used model. This has to be a separate argument because there might be fallbacks from the calling method.</param>
-	/// <returns>A <see cref="ChatCompletion"/> object containing the mapped data.</returns>
-	public static ChatCompletion? ToChatCompletion(ChatDoneResponseStream? stream, string? usedModel)
+	/// <returns>A <see cref="ChatResponse"/> object containing the mapped data.</returns>
+	public static ChatResponse? ToChatResponse(ChatDoneResponseStream? stream, string? usedModel)
 	{
 		if (stream is null)
 			return null;
 
 		var chatMessage = ToChatMessage(stream.Message);
 
-		return new ChatCompletion(chatMessage)
+		return new ChatResponse(chatMessage)
 		{
 			FinishReason = ToFinishReason(stream.DoneReason),
 			AdditionalProperties = ParseOllamaChatResponseProps(stream),
 			Choices = [chatMessage],
-			CompletionId = stream.CreatedAtString,
 			CreatedAt = stream.CreatedAt,
 			ModelId = usedModel ?? stream.Model,
 			RawRepresentation = stream,
+			ResponseId = stream.CreatedAtString,
 			Usage = ParseOllamaChatResponseUsage(stream)
 		};
 	}
@@ -50,9 +50,14 @@ internal static class AbstractionMapper
 	/// <returns>A <see cref="ChatRequest"/> object containing the converted data.</returns>
 	public static ChatRequest ToOllamaSharpChatRequest(IList<ChatMessage> chatMessages, ChatOptions? options, bool stream, JsonSerializerOptions serializerOptions)
 	{
+		object? format = null;
+
+		if (options?.ResponseFormat is ChatResponseFormatJson jsonFormat)
+			format = jsonFormat.Schema.HasValue ? jsonFormat.Schema.Value : Application.Json;
+
 		var request = new ChatRequest
 		{
-			Format = Equals(options?.ResponseFormat, ChatResponseFormat.Json) ? Application.Json : null,
+			Format = format,
 			KeepAlive = null,
 			Messages = ToOllamaSharpMessages(chatMessages, serializerOptions),
 			Model = options?.ModelId ?? string.Empty, // will be set OllamaApiClient.SelectedModel if not set
@@ -75,36 +80,36 @@ internal static class AbstractionMapper
 		var hasAdditionalProperties = options?.AdditionalProperties?.Any() ?? false;
 		if (!hasAdditionalProperties)
 			return request;
-		
+
 		TryAddOllamaOption<bool?>(options, OllamaOption.F16kv, v => request.Options.F16kv = (bool?)v);
-		TryAddOllamaOption<float?>(options, OllamaOption.FrequencyPenalty, v => request.Options.FrequencyPenalty = (float?)v);
+		TryAddOllamaOption<float?>(options, OllamaOption.FrequencyPenalty, v => request.Options.FrequencyPenalty = Convert.ToSingle(v));
 		TryAddOllamaOption<bool?>(options, OllamaOption.LogitsAll, v => request.Options.LogitsAll = (bool?)v);
 		TryAddOllamaOption<bool?>(options, OllamaOption.LowVram, v => request.Options.LowVram = (bool?)v);
-		TryAddOllamaOption<int?>(options, OllamaOption.MainGpu, v => request.Options.MainGpu = (int?)v);
-		TryAddOllamaOption<float?>(options, OllamaOption.MinP, v => request.Options.MinP = (float?)v);
-		TryAddOllamaOption<int?>(options, OllamaOption.MiroStat, v => request.Options.MiroStat = (int?)v);
-		TryAddOllamaOption<float?>(options, OllamaOption.MiroStatEta, v => request.Options.MiroStatEta = (float?)v);
-		TryAddOllamaOption<float?>(options, OllamaOption.MiroStatTau, v => request.Options.MiroStatTau = (float?)v);
+		TryAddOllamaOption<int?>(options, OllamaOption.MainGpu, v => request.Options.MainGpu = Convert.ToInt32(v));
+		TryAddOllamaOption<float?>(options, OllamaOption.MinP, v => request.Options.MinP = Convert.ToSingle(v));
+		TryAddOllamaOption<int?>(options, OllamaOption.MiroStat, v => request.Options.MiroStat = Convert.ToInt32(v));
+		TryAddOllamaOption<float?>(options, OllamaOption.MiroStatEta, v => request.Options.MiroStatEta = Convert.ToSingle(v));
+		TryAddOllamaOption<float?>(options, OllamaOption.MiroStatTau, v => request.Options.MiroStatTau = Convert.ToSingle(v));
 		TryAddOllamaOption<bool?>(options, OllamaOption.Numa, v => request.Options.Numa = (bool?)v);
-		TryAddOllamaOption<int?>(options, OllamaOption.NumBatch, v => request.Options.NumBatch = (int?)v);
-		TryAddOllamaOption<int?>(options, OllamaOption.NumCtx, v => request.Options.NumCtx = (int?)v);
-		TryAddOllamaOption<int?>(options, OllamaOption.NumGpu, v => request.Options.NumGpu = (int?)v);
-		TryAddOllamaOption<int?>(options, OllamaOption.NumGqa, v => request.Options.NumGqa = (int?)v);
-		TryAddOllamaOption<int?>(options, OllamaOption.NumKeep, v => request.Options.NumKeep = (int?)v);
-		TryAddOllamaOption<int?>(options, OllamaOption.NumPredict, v => request.Options.NumPredict = (int?)v);
-		TryAddOllamaOption<int?>(options, OllamaOption.MaxOutputTokens, v => request.Options.NumPredict = (int?)v);
-		TryAddOllamaOption<int?>(options, OllamaOption.NumThread, v => request.Options.NumThread = (int?)v);
+		TryAddOllamaOption<int?>(options, OllamaOption.NumBatch, v => request.Options.NumBatch = Convert.ToInt32(v));
+		TryAddOllamaOption<int?>(options, OllamaOption.NumCtx, v => request.Options.NumCtx = Convert.ToInt32(v));
+		TryAddOllamaOption<int?>(options, OllamaOption.NumGpu, v => request.Options.NumGpu = Convert.ToInt32(v));
+		TryAddOllamaOption<int?>(options, OllamaOption.NumGqa, v => request.Options.NumGqa = Convert.ToInt32(v));
+		TryAddOllamaOption<int?>(options, OllamaOption.NumKeep, v => request.Options.NumKeep = Convert.ToInt32(v));
+		TryAddOllamaOption<int?>(options, OllamaOption.NumPredict, v => request.Options.NumPredict = Convert.ToInt32(v));
+		TryAddOllamaOption<int?>(options, OllamaOption.MaxOutputTokens, v => request.Options.NumPredict = Convert.ToInt32(v));
+		TryAddOllamaOption<int?>(options, OllamaOption.NumThread, v => request.Options.NumThread = Convert.ToInt32(v));
 		TryAddOllamaOption<bool?>(options, OllamaOption.PenalizeNewline, v => request.Options.PenalizeNewline = (bool?)v);
-		TryAddOllamaOption<float?>(options, OllamaOption.PresencePenalty, v => request.Options.PresencePenalty = (float?)v);
-		TryAddOllamaOption<int?>(options, OllamaOption.RepeatLastN, v => request.Options.RepeatLastN = (int?)v);
-		TryAddOllamaOption<float?>(options, OllamaOption.RepeatPenalty, v => request.Options.RepeatPenalty = (float?)v);
-		TryAddOllamaOption<int?>(options, OllamaOption.Seed, v => request.Options.Seed = (int?)v);
+		TryAddOllamaOption<float?>(options, OllamaOption.PresencePenalty, v => request.Options.PresencePenalty = Convert.ToSingle(v));
+		TryAddOllamaOption<int?>(options, OllamaOption.RepeatLastN, v => request.Options.RepeatLastN = Convert.ToInt32(v));
+		TryAddOllamaOption<float?>(options, OllamaOption.RepeatPenalty, v => request.Options.RepeatPenalty = Convert.ToSingle(v));
+		TryAddOllamaOption<int?>(options, OllamaOption.Seed, v => request.Options.Seed = Convert.ToInt32(v));
 		TryAddOllamaOption<string[]?>(options, OllamaOption.Stop, v => request.Options.Stop = (v as IEnumerable<string>)?.ToArray());
-		TryAddOllamaOption<float?>(options, OllamaOption.Temperature, v => request.Options.Temperature = (float?)v);
-		TryAddOllamaOption<float?>(options, OllamaOption.TfsZ, v => request.Options.TfsZ = (float?)v);
-		TryAddOllamaOption<int?>(options, OllamaOption.TopK, v => request.Options.TopK = (int?)v);
-		TryAddOllamaOption<float?>(options, OllamaOption.TopP, v => request.Options.TopP = (float?)v);
-		TryAddOllamaOption<float?>(options, OllamaOption.TypicalP, v => request.Options.TypicalP = (float?)v);
+		TryAddOllamaOption<float?>(options, OllamaOption.Temperature, v => request.Options.Temperature = Convert.ToSingle(v));
+		TryAddOllamaOption<float?>(options, OllamaOption.TfsZ, v => request.Options.TfsZ = Convert.ToSingle(v));
+		TryAddOllamaOption<int?>(options, OllamaOption.TopK, v => request.Options.TopK = Convert.ToInt32(v));
+		TryAddOllamaOption<float?>(options, OllamaOption.TopP, v => request.Options.TopP = Convert.ToSingle(v));
+		TryAddOllamaOption<float?>(options, OllamaOption.TypicalP, v => request.Options.TypicalP = Convert.ToSingle(v));
 		TryAddOllamaOption<bool?>(options, OllamaOption.UseMlock, v => request.Options.UseMlock = (bool?)v);
 		TryAddOllamaOption<bool?>(options, OllamaOption.UseMmap, v => request.Options.UseMmap = (bool?)v);
 		TryAddOllamaOption<bool?>(options, OllamaOption.VocabOnly, v => request.Options.VocabOnly = (bool?)v);
@@ -146,15 +151,15 @@ internal static class AbstractionMapper
 	private static object? ToOllamaSharpTool(AITool tool)
 	{
 		if (tool is AIFunction f)
-			return ToOllamaSharpTool(f.Metadata);
+			return ToOllamaSharpTool(f);
 
 		return null;
 	}
 
 	/// <summary>
-	/// Converts <see cref="AIFunctionMetadata"/> to a <see cref="Tool"/>.
+	/// Converts an <see cref="AIFunction"/> to a <see cref="Tool"/>.
 	/// </summary>
-	/// <param name="functionMetadata">The function metadata to convert.</param>
+	/// <param name="function">The function to convert.</param>
 	/// <returns>A <see cref="Tool"/> object containing the converted data.</returns>
 	private static object ToOllamaSharpTool(AIFunctionMetadata functionMetadata)
 	{
@@ -162,19 +167,9 @@ internal static class AbstractionMapper
 		{
 			Function = new Function
 			{
-				Description = functionMetadata.Description,
-				Name = functionMetadata.Name,
-				Parameters = new Parameters
-				{
-					Properties = functionMetadata.Parameters.ToDictionary(p => p.Name, p => new Property
-					{
-						Description = p.Description,
-						Enum = GetPossibleValues(p.Schema as JsonObject),
-						Type = ToFunctionTypeString(p.Schema as JsonObject)
-					}),
-					Required = functionMetadata.Parameters.Where(p => p.IsRequired).Select(p => p.Name),
-					Type = Application.Object
-				}
+				Description = function.Description,
+				Name = function.Name,
+				Parameters = JsonSerializer.Deserialize<Parameters>(function.JsonSchema),
 			},
 			Type = Application.Function
 		};
@@ -210,7 +205,7 @@ internal static class AbstractionMapper
 	{
 		foreach (var cm in chatMessages)
 		{
-			var images = cm.Contents.OfType<ImageContent>().Select(ToOllamaImage).Where(s => !string.IsNullOrEmpty(s)).ToArray();
+			var images = cm.Contents.OfType<DataContent>().Where(dc => dc.MediaType is null || dc.MediaTypeStartsWith("image/")).Select(ToOllamaImage).Where(s => !string.IsNullOrEmpty(s)).ToArray();
 			var toolCalls = cm.Contents.OfType<FunctionCallContent>().Select(ToOllamaSharpToolCall).ToArray();
 
 			// Only generates a message if there is text/content, images or tool calls
@@ -248,12 +243,12 @@ internal static class AbstractionMapper
 	/// </summary>
 	/// <param name="content">The data content to convert.</param>
 	/// <returns>A string containing the base64 image data.</returns>
-	private static string ToOllamaImage(ImageContent? content)
+	private static string ToOllamaImage(DataContent? content)
 	{
 		if (content is null)
 			return string.Empty;
 
-		if (content.ContainsData && content.Data.HasValue)
+		if (content.Data.HasValue)
 			return Convert.ToBase64String(content.Data.Value.ToArray());
 
 		throw new NotSupportedException("Images have to be provided as content (byte-Array or base64-string) for Ollama to be used. Other image sources like links are not supported.");
@@ -314,20 +309,20 @@ internal static class AbstractionMapper
 	}
 
 	/// <summary>
-	/// Converts a <see cref="ChatResponseStream"/> to a <see cref="StreamingChatCompletionUpdate"/>.
+	/// Converts a <see cref="ChatResponseStream"/> to a <see cref="ChatResponseUpdate"/>.
 	/// </summary>
 	/// <param name="response">The response stream to convert.</param>
-	/// <returns>A <see cref="StreamingChatCompletionUpdate"/> object containing the latest chat completion chunk.</returns>
-	public static StreamingChatCompletionUpdate ToStreamingChatCompletionUpdate(ChatResponseStream? response)
+	/// <returns>A <see cref="ChatResponseUpdate"/> object containing the latest chat completion chunk.</returns>
+	public static ChatResponseUpdate ToStreamingChatCompletionUpdate(ChatResponseStream? response)
 	{
-		return new StreamingChatCompletionUpdate
+		return new ChatResponseUpdate
 		{
 			// no need to set "Contents" as we set the text
-			CompletionId = response?.CreatedAtString,
 			ChoiceIndex = 0, // should be left at 0 as Ollama does not support this
 			CreatedAt = response?.CreatedAt,
 			FinishReason = response?.Done == true ? ChatFinishReason.Stop : null,
 			RawRepresentation = response,
+			ResponseId = response?.CreatedAtString,
 			// TODO: Check if "Message" can ever actually be null. If not, remove the null-coalescing operator
 			Text = response?.Message?.Content ?? string.Empty,
 			Role = ToAbstractionRole(response?.Message?.Role),

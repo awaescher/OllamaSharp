@@ -275,7 +275,7 @@ public class OllamaApiClientTests
 				StopSequences = ["stop me"],
 			};
 
-			await chatClient.CompleteAsync(chatHistory, options, CancellationToken.None);
+			await chatClient.GetResponseAsync(chatHistory, options, CancellationToken.None);
 
 			_request.Should().NotBeNull();
 			_requestContent.Should().NotBeNull();
