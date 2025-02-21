@@ -257,7 +257,7 @@ public class Chat
 	/// An <see cref="IAsyncEnumerable{T}"/> of strings representing the streamed response from the server.
 	/// </returns>
 	/// <example>
-	/// Example usage of the <see cref="SendAsAsync(string, string)"/> method:
+	/// Example usage of the <see cref="SendAsAsync(ChatRole, string, CancellationToken)"/> method:
 	/// <code>
 	/// var client = new OllamaApiClient("http://localhost:11434", "llama3.2-vision:latest");
 	/// var chat = new Chat(client);

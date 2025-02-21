@@ -14,7 +14,7 @@ namespace OllamaSharp.MicrosoftAi;
 internal static class AbstractionMapper
 {
 	/// <summary>
-	/// Maps a <see cref="ChatRequest"/> and <see cref="ChatDoneResponseStream"/> to a <see cref="ChatCompletion"/>.
+	/// Maps a <see cref="ChatRequest"/> and <see cref="ChatDoneResponseStream"/> to a <see cref="ChatResponse"/>.
 	/// </summary>
 	/// <param name="stream">The response stream with completion data.</param>
 	/// <param name="usedModel">The used model. This has to be a separate argument because there might be fallbacks from the calling method.</param>
@@ -137,7 +137,7 @@ internal static class AbstractionMapper
 	/// <returns>An enumeration of <see cref="Tool"/> objects containing the converted data.</returns>
 	private static IEnumerable<object>? ToOllamaSharpTools(IEnumerable<AITool>? tools)
 	{
-		return tools?.Select(ToOllamaSharpTool).Where(t => t is not null);
+		return tools?.Select(ToOllamaSharpTool).Where(t => t is not null)!;
 	}
 
 	/// <summary>
@@ -313,7 +313,7 @@ internal static class AbstractionMapper
 	/// </summary>
 	/// <param name="response">The response stream to convert.</param>
 	/// <returns>A <see cref="ChatResponseUpdate"/> object containing the latest chat completion chunk.</returns>
-	public static ChatResponseUpdate ToStreamingChatCompletionUpdate(ChatResponseStream? response)
+	public static ChatResponseUpdate ToChatResponseUpdate(ChatResponseStream? response)
 	{
 		return new ChatResponseUpdate
 		{

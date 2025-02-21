@@ -299,6 +299,8 @@ using System.ComponentModel;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
+#nullable enable
+
 namespace {containingNamespace}
 {{
     /// <summary>
