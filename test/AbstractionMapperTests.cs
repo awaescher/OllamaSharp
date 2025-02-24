@@ -10,6 +10,9 @@ using OllamaSharp.Models.Chat;
 
 namespace Tests;
 
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+#pragma warning disable CS8604 // Possible null reference argument.
+
 public class AbstractionMapperTests
 {
 	public class ToOllamaSharpChatRequestMethod : AbstractionMapperTests
@@ -394,8 +397,8 @@ public class AbstractionMapperTests
 				yield return new TestCaseData((object?)new List<string> { "stop1", "stop2", "stop3", "stop4" });
 				yield return new TestCaseData((object?)new string[] { "stop1", "stop2", "stop3" });
 				yield return new TestCaseData((object?)new HashSet<string> { "stop1", "stop2", });
-				yield return new TestCaseData((object?)new Stack<string>(new[] { "stop1" }));
-				yield return new TestCaseData((object?)new Queue<string>(new[] { "stop1" }));
+				yield return new TestCaseData((object?)new Stack<string>(["stop1"]));
+				yield return new TestCaseData((object?)new Queue<string>(["stop1"]));
 			}
 		}
 
@@ -756,24 +759,26 @@ public class AbstractionMapperTests
 		[Test]
 		public void Maps_ToolCalls()
 		{
-			var message = new Message();
-			message.Role = OllamaSharp.Models.Chat.ChatRole.Assistant;
-			message.Content = "It seems the sun will be out all day.";
-			message.ToolCalls =
-			[
-				new Message.ToolCall
-				{
-					Function = new Message.Function
+			var message = new Message
+			{
+				Role = OllamaSharp.Models.Chat.ChatRole.Assistant,
+				Content = "It seems the sun will be out all day.",
+				ToolCalls =
+				[
+					new Message.ToolCall
 					{
-						Arguments = new Dictionary<string, object?>
+						Function = new Message.Function
 						{
-							["city"] = "Honululu",
-							["unit"] = "celsius"
-						},
-						Name = "get_weather"
+							Arguments = new Dictionary<string, object?>
+							{
+								["city"] = "Honululu",
+								["unit"] = "celsius"
+							},
+							Name = "get_weather"
+						}
 					}
-				}
-			];
+				]
+			};
 
 			var chatMessage = AbstractionMapper.ToChatMessage(message);
 
@@ -821,8 +826,10 @@ public class AbstractionMapperTests
 		[Test]
 		public void Maps_KeepAlive_And_Truncate_From_AdditionalProperties()
 		{
-			var options = new EmbeddingGenerationOptions();
-			options.AdditionalProperties = [];
+			var options = new EmbeddingGenerationOptions
+			{
+				AdditionalProperties = []
+			};
 			options.AdditionalProperties["keep_alive"] = 123456789;
 			options.AdditionalProperties["truncate"] = true;
 
@@ -865,3 +872,6 @@ public class AbstractionMapperTests
 		}
 	}
 }
+
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+#pragma warning restore CS8604 // Possible null reference argument.

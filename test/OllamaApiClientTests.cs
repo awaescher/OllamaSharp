@@ -14,6 +14,9 @@ using ChatRole = OllamaSharp.Models.Chat.ChatRole;
 
 namespace Tests;
 
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+#pragma warning disable CS8604 // Possible null reference argument.
+
 public class OllamaApiClientTests
 {
 	private OllamaApiClient _client;
@@ -662,3 +665,6 @@ public static class WriterExtensions
 		await writer.WriteLineAsync(JsonSerializer.Serialize(json));
 	}
 }
+
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+#pragma warning restore CS8604 // Possible null reference argument.

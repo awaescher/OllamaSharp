@@ -24,14 +24,14 @@ public class ToolSourceGenerator : IIncrementalGenerator
 
 		context.RegisterSourceOutput(
 			compilationAndMethods,
-			(spc, source) => ExecuteGeneration(spc, source.Left, source.Right)
+			(spc, source) => ExecuteGeneration(spc, source.Right)
 		);
 	}
 
 	/// <summary>
 	/// Creates the final source code for each discovered [OllamaTool] method.
 	/// </summary>
-	private static void ExecuteGeneration(SourceProductionContext context, Compilation compilation, IReadOnlyList<IMethodSymbol> methods)
+	private static void ExecuteGeneration(SourceProductionContext context, IReadOnlyList<IMethodSymbol> methods)
 	{
 		foreach (var methodSymbol in methods)
 		{
@@ -51,7 +51,6 @@ public class ToolSourceGenerator : IIncrementalGenerator
 
 			var sourceCode = GenerateToolClassCode(
 				containingNamespace,
-				className,
 				toolClassName,
 				methodSymbol.Name,
 				methodSummary,
@@ -73,12 +72,12 @@ public class ToolSourceGenerator : IIncrementalGenerator
 		var model = context.SemanticModel;
 		var hasOllamaToolAttribute = methodDecl.AttributeLists
 			.SelectMany(al => al.Attributes)
-			.Any(a => IsOllamaToolAttribute(a, model));
+			.Any(IsOllamaToolAttribute);
 
 		return hasOllamaToolAttribute ? model.GetDeclaredSymbol(methodDecl) : null;
 	}
 
-	private static bool IsOllamaToolAttribute(AttributeSyntax attr, SemanticModel model)
+	private static bool IsOllamaToolAttribute(AttributeSyntax attr)
 	{
 		return attr.Name.ToString().Equals("OllamaTool");
 	}
@@ -188,30 +187,15 @@ public class ToolSourceGenerator : IIncrementalGenerator
 
 	private static string GenerateInvokeMethodCode(IMethodSymbol methodSymbol)
 	{
+		var paramLines = new List<string>();
+		var usageParams = new List<string>();
+
 		var parameters = methodSymbol.Parameters;
 		var methodName = methodSymbol.Name;
 		var className = methodSymbol.ContainingType.ToDisplayString();
 		var returnType = methodSymbol.ReturnType;
-		var isAsync = false;
-		string? resultType = null;
+		var isAsync = returnType.Name.Equals("Task", StringComparison.OrdinalIgnoreCase);
 
-		if (returnType.Name.Equals("Task", StringComparison.OrdinalIgnoreCase))
-		{
-			if (returnType is INamedTypeSymbol named && named.IsGenericType)
-			{
-				var typeArg = named.TypeArguments.FirstOrDefault();
-				if (typeArg != null)
-					resultType = typeArg.ToDisplayString();
-			}
-			isAsync = true;
-		}
-		else
-		{
-			resultType = returnType.ToDisplayString();
-		}
-
-		var paramLines = new List<string>();
-		var usageParams = new List<string>();
 		foreach (var p in parameters)
 		{
 			var pName = p.Name;
@@ -292,7 +276,6 @@ $@"{asyncSignature}
 
 	private static string GenerateToolClassCode(
 		string containingNamespace,
-		string containingClass,
 		string toolClassName,
 		string originalMethodName,
 		string methodSummary,

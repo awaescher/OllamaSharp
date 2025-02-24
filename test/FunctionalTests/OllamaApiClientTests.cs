@@ -7,6 +7,8 @@ using ChatRole = OllamaSharp.Models.Chat.ChatRole;
 
 namespace Tests.FunctionalTests;
 
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+
 public class OllamaApiClientTests
 {
 	private readonly Uri _baseUri = new("http://localhost:11434");
@@ -213,8 +215,8 @@ public class OllamaApiClientTests
 		var response = await _client.ChatAsync(new ChatRequest
 		{
 			Model = _model,
-			Messages = new[]
-			{
+			Messages =
+			[
 				new Message
 				{
 					Role = ChatRole.User,
@@ -230,7 +232,7 @@ public class OllamaApiClientTests
 					Role = ChatRole.User,
 					Content = "Who is the author of the Hitchhikers Guide to the Galaxy?"
 				}
-			}
+			]
 		})
 		.ToListAsync();
 
@@ -254,3 +256,5 @@ public class OllamaApiClientTests
 		response.Should().NotBeNull();
 	}
 }
+
+#pragma warning restore CS8602 // Dereference of a possibly null reference.

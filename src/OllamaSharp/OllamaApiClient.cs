@@ -291,8 +291,10 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 
 	private HttpRequestMessage CreateRequestMessage<TRequest>(HttpMethod method, string endpoint, TRequest ollamaRequest) where TRequest : OllamaRequest
 	{
-		var requestMessage = new HttpRequestMessage(method, endpoint);
-		requestMessage.Content = GetJsonContent(ollamaRequest);
+		var requestMessage = new HttpRequestMessage(method, endpoint)
+		{
+			Content = GetJsonContent(ollamaRequest)
+		};
 		return requestMessage;
 	}
 

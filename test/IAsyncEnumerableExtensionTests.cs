@@ -6,6 +6,8 @@ using OllamaSharp.Models.Chat;
 
 namespace Tests;
 
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+
 public class IAsyncEnumerableExtensionTests
 {
 	public class StreamToEndAsyncMethod : IAsyncEnumerableExtensionTests
@@ -72,3 +74,5 @@ public class IAsyncEnumerableExtensionTests
 			=> new() { Role = role, Content = content };
 	}
 }
+
+#pragma warning restore CS8602 // Dereference of a possibly null reference.

@@ -5,6 +5,9 @@ using OllamaSharp.Models.Chat;
 
 namespace Tests;
 
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+#pragma warning disable CS8604 // Possible null reference argument.
+
 public class ChatTests
 {
 	private readonly TestOllamaApiClient _ollama = new();
@@ -135,9 +138,10 @@ public class ChatTests
 		[Test]
 		public void Replaces_Chat_History()
 		{
-			var chat = new Chat(_ollama);
-
-			chat.Messages = [new Message { Content = "A", Role = ChatRole.System }];
+			var chat = new Chat(_ollama)
+			{
+				Messages = [new Message { Content = "A", Role = ChatRole.System }]
+			};
 			chat.Messages.Single().Content.Should().Be("A");
 
 			chat.Messages = [new Message { Content = "B", Role = ChatRole.System }];
@@ -148,3 +152,6 @@ public class ChatTests
 	protected static Message CreateMessage(ChatRole role, string content)
 		=> new() { Role = role, Content = content };
 }
+
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+#pragma warning restore CS8604 // Possible null reference argument.
