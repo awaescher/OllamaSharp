@@ -35,7 +35,11 @@ public class ToolSourceGenerator : IIncrementalGenerator
 	{
 		foreach (var methodSymbol in methods)
 		{
-			var ns = methodSymbol.ContainingType.ContainingNamespace?.ToString() ?? "";
+			var containingNamespace = methodSymbol.ContainingType.ContainingNamespace?.ToString() ?? "";
+
+			if (string.IsNullOrEmpty(containingNamespace) || containingNamespace.Equals("<global namespace>"))
+				throw new ArgumentException("A namespace is required!");
+
 			var className = methodSymbol.ContainingType.Name;
 			var toolClassName = methodSymbol.Name + "Tool";
 
@@ -46,7 +50,7 @@ public class ToolSourceGenerator : IIncrementalGenerator
 			var invokeMethodCode = GenerateInvokeMethodCode(methodSymbol);
 
 			var sourceCode = GenerateToolClassCode(
-				ns,
+				containingNamespace,
 				className,
 				toolClassName,
 				methodSymbol.Name,
@@ -56,7 +60,7 @@ public class ToolSourceGenerator : IIncrementalGenerator
 				invokeMethodCode
 			);
 
-			var hintName = ns + "." + className + "." + toolClassName + ".g.cs";
+			var hintName = containingNamespace + "." + className + "." + toolClassName + ".g.cs";
 			context.AddSource(hintName, sourceCode);
 		}
 	}
@@ -76,9 +80,7 @@ public class ToolSourceGenerator : IIncrementalGenerator
 
 	private static bool IsOllamaToolAttribute(AttributeSyntax attr, SemanticModel model)
 	{
-		var typeInfo = model.GetTypeInfo(attr);
-		var name = typeInfo.Type?.ToDisplayString() ?? "";
-		return name.EndsWith("OllamaToolAttribute", StringComparison.Ordinal);
+		return attr.Name.ToString().Equals("OllamaTool");
 	}
 
 	private static (string methodSummary, Dictionary<string, string> paramComments) ExtractDocComments(string? xmlDoc)
@@ -134,7 +136,7 @@ public class ToolSourceGenerator : IIncrementalGenerator
 		{
 			var paramName = param.Name;
 			var pType = param.Type;
-			var desc = paramComments.ContainsKey(paramName) ? paramComments[paramName] : "No description.";
+			var desc = paramComments.ContainsKey(paramName) ? paramComments[paramName] : "";
 			var typeName = pType.Name;
 			var jsonType = "string";
 			IEnumerable<string>? enumValues = null;
@@ -150,10 +152,7 @@ public class ToolSourceGenerator : IIncrementalGenerator
 						.Select(f => f.Name);
 				}
 			}
-			else if (typeName.Equals("Int32", StringComparison.OrdinalIgnoreCase)
-				  || typeName.Equals("Int64", StringComparison.OrdinalIgnoreCase)
-				  || typeName.Equals("Double", StringComparison.OrdinalIgnoreCase)
-				  || typeName.Equals("Single", StringComparison.OrdinalIgnoreCase))
+			else if (IsNumericType(typeName))
 			{
 				jsonType = "number";
 			}
@@ -176,6 +175,15 @@ public class ToolSourceGenerator : IIncrementalGenerator
 			? "new[] {" + string.Join(", ", requiredList) + "}"
 			: "Array.Empty<string>()";
 		return (propsJoined, req);
+	}
+
+	private static bool IsNumericType(string typeName)
+	{
+		return typeName.Equals("Int16", StringComparison.OrdinalIgnoreCase)
+			|| typeName.Equals("Int32", StringComparison.OrdinalIgnoreCase)
+			|| typeName.Equals("Int64", StringComparison.OrdinalIgnoreCase)
+			|| typeName.Equals("Double", StringComparison.OrdinalIgnoreCase)
+			|| typeName.Equals("Single", StringComparison.OrdinalIgnoreCase);
 	}
 
 	private static string GenerateInvokeMethodCode(IMethodSymbol methodSymbol)
@@ -214,14 +222,16 @@ public class ToolSourceGenerator : IIncrementalGenerator
 			if (p.Type.TypeKind == TypeKind.Enum)
 			{
 				if (p.IsOptional)
-					paramLines.Add($@"            {pType} {safeName} = ({pType})Enum.Parse(typeof({pType}), args.ContainsKey(""{pName}"") ? args[""{pName}""]?.ToString() ?? ""{p.ExplicitDefaultValue?.ToString() ?? p.Type.GetMembers().OfType<IFieldSymbol>().FirstOrDefault()?.Name}"" : ""{p.ExplicitDefaultValue?.ToString() ?? p.Type.GetMembers().OfType<IFieldSymbol>().FirstOrDefault()?.Name}"", true);");
+				{
+					var defaultValue = p.ExplicitDefaultValue?.ToString() ?? p.Type.GetMembers().OfType<IFieldSymbol>().FirstOrDefault()?.Name;
+					paramLines.Add($@"            {pType} {safeName} = ({pType})(Enum.TryParse(typeof({pType}), args.ContainsKey(""{pName}"") ? args[""{pName}""]?.ToString() ?? ""{defaultValue}"" : ""{defaultValue}"", ignoreCase: true, out var parsedEnumValue) ? parsedEnumValue : {defaultValue});");
+				}
 				else
-					paramLines.Add($@"            {pType} {safeName} = ({pType})Enum.Parse(typeof({pType}), args[""{pName}""]?.ToString() ?? """", true);");
+				{
+					paramLines.Add($@"            {pType} {safeName} = ({pType})Enum.Parse(typeof({pType}), args[""{pName}""]?.ToString() ?? """", ignoreCase: true);");
+				}
 			}
-			else if (tName.Equals("Int32", StringComparison.OrdinalIgnoreCase)
-				  || tName.Equals("Int64", StringComparison.OrdinalIgnoreCase)
-				  || tName.Equals("Double", StringComparison.OrdinalIgnoreCase)
-				  || tName.Equals("Single", StringComparison.OrdinalIgnoreCase))
+			else if (IsNumericType(tName))
 			{
 				if (p.IsOptional)
 					paramLines.Add($@"            {pType} {safeName} = args.ContainsKey(""{pName}"") ? Convert.To{tName}(args[""{pName}""]) : {(p.ExplicitDefaultValue ?? 0)};");

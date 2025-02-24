@@ -1,0 +1,83 @@
+using System.Reflection;
+using FluentAssertions;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using NUnit.Framework;
+using OllamaSharp;
+using OllamaSharp.Models.Chat;
+
+namespace Tests.SourceGenerators;
+
+public abstract class SourceGeneratorTest
+{
+	protected static SourceGeneratorResult RunGenerator(string source, bool allowErrors = false)
+	{
+		var generator = new ToolSourceGenerator();
+
+		source = """
+	using System;
+	using System.Collections.Generic;
+	using System.Threading.Tasks;
+	using OllamaSharp;
+
+	""" + source;
+
+		var syntaxTree = CSharpSyntaxTree.ParseText(source);
+
+		var compilation = CSharpCompilation.Create(
+			assemblyName: "Tests",
+			syntaxTrees: [syntaxTree]);
+
+		var driver = (GeneratorDriver)CSharpGeneratorDriver.Create(generator);
+		driver.RunGeneratorsAndUpdateCompilation(compilation, out var updatedCompilation, out var diagnostics);
+		var generatedTrees = updatedCompilation.SyntaxTrees.Skip(1).ToList(); // Skip original input
+
+		var hasErrors = diagnostics.Any();
+
+		if (hasErrors && allowErrors)
+			return new SourceGeneratorResult(GeneratedCode: "", GeneratedTool: null, diagnostics);
+
+		diagnostics.Should().BeEmpty("there should be no compilation errors");
+		generatedTrees.Should().ContainSingle("only one file should be generated");
+
+		var generatedCode = generatedTrees[0].ToString();
+
+		// add System.- and OllamaSharp references
+		var references = AppDomain.CurrentDomain
+			.GetAssemblies()
+			.Where(a => (a.FullName?.StartsWith("System.") ?? false) || (a.FullName?.Contains("OllamaSharp") ?? false))
+			.Select(a => MetadataReference.CreateFromFile(a.Location))
+			.ToList();
+
+		var finalCompilation = CSharpCompilation.Create(
+			"GeneratedAssembly",
+			syntaxTrees: updatedCompilation.SyntaxTrees, // compiles the original source and the generated source
+			references,
+			new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
+
+		using var stream = new MemoryStream();
+		var emitResult = finalCompilation.Emit(stream);
+		var compileerrors = emitResult.Diagnostics.Where(d => d.WarningLevel == 0);
+		compileerrors.Should().BeEmpty();
+
+		// load dynamic assembly
+		stream.Seek(0, SeekOrigin.Begin);
+		var generatedAssembly = Assembly.Load(stream.ToArray());
+		var generatedToolType = generatedAssembly.GetTypes().Single(t => t.Name.EndsWith("Tool")); // find generated tool
+		var tool = Activator.CreateInstance(generatedToolType) as Tool;
+
+		return new SourceGeneratorResult(generatedCode, tool, diagnostics);
+	}
+
+	protected static async Task<object?> InvokeTool(SourceGeneratorResult sourceGeneratorResult, Dictionary<string, object?>? args = default)
+	{
+		if (sourceGeneratorResult.GeneratedTool is OllamaSharp.Tools.IInvokableTool t)
+			return t.InvokeMethod(args);
+		else if (sourceGeneratorResult.GeneratedTool is OllamaSharp.Tools.IAsyncInvokableTool at)
+			return await at.InvokeMethodAsync(args);
+		else
+			throw new NotSupportedException("Tool is not IInvokableTool or IAsyncInvokableTool");
+	}
+
+	public record SourceGeneratorResult(string GeneratedCode, Tool? GeneratedTool, IEnumerable<Diagnostic> Diagnostics);
+}

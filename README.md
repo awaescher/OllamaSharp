@@ -10,15 +10,15 @@
 
 OllamaSharp provides .NET bindings for the [Ollama API](https://github.com/jmorganca/ollama/blob/main/docs/api.md), simplifying interactions with Ollama both locally and remotely.
 
-✅ Supporting [Microsoft.Extensions.AI](https://devblogs.microsoft.com/dotnet/introducing-microsoft-extensions-ai-preview/) and [Microsoft Semantic Kernel](https://github.com/microsoft/semantic-kernel/pull/7362)
-
 ## Features
 
-- Ease of use: Interact with Ollama in just a few lines of code.
-- API endpoint coverage: Support for all the Ollama API endpoints, including chats, embeddings, listing models, pulling and creating new models, and more.
-- Real-time streaming: Stream responses directly to your application.
-- Progress reporting: Get real-time progress feedback on tasks like model pulling.
-- Support for [vision models](https://ollama.com/blog/vision-models) and [tools (function calling)](https://ollama.com/blog/tool-support).
+- **Ease of use:** Interact with Ollama in just a few lines of code.
+- **Reliability**: Powering [Microsoft Semantic Kernel](https://github.com/microsoft/semantic-kernel/pull/7362), [.NET Aspire](https://learn.microsoft.com/en-us/dotnet/aspire/community-toolkit/ollama) and [Microsoft.Extensions.AI](https://devblogs.microsoft.com/dotnet/introducing-microsoft-extensions-ai-preview/)
+- **API coverage:** Covers every single Ollama API endpoint, including chats, embeddings, listing models, pulling and creating new models, and more.
+- **Real-time streaming:** Stream responses directly to your application.
+- **Progress reporting:** Real-time progress feedback on tasks like model pulling.
+- **Tools engine:** [Sophisticated tool support with source generators](https://awaescher.github.io/OllamaSharp/docs/tool-support.html).
+- **Multi modality:** Support for [vision models](https://ollama.com/blog/vision-models).
 
 ## Usage
 
@@ -62,15 +62,17 @@ await foreach (var stream in ollama.GenerateAsync("How are you today?"))
 ### Building interactive chats
 
 ```csharp
+// messages including their roles and tool calls will automatically be tracked within the chat object
+// and are accessible via the Messages property
+
 var chat = new Chat(ollama);
+
 while (true)
 {
     var message = Console.ReadLine();
     await foreach (var answerToken in chat.SendAsync(message))
         Console.Write(answerToken);
 }
-// messages including their roles and tool calls will automatically be tracked within the chat object
-// and are accessible via the Messages property
 ```
 
 ## Usage with Microsoft.Extensions.AI
