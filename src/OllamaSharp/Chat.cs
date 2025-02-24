@@ -218,20 +218,20 @@ public class Chat
 	/// An asynchronous enumerable stream of string responses from the model.
 	/// </returns>
 	/// <example>
-	/// Example usage of <see cref="SendAsync"/>:
+	/// Example usage of <see cref="SendAsync(string, IEnumerable{object}?, IEnumerable{string}?, object?, CancellationToken)"/>:
 	/// <code>
 	/// var client = new OllamaApiClient("http://localhost:11434", "llama3.2-vision:latest");
 	/// var chat = new Chat(client);
-	/// var tools = new List<Tool> { new Tool() }; // Example tools
-	/// var images = new List<string> { ConvertImageToBase64("path-to-image.jpg") };
+	/// var tools = new List&lt;Tool&gt; { new Tool() }; // Example tools
+	/// var images = new List&lt;string&gt; { ConvertImageToBase64("path-to-image.jpg") };
 	/// await foreach (var response in chat.SendAsync(
-	/// "Tell me about recent advancements in AI.",
-	/// tools: tools,
-	/// imagesAsBase64: images,
-	/// format: "json",
-	/// cancellationToken: CancellationToken.None))
+	///   "Tell me about recent advancements in AI.",
+	///   tools: tools,
+	///   imagesAsBase64: images,
+	///   format: "json",
+	///   cancellationToken: CancellationToken.None))
 	/// {
-	/// Console.WriteLine(response);
+	///   Console.WriteLine(response);
 	/// }
 	/// </code>
 	/// </example>

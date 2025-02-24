@@ -1,4 +1,6 @@
 - name: Introduction
   href: introduction.md
-- name: Getting Started
+- name: Getting started
   href: getting-started.md
+- name: Tool support
+  href: tool-support.md

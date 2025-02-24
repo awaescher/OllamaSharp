@@ -11,6 +11,8 @@
 
 	<ItemGroup>
 		<PackageReference Include="FluentAssertions" Version="7.0.0" />
+		<PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.12.0" />
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.12.0" />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
 		<PackageReference Include="Moq" Version="4.20.72" />
 		<PackageReference Include="NUnit" Version="4.3.2" />
@@ -29,6 +31,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\src\OllamaSharp\OllamaSharp.csproj" />
+		<ProjectReference Include="..\src\SourceGenerators\OllamaSharp.SourceGenerators.csproj" />
 	</ItemGroup>
 
 </Project>

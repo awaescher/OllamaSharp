@@ -6,6 +6,8 @@ using OllamaSharp;
 
 namespace Tests.FunctionalTests;
 
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+
 public class JsonSchemaTests
 {
 	private readonly Uri _baseUri = new("http://localhost:11434");
@@ -64,3 +66,5 @@ public class JsonSchemaTests
 		public required int Damage { get; set; }
 	}
 }
+
+#pragma warning restore CS8602 // Dereference of a possibly null reference.

@@ -1,4 +1,4 @@
-# Getting Started
+# Getting started
 
 [OllamaSharp](https://github.com/awaescher/OllamaSharp) provides .NET bindings for the Ollama API, simplifying interactions with Ollama both locally and remotely. It provides asynchronous streaming, progress reporting and convenience classes and functions to simplify common use cases.
 
@@ -9,56 +9,81 @@ Getting started with OllamaSharp only requires a running Ollama server and a sup
 - [Ollama](https://ollama.com/)
 - [.NET](https://dotnet.microsoft.com/en-us/download)
 
-## Pulling a model
+## Using Ollama with OllamaSharp
 
-To use Ollama, you will need  to specify a large language model to talk with. You can download a model from the [Ollama model hub](https://ollama.com/models). Below is a code snippet illustrating how to connect to an Ollama server and pull a model from there:
+To use Ollama from your code base, you'll need to create and initialize an instance of the `OllamaApiClient`. This client wraps each Ollama API endpoint in awaitable methods that fully support response streaming.
 
-```csharp
-using OllamaSharp;
-
-// if you are running Ollama locally on the default port:
+``` csharp
+// set up the client
 var uri = new Uri("http://localhost:11434");
 var ollama = new OllamaApiClient(uri);
 
-// pull the model, and print the status of the pull operation.
-await foreach (var status in ollama.PullModelAsync("llama3.2-vision"))
-    Console.WriteLine($"{status.Percent}% {status.Status}");
-
-Console.WriteLine("Model pulled successfully.");
+// select a model which should be used for further operations
+ollama.SelectedModel = "llama3.1:8b";
 ```
 
-This should result in an output like this:
+Once your client is initialized, you can list local models, pull new models from the [Ollama model hub](https://ollama.com/models) and build interactive chats with them.
 
-```
-100% pulling manifest
-100% pulling 11f274007f09
-100% pulling ece5e659647a
-100% pulling 715415638c9c
-100% pulling 0b4284c1f870
-100% pulling fefc914e46e6
-100% pulling fbd313562bb7
-100% verifying sha256 digest
-100% writing manifest
-100% success
-Model pulled successfully.
-```
 
-## Taking to a model
-
-After obtaining a model, you can begin interacting with Ollama. The following code snippet demonstrates how to connect to an Ollama server, load a model, and initiate a conversation:
+### Listing all models that are available locally
 
 ```csharp
-using OllamaSharp;
+var models = await ollama.ListLocalModelsAsync();
+```
 
-var uri = new Uri("http://localhost:11434");
-var model = "llama3.2-vision";
+### Pulling a model and reporting progress
 
-var ollama = new OllamaApiClient(uri, model);
-    
-var request = "Write a deep, beautiful song for me about AI and the future.";
+```csharp
+await foreach (var status in ollama.PullModelAsync("llama3.1:405b"))
+    Console.WriteLine($"{status.Percent}% {status.Status}");
+```
 
-await foreach (var stream in ollama.GenerateAsync(request))
+### Generating a completion directly into the console
+
+```csharp
+await foreach (var stream in ollama.GenerateAsync("How are you today?"))
     Console.Write(stream.Response);
 ```
 
-The model's answer should be streamed directly into your Console window.
+### Building interactive chats
+
+```csharp
+// messages including their roles and tool calls will automatically be tracked within the chat object
+// and are accessible via the Messages property
+
+var chat = new Chat(ollama);
+
+while (true)
+{
+    var message = Console.ReadLine();
+    await foreach (var answerToken in chat.SendAsync(message))
+        Console.Write(answerToken);
+}
+```
+
+
+## Usage with Microsoft.Extensions.AI
+
+Microsoft built an abstraction library to streamline the usage of different AI providers. This is a really interesting concept if you plan to build apps that might use different providers, like ChatGPT, Claude and local models with Ollama.
+
+I encourage you to read their accouncement [Introducing Microsoft.Extensions.AI Preview – Unified AI Building Blocks for .NET](https://devblogs.microsoft.com/dotnet/introducing-microsoft-extensions-ai-preview/).
+
+OllamaSharp is the first full implementation of their `IChatClient` and `IEmbeddingGenerator` that makes it possible to use Ollama just like every other chat provider.
+
+To do this, simply use the `OllamaApiClient` as `IChatClient` instead of `IOllamaApiClient`. 
+
+```csharp
+// install package Microsoft.Extensions.AI.Abstractions
+
+private static IChatClient CreateChatClient(Arguments arguments)
+{
+  if (arguments.Provider.Equals("ollama", StringComparison.OrdinalIgnoreCase))
+    return new OllamaApiClient(arguments.Uri, arguments.Model);
+  else
+    return new OpenAIChatClient(new OpenAI.OpenAIClient(arguments.ApiKey), arguments.Model); // ChatGPT or compatible
+}
+```
+
+Note that `IOllamaApiClient` provides many Ollama specific methods that `IChatClient` and `IEmbeddingGenerator` miss.
+
+Because these are abstractions, `IChatClient` and `IEmbeddingGenerator` will never implement the full Ollama API specification. However, `OllamaApiClient` implements three interfaces: the native `IOllamaApiClient` and Microsoft `IChatClient` and `IEmbeddingGenerator<string, Embedding<float>>` which allows you to cast it to any of these two interfaces as you need them at any time.
