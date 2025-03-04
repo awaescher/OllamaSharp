@@ -21,6 +21,8 @@ public abstract class OllamaConsole(IOllamaApiClient ollama)
 	public static string AiTextColor { get; } = "cyan";
 
 	public static string START_NEW_COMMAND { get; } = "/new";
+	public static string USE_MCP_SERVER_COMMAND { get; } = "/mcp";
+	public static string LIST_TOOLS_COMMAND { get; } = "/tools";
 
 	public static string EXIT_COMMAND { get; } = "/exit";
 

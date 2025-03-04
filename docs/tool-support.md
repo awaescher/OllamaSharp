@@ -154,3 +154,18 @@ OllamaSharp will automatically match tool calls from the AI model with the provi
   - cannot be used with non-static instance methods <sup>**_planned_**</sup>
   - cannot be used with interfaces to only define the meta data without providing an implementation <sup>**_planned_**</sup>
   - only available for C#. Visual Basic and F# are not supported <sup>**_not planned_**</sup>
+ 
+## Model context protocol servers
+
+OllamaSharp also supports the [model context protocol](https://modelcontextprotocol.io/introduction) which allows to define tools in a more generic way.
+This way, tools can be defined in a separate project and be used by multiple models.
+The "server"" will receive tool calls from the AI model and return the result back to the model. 
+This way, tools can be implemented in any language and be used by any AI model that supports the model context protocol.
+
+### Usage
+
+Please use the `OllamaSharp.ModelContextProtocol` NuGet package.
+
+Tools from the model context protocol server(s) can be added by the `Tools.GetFromMcpServers()` method.
+
+It supports reading MCP servers from a configuration file or via code.

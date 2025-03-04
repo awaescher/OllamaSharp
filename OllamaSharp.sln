@@ -16,6 +16,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OllamaApiConsole", "demo\Ol
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OllamaSharp.SourceGenerators", "src\SourceGenerators\OllamaSharp.SourceGenerators.csproj", "{5E82D0E3-0A62-4D84-8ED0-5F928885D8FB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OllamaSharp.ModelContextProtocol", "src\OllamaSharp.ModelContextProtocol\OllamaSharp.ModelContextProtocol.csproj", "{5D107FA8-6AFD-4092-9B4D-BFF31FFD7770}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OllamaSharp.ModelContextProtocol.Tests", "tests\OllamaSharp.ModelContextProtocol.Tests\OllamaSharp.ModelContextProtocol.Tests.csproj", "{73240E06-6B63-4062-B841-6AAA4DC3BFB8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,6 +42,14 @@ Global
 		{5E82D0E3-0A62-4D84-8ED0-5F928885D8FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5E82D0E3-0A62-4D84-8ED0-5F928885D8FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5E82D0E3-0A62-4D84-8ED0-5F928885D8FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D107FA8-6AFD-4092-9B4D-BFF31FFD7770}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D107FA8-6AFD-4092-9B4D-BFF31FFD7770}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D107FA8-6AFD-4092-9B4D-BFF31FFD7770}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D107FA8-6AFD-4092-9B4D-BFF31FFD7770}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73240E06-6B63-4062-B841-6AAA4DC3BFB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73240E06-6B63-4062-B841-6AAA4DC3BFB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73240E06-6B63-4062-B841-6AAA4DC3BFB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73240E06-6B63-4062-B841-6AAA4DC3BFB8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
