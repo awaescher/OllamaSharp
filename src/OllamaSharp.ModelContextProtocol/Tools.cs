@@ -38,7 +38,7 @@ public static class Tools
 			throw new ArgumentNullException(nameof(configurationFilePath));
 
 		if (!File.Exists(configurationFilePath))
-			throw new FileNotFoundException("The specified configuration file does not exist.", configurationFilePath);
+			throw new FileNotFoundException($"The specified configuration file '{configurationFilePath}' does not exist.", configurationFilePath);
 
 		using var fileStream = File.OpenRead(configurationFilePath);
 		var configuration = await JsonSerializer.DeserializeAsync<McpServerConfigurationFile>(fileStream, _jsonSerializerOptions)

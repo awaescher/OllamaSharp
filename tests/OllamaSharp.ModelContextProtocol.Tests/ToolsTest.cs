@@ -18,7 +18,7 @@ public class ToolsTests
 	public async Task Throws_Exception_When_File_Does_Not_Exists()
 	{
 		var action = async () => await Tools.GetFromMcpServers("someConfig.txt");
-		await action.Should().ThrowAsync<FileNotFoundException>().WithMessage("The specified configuration file does not exist.");
+		await action.Should().ThrowAsync<FileNotFoundException>().WithMessage("The specified configuration file 'someConfig.txt' does not exist.");
 	}
 
 	[Test]
