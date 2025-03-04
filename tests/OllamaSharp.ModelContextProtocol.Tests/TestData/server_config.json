@@ -1,0 +1,25 @@
+{
+	"mcpServers": {
+		"filesystem": {
+			"command": "C:\\Program Files\\nodejs\\node.exe",
+			"args": [
+				"%APPDATA%\\npm\\node_modules\\@modelcontextprotocol\\server-filesystem\\dist\\index.js",
+				"%USERPROFILE%\\Documents"
+			]
+		},
+
+		"github": {
+			"command": "C:\\Program Files\\nodejs\\node.exe",
+			"args": [
+				"%APPDATA%\\npm\\node_modules\\@modelcontextprotocol\\server-github\\dist\\index.js"
+			],
+			"env": {
+				"GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_PERSONAL_ACCESS_TOKEN}"
+			},
+			"options": {
+				"workingDirectory": "%USERPROFILE%\\Documents"
+			}
+
+		}
+	}
+}

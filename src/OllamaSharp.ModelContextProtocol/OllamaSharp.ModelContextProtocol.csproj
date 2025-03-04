@@ -1,0 +1,46 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+   	<TargetFrameworks>net8.0;net9.0</TargetFrameworks>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<Title>OllamaSharp.ModelContextProtocol</Title>
+		<Copyright>Andreas Wäscher</Copyright>
+		<Authors>Andreas Wäscher, Milkey Tan, Jerrett Davis, Toni Wenzel</Authors>
+		<PackageIcon>Ollama.png</PackageIcon>
+		<Description>Use MCP servers as tools for Ollama</Description>
+		<PackageProjectUrl>https://github.com/awaescher/OllamaSharp</PackageProjectUrl>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<RepositoryUrl>https://github.com/awaescher/OllamaSharp</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageTags>ollama;ollama-api;api;llm;openai;ai;localllama;llama;streaming;gpt;llamacpp;ichatclient;mcp;mcpserver</PackageTags>
+		<PackageLicenseFile>LICENSE</PackageLicenseFile>
+		<SignAssembly>True</SignAssembly>
+		<AssemblyOriginatorKeyFile>..\..\OllamaSharp.snk</AssemblyOriginatorKeyFile>
+		<NoWarn>$(NoWarn);IDE0065;IDE0055;IDE0011;S3881</NoWarn>
+  </PropertyGroup>
+
+	<ItemGroup>
+		<None Include="..\..\Ollama.png">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+		<None Include="..\..\LICENSE">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+		<None Include="..\..\README.md">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="mcpdotnet" Version="1.0.1.3" />
+	</ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\OllamaSharp\OllamaSharp.csproj" />
+  </ItemGroup>
+
+</Project>

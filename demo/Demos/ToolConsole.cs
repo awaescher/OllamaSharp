@@ -30,6 +30,8 @@ public class ToolConsole(IOllamaApiClient ollama) : OllamaConsole(ollama)
 
 				string message;
 
+				var tools = await GetTools();
+
 				do
 				{
 					AnsiConsole.WriteLine();
@@ -51,7 +53,7 @@ public class ToolConsole(IOllamaApiClient ollama) : OllamaConsole(ollama)
 
 					try
 					{
-						await foreach (var answerToken in chat.SendAsync(message, GetTools()))
+						await foreach (var answerToken in chat.SendAsync(message, tools))
 							AnsiConsole.MarkupInterpolated($"[{AiTextColor}]{answerToken}[/]");
 					}
 					catch (OllamaException ex)
@@ -91,7 +93,7 @@ public class ToolConsole(IOllamaApiClient ollama) : OllamaConsole(ollama)
 		}
 	}
 
-	private static object[] GetTools() => [new GetWeatherTool(), new GetLatLonAsyncTool()];
+	private static async Task<object[]> GetTools() => (await OllamaSharp.ModelContextProtocol.Tools.GetFromMcpServers("server_config.json")).Union([new GetWeatherTool(), new GetLatLonAsyncTool()]).ToArray();
 
 	public enum Unit
 	{

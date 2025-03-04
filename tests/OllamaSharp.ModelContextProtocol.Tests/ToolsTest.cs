@@ -1,0 +1,42 @@
+using FluentAssertions;
+using Microsoft.Extensions.Logging;
+
+namespace OllamaSharp.ModelContextProtocol.Tests;
+
+public class ToolsTests
+{
+	[Test]
+	public async Task Throws_Exception_When_Empty_File_Path()
+	{
+		var action = async () => await Tools.GetFromMcpServers("");
+		await action.Should().ThrowAsync<ArgumentNullException>().WithMessage("Value cannot be null. (Parameter 'configurationFilePath')");
+	}
+
+	[Test]
+	public async Task Throws_Exception_When_File_Does_Not_Exists()
+	{
+		var action = async () => await Tools.GetFromMcpServers("someConfig.txt");
+		await action.Should().ThrowAsync<FileNotFoundException>().WithMessage("The specified configuration file does not exist.");
+	}
+
+	[Test]
+	public async Task Throws_Exception()
+	{
+		var action = async () => await Tools.GetFromMcpServers();
+		await action.Should().ThrowAsync<ArgumentNullException>().WithMessage("Value cannot be null. (Parameter 'mcpServers')");
+	}
+
+	[Test]
+	public async Task Reads_From_File()
+	{
+		var loggerFactory = LoggerFactory.Create(builder => builder.AddDebug());
+
+		var options = new McpClientOptions
+		{
+			LoggerFactory = loggerFactory
+		};
+
+		var tools = await Tools.GetFromMcpServers("./TestData/server_config.json", options);
+		tools.Should().NotBeEmpty();
+	}
+}
