@@ -1,3 +1,4 @@
+using System.Reflection;
 using OllamaSharp;
 using OllamaSharp.Models.Exceptions;
 using Spectre.Console;
@@ -135,7 +136,7 @@ public class ToolConsole(IOllamaApiClient ollama) : OllamaConsole(ollama)
 		object[] tools = [new GetWeatherTool(), new GetLatLonAsyncTool()];
 
 		if (withMcpServers)
-			tools = tools.Union(await OllamaSharp.ModelContextProtocol.Tools.GetFromMcpServers("server_config.json")).ToArray();
+			tools = tools.Union(await OllamaSharp.ModelContextProtocol.Tools.GetFromMcpServers(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, "server_config.json"))).ToArray();
 
 		return tools.ToArray();
 	}
