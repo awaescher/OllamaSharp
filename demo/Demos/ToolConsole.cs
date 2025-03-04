@@ -16,7 +16,10 @@ public class ToolConsole(IOllamaApiClient ollama) : OllamaConsole(ollama)
 		if (!string.IsNullOrEmpty(Ollama.SelectedModel))
 		{
 			var keepChatting = true;
+			var mcpServersAdded = false;
 			var systemPrompt = ReadInput($"Define a system prompt [{HintTextColor}](optional)[/]");
+
+			var tools = await GetTools(false);
 
 			do
 			{
@@ -26,11 +29,17 @@ public class ToolConsole(IOllamaApiClient ollama) : OllamaConsole(ollama)
 				AnsiConsole.MarkupLine("If any tool is used, the intended usage information is printed.");
 				WriteChatInstructionHint();
 
+				if (!mcpServersAdded)
+				{
+					AnsiConsole.MarkupLine($"[{HintTextColor}]Enter [{AccentTextColor}]{USE_MCP_SERVER_COMMAND}[/] to use tools from MCP servers. Caution, please install following MCP servers for this demo: [/]");
+					AnsiConsole.MarkupLine($"[{HintTextColor}]npm install -g @modelcontextprotocol/server-filesystem [/]");
+					AnsiConsole.MarkupLine($"[{HintTextColor}]npm install -g @modelcontextprotocol/server-github [/]");
+				}
+				AnsiConsole.MarkupLine($"[{HintTextColor}]Enter [{AccentTextColor}]{LIST_TOOLS_COMMAND}[/] to list all available tools.[/]");
+
 				var chat = new Chat(Ollama, systemPrompt);
 
 				string message;
-
-				var tools = await GetTools();
 
 				do
 				{
@@ -46,6 +55,21 @@ public class ToolConsole(IOllamaApiClient ollama) : OllamaConsole(ollama)
 					if (message.Equals(START_NEW_COMMAND, StringComparison.OrdinalIgnoreCase))
 					{
 						keepChatting = true;
+						break;
+					}
+
+					if (message.Equals(USE_MCP_SERVER_COMMAND, StringComparison.OrdinalIgnoreCase))
+					{
+						keepChatting = true;
+						mcpServersAdded = true;
+						tools = await GetTools(true);
+						break;
+					}
+
+					if (message.Equals(LIST_TOOLS_COMMAND, StringComparison.OrdinalIgnoreCase))
+					{
+						keepChatting = true;
+						ListTools(tools);
 						break;
 					}
 
@@ -93,7 +117,29 @@ public class ToolConsole(IOllamaApiClient ollama) : OllamaConsole(ollama)
 		}
 	}
 
-	private static async Task<object[]> GetTools() => (await OllamaSharp.ModelContextProtocol.Tools.GetFromMcpServers("server_config.json")).Union([new GetWeatherTool(), new GetLatLonAsyncTool()]).ToArray();
+	private static void ListTools(object[] tools)
+	{
+		AnsiConsole.MarkupLine("\n[purple]Available tools:[/]");
+
+		foreach (var tool in tools)
+		{
+			if (tool is not OllamaSharp.Models.Chat.Tool chatTool)
+				break;
+
+			AnsiConsole.MarkupLineInterpolated($"{chatTool.Function.Name}\t\t[purple]{chatTool.Function.Description}[/]");
+		}
+	}
+
+	private static async Task<object[]> GetTools(bool withMcpServers)
+	{
+		object[] tools = [new GetWeatherTool(), new GetLatLonAsyncTool()];
+
+		if (withMcpServers)
+			tools = tools.Union(await OllamaSharp.ModelContextProtocol.Tools.GetFromMcpServers("server_config.json")).ToArray();
+
+		return tools.ToArray();
+	}
+
 
 	public enum Unit
 	{

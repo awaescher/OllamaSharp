@@ -22,7 +22,7 @@ public class ToolsTests
 	}
 
 	[Test]
-	public async Task Throws_Exception()
+	public async Task Throws_Exception_When_Server_Are_Empty()
 	{
 		var action = async () => await Tools.GetFromMcpServers();
 		await action.Should().ThrowAsync<ArgumentNullException>().WithMessage("Value cannot be null. (Parameter 'mcpServers')");

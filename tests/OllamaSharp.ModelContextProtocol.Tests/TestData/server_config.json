@@ -1,7 +1,7 @@
 {
 	"mcpServers": {
 		"filesystem": {
-			"command": "C:\\Program Files\\nodejs\\node.exe",
+			"command": "willbeIgnored",
 			"args": [
 				"%APPDATA%\\npm\\node_modules\\@modelcontextprotocol\\server-filesystem\\dist\\index.js",
 				"%USERPROFILE%\\Documents"
@@ -9,9 +9,9 @@
 		},
 
 		"github": {
-			"command": "C:\\Program Files\\nodejs\\node.exe",
+			"command": "willbeIgnored",
 			"args": [
-				"%APPDATA%\\npm\\node_modules\\@modelcontextprotocol\\server-github\\dist\\index.js"
+				"someArgs"
 			],
 			"env": {
 				"GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_PERSONAL_ACCESS_TOKEN}"
