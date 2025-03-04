@@ -19,7 +19,7 @@
 
 	<ItemGroup>
 	  <None Update="server_config.json">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
 	</ItemGroup>
 
