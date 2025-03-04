@@ -126,7 +126,7 @@ public class ToolConsole(IOllamaApiClient ollama) : OllamaConsole(ollama)
 			if (tool is not OllamaSharp.Models.Chat.Tool chatTool)
 				break;
 
-			AnsiConsole.MarkupLineInterpolated($"{chatTool.Function.Name}\t\t[purple]{chatTool.Function.Description}[/]");
+			AnsiConsole.MarkupLineInterpolated($"{chatTool.Function?.Name ?? "Unknown"}\t\t[purple]{chatTool.Function?.Description}[/]");
 		}
 	}
 
