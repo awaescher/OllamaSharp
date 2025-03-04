@@ -1,5 +1,7 @@
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
+using OllamaSharp.ModelContextProtocol.Server;
+using OllamaSharp.ModelContextProtocol.Tests.Infrastructure;
 
 namespace OllamaSharp.ModelContextProtocol.Tests;
 
@@ -33,10 +35,20 @@ public class ToolsTests
 
 		var options = new McpClientOptions
 		{
-			LoggerFactory = loggerFactory
+			LoggerFactory = loggerFactory,
+			TransportFactoryMethod = config => new TestClientTransport(config),
 		};
 
 		var tools = await Tools.GetFromMcpServers("./TestData/server_config.json", options);
 		tools.Should().NotBeEmpty();
+		tools.Should().HaveCount(2);
+
+		var tool = tools[0];
+		tool.Should().BeOfType<McpClientTool>();
+		var clientTools = tool.As<McpClientTool>();
+		clientTools.Type.Should().Be("function");
+		clientTools.Function.Should().NotBeNull();
+		clientTools.Function!.Name.Should().Be("test_for_filesystem");
 	}
+
 }

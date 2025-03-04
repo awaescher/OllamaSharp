@@ -13,7 +13,15 @@ namespace OllamaSharp.ModelContextProtocol;
 /// </summary>
 public static class Tools
 {
-	private static readonly JsonSerializerOptions _jsonSerializerOptions = new(JsonSerializerDefaults.Web);
+	private static readonly JsonSerializerOptions _jsonSerializerOptions = CreateJsonOptions();
+
+	private static JsonSerializerOptions CreateJsonOptions()
+	{
+		JsonSerializerOptions options = new(JsonSerializerDefaults.Web);
+		options.Converters.Add(new JsonStringEnumConverter());
+
+		return options;
+	}
 
 	/// <summary>
 	/// Gets the tools from the specified MCP server configuration file.
@@ -100,7 +108,7 @@ public static class Tools
 				TransportType = server.TransportType.ToString(),
 				Arguments = ResolveVariables(server.Arguments),
 				Location = server.Command,
-				TransportOptions = server.Options ?? new()
+				TransportOptions = server.Options ?? []
 			};
 
 			if (server.Environment != null)

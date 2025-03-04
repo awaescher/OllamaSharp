@@ -1,4 +1,3 @@
-
 using McpDotNet.Client;
 
 namespace OllamaSharp.ModelContextProtocol.Server;
@@ -44,11 +43,18 @@ public class McpClientTool : OllamaSharp.Models.Chat.Tool, OllamaSharp.Tools.IAs
 	{
 		var arguments = args?.ToDictionary(a => a.Key, a => a.Value ?? string.Empty) ?? [];
 
-		var toolresult = await _client.CallToolAsync(Function!.Name!, arguments);
+		try
+		{
+			var toolresult = await _client.CallToolAsync(Function!.Name!, arguments);
 
-		if (toolresult.IsError)
-			return null;
+			if (toolresult.IsError)
+				return null;
 
-		return toolresult.Content;
+			return string.Join('\n', toolresult.Content.Select(c => c.Text));
+		}
+		catch (Exception ex)
+		{
+			return ex.Message;
+		}
 	}
 }
