@@ -16,10 +16,6 @@
 			"env": {
 				"GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_PERSONAL_ACCESS_TOKEN}"
 			}
-		},
-
-		"testServer": {
-			"command": "C:\\Data\\temp\\McpTestServer\\bin\\Debug\\net9.0\\McpTestServer.exe"
 		}
 	}
 }
