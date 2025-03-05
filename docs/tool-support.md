@@ -146,6 +146,7 @@ OllamaSharp will automatically match tool calls from the AI model with the provi
     - the tool implementation itself is not duplicated but gets executed from the generated tool. This allows easy debugging.
     - the tool's result value will automatically be back-propagated to the chat so that the AI model can continue working.
     - the entire tool invocation behavior can be modified by changing the `Chat.ToolInvoker` instance.
+ - the project containing the tools **must generate a documentation file**, otherwise the tools' summaries are lost after compilation. Add `<GenerateDocumentationFile>true</GenerateDocumentationFile>` to the corresponding project file.
 
  #### Limitations
 
@@ -154,6 +155,8 @@ OllamaSharp will automatically match tool calls from the AI model with the provi
   - cannot be used with non-static instance methods <sup>**_planned_**</sup>
   - cannot be used with interfaces to only define the meta data without providing an implementation <sup>**_planned_**</sup>
   - only available for C#. Visual Basic and F# are not supported <sup>**_not planned_**</sup>
+
+ > The project containing the Ollama tools must generate a documentation file, see "Important details".
  
 ## Model context protocol servers
 

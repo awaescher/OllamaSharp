@@ -5,10 +5,10 @@
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<Title>OllamaSharp.ModelContextProtocol</Title>
-		<Copyright>Toni Wenzel</Copyright>
-		<Authors>Andreas Wäscher, Milkey Tan, Jerrett Davis, Toni Wenzel</Authors>
+		<Copyright>Andreas Wäscher</Copyright>
+		<Authors>Toni Wenzel</Authors>
 		<PackageIcon>Ollama.png</PackageIcon>
-		<Description>Use MCP servers as tools for Ollama</Description>
+		<Description>Use tools from model context protocol (MCP) servers with Ollama</Description>
 		<PackageProjectUrl>https://github.com/awaescher/OllamaSharp</PackageProjectUrl>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<RepositoryUrl>https://github.com/awaescher/OllamaSharp</RepositoryUrl>
