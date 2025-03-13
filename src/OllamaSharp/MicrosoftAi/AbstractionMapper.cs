@@ -30,11 +30,10 @@ internal static class AbstractionMapper
 		{
 			FinishReason = ToFinishReason(stream.DoneReason),
 			AdditionalProperties = ParseOllamaChatResponseProps(stream),
-			Choices = [chatMessage],
 			CreatedAt = stream.CreatedAt,
 			ModelId = usedModel ?? stream.Model,
 			RawRepresentation = stream,
-			ResponseId = stream.CreatedAtString,
+			ResponseId = stream.CreatedAtString ?? Guid.NewGuid().ToString("N"),
 			Usage = ParseOllamaChatResponseUsage(stream)
 		};
 	}
@@ -43,12 +42,12 @@ internal static class AbstractionMapper
 	/// Converts Microsoft.Extensions.AI <see cref="ChatMessage"/> objects and
 	/// an option <see cref="ChatOptions"/> instance to an OllamaSharp <see cref="ChatRequest"/>.
 	/// </summary>
-	/// <param name="chatMessages">A list of chat messages.</param>
+	/// <param name="messages">A list of chat messages.</param>
 	/// <param name="options">Optional chat options to configure the request.</param>
 	/// <param name="stream">Indicates if the request should be streamed.</param>
 	/// <param name="serializerOptions">Serializer options</param>
 	/// <returns>A <see cref="ChatRequest"/> object containing the converted data.</returns>
-	public static ChatRequest ToOllamaSharpChatRequest(IList<ChatMessage> chatMessages, ChatOptions? options, bool stream, JsonSerializerOptions serializerOptions)
+	public static ChatRequest ToOllamaSharpChatRequest(IEnumerable<ChatMessage> messages, ChatOptions? options, bool stream, JsonSerializerOptions serializerOptions)
 	{
 		object? format = null;
 
@@ -59,7 +58,7 @@ internal static class AbstractionMapper
 		{
 			Format = format,
 			KeepAlive = null,
-			Messages = ToOllamaSharpMessages(chatMessages, serializerOptions),
+			Messages = ToOllamaSharpMessages(messages, serializerOptions),
 			Model = options?.ModelId ?? string.Empty, // will be set OllamaApiClient.SelectedModel if not set
 			Options = new RequestOptions
 			{
@@ -198,18 +197,18 @@ internal static class AbstractionMapper
 	/// <summary>
 	/// Converts a list of Microsoft.Extensions.AI.<see cref="ChatMessage"/> to a list of Ollama <see cref="Message"/>.
 	/// </summary>
-	/// <param name="chatMessages">The chat messages to convert.</param>
+	/// <param name="messages">The chat messages to convert.</param>
 	/// <param name="serializerOptions">Serializer options</param>
 	/// <returns>An enumeration of <see cref="Message"/> objects containing the converted data.</returns>
-	private static IEnumerable<Message> ToOllamaSharpMessages(IList<ChatMessage> chatMessages, JsonSerializerOptions serializerOptions)
+	private static IEnumerable<Message> ToOllamaSharpMessages(IEnumerable<ChatMessage> messages, JsonSerializerOptions serializerOptions)
 	{
-		foreach (var cm in chatMessages)
+		foreach (var cm in messages)
 		{
-			var images = cm.Contents.OfType<DataContent>().Where(dc => dc.MediaType is null || dc.MediaTypeStartsWith("image/")).Select(ToOllamaImage).Where(s => !string.IsNullOrEmpty(s)).ToArray();
+			var images = cm.Contents.OfType<DataContent>().Where(dc => dc.HasTopLevelMediaType("image")).Select(ToOllamaImage).ToArray();
 			var toolCalls = cm.Contents.OfType<FunctionCallContent>().Select(ToOllamaSharpToolCall).ToArray();
 
 			// Only generates a message if there is text/content, images or tool calls
-			if (cm.Text is not null || images.Length > 0 || toolCalls.Length > 0)
+			if (cm.Text is { Length: > 0 } || images.Length > 0 || toolCalls.Length > 0)
 			{
 				yield return new Message
 				{
@@ -243,15 +242,9 @@ internal static class AbstractionMapper
 	/// </summary>
 	/// <param name="content">The data content to convert.</param>
 	/// <returns>A string containing the base64 image data.</returns>
-	private static string ToOllamaImage(DataContent? content)
+	private static string ToOllamaImage(DataContent content)
 	{
-		if (content is null)
-			return string.Empty;
-
-		if (content.Data.HasValue)
-			return Convert.ToBase64String(content.Data.Value.ToArray());
-
-		throw new NotSupportedException("Images have to be provided as content (byte-Array or base64-string) for Ollama to be used. Other image sources like links are not supported.");
+		return Convert.ToBase64String(content.Data.ToArray());
 	}
 
 	/// <summary>
@@ -312,20 +305,18 @@ internal static class AbstractionMapper
 	/// Converts a <see cref="ChatResponseStream"/> to a <see cref="ChatResponseUpdate"/>.
 	/// </summary>
 	/// <param name="response">The response stream to convert.</param>
+	/// <param name="responseId">The response ID to store onto the created update.</param>
 	/// <returns>A <see cref="ChatResponseUpdate"/> object containing the latest chat completion chunk.</returns>
-	public static ChatResponseUpdate ToChatResponseUpdate(ChatResponseStream? response)
+	public static ChatResponseUpdate ToChatResponseUpdate(ChatResponseStream? response, string responseId)
 	{
-		return new ChatResponseUpdate
+		// TODO: Check if "Message" can ever actually be null. If not, remove the null-coalescing operator
+		return new(ToAbstractionRole(response?.Message?.Role), response?.Message?.Content ?? string.Empty)
 		{
 			// no need to set "Contents" as we set the text
-			ChoiceIndex = 0, // should be left at 0 as Ollama does not support this
 			CreatedAt = response?.CreatedAt,
 			FinishReason = response?.Done == true ? ChatFinishReason.Stop : null,
 			RawRepresentation = response,
-			ResponseId = response?.CreatedAtString,
-			// TODO: Check if "Message" can ever actually be null. If not, remove the null-coalescing operator
-			Text = response?.Message?.Content ?? string.Empty,
-			Role = ToAbstractionRole(response?.Message?.Role),
+			ResponseId = responseId,
 			ModelId = response?.Model
 		};
 	}

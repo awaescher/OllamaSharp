@@ -22,8 +22,8 @@ public class AbstractionMapperTests
 		{
 			var messages = new List<ChatMessage>
 			{
-				new() { Role = Microsoft.Extensions.AI.ChatRole.Assistant, Text = "A" },
-				new() { Role = Microsoft.Extensions.AI.ChatRole.User, Text = "B" },
+				new(Microsoft.Extensions.AI.ChatRole.Assistant, "A"),
+				new(Microsoft.Extensions.AI.ChatRole.User, "B"),
 			};
 
 			var options = new ChatOptions { Temperature = 0.5f, /* other properties are left out */ };
@@ -68,32 +68,26 @@ public class AbstractionMapperTests
 		{
 			var chatMessages = new List<Microsoft.Extensions.AI.ChatMessage>
 			{
-				new()
+				new(Microsoft.Extensions.AI.ChatRole.Assistant, "Hi there.")
 				{
 					AdditionalProperties = [],
 					AuthorName = "a1",
 					Contents = [new TextContent("Hi there.")],
 					RawRepresentation = null,
-					Role = Microsoft.Extensions.AI.ChatRole.Assistant,
-					Text = "Hi there."
 				},
-				new()
+				new(Microsoft.Extensions.AI.ChatRole.User, "What is 3 + 4?")
 				{
 					AdditionalProperties = [],
 					AuthorName = "a2",
 					Contents = [new TextContent("What is 3 + 4?")],
 					RawRepresentation = null,
-					Role = Microsoft.Extensions.AI.ChatRole.User,
-					Text = "What is 3 + 4?"
 				},
-				new()
+				new(Microsoft.Extensions.AI.ChatRole.Assistant, "3 + 4 is 7")
 				{
 					AdditionalProperties = [],
 					AuthorName = "a1",
 					Contents = [new TextContent("3 + 4 is 7")],
 					RawRepresentation = null,
-					Role = Microsoft.Extensions.AI.ChatRole.Assistant,
-					Text = "3 + 4 is 7"
 				},
 			};
 
@@ -176,7 +170,7 @@ public class AbstractionMapperTests
 					AuthorName = "a1",
 					Contents = [
 						new TextContent("Make me an image like this, but with beer."),
-						new DataContent(bytes)],
+						new DataContent(bytes, "image/png")],
 					RawRepresentation = null,
 					Role = Microsoft.Extensions.AI.ChatRole.User
 				}
@@ -191,7 +185,7 @@ public class AbstractionMapperTests
 		/// Links to images are not supported
 		/// </summary>
 		[Test]
-		public void Does_Not_Support_Image_Links()
+		public void Ignores_UriContent()
 		{
 			var chatMessages = new List<Microsoft.Extensions.AI.ChatMessage>
 			{
@@ -201,7 +195,7 @@ public class AbstractionMapperTests
 					AuthorName = "a1",
 					Contents = [
 						new TextContent("Make me an image like this, but with beer."),
-						new DataContent("https://unsplash.com/sunset.png")],
+						new UriContent("https://unsplash.com/sunset.png", "image/png")],
 					RawRepresentation = null,
 					Role = Microsoft.Extensions.AI.ChatRole.User
 				}
@@ -213,7 +207,7 @@ public class AbstractionMapperTests
 				request.Messages.Should().NotBeEmpty(); // access .Messages to invoke the evaluation of IEnumerable<Message>
 			};
 
-			act.Should().Throw<NotSupportedException>().Which.Message.Should().Contain("Images have to be provided as content");
+			act.Should().NotThrow();
 		}
 
 		[Test]
@@ -221,13 +215,11 @@ public class AbstractionMapperTests
 		{
 			var chatMessages = new List<Microsoft.Extensions.AI.ChatMessage>
 			{
-				new()
+				new(Microsoft.Extensions.AI.ChatRole.User, "What's the weather in Honululu?")
 				{
 					AdditionalProperties = [],
 					AuthorName = "a1",
 					RawRepresentation = null,
-					Role = Microsoft.Extensions.AI.ChatRole.User,
-					Text = "What's the weather in Honululu?"
 				}
 			};
 
@@ -360,13 +352,11 @@ public class AbstractionMapperTests
 		{
 			var chatMessages = new List<Microsoft.Extensions.AI.ChatMessage>
 			{
-				new()
+				new(Microsoft.Extensions.AI.ChatRole.User, "What's the weather in Honululu?")
 				{
 					AdditionalProperties = [],
 					AuthorName = "a1",
 					RawRepresentation = null,
-					Role = Microsoft.Extensions.AI.ChatRole.User,
-					Text = "What's the weather in Honululu?"
 				}
 			};
 
@@ -407,13 +397,11 @@ public class AbstractionMapperTests
 		{
 			var chatMessages = new List<Microsoft.Extensions.AI.ChatMessage>
 			{
-				new()
+				new(Microsoft.Extensions.AI.ChatRole.Tool, "The weather in Honolulu is 25°C.")
 				{
 					AdditionalProperties = [],
 					AuthorName = "a1",
 					RawRepresentation = null,
-					Role = Microsoft.Extensions.AI.ChatRole.Tool,
-					Text = "The weather in Honolulu is 25°C."
 				}
 			};
 
@@ -696,29 +684,27 @@ public class AbstractionMapperTests
 				TotalDuration = 6666666666
 			};
 
-			var chatCompletion = AbstractionMapper.ToChatResponse(stream, usedModel: null);
+			var response = AbstractionMapper.ToChatResponse(stream, usedModel: null);
 
-			chatCompletion.AdditionalProperties.Should().NotBeNull();
-			chatCompletion.AdditionalProperties[Application.EvalDuration].Should().Be(TimeSpan.FromSeconds(2.222222222));
-			chatCompletion.AdditionalProperties[Application.LoadDuration].Should().Be(TimeSpan.FromSeconds(3.333333333));
-			chatCompletion.AdditionalProperties[Application.TotalDuration].Should().Be(TimeSpan.FromSeconds(6.666666666));
-			chatCompletion.AdditionalProperties[Application.PromptEvalDuration].Should().Be(TimeSpan.FromSeconds(5.555555555));
-			chatCompletion.Choices.Should().HaveCount(1);
-			chatCompletion.Choices.Single().Text.Should().Be("Hi.");
-			chatCompletion.CreatedAt.Should().Be(new DateTimeOffset(2023, 08, 04, 08, 52, 19, 385, 406, TimeSpan.FromHours(-7)));
-			chatCompletion.FinishReason.Should().Be(ChatFinishReason.Stop);
-			chatCompletion.Message.AuthorName.Should().BeNull();
-			chatCompletion.Message.RawRepresentation.Should().Be(stream.Message);
-			chatCompletion.Message.Role.Should().Be(Microsoft.Extensions.AI.ChatRole.Assistant);
-			chatCompletion.Message.Text.Should().Be("Hi.");
-			chatCompletion.Message.Contents.Should().BeEquivalentTo([new TextContent("Hi.")]);
-			chatCompletion.ModelId.Should().Be("llama3.1:8b");
-			chatCompletion.RawRepresentation.Should().Be(stream);
-			chatCompletion.ResponseId.Should().Be(ollamaCreatedStamp);
-			chatCompletion.Usage.Should().NotBeNull();
-			chatCompletion.Usage.InputTokenCount.Should().Be(411);
-			chatCompletion.Usage.OutputTokenCount.Should().Be(111);
-			chatCompletion.Usage.TotalTokenCount.Should().Be(111 + 411);
+			response.AdditionalProperties.Should().NotBeNull();
+			response.AdditionalProperties[Application.EvalDuration].Should().Be(TimeSpan.FromSeconds(2.222222222));
+			response.AdditionalProperties[Application.LoadDuration].Should().Be(TimeSpan.FromSeconds(3.333333333));
+			response.AdditionalProperties[Application.TotalDuration].Should().Be(TimeSpan.FromSeconds(6.666666666));
+			response.AdditionalProperties[Application.PromptEvalDuration].Should().Be(TimeSpan.FromSeconds(5.555555555));
+			response.CreatedAt.Should().Be(new DateTimeOffset(2023, 08, 04, 08, 52, 19, 385, 406, TimeSpan.FromHours(-7)));
+			response.FinishReason.Should().Be(ChatFinishReason.Stop);
+			response.Messages[0].AuthorName.Should().BeNull();
+			response.Messages[0].RawRepresentation.Should().Be(stream.Message);
+			response.Messages[0].Role.Should().Be(Microsoft.Extensions.AI.ChatRole.Assistant);
+			response.Messages[0].Text.Should().Be("Hi.");
+			response.Messages[0].Contents.Should().BeEquivalentTo([new TextContent("Hi.")]);
+			response.ModelId.Should().Be("llama3.1:8b");
+			response.RawRepresentation.Should().Be(stream);
+			response.ResponseId.Should().Be(ollamaCreatedStamp);
+			response.Usage.Should().NotBeNull();
+			response.Usage.InputTokenCount.Should().Be(411);
+			response.Usage.OutputTokenCount.Should().Be(111);
+			response.Usage.TotalTokenCount.Should().Be(111 + 411);
 		}
 	}
 
@@ -728,27 +714,24 @@ public class AbstractionMapperTests
 		public void Maps_Known_Properties()
 		{
 			var ollamaCreated = new DateTimeOffset(2023, 08, 04, 08, 52, 19, 385, 406, TimeSpan.FromHours(-7));
-			var ollamaCreatedStamp = "2023-08-04T08:52:19.385406-07:00";
 
 			var stream = new ChatResponseStream
 			{
 				CreatedAt = ollamaCreated,
-				CreatedAtString = ollamaCreatedStamp,
 				Done = true,
 				Message = new Message { Role = OllamaSharp.Models.Chat.ChatRole.Assistant, Content = "Hi." },
 				Model = "llama3.1:8b"
 			};
 
-			var streamingChatCompletion = AbstractionMapper.ToChatResponseUpdate(stream);
+			var streamingChatCompletion = AbstractionMapper.ToChatResponseUpdate(stream, "12345");
 
 			streamingChatCompletion.AdditionalProperties.Should().BeNull();
 			streamingChatCompletion.AuthorName.Should().BeNull();
-			streamingChatCompletion.ChoiceIndex.Should().Be(0);
 			streamingChatCompletion.Contents.Should().BeEquivalentTo([new TextContent("Hi.")]);
 			streamingChatCompletion.CreatedAt.Should().Be(new DateTimeOffset(2023, 08, 04, 08, 52, 19, 385, 406, TimeSpan.FromHours(-7)));
 			streamingChatCompletion.FinishReason.Should().Be(ChatFinishReason.Stop);
 			streamingChatCompletion.RawRepresentation.Should().Be(stream);
-			streamingChatCompletion.ResponseId.Should().Be(ollamaCreatedStamp);
+			streamingChatCompletion.ResponseId.Should().Be("12345");
 			streamingChatCompletion.Role.Should().Be(Microsoft.Extensions.AI.ChatRole.Assistant);
 			streamingChatCompletion.Text.Should().Be("Hi.");
 		}

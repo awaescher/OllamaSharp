@@ -1,4 +1,3 @@
-using System.Text;
 using Microsoft.Extensions.AI;
 
 namespace OllamaSharp.MicrosoftAi;
@@ -8,7 +7,6 @@ namespace OllamaSharp.MicrosoftAi;
 /// </summary>
 internal class ChatResponseUpdateBuilder
 {
-	private readonly StringBuilder _contentBuilder = new();
 	private ChatResponseUpdate? _first;
 
 	/// <summary>
@@ -20,19 +18,16 @@ internal class ChatResponseUpdateBuilder
 		if (update is null)
 			return;
 
-		_contentBuilder.Append(update.Text ?? "");
-
 		_first ??= update;
 
 		_first.AdditionalProperties = update.AdditionalProperties;
 		_first.AuthorName = update.AuthorName;
-		_first.ChoiceIndex = update.ChoiceIndex;
 		_first.CreatedAt = update.CreatedAt;
 		_first.FinishReason = update.FinishReason;
 		_first.ResponseId = update.ResponseId;
 		_first.Role = update.Role;
 
-		//_first.Contents and .Text will be set in Complete() with values collected from each update
+		//_first.Contents will be set in Complete() with values collected from each update
 		//_first.RawRepresentation makes no sense 
 
 		// TODO: Check if this can ever be null. The docs imply not.
@@ -50,7 +45,6 @@ internal class ChatResponseUpdateBuilder
 		if (_first is null)
 			return null;
 
-		_first.Text = _contentBuilder.ToString();
 		_first.Contents = Contents;
 
 		return _first;
