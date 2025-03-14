@@ -1,4 +1,3 @@
-using System;
 using System.ComponentModel;
 using System.Text.Json.Serialization;
 using OllamaSharp.Models.Chat.Converter;

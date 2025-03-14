@@ -1,7 +1,7 @@
-using FluentAssertions;
 using NUnit.Framework;
 using OllamaSharp;
 using OllamaSharp.Models.Chat;
+using Shouldly;
 
 namespace Tests;
 
@@ -25,10 +25,10 @@ public class ChatTests
 			var chat = new Chat(_ollama);
 			var answer = await chat.SendAsync("henlo", CancellationToken.None).StreamToEndAsync();
 
-			answer.Should().Be("Hi human, how are you?");
+			answer.ShouldBe("Hi human, how are you?");
 
-			chat.Messages.Last().Role.Should().Be(ChatRole.Assistant);
-			chat.Messages.Last().Content.Should().Be("Hi human, how are you?");
+			chat.Messages.Last().Role.ShouldBe(ChatRole.Assistant);
+			chat.Messages.Last().Content.ShouldBe("Hi human, how are you?");
 		}
 
 		[Test]
@@ -62,9 +62,9 @@ public class ChatTests
 			var chat = new Chat(_ollama);
 			await chat.SendAsync("How is the weather in LA?", CancellationToken.None).StreamToEndAsync();
 
-			chat.Messages.Last().Role.Should().Be(ChatRole.Assistant);
-			chat.Messages.Last().ToolCalls.Should().HaveCount(1);
-			chat.Messages.Last().ToolCalls.ElementAt(0).Function.Name.Should().Be("get_current_weather");
+			chat.Messages.Last().Role.ShouldBe(ChatRole.Assistant);
+			chat.Messages.Last().ToolCalls.Count().ShouldBe(1);
+			chat.Messages.Last().ToolCalls.ElementAt(0).Function.Name.ShouldBe("get_current_weather");
 		}
 
 		[Test]
@@ -73,8 +73,8 @@ public class ChatTests
 			var chat = new Chat(_ollama, "Speak like a pirate.");
 			await chat.SendAsync("henlo", CancellationToken.None).StreamToEndAsync();
 
-			chat.Messages.First().Role.Should().Be(ChatRole.System);
-			chat.Messages.First().Content.Should().Be("Speak like a pirate.");
+			chat.Messages.First().Role.ShouldBe(ChatRole.System);
+			chat.Messages.First().Content.ShouldBe("Speak like a pirate.");
 		}
 
 		[Test]
@@ -83,8 +83,8 @@ public class ChatTests
 			var chat = new Chat(_ollama);
 			await chat.SendAsync("henlo", CancellationToken.None).StreamToEndAsync();
 
-			chat.Messages.First().Role.Should().Be(ChatRole.User);
-			chat.Messages.First().Content.Should().Be("henlo");
+			chat.Messages.First().Role.ShouldBe(ChatRole.User);
+			chat.Messages.First().Content.ShouldBe("henlo");
 		}
 
 		[Test]
@@ -96,7 +96,7 @@ public class ChatTests
 			var chat = new Chat(_ollama);
 			await chat.SendAsync("", [bytes1, bytes2], CancellationToken.None).StreamToEndAsync();
 
-			chat.Messages.Single(m => m.Role == ChatRole.User).Images.Should().BeEquivalentTo("QUJD", "QUJE");
+			chat.Messages.Single(m => m.Role == ChatRole.User).Images.ShouldBe(["QUJD", "QUJE"], ignoreOrder: true);
 		}
 	}
 
@@ -113,11 +113,11 @@ public class ChatTests
 			await chat.SendAsAsync(ChatRole.Tool, "Henlo assistant.", CancellationToken.None).StreamToEndAsync();
 
 			var history = chat.Messages.ToArray();
-			history.Length.Should().Be(2);
-			history[0].Role.Should().Be(ChatRole.Tool);
-			history[0].Content.Should().Be("Henlo assistant.");
-			history[1].Role.Should().Be(ChatRole.Assistant);
-			history[1].Content.Should().Be("Hi tool.");
+			history.Length.ShouldBe(2);
+			history[0].Role.ShouldBe(ChatRole.Tool);
+			history[0].Content.ShouldBe("Henlo assistant.");
+			history[1].Role.ShouldBe(ChatRole.Assistant);
+			history[1].Content.ShouldBe("Hi tool.");
 		}
 
 		[Test]
@@ -129,7 +129,7 @@ public class ChatTests
 			var chat = new Chat(_ollama);
 			await chat.SendAsAsync(ChatRole.User, "", [bytes1, bytes2], CancellationToken.None).StreamToEndAsync();
 
-			chat.Messages.Single(m => m.Role == ChatRole.User).Images.Should().BeEquivalentTo("QUJD", "QUJE");
+			chat.Messages.Single(m => m.Role == ChatRole.User).Images.ShouldBe(["QUJD", "QUJE"], ignoreOrder: true);
 		}
 	}
 
@@ -142,10 +142,10 @@ public class ChatTests
 			{
 				Messages = [new Message { Content = "A", Role = ChatRole.System }]
 			};
-			chat.Messages.Single().Content.Should().Be("A");
+			chat.Messages.Single().Content.ShouldBe("A");
 
 			chat.Messages = [new Message { Content = "B", Role = ChatRole.System }];
-			chat.Messages.Single().Content.Should().Be("B");
+			chat.Messages.Single().Content.ShouldBe("B");
 		}
 	}
 

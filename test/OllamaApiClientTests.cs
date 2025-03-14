@@ -1,7 +1,6 @@
 using System.Net;
 using System.Text;
 using System.Text.Json;
-using FluentAssertions;
 using Microsoft.Extensions.AI;
 using Moq;
 using Moq.Protected;
@@ -10,6 +9,7 @@ using OllamaSharp;
 using OllamaSharp.Models;
 using OllamaSharp.Models.Chat;
 using OllamaSharp.Models.Exceptions;
+using Shouldly;
 using ChatRole = OllamaSharp.Models.Chat.ChatRole;
 
 namespace Tests;
@@ -110,7 +110,7 @@ public class OllamaApiClientTests
 			await foreach (var status in modelStream)
 				builder.Append(status?.Status);
 
-			builder.ToString().Should().Be("Creating modelDownloading modelModel created");
+			builder.ToString().ShouldBe("Creating modelDownloading modelModel created");
 		}
 
 		/// <summary>
@@ -134,7 +134,7 @@ public class OllamaApiClientTests
 			await foreach (var status in _client.CreateModelAsync(new CreateModelRequest(), CancellationToken.None))
 				builder.Append(status?.Status);
 
-			builder.Length.Should().Be(0); // assert anything, the test will fail if the expected headers are not available
+			builder.Length.ShouldBe(0); // assert anything, the test will fail if the expected headers are not available
 		}
 
 		/// <summary>
@@ -162,7 +162,7 @@ public class OllamaApiClientTests
 			await foreach (var status in _client.CreateModelAsync(request, CancellationToken.None))
 				builder.Append(status?.Status);
 
-			builder.Length.Should().Be(0); // assert anything, the test will fail if the expected headers are not available
+			builder.Length.ShouldBe(0); // assert anything, the test will fail if the expected headers are not available
 		}
 
 		/// <summary>
@@ -189,7 +189,7 @@ public class OllamaApiClientTests
 			await foreach (var status in _client.CreateModelAsync(request, CancellationToken.None))
 				builder.Append(status?.Status);
 
-			builder.Length.Should().Be(0); // assert anything, the test will fail if the expected headers are not available
+			builder.Length.ShouldBe(0); // assert anything, the test will fail if the expected headers are not available
 		}
 	}
 
@@ -216,10 +216,9 @@ public class OllamaApiClientTests
 
 			var context = await _client.GenerateAsync("prompt").StreamToEndAsync();
 
-			context.Should().NotBeNull();
-			context.Response.Should().Be("The sky is blue.");
-			var expectation = new int[] { 1, 2, 3 };
-			context.Context.Should().BeEquivalentTo(expectation);
+			context.ShouldNotBeNull();
+			context.Response.ShouldBe("The sky is blue.");
+			context.Context.ShouldBe([1, 2, 3], ignoreOrder: true);
 		}
 	}
 
@@ -280,23 +279,23 @@ public class OllamaApiClientTests
 
 			await chatClient.GetResponseAsync(chatHistory, options, CancellationToken.None);
 
-			_request.Should().NotBeNull();
-			_requestContent.Should().NotBeNull();
+			_request.ShouldNotBeNull();
+			_requestContent.ShouldNotBeNull();
 
-			_requestContent.Should().Contain("Why?");
-			_requestContent.Should().Contain("Because!");
-			_requestContent.Should().Contain("And where?");
-			_requestContent.Should().Contain("\"top_p\":100");
-			_requestContent.Should().Contain("\"top_k\":50");
-			_requestContent.Should().Contain("\"temperature\":0.5");
-			_requestContent.Should().Contain("\"frequency_penalty\":0.1");
-			_requestContent.Should().Contain("\"presence_penalty\":0.2");
-			_requestContent.Should().Contain("\"stop\":[\"stop me\"]");
+			_requestContent.ShouldContain("Why?");
+			_requestContent.ShouldContain("Because!");
+			_requestContent.ShouldContain("And where?");
+			_requestContent.ShouldContain("\"top_p\":100");
+			_requestContent.ShouldContain("\"top_k\":50");
+			_requestContent.ShouldContain("\"temperature\":0.5");
+			_requestContent.ShouldContain("\"frequency_penalty\":0.1");
+			_requestContent.ShouldContain("\"presence_penalty\":0.2");
+			_requestContent.ShouldContain("\"stop\":[\"stop me\"]");
 
 			// Ensure that the request does not contain any other properties when not provided.
-			_requestContent.Should().NotContain("tools");
-			_requestContent.Should().NotContain("tool_calls");
-			_requestContent.Should().NotContain("images");
+			_requestContent.ShouldNotContain("tools");
+			_requestContent.ShouldNotContain("tool_calls");
+			_requestContent.ShouldNotContain("images");
 		}
 	}
 
@@ -348,17 +347,17 @@ public class OllamaApiClientTests
 
 			var result = await _client.ChatAsync(chat, CancellationToken.None).StreamToEndAsync();
 
-			result.Should().NotBeNull();
-			result.Message.Role.Should().Be(ChatRole.Assistant);
-			result.Message.Content.Should().Be("Test content.");
-			result.Done.Should().BeTrue();
-			result.DoneReason.Should().Be("stop");
-			result.TotalDuration.Should().Be(137729492272);
-			result.LoadDuration.Should().Be(133071702768);
-			result.PromptEvalCount.Should().Be(26);
-			result.PromptEvalDuration.Should().Be(35137000);
-			result.EvalCount.Should().Be(323);
-			result.EvalDuration.Should().Be(4575154000);
+			result.ShouldNotBeNull();
+			result.Message.Role.ShouldBe(ChatRole.Assistant);
+			result.Message.Content.ShouldBe("Test content.");
+			result.Done.ShouldBeTrue();
+			result.DoneReason.ShouldBe("stop");
+			result.TotalDuration.ShouldBe(137729492272);
+			result.LoadDuration.ShouldBe(133071702768);
+			result.PromptEvalCount.ShouldBe(26);
+			result.PromptEvalDuration.ShouldBe(35137000);
+			result.EvalCount.ShouldBe(323);
+			result.EvalDuration.ShouldBe(4575154000);
 		}
 
 		[Test, NonParallelizable]
@@ -453,23 +452,23 @@ public class OllamaApiClientTests
 
 			var result = await _client.ChatAsync(chat, CancellationToken.None).StreamToEndAsync();
 
-			result.Should().NotBeNull();
-			result.Message.Role.Should().Be(ChatRole.Assistant);
-			result.Done.Should().BeTrue();
-			result.DoneReason.Should().Be("stop");
+			result.ShouldNotBeNull();
+			result.Message.Role.ShouldBe(ChatRole.Assistant);
+			result.Done.ShouldBeTrue();
+			result.DoneReason.ShouldBe("stop");
 
-			result.Message.ToolCalls.Should().HaveCount(1);
+			result.Message.ToolCalls.Count().ShouldBe(1);
 
 			var toolsFunction = result.Message.ToolCalls.ElementAt(0).Function;
-			toolsFunction.Name.Should().Be("get_current_weather");
-			toolsFunction.Arguments.ElementAt(0).Key.Should().Be("format");
-			toolsFunction.Arguments.ElementAt(0).Value.ToString().Should().Be("celsius");
+			toolsFunction.Name.ShouldBe("get_current_weather");
+			toolsFunction.Arguments.ElementAt(0).Key.ShouldBe("format");
+			toolsFunction.Arguments.ElementAt(0).Value.ToString().ShouldBe("celsius");
 
-			toolsFunction.Arguments.ElementAt(1).Key.Should().Be("location");
-			toolsFunction.Arguments.ElementAt(1).Value.ToString().Should().Be("Los Angeles, CA");
+			toolsFunction.Arguments.ElementAt(1).Key.ShouldBe("location");
+			toolsFunction.Arguments.ElementAt(1).Value.ToString().ShouldBe("Los Angeles, CA");
 
-			toolsFunction.Arguments.ElementAt(2).Key.Should().Be("number");
-			toolsFunction.Arguments.ElementAt(2).Value.ToString().Should().Be("42");
+			toolsFunction.Arguments.ElementAt(2).Key.ShouldBe("number");
+			toolsFunction.Arguments.ElementAt(2).Value.ToString().ShouldBe("42");
 		}
 	}
 
@@ -515,12 +514,12 @@ public class OllamaApiClientTests
 				responses.Add(response?.Message);
 			}
 
-			builder.ToString().Should().BeEquivalentTo("Leave me alone.");
+			builder.ToString().ShouldBe("Leave me alone.");
 
-			responses.Should().HaveCount(3);
-			responses[0].Role.Should().Be(ChatRole.Assistant);
-			responses[1].Role.Should().Be(ChatRole.Assistant);
-			responses[2].Role.Should().Be(ChatRole.Assistant);
+			responses.Count.ShouldBe(3);
+			responses[0].Role.ShouldBe(ChatRole.Assistant);
+			responses[1].Role.ShouldBe(ChatRole.Assistant);
+			responses[2].Role.ShouldBe(ChatRole.Assistant);
 		}
 
 		[Test, NonParallelizable]
@@ -533,7 +532,7 @@ public class OllamaApiClientTests
 			};
 
 			var act = () => _client.ChatAsync(new ChatRequest() { Stream = false }, CancellationToken.None).StreamToEndAsync();
-			await act.Should().ThrowAsync<ModelDoesNotSupportToolsException>();
+			await act.ShouldThrowAsync<ModelDoesNotSupportToolsException>();
 		}
 
 		[Test, NonParallelizable]
@@ -546,7 +545,7 @@ public class OllamaApiClientTests
 			};
 
 			var act = () => _client.ChatAsync(new ChatRequest(), CancellationToken.None).StreamToEndAsync();
-			await act.Should().ThrowAsync<OllamaException>();
+			await act.ShouldThrowAsync<OllamaException>();
 		}
 	}
 
@@ -562,13 +561,13 @@ public class OllamaApiClientTests
 			};
 
 			var models = await _client.ListLocalModelsAsync(CancellationToken.None);
-			models.Count().Should().Be(4);
+			models.Count().ShouldBe(4);
 
 			var first = models.First();
-			first.Name.Should().Be("codellama:latest");
-			first.ModifiedAt.Date.Should().Be(new DateTime(2023, 10, 12, 0, 0, 0, DateTimeKind.Local));
-			first.Size.Should().Be(3791811617);
-			first.Digest.Should().StartWith("36893bf9bc7ff7ace5655");
+			first.Name.ShouldBe("codellama:latest");
+			first.ModifiedAt.Date.ShouldBe(new DateTime(2023, 10, 12, 0, 0, 0, DateTimeKind.Local));
+			first.Size.ShouldBe(3791811617);
+			first.Digest.ShouldStartWith("36893bf9bc7ff7ace5655");
 		}
 	}
 
@@ -585,10 +584,10 @@ public class OllamaApiClientTests
 
 			var info = await _client.ShowModelAsync("codellama:latest", CancellationToken.None);
 
-			info.License.Should().Contain("contents of license block");
-			info.Modelfile.Should().StartWith("# Modelfile generated");
-			info.Parameters.Should().StartWith("stop");
-			info.Template.Should().StartWith("[INST]");
+			info.License.ShouldContain("contents of license block");
+			info.Modelfile.ShouldStartWith("# Modelfile generated");
+			info.Parameters.ShouldStartWith("stop");
+			info.Template.ShouldStartWith("[INST]");
 		}
 
 		[Test, NonParallelizable]
@@ -602,21 +601,21 @@ public class OllamaApiClientTests
 
 			var info = await _client.ShowModelAsync("starcoder:latest", CancellationToken.None);
 
-			info.License.Should().BeNullOrEmpty();
-			info.Modelfile.Should().StartWith("# Modelfile generated");
-			info.Parameters.Should().StartWith("num_ctx");
-			info.Template.Should().StartWith("{{ .System }}");
-			info.System.Should().StartWith("You are an exceptionally intelligent coding assistant");
-			info.Details.ParentModel.Should().BeNullOrEmpty();
-			info.Details.Format.Should().Be("gguf");
-			info.Details.Family.Should().Be("llama");
-			info.Details.Families.Should().BeNull();
-			info.Details.ParameterSize.Should().Be("7B");
-			info.Details.QuantizationLevel.Should().Be("Q4_0");
-			info.Info.Architecture.Should().Be("llama");
-			info.Info.QuantizationVersion.Should().Be(2);
-			info.Info.FileType.Should().Be(2);
-			info.Info.ExtraInfo.Should().NotBeNullOrEmpty();
+			info.License.ShouldBeNullOrEmpty();
+			info.Modelfile.ShouldStartWith("# Modelfile generated");
+			info.Parameters.ShouldStartWith("num_ctx");
+			info.Template.ShouldStartWith("{{ .System }}");
+			info.System.ShouldStartWith("You are an exceptionally intelligent coding assistant");
+			info.Details.ParentModel.ShouldBeNullOrEmpty();
+			info.Details.Format.ShouldBe("gguf");
+			info.Details.Family.ShouldBe("llama");
+			info.Details.Families.ShouldBeNull();
+			info.Details.ParameterSize.ShouldBe("7B");
+			info.Details.QuantizationLevel.ShouldBe("Q4_0");
+			info.Info.Architecture.ShouldBe("llama");
+			info.Info.QuantizationVersion.ShouldBe(2);
+			info.Info.FileType.ShouldBe(2);
+			info.Info.ExtraInfo.ShouldNotBeEmpty();
 		}
 	}
 
@@ -633,8 +632,8 @@ public class OllamaApiClientTests
 
 			var info = await _client.EmbedAsync(new EmbedRequest { Model = "", Input = [""] }, CancellationToken.None);
 
-			info.Embeddings[0].Should().HaveCount(5);
-			info.Embeddings[0][0].Should().BeApproximately(0.567f, precision: 0.01f);
+			info.Embeddings[0].Length.ShouldBe(5);
+			info.Embeddings[0][0].ShouldBe(0.567f, tolerance: 0.01f);
 		}
 	}
 }

@@ -1,8 +1,8 @@
-using FluentAssertions;
 using NUnit.Framework;
 using OllamaSharp;
 using OllamaSharp.Models;
 using OllamaSharp.Models.Chat;
+using Shouldly;
 
 namespace Tests;
 
@@ -24,7 +24,7 @@ public class IAsyncEnumerableExtensionTests
 
 			var answer = await ollama.ChatAsync(new ChatRequest()).StreamToEndAsync();
 
-			answer.Message.Content.Should().Be("Hi human, how are you?");
+			answer.Message.Content.ShouldBe("Hi human, how are you?");
 		}
 
 		[Test]
@@ -41,7 +41,7 @@ public class IAsyncEnumerableExtensionTests
 
 			await ollama.ChatAsync(new ChatRequest()).StreamToEndAsync(r => concatinatedItems += r.Message.Content);
 
-			concatinatedItems.Should().Be("ABC");
+			concatinatedItems.ShouldBe("ABC");
 		}
 
 		/// <summary>
@@ -59,7 +59,7 @@ public class IAsyncEnumerableExtensionTests
 
 			Func<Task> act = async () => await ollama.ChatAsync(new ChatRequest()).StreamToEndAsync();
 
-			await act.Should().ThrowAsync<InvalidOperationException>();
+			await act.ShouldThrowAsync<InvalidOperationException>();
 
 			ollama.SetExpectedGenerateResponses(
 				new GenerateResponseStream { Response = "This message" },
@@ -67,7 +67,7 @@ public class IAsyncEnumerableExtensionTests
 
 			act = async () => await ollama.GenerateAsync(new GenerateRequest()).StreamToEndAsync();
 
-			await act.Should().ThrowAsync<InvalidOperationException>();
+			await act.ShouldThrowAsync<InvalidOperationException>();
 		}
 
 		private static Message CreateMessage(ChatRole role, string content)

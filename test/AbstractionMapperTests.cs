@@ -1,5 +1,4 @@
 using System.Text.Json;
-using FluentAssertions;
 using Microsoft.Extensions.AI;
 using NUnit.Framework;
 using OllamaSharp;
@@ -7,6 +6,7 @@ using OllamaSharp.Constants;
 using OllamaSharp.MicrosoftAi;
 using OllamaSharp.Models;
 using OllamaSharp.Models.Chat;
+using Shouldly;
 
 namespace Tests;
 
@@ -30,37 +30,37 @@ public class AbstractionMapperTests
 
 			var request = AbstractionMapper.ToOllamaSharpChatRequest(messages, options, stream: true, JsonSerializerOptions.Default);
 
-			request.Options.F16kv.Should().BeNull();
-			request.Options.FrequencyPenalty.Should().BeNull();
-			request.Options.LogitsAll.Should().BeNull();
-			request.Options.LowVram.Should().BeNull();
-			request.Options.MainGpu.Should().BeNull();
-			request.Options.MinP.Should().BeNull();
-			request.Options.MiroStat.Should().BeNull();
-			request.Options.MiroStatEta.Should().BeNull();
-			request.Options.MiroStatTau.Should().BeNull();
-			request.Options.Numa.Should().BeNull();
-			request.Options.NumBatch.Should().BeNull();
-			request.Options.NumCtx.Should().BeNull();
-			request.Options.NumGpu.Should().BeNull();
-			request.Options.NumGqa.Should().BeNull();
-			request.Options.NumKeep.Should().BeNull();
-			request.Options.NumPredict.Should().BeNull();
-			request.Options.NumThread.Should().BeNull();
-			request.Options.PenalizeNewline.Should().BeNull();
-			request.Options.PresencePenalty.Should().BeNull();
-			request.Options.RepeatLastN.Should().BeNull();
-			request.Options.RepeatPenalty.Should().BeNull();
-			request.Options.Seed.Should().BeNull();
-			request.Options.Stop.Should().BeNull();
-			request.Options.Temperature.Should().Be(0.5f); // the only specified value
-			request.Options.TfsZ.Should().BeNull();
-			request.Options.TopK.Should().BeNull();
-			request.Options.TopP.Should().BeNull();
-			request.Options.TypicalP.Should().BeNull();
-			request.Options.UseMlock.Should().BeNull();
-			request.Options.UseMmap.Should().BeNull();
-			request.Options.VocabOnly.Should().BeNull();
+			request.Options.F16kv.ShouldBeNull();
+			request.Options.FrequencyPenalty.ShouldBeNull();
+			request.Options.LogitsAll.ShouldBeNull();
+			request.Options.LowVram.ShouldBeNull();
+			request.Options.MainGpu.ShouldBeNull();
+			request.Options.MinP.ShouldBeNull();
+			request.Options.MiroStat.ShouldBeNull();
+			request.Options.MiroStatEta.ShouldBeNull();
+			request.Options.MiroStatTau.ShouldBeNull();
+			request.Options.Numa.ShouldBeNull();
+			request.Options.NumBatch.ShouldBeNull();
+			request.Options.NumCtx.ShouldBeNull();
+			request.Options.NumGpu.ShouldBeNull();
+			request.Options.NumGqa.ShouldBeNull();
+			request.Options.NumKeep.ShouldBeNull();
+			request.Options.NumPredict.ShouldBeNull();
+			request.Options.NumThread.ShouldBeNull();
+			request.Options.PenalizeNewline.ShouldBeNull();
+			request.Options.PresencePenalty.ShouldBeNull();
+			request.Options.RepeatLastN.ShouldBeNull();
+			request.Options.RepeatPenalty.ShouldBeNull();
+			request.Options.Seed.ShouldBeNull();
+			request.Options.Stop.ShouldBeNull();
+			request.Options.Temperature.ShouldBe(0.5f); // the only specified value
+			request.Options.TfsZ.ShouldBeNull();
+			request.Options.TopK.ShouldBeNull();
+			request.Options.TopP.ShouldBeNull();
+			request.Options.TypicalP.ShouldBeNull();
+			request.Options.UseMlock.ShouldBeNull();
+			request.Options.UseMmap.ShouldBeNull();
+			request.Options.VocabOnly.ShouldBeNull();
 		}
 
 		[Test]
@@ -93,19 +93,19 @@ public class AbstractionMapperTests
 
 			var chatRequest = AbstractionMapper.ToOllamaSharpChatRequest(chatMessages, null, stream: true, JsonSerializerOptions.Default);
 
-			chatRequest.Messages.Should().HaveCount(3);
+			chatRequest.Messages.Count().ShouldBe(3);
 
 			var message = chatRequest.Messages.ElementAt(0);
-			message.Content.Should().Be("Hi there.");
-			message.Role.Should().Be(OllamaSharp.Models.Chat.ChatRole.Assistant);
+			message.Content.ShouldBe("Hi there.");
+			message.Role.ShouldBe(OllamaSharp.Models.Chat.ChatRole.Assistant);
 
 			message = chatRequest.Messages.ElementAt(1);
-			message.Content.Should().Be("What is 3 + 4?");
-			message.Role.Should().Be(OllamaSharp.Models.Chat.ChatRole.User);
+			message.Content.ShouldBe("What is 3 + 4?");
+			message.Role.ShouldBe(OllamaSharp.Models.Chat.ChatRole.User);
 
 			message = chatRequest.Messages.ElementAt(2);
-			message.Content.Should().Be("3 + 4 is 7");
-			message.Role.Should().Be(OllamaSharp.Models.Chat.ChatRole.Assistant);
+			message.Content.ShouldBe("3 + 4 is 7");
+			message.Role.ShouldBe(OllamaSharp.Models.Chat.ChatRole.Assistant);
 		}
 
 		/// <summary>
@@ -146,15 +146,15 @@ public class AbstractionMapperTests
 
 			var chatRequest = AbstractionMapper.ToOllamaSharpChatRequest(chatMessages, null, stream: true, JsonSerializerOptions.Default);
 
-			chatRequest.Messages.Should().HaveCount(2);
+			chatRequest.Messages.Count().ShouldBe(2);
 
 			var message = chatRequest.Messages.ElementAt(0);
-			message.Role.Should().Be(OllamaSharp.Models.Chat.ChatRole.User);
-			message.Images.Single().Should().Be(TRANSPARENT_PIXEL); // <- WITHOUT BASE64_META
+			message.Role.ShouldBe(OllamaSharp.Models.Chat.ChatRole.User);
+			message.Images.Single().ShouldBe(TRANSPARENT_PIXEL); // <- WITHOUT BASE64_META
 
 			message = chatRequest.Messages.ElementAt(1);
-			message.Role.Should().Be(OllamaSharp.Models.Chat.ChatRole.Assistant);
-			message.Images.Should().HaveCount(4);
+			message.Role.ShouldBe(OllamaSharp.Models.Chat.ChatRole.Assistant);
+			message.Images.Count().ShouldBe(4);
 		}
 
 		[Test]
@@ -177,7 +177,7 @@ public class AbstractionMapperTests
 			};
 
 			var request = AbstractionMapper.ToOllamaSharpChatRequest(chatMessages, null, stream: true, JsonSerializerOptions.Default);
-			request.Messages.Single().Images.Single().Should().Be("QUJD");
+			request.Messages.Single().Images.Single().ShouldBe("QUJD");
 		}
 
 		/// <summary>
@@ -204,10 +204,10 @@ public class AbstractionMapperTests
 			Action act = () =>
 			{
 				var request = AbstractionMapper.ToOllamaSharpChatRequest(chatMessages, null, stream: true, JsonSerializerOptions.Default);
-				request.Messages.Should().NotBeEmpty(); // access .Messages to invoke the evaluation of IEnumerable<Message>
+				request.Messages.ShouldNotBeEmpty(); // access .Messages to invoke the evaluation of IEnumerable<Message>
 			};
 
-			act.Should().NotThrow();
+			act.ShouldNotThrow();
 		}
 
 		[Test]
@@ -234,18 +234,18 @@ public class AbstractionMapperTests
 			var chatRequest = AbstractionMapper.ToOllamaSharpChatRequest(chatMessages, options, stream: true, JsonSerializerOptions.Default);
 
 			var tool = (Tool)chatRequest.Tools.Single();
-			tool.Function.Description.Should().Be("Gets the current weather for a current location");
-			tool.Function.Name.Should().Be("get_weather");
-			tool.Function.Parameters.Properties.Should().HaveCount(2);
-			tool.Function.Parameters.Properties["city"].Description.Should().Be("The city to get the weather for");
-			tool.Function.Parameters.Properties["city"].Enum.Should().BeNull();
-			tool.Function.Parameters.Properties["city"].Type.Should().Be("string");
-			tool.Function.Parameters.Properties["unit"].Description.Should().Be("The unit to calculate the current temperature to");
-			tool.Function.Parameters.Properties["unit"].Enum.Should().BeNull();
-			tool.Function.Parameters.Properties["unit"].Type.Should().Be("string");
-			tool.Function.Parameters.Required.Should().BeEquivalentTo("city");
-			tool.Function.Parameters.Type.Should().Be("object");
-			tool.Type.Should().Be("function");
+			tool.Function.Description.ShouldBe("Gets the current weather for a current location");
+			tool.Function.Name.ShouldBe("get_weather");
+			tool.Function.Parameters.Properties.Count.ShouldBe(2);
+			tool.Function.Parameters.Properties["city"].Description.ShouldBe("The city to get the weather for");
+			tool.Function.Parameters.Properties["city"].Enum.ShouldBeNull();
+			tool.Function.Parameters.Properties["city"].Type.ShouldBe("string");
+			tool.Function.Parameters.Properties["unit"].Description.ShouldBe("The unit to calculate the current temperature to");
+			tool.Function.Parameters.Properties["unit"].Enum.ShouldBeNull();
+			tool.Function.Parameters.Properties["unit"].Type.ShouldBe("string");
+			tool.Function.Parameters.Required.ShouldBe(["city"], ignoreOrder: true);
+			tool.Function.Parameters.Type.ShouldBe("object");
+			tool.Type.ShouldBe("function");
 		}
 
 		[Test]
@@ -304,47 +304,47 @@ public class AbstractionMapperTests
 			var chatRequest = AbstractionMapper.ToOllamaSharpChatRequest(chatMessages, options, stream: true, JsonSerializerOptions.Default);
 
 			// Assert
-			chatRequest.Options.Should().NotBeNull();
+			chatRequest.Options.ShouldNotBeNull();
 
 			// Boolean assertions
-			chatRequest.Options!.F16kv.Should().BeTrue();
-			chatRequest.Options!.LogitsAll.Should().BeTrue();
-			chatRequest.Options!.LowVram.Should().BeTrue();
-			chatRequest.Options!.Numa.Should().BeTrue();
-			chatRequest.Options!.PenalizeNewline.Should().BeTrue();
-			chatRequest.Options!.UseMlock.Should().BeTrue();
-			chatRequest.Options!.UseMmap.Should().BeTrue();
-			chatRequest.Options!.VocabOnly.Should().BeTrue();
+			chatRequest.Options!.F16kv.ShouldBe(true);
+			chatRequest.Options!.LogitsAll.ShouldBe(true);
+			chatRequest.Options!.LowVram.ShouldBe(true);
+			chatRequest.Options!.Numa.ShouldBe(true);
+			chatRequest.Options!.PenalizeNewline.ShouldBe(true);
+			chatRequest.Options!.UseMlock.ShouldBe(true);
+			chatRequest.Options!.UseMmap.ShouldBe(true);
+			chatRequest.Options!.VocabOnly.ShouldBe(true);
 
 			// Float assertions
-			chatRequest.Options!.FrequencyPenalty.Should().Be(0.5f);
-			chatRequest.Options!.MinP.Should().Be(0.1f);
-			chatRequest.Options!.MiroStatEta.Should().Be(0.1f);
-			chatRequest.Options!.MiroStatTau.Should().Be(0.2f);
-			chatRequest.Options!.PresencePenalty.Should().Be(0.3f);
-			chatRequest.Options!.RepeatPenalty.Should().Be(0.4f);
-			chatRequest.Options!.Temperature.Should().Be(0.7f);
-			chatRequest.Options!.TfsZ.Should().Be(0.8f);
-			chatRequest.Options!.TopP.Should().Be(0.9f);
-			chatRequest.Options!.TypicalP.Should().Be(0.95f);
+			chatRequest.Options!.FrequencyPenalty.ShouldBe(0.5f);
+			chatRequest.Options!.MinP.ShouldBe(0.1f);
+			chatRequest.Options!.MiroStatEta.ShouldBe(0.1f);
+			chatRequest.Options!.MiroStatTau.ShouldBe(0.2f);
+			chatRequest.Options!.PresencePenalty.ShouldBe(0.3f);
+			chatRequest.Options!.RepeatPenalty.ShouldBe(0.4f);
+			chatRequest.Options!.Temperature.ShouldBe(0.7f);
+			chatRequest.Options!.TfsZ.ShouldBe(0.8f);
+			chatRequest.Options!.TopP.ShouldBe(0.9f);
+			chatRequest.Options!.TypicalP.ShouldBe(0.95f);
 
 			// Integer assertions
-			chatRequest.Options!.MainGpu.Should().Be(0);
-			chatRequest.Options!.MiroStat.Should().Be(1);
-			chatRequest.Options!.NumBatch.Should().Be(512);
-			chatRequest.Options!.NumCtx.Should().Be(4096);
-			chatRequest.Options!.NumGpu.Should().Be(1);
-			chatRequest.Options!.NumGqa.Should().Be(8);
-			chatRequest.Options!.NumKeep.Should().Be(64);
-			chatRequest.Options!.NumPredict.Should().Be(2048);
-			chatRequest.Options!.NumThread.Should().Be(8);
-			chatRequest.Options!.RepeatLastN.Should().Be(64);
-			chatRequest.Options!.Seed.Should().Be(42);
-			chatRequest.Options!.TopK.Should().Be(40);
+			chatRequest.Options!.MainGpu.ShouldBe(0);
+			chatRequest.Options!.MiroStat.ShouldBe(1);
+			chatRequest.Options!.NumBatch.ShouldBe(512);
+			chatRequest.Options!.NumCtx.ShouldBe(4096);
+			chatRequest.Options!.NumGpu.ShouldBe(1);
+			chatRequest.Options!.NumGqa.ShouldBe(8);
+			chatRequest.Options!.NumKeep.ShouldBe(64);
+			chatRequest.Options!.NumPredict.ShouldBe(2048);
+			chatRequest.Options!.NumThread.ShouldBe(8);
+			chatRequest.Options!.RepeatLastN.ShouldBe(64);
+			chatRequest.Options!.Seed.ShouldBe(42);
+			chatRequest.Options!.TopK.ShouldBe(40);
 
 			// String array assertions
-			chatRequest.Options!.Stop.Should().NotBeNull();
-			chatRequest.Options!.Stop.Should().BeEquivalentTo("stop1", "stop2");
+			chatRequest.Options!.Stop.ShouldNotBeNull();
+			chatRequest.Options!.Stop.ShouldBe(["stop1", "stop2"], ignoreOrder: true);
 		}
 
 		[TestCaseSource(nameof(StopSequencesTestData))]
@@ -372,10 +372,10 @@ public class AbstractionMapperTests
 
 			if (typedEnumerable == null)
 			{
-				stopSequences.Should().BeNull();
+				stopSequences.ShouldBeNull();
 				return;
 			}
-			stopSequences.Should().HaveCount(typedEnumerable?.Count() ?? 0);
+			stopSequences.Length.ShouldBe(typedEnumerable?.Count() ?? 0);
 		}
 
 		public static IEnumerable<TestCaseData> StopSequencesTestData
@@ -408,8 +408,8 @@ public class AbstractionMapperTests
 			var chatRequest = AbstractionMapper.ToOllamaSharpChatRequest(chatMessages, new(), stream: true, JsonSerializerOptions.Default);
 
 			var tool = chatRequest.Messages.Single();
-			tool.Content.Should().Contain("The weather in Honolulu is 25°C.");
-			tool.Role.Should().Be(OllamaSharp.Models.Chat.ChatRole.Tool);
+			tool.Content.ShouldContain("The weather in Honolulu is 25°C.");
+			tool.Role.ShouldBe(OllamaSharp.Models.Chat.ChatRole.Tool);
 		}
 
 		[Test]
@@ -440,19 +440,19 @@ public class AbstractionMapperTests
 			var chatRequest = AbstractionMapper.ToOllamaSharpChatRequest(aiChatMessages, new(), stream: true, JsonSerializerOptions.Default);
 			var chatMessages = chatRequest.Messages?.ToList();
 
-			chatMessages.Should().HaveCount(3);
+			chatMessages.Count.ShouldBe(3);
 
 			var user = chatMessages[0];
 			var tool1 = chatMessages[1];
 			var tool2 = chatMessages[2];
-			tool1.Content.Should().Contain("\"Temperature\":40");
-			tool1.Content.Should().Contain("\"CallId\":\"123\"");
-			tool1.Role.Should().Be(OllamaSharp.Models.Chat.ChatRole.Tool);
-			tool2.Content.Should().Contain("\"Summary\":\"This is a tool result test\"");
-			tool2.Content.Should().Contain("\"CallId\":\"456\"");
-			tool2.Role.Should().Be(OllamaSharp.Models.Chat.ChatRole.Tool);
-			user.Content.Should().Contain("I have found those 2 results");
-			user.Role.Should().Be(OllamaSharp.Models.Chat.ChatRole.User);
+			tool1.Content.ShouldContain("\"Temperature\":40");
+			tool1.Content.ShouldContain("\"CallId\":\"123\"");
+			tool1.Role.ShouldBe(OllamaSharp.Models.Chat.ChatRole.Tool);
+			tool2.Content.ShouldContain("\"Summary\":\"This is a tool result test\"");
+			tool2.Content.ShouldContain("\"CallId\":\"456\"");
+			tool2.Role.ShouldBe(OllamaSharp.Models.Chat.ChatRole.Tool);
+			user.Content.ShouldContain("I have found those 2 results");
+			user.Role.ShouldBe(OllamaSharp.Models.Chat.ChatRole.User);
 		}
 
 		[Test]
@@ -482,16 +482,16 @@ public class AbstractionMapperTests
 			var chatRequest = AbstractionMapper.ToOllamaSharpChatRequest(aiChatMessages, new(), stream: true, JsonSerializerOptions.Default);
 			var chatMessages = chatRequest.Messages?.ToList();
 
-			chatMessages.Should().HaveCount(2);
+			chatMessages.Count.ShouldBe(2);
 
 			var tool1 = chatMessages[0];
 			var tool2 = chatMessages[1];
-			tool1.Content.Should().Contain("\"Temperature\":40");
-			tool1.Content.Should().Contain("\"CallId\":\"123\"");
-			tool1.Role.Should().Be(OllamaSharp.Models.Chat.ChatRole.Tool);
-			tool2.Content.Should().Contain("\"Summary\":\"This is a tool result test\"");
-			tool2.Content.Should().Contain("\"CallId\":\"456\"");
-			tool2.Role.Should().Be(OllamaSharp.Models.Chat.ChatRole.Tool);
+			tool1.Content.ShouldContain("\"Temperature\":40");
+			tool1.Content.ShouldContain("\"CallId\":\"123\"");
+			tool1.Role.ShouldBe(OllamaSharp.Models.Chat.ChatRole.Tool);
+			tool2.Content.ShouldContain("\"Summary\":\"This is a tool result test\"");
+			tool2.Content.ShouldContain("\"CallId\":\"456\"");
+			tool2.Role.ShouldBe(OllamaSharp.Models.Chat.ChatRole.Tool);
 		}
 
 		[Test]
@@ -514,45 +514,45 @@ public class AbstractionMapperTests
 
 			var chatRequest = AbstractionMapper.ToOllamaSharpChatRequest(chatMessages, options, stream: true, JsonSerializerOptions.Default);
 
-			chatRequest.Format.Should().Be("json");
-			chatRequest.Model.Should().Be("llama3.1:405b");
-			chatRequest.Options.FrequencyPenalty.Should().Be(0.5f);
-			chatRequest.Options.PresencePenalty.Should().Be(0.3f);
-			chatRequest.Options.Stop.Should().BeEquivalentTo("stop1", "stop2", "stop3");
-			chatRequest.Options.Temperature.Should().Be(0.1f);
-			chatRequest.Options.TopP.Should().Be(10.1f);
-			chatRequest.Options.Seed.Should().Be(11);
-			chatRequest.Stream.Should().BeTrue();
-			chatRequest.Template.Should().BeNull();
-			chatRequest.Options.NumPredict.Should().Be(1000);
+			chatRequest.Format.ShouldBe("json");
+			chatRequest.Model.ShouldBe("llama3.1:405b");
+			chatRequest.Options.FrequencyPenalty.ShouldBe(0.5f);
+			chatRequest.Options.PresencePenalty.ShouldBe(0.3f);
+			chatRequest.Options.Stop.ShouldBe(["stop1", "stop2", "stop3"], ignoreOrder: true);
+			chatRequest.Options.Temperature.ShouldBe(0.1f);
+			chatRequest.Options.TopP.ShouldBe(10.1f);
+			chatRequest.Options.Seed.ShouldBe(11);
+			chatRequest.Stream.ShouldBeTrue();
+			chatRequest.Template.ShouldBeNull();
+			chatRequest.Options.NumPredict.ShouldBe(1000);
 
 			// not defined in ChatOptions
-			chatRequest.CustomHeaders.Should().BeEmpty();
-			chatRequest.KeepAlive.Should().BeNull();
-			chatRequest.Options.F16kv.Should().BeNull();
-			chatRequest.Options.LogitsAll.Should().BeNull();
-			chatRequest.Options.LowVram.Should().BeNull();
-			chatRequest.Options.MainGpu.Should().BeNull();
-			chatRequest.Options.MinP.Should().BeNull();
-			chatRequest.Options.MiroStat.Should().BeNull();
-			chatRequest.Options.MiroStatEta.Should().BeNull();
-			chatRequest.Options.MiroStatTau.Should().BeNull();
-			chatRequest.Options.Numa.Should().BeNull();
-			chatRequest.Options.NumBatch.Should().BeNull();
-			chatRequest.Options.NumCtx.Should().BeNull();
-			chatRequest.Options.NumGpu.Should().BeNull();
-			chatRequest.Options.NumGqa.Should().BeNull();
-			chatRequest.Options.NumKeep.Should().BeNull();
-			chatRequest.Options.NumThread.Should().BeNull();
-			chatRequest.Options.PenalizeNewline.Should().BeNull();
-			chatRequest.Options.RepeatLastN.Should().BeNull();
-			chatRequest.Options.RepeatPenalty.Should().BeNull();
-			chatRequest.Options.TfsZ.Should().BeNull();
-			chatRequest.Options.TopK.Should().BeNull();
-			chatRequest.Options.TypicalP.Should().BeNull();
-			chatRequest.Options.UseMlock.Should().BeNull();
-			chatRequest.Options.UseMmap.Should().BeNull();
-			chatRequest.Options.VocabOnly.Should().BeNull();
+			chatRequest.CustomHeaders.ShouldBeEmpty();
+			chatRequest.KeepAlive.ShouldBeNull();
+			chatRequest.Options.F16kv.ShouldBeNull();
+			chatRequest.Options.LogitsAll.ShouldBeNull();
+			chatRequest.Options.LowVram.ShouldBeNull();
+			chatRequest.Options.MainGpu.ShouldBeNull();
+			chatRequest.Options.MinP.ShouldBeNull();
+			chatRequest.Options.MiroStat.ShouldBeNull();
+			chatRequest.Options.MiroStatEta.ShouldBeNull();
+			chatRequest.Options.MiroStatTau.ShouldBeNull();
+			chatRequest.Options.Numa.ShouldBeNull();
+			chatRequest.Options.NumBatch.ShouldBeNull();
+			chatRequest.Options.NumCtx.ShouldBeNull();
+			chatRequest.Options.NumGpu.ShouldBeNull();
+			chatRequest.Options.NumGqa.ShouldBeNull();
+			chatRequest.Options.NumKeep.ShouldBeNull();
+			chatRequest.Options.NumThread.ShouldBeNull();
+			chatRequest.Options.PenalizeNewline.ShouldBeNull();
+			chatRequest.Options.RepeatLastN.ShouldBeNull();
+			chatRequest.Options.RepeatPenalty.ShouldBeNull();
+			chatRequest.Options.TfsZ.ShouldBeNull();
+			chatRequest.Options.TopK.ShouldBeNull();
+			chatRequest.Options.TypicalP.ShouldBeNull();
+			chatRequest.Options.UseMlock.ShouldBeNull();
+			chatRequest.Options.UseMmap.ShouldBeNull();
+			chatRequest.Options.VocabOnly.ShouldBeNull();
 		}
 
 		[Test]
@@ -566,7 +566,7 @@ public class AbstractionMapperTests
 			};
 
 			var chatRequest = AbstractionMapper.ToOllamaSharpChatRequest(chatMessages, options, stream: true, JsonSerializerOptions.Default);
-			chatRequest.Format.Should().Be("json");
+			chatRequest.Format.ShouldBe("json");
 		}
 
 		[Test]
@@ -581,7 +581,7 @@ public class AbstractionMapperTests
 			};
 
 			var chatRequest = AbstractionMapper.ToOllamaSharpChatRequest(chatMessages, options, stream: true, JsonSerializerOptions.Default);
-			chatRequest.Format.Should().Be(schemaElement);
+			chatRequest.Format.ShouldBe(schemaElement);
 		}
 
 		private class Sword
@@ -628,37 +628,37 @@ public class AbstractionMapperTests
 
 			var ollamaRequest = AbstractionMapper.ToOllamaSharpChatRequest([], options, stream: true, JsonSerializerOptions.Default);
 
-			ollamaRequest.Options.F16kv.Should().Be(true);
-			ollamaRequest.Options.FrequencyPenalty.Should().Be(0.11f);
-			ollamaRequest.Options.LogitsAll.Should().Be(false);
-			ollamaRequest.Options.LowVram.Should().Be(true);
-			ollamaRequest.Options.MainGpu.Should().Be(1);
-			ollamaRequest.Options.MinP.Should().Be(0.22f);
-			ollamaRequest.Options.MiroStat.Should().Be(2);
-			ollamaRequest.Options.MiroStatEta.Should().Be(0.33f);
-			ollamaRequest.Options.MiroStatTau.Should().Be(0.44f);
-			ollamaRequest.Options.Numa.Should().Be(false);
-			ollamaRequest.Options.NumBatch.Should().Be(3);
-			ollamaRequest.Options.NumCtx.Should().Be(4);
-			ollamaRequest.Options.NumGpu.Should().Be(5);
-			ollamaRequest.Options.NumGqa.Should().Be(6);
-			ollamaRequest.Options.NumKeep.Should().Be(7);
-			ollamaRequest.Options.NumPredict.Should().Be(8);
-			ollamaRequest.Options.NumThread.Should().Be(9);
-			ollamaRequest.Options.PenalizeNewline.Should().Be(true);
-			ollamaRequest.Options.PresencePenalty.Should().Be(0.55f);
-			ollamaRequest.Options.RepeatLastN.Should().Be(10);
-			ollamaRequest.Options.RepeatPenalty.Should().Be(0.66f);
-			ollamaRequest.Options.Seed.Should().Be(11);
-			ollamaRequest.Options.Stop.Should().BeEquivalentTo("stop", "quit", "exit");
-			ollamaRequest.Options.Temperature.Should().Be(0.77f);
-			ollamaRequest.Options.TfsZ.Should().Be(0.88f);
-			ollamaRequest.Options.TopK.Should().Be(12);
-			ollamaRequest.Options.TopP.Should().Be(0.99f);
-			ollamaRequest.Options.TypicalP.Should().Be(1.01f);
-			ollamaRequest.Options.UseMlock.Should().Be(false);
-			ollamaRequest.Options.UseMmap.Should().Be(true);
-			ollamaRequest.Options.VocabOnly.Should().Be(false);
+			ollamaRequest.Options.F16kv.ShouldBe(true);
+			ollamaRequest.Options.FrequencyPenalty.ShouldBe(0.11f);
+			ollamaRequest.Options.LogitsAll.ShouldBe(false);
+			ollamaRequest.Options.LowVram.ShouldBe(true);
+			ollamaRequest.Options.MainGpu.ShouldBe(1);
+			ollamaRequest.Options.MinP.ShouldBe(0.22f);
+			ollamaRequest.Options.MiroStat.ShouldBe(2);
+			ollamaRequest.Options.MiroStatEta.ShouldBe(0.33f);
+			ollamaRequest.Options.MiroStatTau.ShouldBe(0.44f);
+			ollamaRequest.Options.Numa.ShouldBe(false);
+			ollamaRequest.Options.NumBatch.ShouldBe(3);
+			ollamaRequest.Options.NumCtx.ShouldBe(4);
+			ollamaRequest.Options.NumGpu.ShouldBe(5);
+			ollamaRequest.Options.NumGqa.ShouldBe(6);
+			ollamaRequest.Options.NumKeep.ShouldBe(7);
+			ollamaRequest.Options.NumPredict.ShouldBe(8);
+			ollamaRequest.Options.NumThread.ShouldBe(9);
+			ollamaRequest.Options.PenalizeNewline.ShouldBe(true);
+			ollamaRequest.Options.PresencePenalty.ShouldBe(0.55f);
+			ollamaRequest.Options.RepeatLastN.ShouldBe(10);
+			ollamaRequest.Options.RepeatPenalty.ShouldBe(0.66f);
+			ollamaRequest.Options.Seed.ShouldBe(11);
+			ollamaRequest.Options.Stop.ShouldBe(["stop", "quit", "exit"], ignoreOrder: true);
+			ollamaRequest.Options.Temperature.ShouldBe(0.77f);
+			ollamaRequest.Options.TfsZ.ShouldBe(0.88f);
+			ollamaRequest.Options.TopK.ShouldBe(12);
+			ollamaRequest.Options.TopP.ShouldBe(0.99f);
+			ollamaRequest.Options.TypicalP.ShouldBe(1.01f);
+			ollamaRequest.Options.UseMlock.ShouldBe(false);
+			ollamaRequest.Options.UseMmap.ShouldBe(true);
+			ollamaRequest.Options.VocabOnly.ShouldBe(false);
 		}
 	}
 
@@ -686,25 +686,26 @@ public class AbstractionMapperTests
 
 			var response = AbstractionMapper.ToChatResponse(stream, usedModel: null);
 
-			response.AdditionalProperties.Should().NotBeNull();
-			response.AdditionalProperties[Application.EvalDuration].Should().Be(TimeSpan.FromSeconds(2.222222222));
-			response.AdditionalProperties[Application.LoadDuration].Should().Be(TimeSpan.FromSeconds(3.333333333));
-			response.AdditionalProperties[Application.TotalDuration].Should().Be(TimeSpan.FromSeconds(6.666666666));
-			response.AdditionalProperties[Application.PromptEvalDuration].Should().Be(TimeSpan.FromSeconds(5.555555555));
-			response.CreatedAt.Should().Be(new DateTimeOffset(2023, 08, 04, 08, 52, 19, 385, 406, TimeSpan.FromHours(-7)));
-			response.FinishReason.Should().Be(ChatFinishReason.Stop);
-			response.Messages[0].AuthorName.Should().BeNull();
-			response.Messages[0].RawRepresentation.Should().Be(stream.Message);
-			response.Messages[0].Role.Should().Be(Microsoft.Extensions.AI.ChatRole.Assistant);
-			response.Messages[0].Text.Should().Be("Hi.");
-			response.Messages[0].Contents.Should().BeEquivalentTo([new TextContent("Hi.")]);
-			response.ModelId.Should().Be("llama3.1:8b");
-			response.RawRepresentation.Should().Be(stream);
-			response.ResponseId.Should().Be(ollamaCreatedStamp);
-			response.Usage.Should().NotBeNull();
-			response.Usage.InputTokenCount.Should().Be(411);
-			response.Usage.OutputTokenCount.Should().Be(111);
-			response.Usage.TotalTokenCount.Should().Be(111 + 411);
+			response.AdditionalProperties.ShouldNotBeNull();
+			response.AdditionalProperties[Application.EvalDuration].ShouldBe(TimeSpan.FromSeconds(2.222222222));
+			response.AdditionalProperties[Application.LoadDuration].ShouldBe(TimeSpan.FromSeconds(3.333333333));
+			response.AdditionalProperties[Application.TotalDuration].ShouldBe(TimeSpan.FromSeconds(6.666666666));
+			response.AdditionalProperties[Application.PromptEvalDuration].ShouldBe(TimeSpan.FromSeconds(5.555555555));
+			response.CreatedAt.ShouldBe(new DateTimeOffset(2023, 08, 04, 08, 52, 19, 385, 406, TimeSpan.FromHours(-7)));
+			response.FinishReason.ShouldBe(ChatFinishReason.Stop);
+			response.Messages[0].AuthorName.ShouldBeNull();
+			response.Messages[0].RawRepresentation.ShouldBe(stream.Message);
+			response.Messages[0].Role.ShouldBe(Microsoft.Extensions.AI.ChatRole.Assistant);
+			response.Messages[0].Text.ShouldBe("Hi.");
+			response.Messages[0].Contents.Count.ShouldBe(1);
+			((TextContent)response.Messages[0].Contents[0]).Text.ShouldBe("Hi.");
+			response.ModelId.ShouldBe("llama3.1:8b");
+			response.RawRepresentation.ShouldBe(stream);
+			response.ResponseId.ShouldBe(ollamaCreatedStamp);
+			response.Usage.ShouldNotBeNull();
+			response.Usage.InputTokenCount.ShouldBe(411);
+			response.Usage.OutputTokenCount.ShouldBe(111);
+			response.Usage.TotalTokenCount.ShouldBe(111 + 411);
 		}
 	}
 
@@ -725,15 +726,16 @@ public class AbstractionMapperTests
 
 			var streamingChatCompletion = AbstractionMapper.ToChatResponseUpdate(stream, "12345");
 
-			streamingChatCompletion.AdditionalProperties.Should().BeNull();
-			streamingChatCompletion.AuthorName.Should().BeNull();
-			streamingChatCompletion.Contents.Should().BeEquivalentTo([new TextContent("Hi.")]);
-			streamingChatCompletion.CreatedAt.Should().Be(new DateTimeOffset(2023, 08, 04, 08, 52, 19, 385, 406, TimeSpan.FromHours(-7)));
-			streamingChatCompletion.FinishReason.Should().Be(ChatFinishReason.Stop);
-			streamingChatCompletion.RawRepresentation.Should().Be(stream);
-			streamingChatCompletion.ResponseId.Should().Be("12345");
-			streamingChatCompletion.Role.Should().Be(Microsoft.Extensions.AI.ChatRole.Assistant);
-			streamingChatCompletion.Text.Should().Be("Hi.");
+			streamingChatCompletion.AdditionalProperties.ShouldBeNull();
+			streamingChatCompletion.AuthorName.ShouldBeNull();
+			streamingChatCompletion.Contents.Count.ShouldBe(1);
+			((TextContent)streamingChatCompletion.Contents[0]).Text.ShouldBe("Hi.");
+			streamingChatCompletion.CreatedAt.ShouldBe(new DateTimeOffset(2023, 08, 04, 08, 52, 19, 385, 406, TimeSpan.FromHours(-7)));
+			streamingChatCompletion.FinishReason.ShouldBe(ChatFinishReason.Stop);
+			streamingChatCompletion.RawRepresentation.ShouldBe(stream);
+			streamingChatCompletion.ResponseId.ShouldBe("12345");
+			streamingChatCompletion.Role.ShouldBe(Microsoft.Extensions.AI.ChatRole.Assistant);
+			streamingChatCompletion.Text.ShouldBe("Hi.");
 		}
 	}
 
@@ -765,22 +767,23 @@ public class AbstractionMapperTests
 
 			var chatMessage = AbstractionMapper.ToChatMessage(message);
 
-			chatMessage.AdditionalProperties.Should().BeNull();
-			chatMessage.AuthorName.Should().BeNull();
-			chatMessage.Contents.Should().HaveCount(2);
-			chatMessage.Contents.First().Should().BeOfType<TextContent>().Which.Text.Should().Be("It seems the sun will be out all day.");
+			chatMessage.AdditionalProperties.ShouldBeNull();
+			chatMessage.AuthorName.ShouldBeNull();
+			chatMessage.Contents.Count.ShouldBe(2);
+			chatMessage.Contents.First().ShouldBeOfType<TextContent>();
+			((TextContent)chatMessage.Contents.First()).Text.ShouldBe("It seems the sun will be out all day.");
 			var toolCall = chatMessage.Contents.Last() as FunctionCallContent;
-			toolCall.AdditionalProperties.Should().BeNull();
-			toolCall.Arguments.Should().HaveCount(2);
-			toolCall.Arguments["city"].Should().Be("Honululu");
-			toolCall.Arguments["unit"].Should().Be("celsius");
-			toolCall.CallId.Should().NotBeEmpty().And.HaveLength(8); // random guid
-			toolCall.Exception.Should().BeNull();
-			toolCall.Name.Should().Be("get_weather");
-			toolCall.RawRepresentation.Should().Be(message.ToolCalls.Single());
-			chatMessage.RawRepresentation.Should().Be(message);
-			chatMessage.Role.Should().Be(Microsoft.Extensions.AI.ChatRole.Assistant);
-			chatMessage.Text.Should().Be("It seems the sun will be out all day.");
+			toolCall.AdditionalProperties.ShouldBeNull();
+			toolCall.Arguments.Count.ShouldBe(2);
+			toolCall.Arguments["city"].ShouldBe("Honululu");
+			toolCall.Arguments["unit"].ShouldBe("celsius");
+			toolCall.CallId.Length.ShouldBe(8); // random guid
+			toolCall.Exception.ShouldBeNull();
+			toolCall.Name.ShouldBe("get_weather");
+			toolCall.RawRepresentation.ShouldBe(message.ToolCalls.Single());
+			chatMessage.RawRepresentation.ShouldBe(message);
+			chatMessage.Role.ShouldBe(Microsoft.Extensions.AI.ChatRole.Assistant);
+			chatMessage.Text.ShouldBe("It seems the sun will be out all day.");
 		}
 	}
 
@@ -799,11 +802,11 @@ public class AbstractionMapperTests
 
 			var request = AbstractionMapper.ToOllamaEmbedRequest(values, options);
 
-			request.Input.Should().BeEquivalentTo("Teenage ", " Dirtbag.");
-			request.KeepAlive.Should().BeNull();
-			request.Model.Should().Be("nomic_embed");
-			request.Options.Should().BeNull();
-			request.Truncate.Should().BeNull();
+			request.Input.ShouldBe(["Teenage ", " Dirtbag."], ignoreOrder: true);
+			request.KeepAlive.ShouldBeNull();
+			request.Model.ShouldBe("nomic_embed");
+			request.Options.ShouldBeNull();
+			request.Truncate.ShouldBeNull();
 		}
 
 		[Test]
@@ -818,8 +821,8 @@ public class AbstractionMapperTests
 
 			var request = AbstractionMapper.ToOllamaEmbedRequest([], options);
 
-			request.KeepAlive.Should().Be(123456789);
-			request.Truncate.Should().BeTrue();
+			request.KeepAlive.ShouldBe(123456789);
+			request.Truncate.ShouldBe(true);
 		}
 	}
 
@@ -843,15 +846,15 @@ public class AbstractionMapperTests
 
 			var mappedResponse = AbstractionMapper.ToGeneratedEmbeddings(request, response, usedModel: "model");
 
-			mappedResponse.AdditionalProperties.Should().NotBeNull();
-			mappedResponse.Count.Should().Be(2);
-			mappedResponse[0].ModelId.Should().Be("model");
-			mappedResponse[0].Vector.ToArray().Should().BeEquivalentTo([0.101f, 0.102f, 0.103f]);
-			mappedResponse[1].ModelId.Should().Be("model");
-			mappedResponse[1].Vector.ToArray().Should().BeEquivalentTo([0.201f, 0.202f, 0.203f]);
-			mappedResponse.Usage.InputTokenCount.Should().Be(18);
-			mappedResponse.Usage.OutputTokenCount.Should().BeNull();
-			mappedResponse.Usage.TotalTokenCount.Should().Be(18);
+			mappedResponse.AdditionalProperties.ShouldNotBeNull();
+			mappedResponse.Count.ShouldBe(2);
+			mappedResponse[0].ModelId.ShouldBe("model");
+			mappedResponse[0].Vector.ToArray().ShouldBe([0.101f, 0.102f, 0.103f], ignoreOrder: true);
+			mappedResponse[1].ModelId.ShouldBe("model");
+			mappedResponse[1].Vector.ToArray().ShouldBe([0.201f, 0.202f, 0.203f], ignoreOrder: true);
+			mappedResponse.Usage.InputTokenCount.ShouldBe(18);
+			mappedResponse.Usage.OutputTokenCount.ShouldBeNull();
+			mappedResponse.Usage.TotalTokenCount.ShouldBe(18);
 		}
 	}
 }

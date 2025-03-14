@@ -1,5 +1,4 @@
 using System.Text;
-using System.Collections.Generic;
 
 namespace OllamaSharp.AsyncEnumerableExtensions;
 
