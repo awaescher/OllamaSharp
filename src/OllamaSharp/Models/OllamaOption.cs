@@ -115,7 +115,7 @@ public class OllamaOption(string name)
 	/// (Default: 128, -1 = infinite generation, -2 = fill context)
 	/// </summary>
 	public static OllamaOption NumPredict { get; } = new(Application.NumPredict);
-	
+
 	/// <summary>
 	/// The number of tokens to generate in the output.
 	///	(Default: -1, infinite generation)

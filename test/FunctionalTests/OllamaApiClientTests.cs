@@ -1,8 +1,8 @@
-using FluentAssertions;
 using NUnit.Framework;
 using OllamaSharp;
 using OllamaSharp.Models;
 using OllamaSharp.Models.Chat;
+using Shouldly;
 using ChatRole = OllamaSharp.Models.Chat.ChatRole;
 
 namespace Tests.FunctionalTests;
@@ -57,11 +57,11 @@ public class OllamaApiClientTests
 			.ToListAsync();
 
 		var models = await _client.ListLocalModelsAsync();
-		models.Should().Contain(m => m.Name == _model);
+		models.ShouldContain(m => m.Name == _model);
 
-		response.Should().NotBeEmpty();
-		response.Should().Contain(r => r!.Status == "pulling manifest");
-		response.Should().Contain(r => r!.Status == "success");
+		response.ShouldNotBeEmpty();
+		response.ShouldContain(r => r!.Status == "pulling manifest");
+		response.ShouldContain(r => r!.Status == "success");
 	}
 
 	[Test, Order(2)]
@@ -84,11 +84,11 @@ public class OllamaApiClientTests
 			.CreateModelAsync(model)
 			.ToListAsync();
 
-		response.Should().NotBeEmpty();
-		response.Should().Contain(r => r!.Status == "success");
+		response.ShouldNotBeEmpty();
+		response.ShouldContain(r => r!.Status == "success");
 
 		var models = await _client.ListLocalModelsAsync();
-		models.Should().Contain(m => m.Name.StartsWith(_localModel));
+		models.ShouldContain(m => m.Name.StartsWith(_localModel));
 	}
 
 	[Test, Order(3)]
@@ -101,7 +101,7 @@ public class OllamaApiClientTests
 		await _client.CopyModelAsync(model);
 
 		var models = await _client.ListLocalModelsAsync();
-		models.Should().Contain(m => m.Name == $"{_localModel}-copy:latest");
+		models.ShouldContain(m => m.Name == $"{_localModel}-copy:latest");
 
 		await _client.DeleteModelAsync(new DeleteModelRequest { Model = $"{_localModel}-copy:latest" });
 	}
@@ -115,10 +115,10 @@ public class OllamaApiClientTests
 
 		var response = await _client.EmbedAsync(request);
 
-		response.Should().NotBeNull();
-		response.Embeddings.Should().NotBeEmpty();
-		response.LoadDuration.Should().BeGreaterThan(100, "Because loading the model should take some time");
-		response.TotalDuration.Should().BeGreaterThan(100, "Because generating embeddings should take some time");
+		response.ShouldNotBeNull();
+		response.Embeddings.ShouldNotBeEmpty();
+		response.LoadDuration!.Value.ShouldBeGreaterThan(100, "Because loading the model should take some time");
+		response.TotalDuration!.Value.ShouldBeGreaterThan(100, "Because generating embeddings should take some time");
 	}
 
 	[Test]
@@ -126,8 +126,8 @@ public class OllamaApiClientTests
 	{
 		var models = (await _client.ListLocalModelsAsync()).ToList();
 
-		models.Should().NotBeEmpty();
-		models.Should().Contain(m => m.Name == _model);
+		models.ShouldNotBeEmpty();
+		models.ShouldContain(m => m.Name == _model);
 	}
 
 	[Test]
@@ -149,8 +149,8 @@ public class OllamaApiClientTests
 		await Task.WhenAll(backgroundTask, modelsTask);
 
 		var models = modelsTask.Result.ToList();
-		models.Should().NotBeEmpty();
-		models.Should().Contain(m => m.Name == _model);
+		models.ShouldNotBeEmpty();
+		models.ShouldContain(m => m.Name == _model);
 	}
 
 	[Test]
@@ -160,12 +160,12 @@ public class OllamaApiClientTests
 
 		var response = await _client.ShowModelAsync(new ShowModelRequest { Model = _model });
 
-		response.Should().NotBeNull();
-		response.Info.Should().NotBeNull();
-		response.Info.Architecture.Should().Be("llama");
-		response.Details.Should().NotBeNull();
-		response.Details.Format.Should().NotBeNullOrEmpty();
-		response.Details.Family.Should().Be("llama");
+		response.ShouldNotBeNull();
+		response.Info.ShouldNotBeNull();
+		response.Info.Architecture.ShouldBe("llama");
+		response.Details.ShouldNotBeNull();
+		response.Details.Format.ShouldNotBeNullOrEmpty();
+		response.Details.Family.ShouldBe("llama");
 	}
 
 	[Test]
@@ -180,12 +180,12 @@ public class OllamaApiClientTests
 
 		var exists = (await _client.ListLocalModelsAsync()).Any(m => m.Name == $"{_localModel}-copy:latest");
 
-		exists.Should().BeTrue();
+		exists.ShouldBeTrue();
 
 		await _client.DeleteModelAsync(new DeleteModelRequest { Model = $"{_localModel}-copy:latest" });
 
 		var models = await _client.ListLocalModelsAsync();
-		models.Should().NotContain(m => m.Name == $"{_localModel}-copy:latest");
+		models.ShouldNotContain(m => m.Name == $"{_localModel}-copy:latest");
 	}
 
 	[Test]
@@ -203,8 +203,8 @@ public class OllamaApiClientTests
 
 		var joined = string.Join("", response.Select(r => r.Response));
 
-		response.Should().NotBeEmpty();
-		joined.Should().Contain("42");
+		response.ShouldNotBeEmpty();
+		joined.ShouldContain("42");
 	}
 
 	[Test]
@@ -238,22 +238,22 @@ public class OllamaApiClientTests
 
 		var joined = string.Join("", response.Select(r => r.Message.Content));
 
-		response.Should().NotBeEmpty();
-		joined.Should().Contain("Douglas Adams");
+		response.ShouldNotBeEmpty();
+		joined.ShouldContain("Douglas Adams");
 	}
 
 	[Test]
 	public async Task IsRunningAsync()
 	{
 		var response = await _client.IsRunningAsync();
-		response.Should().BeTrue();
+		response.ShouldBeTrue();
 	}
 
 	[Test]
 	public async Task GetVersionAsync()
 	{
 		var response = await _client.GetVersionAsync();
-		response.Should().NotBeNull();
+		response.ShouldNotBeNull();
 	}
 }
 

@@ -1,9 +1,11 @@
-using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using OllamaSharp.ModelContextProtocol.Server;
 using OllamaSharp.ModelContextProtocol.Tests.Infrastructure;
+using Shouldly;
 
 namespace OllamaSharp.ModelContextProtocol.Tests;
+
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
 
 public class ToolsTests
 {
@@ -11,21 +13,24 @@ public class ToolsTests
 	public async Task Throws_Exception_When_Empty_File_Path()
 	{
 		var action = async () => await Tools.GetFromMcpServers("");
-		await action.Should().ThrowAsync<ArgumentNullException>().WithMessage("Value cannot be null. (Parameter 'configurationFilePath')");
+		var ex = await action.ShouldThrowAsync<ArgumentNullException>();
+		ex.Message.ShouldContain("Value cannot be null. (Parameter 'configurationFilePath')");
 	}
 
 	[Test]
 	public async Task Throws_Exception_When_File_Does_Not_Exists()
 	{
 		var action = async () => await Tools.GetFromMcpServers("someConfig.txt");
-		await action.Should().ThrowAsync<FileNotFoundException>().WithMessage("The specified configuration file 'someConfig.txt' does not exist.");
+		var ex = await action.ShouldThrowAsync<FileNotFoundException>();
+		ex.Message.ShouldContain("The specified configuration file 'someConfig.txt' does not exist.");
 	}
 
 	[Test]
 	public async Task Throws_Exception_When_Server_Are_Empty()
 	{
 		var action = async () => await Tools.GetFromMcpServers();
-		await action.Should().ThrowAsync<ArgumentNullException>().WithMessage("Value cannot be null. (Parameter 'mcpServers')");
+		var ex = await action.ShouldThrowAsync<ArgumentNullException>();
+		ex.Message.ShouldContain("Value cannot be null. (Parameter 'mcpServers')");
 	}
 
 	[Test]
@@ -40,15 +45,17 @@ public class ToolsTests
 		};
 
 		var tools = await Tools.GetFromMcpServers("./TestData/server_config.json", options);
-		tools.Should().NotBeEmpty();
-		tools.Should().HaveCount(2);
+		tools.ShouldNotBeEmpty();
+		tools.Count().ShouldBe(2);
 
 		var tool = tools[0];
-		tool.Should().BeOfType<McpClientTool>();
-		var clientTools = tool.As<McpClientTool>();
-		clientTools.Type.Should().Be("function");
-		clientTools.Function.Should().NotBeNull();
-		clientTools.Function!.Name.Should().Be("test_for_filesystem");
+		tool.ShouldBeOfType<McpClientTool>();
+		var clientTools = tool as McpClientTool;
+		clientTools.Type.ShouldBe("function");
+		clientTools.Function.ShouldNotBeNull();
+		clientTools.Function!.Name.ShouldBe("test_for_filesystem");
 	}
 
 }
+
+#pragma warning restore CS8602 // Dereference of a possibly null reference.

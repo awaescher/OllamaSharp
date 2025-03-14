@@ -1,5 +1,5 @@
-using FluentAssertions;
 using NUnit.Framework;
+using Shouldly;
 
 namespace Tests.SourceGenerators;
 
@@ -29,17 +29,17 @@ public class Test
 
 			var result = RunGenerator(code);
 
-			result.GeneratedTool.Function.Name.Should().Be("GetWeather");
-			result.GeneratedTool.Function.Description.Should().Be("Gets the current weather for a given location.");
-			result.GeneratedTool.Function.Parameters.Type.Should().Be("object");
-			result.GeneratedTool.Function.Parameters.Required.Should().BeEquivalentTo(["location"]);
-			result.GeneratedTool.Function.Parameters.Properties.Count.Should().Be(1);
-			result.GeneratedTool.Function.Parameters.Properties["location"].Description.Should().Be("The location or city to get the weather for");
-			result.GeneratedTool.Function.Parameters.Properties["location"].Enum.Should().BeNull();
-			result.GeneratedTool.Function.Parameters.Properties["location"].Type.Should().Be("string");
-			result.GeneratedTool.Type.Should().Be("function");
+			result.GeneratedTool.Function.Name.ShouldBe("GetWeather");
+			result.GeneratedTool.Function.Description.ShouldBe("Gets the current weather for a given location.");
+			result.GeneratedTool.Function.Parameters.Type.ShouldBe("object");
+			result.GeneratedTool.Function.Parameters.Required.ShouldBe(["location"], ignoreOrder: true);
+			result.GeneratedTool.Function.Parameters.Properties.Count.ShouldBe(1);
+			result.GeneratedTool.Function.Parameters.Properties["location"].Description.ShouldBe("The location or city to get the weather for");
+			result.GeneratedTool.Function.Parameters.Properties["location"].Enum.ShouldBeNull();
+			result.GeneratedTool.Function.Parameters.Properties["location"].Type.ShouldBe("string");
+			result.GeneratedTool.Type.ShouldBe("function");
 
-			result.GeneratedTool.GetType().Name.Should().Be("GetWeatherTool");
+			result.GeneratedTool.GetType().Name.ShouldBe("GetWeatherTool");
 		}
 
 		[Test]
@@ -56,9 +56,9 @@ public class Test
 
 			var result = RunGenerator(code);
 
-			result.GeneratedTool.Function.Name.Should().Be("GetWeather");
-			result.GeneratedTool.Function.Description.Should().BeEmpty();
-			result.GeneratedTool.Function.Parameters.Properties["location"].Description.Should().BeEmpty();
+			result.GeneratedTool.Function.Name.ShouldBe("GetWeather");
+			result.GeneratedTool.Function.Description.ShouldBeEmpty();
+			result.GeneratedTool.Function.Parameters.Properties["location"].Description.ShouldBeEmpty();
 		}
 
 		[Test]
@@ -87,10 +87,10 @@ public class Test
 
 			var result = RunGenerator(code);
 
-			result.GeneratedTool.Function.Parameters.Required.Should().BeEquivalentTo(["location", "unit"]);
-			result.GeneratedTool.Function.Parameters.Properties["unit"].Description.Should().Be("The unit to measure the temperature in");
-			result.GeneratedTool.Function.Parameters.Properties["unit"].Enum.Should().BeEquivalentTo(["Celsius", "Fahrenheit"]);
-			result.GeneratedTool.Function.Parameters.Properties["unit"].Type.Should().Be("string");
+			result.GeneratedTool.Function.Parameters.Required.ShouldBe(["location", "unit"], ignoreOrder: true);
+			result.GeneratedTool.Function.Parameters.Properties["unit"].Description.ShouldBe("The unit to measure the temperature in");
+			result.GeneratedTool.Function.Parameters.Properties["unit"].Enum.ShouldBe(["Celsius", "Fahrenheit"], ignoreOrder: true);
+			result.GeneratedTool.Function.Parameters.Properties["unit"].Type.ShouldBe("string");
 		}
 
 		[Test]
@@ -107,12 +107,12 @@ public class Test
 
 			var result = RunGenerator(code);
 
-			result.GeneratedTool.Function.Parameters.Properties["a"].Type.Should().Be("string");
-			result.GeneratedTool.Function.Parameters.Properties["b"].Type.Should().Be("number");
-			result.GeneratedTool.Function.Parameters.Properties["c"].Type.Should().Be("number");
-			result.GeneratedTool.Function.Parameters.Properties["d"].Type.Should().Be("number");
-			result.GeneratedTool.Function.Parameters.Properties["e"].Type.Should().Be("number");
-			result.GeneratedTool.Function.Parameters.Properties["f"].Type.Should().Be("number");
+			result.GeneratedTool.Function.Parameters.Properties["a"].Type.ShouldBe("string");
+			result.GeneratedTool.Function.Parameters.Properties["b"].Type.ShouldBe("number");
+			result.GeneratedTool.Function.Parameters.Properties["c"].Type.ShouldBe("number");
+			result.GeneratedTool.Function.Parameters.Properties["d"].Type.ShouldBe("number");
+			result.GeneratedTool.Function.Parameters.Properties["e"].Type.ShouldBe("number");
+			result.GeneratedTool.Function.Parameters.Properties["f"].Type.ShouldBe("number");
 		}
 
 		[Test]
@@ -141,10 +141,10 @@ public class Test
 
 			var result = RunGenerator(code);
 
-			result.GeneratedTool.Function.Parameters.Required.Should().BeEquivalentTo(["location"]);
-			result.GeneratedTool.Function.Parameters.Properties["unit"].Description.Should().Be("The unit to measure the temperature in");
-			result.GeneratedTool.Function.Parameters.Properties["unit"].Enum.Should().BeEquivalentTo(["Celsius", "Fahrenheit"]);
-			result.GeneratedTool.Function.Parameters.Properties["unit"].Type.Should().Be("string");
+			result.GeneratedTool.Function.Parameters.Required.ShouldBe(["location"], ignoreOrder: true);
+			result.GeneratedTool.Function.Parameters.Properties["unit"].Description.ShouldBe("The unit to measure the temperature in");
+			result.GeneratedTool.Function.Parameters.Properties["unit"].Enum.ShouldBe(["Celsius", "Fahrenheit"], ignoreOrder: true);
+			result.GeneratedTool.Function.Parameters.Properties["unit"].Type.ShouldBe("string");
 		}
 
 		[Test]
@@ -160,7 +160,8 @@ public class Test
 
 			var result = RunGenerator(code, allowErrors: true);
 
-			result.Diagnostics.Should().ContainSingle(d => d.ToString().Contains("A namespace is required!"));
+			var namespaceErrors = result.Diagnostics.Where(d => d.ToString().Contains("A namespace is required!"));
+			namespaceErrors.Count().ShouldBe(1);
 		}
 
 		[Test]
@@ -176,7 +177,7 @@ public static class Test
 """;
 
 			var result = RunGenerator(code, allowErrors: true);
-			result.GeneratedTool.Function.Name.Should().Be("GetWeather");
+			result.GeneratedTool.Function.Name.ShouldBe("GetWeather");
 		}
 	}
 
@@ -195,7 +196,7 @@ public class Test
 """;
 			var result = RunGenerator(code);
 			var toolResult = await InvokeTool(result);
-			toolResult.Should().Be(42);
+			toolResult.ShouldBe(42);
 		}
 
 		[Test]
@@ -211,7 +212,7 @@ public static class Test
 """;
 			var result = RunGenerator(code);
 			var toolResult = await InvokeTool(result);
-			toolResult.Should().Be(42);
+			toolResult.ShouldBe(42);
 		}
 
 		[Test]
@@ -231,7 +232,7 @@ public class Test
 """;
 			var result = RunGenerator(code);
 			var toolResult = await InvokeTool(result);
-			toolResult.Should().Be(42);
+			toolResult.ShouldBe(42);
 		}
 
 		[Test]
@@ -254,7 +255,7 @@ public class Test
 
 			var result = RunGenerator(code);
 			var toolResult = await InvokeTool(result, new() { ["location"] = "Berlin", ["unit"] = "Fahrenheit" });
-			toolResult.Should().Be("It's cold at only 6° Fahrenheit in Berlin.");
+			toolResult.ShouldBe("It's cold at only 6° Fahrenheit in Berlin.");
 		}
 
 		[Test]
@@ -277,7 +278,7 @@ public class Test
 
 			var result = RunGenerator(code);
 			var toolResult = await InvokeTool(result, new() { ["location"] = "Berlin" });
-			toolResult.Should().Be("It's cold at only 6° Celsius in Berlin.");
+			toolResult.ShouldBe("It's cold at only 6° Celsius in Berlin.");
 		}
 
 		[Test]
@@ -300,7 +301,7 @@ public class Test
 			var result = RunGenerator(code);
 
 			Func<Task> act = async () => await InvokeTool(result, new() { ["location"] = "Berlin", ["unit"] = "Kelvin" }); // <- Kelvin is not part of the enum
-			await act.Should().ThrowAsync<ArgumentException>();
+			await act.ShouldThrowAsync<ArgumentException>();
 		}
 
 		[Test]
@@ -322,7 +323,7 @@ public class Test
 """;
 			var result = RunGenerator(code);
 			var toolResult = await InvokeTool(result, new() { ["location"] = "Berlin", ["unit"] = "Kelvin" }); // <- Kelvin is not part of the enum
-			toolResult.Should().Be("It's cold at only 6° Celsius in Berlin."); // <-- Celsius is the fallback value
+			toolResult.ShouldBe("It's cold at only 6° Celsius in Berlin."); // <-- Celsius is the fallback value
 		}
 	}
 }

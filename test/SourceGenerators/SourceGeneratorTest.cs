@@ -1,10 +1,10 @@
 using System.Reflection;
-using FluentAssertions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using NUnit.Framework;
 using OllamaSharp;
 using OllamaSharp.Models.Chat;
+using Shouldly;
 
 namespace Tests.SourceGenerators;
 
@@ -37,8 +37,8 @@ public abstract class SourceGeneratorTest
 		if (hasErrors && allowErrors)
 			return new SourceGeneratorResult(GeneratedCode: "", GeneratedTool: null, diagnostics);
 
-		diagnostics.Should().BeEmpty("there should be no compilation errors");
-		generatedTrees.Should().ContainSingle("only one file should be generated");
+		diagnostics.ShouldBeEmpty("there should be no compilation errors");
+		generatedTrees.Count.ShouldBe(1, "only one file should be generated");
 
 		var generatedCode = generatedTrees[0].ToString();
 
@@ -58,7 +58,7 @@ public abstract class SourceGeneratorTest
 		using var stream = new MemoryStream();
 		var emitResult = finalCompilation.Emit(stream);
 		var compileerrors = emitResult.Diagnostics.Where(d => d.WarningLevel == 0);
-		compileerrors.Should().BeEmpty();
+		compileerrors.ShouldBeEmpty();
 
 		// load dynamic assembly
 		stream.Seek(0, SeekOrigin.Begin);

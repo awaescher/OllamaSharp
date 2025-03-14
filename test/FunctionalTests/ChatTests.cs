@@ -1,6 +1,6 @@
-using FluentAssertions;
 using NUnit.Framework;
 using OllamaSharp;
+using Shouldly;
 
 namespace Tests.FunctionalTests;
 
@@ -37,14 +37,9 @@ public class ChatTests
 		_client.SelectedModel = _model;
 
 		var response = await _chat
-			.SendAsync("What is the ultimate answer to " +
-					   "life, the universe, and everything, as specified in " +
-					   "a Hitchhikers Guide to the Galaxy. " +
-					   "Provide only the answer.",
-				CancellationToken.None)
+			.SendAsync("What is 1+1? Provide only the result number, nothing else.", CancellationToken.None)
 			.StreamToEndAsync();
 
-		response.Should().NotBeNullOrEmpty();
-		response.Should().ContainAny("42", "forty-two", "forty two");
+		response.ShouldBe("2");
 	}
 }

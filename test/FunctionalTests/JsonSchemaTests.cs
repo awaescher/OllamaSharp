@@ -1,8 +1,8 @@
 using System.Text.Json;
 using System.Text.Json.Schema;
 using NUnit.Framework;
-using FluentAssertions;
 using OllamaSharp;
+using Shouldly;
 
 namespace Tests.FunctionalTests;
 
@@ -52,12 +52,12 @@ public class JsonSchemaTests
 				}
 				""", tools: null, format: responseSchema)
 			.StreamToEndAsync();
-		response.Should().NotBeNullOrEmpty();
+		response.ShouldNotBeNullOrEmpty();
 
 		var responseSword = JsonSerializer.Deserialize<Sword>(response);
-		responseSword.Should().NotBeNull();
-		responseSword.Name.ToLowerInvariant().Should().Contain("excalibur");
-		responseSword.Damage.Should().BeOfType(typeof(int));
+		responseSword.ShouldNotBeNull();
+		responseSword.Name.ToLowerInvariant().ShouldContain("excalibur");
+		responseSword.Damage.ShouldBeOfType(typeof(int));
 	}
 
 	private class Sword
