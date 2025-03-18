@@ -308,8 +308,20 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 
 		while (!reader.EndOfStream && !cancellationToken.IsCancellationRequested)
 		{
-			var line = await reader.ReadLineAsync().ConfigureAwait(false) ?? "";
-			yield return JsonSerializer.Deserialize<TLine?>(line, IncomingJsonSerializerOptions);
+			var line = await reader.ReadLineAsync()
+				.ConfigureAwait(false) ?? "";
+
+			var error = JsonSerializer.Deserialize<ErrorResponse?>(line,IncomingJsonSerializerOptions);
+			if ((error?.Message ?? null) is not null)
+			{
+				throw new ResponseError(error.Message);
+			}
+
+			yield return JsonSerializer
+				.Deserialize<TLine?>(
+					line,
+					IncomingJsonSerializerOptions
+				);
 		}
 	}
 
