@@ -1,10 +1,12 @@
 using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using McpDotNet.Client;
-using McpDotNet.Configuration;
 using Microsoft.Extensions.Logging.Abstractions;
+using ModelContextProtocol.Client;
+using ModelContextProtocol.Configuration;
 using OllamaSharp.ModelContextProtocol.Server;
+using OllamaSharp.ModelContextProtocol.Server.Extensions;
+using ModelContextProtocolClient = ModelContextProtocol.Client;
 
 namespace OllamaSharp.ModelContextProtocol;
 
@@ -71,25 +73,16 @@ public static class Tools
 		var options = CreateMcpClientOptions(clientOptions);
 		var servers = ConvertServerConfigurations(mcpServers);
 
-		var factory = new McpClientFactory(
-			servers,
-			options,
-			clientOptions?.LoggerFactory ?? NullLoggerFactory.Instance, clientOptions?.TransportFactoryMethod, clientOptions?.ClientFactoryMethod
-		);
-
 		var result = new List<object>();
 
 		foreach (var server in servers)
 		{
-			var client = await factory.GetClientAsync(server.Id);
+			var client = await McpClientFactory.CreateAsync(server, options, clientOptions?.TransportFactoryMethod, clientOptions?.LoggerFactory ?? NullLoggerFactory.Instance);
 
-			var tools = await client.ListToolsAsync();
+			var tools = await client.ListToolsAsync().ToListAsync();
 
-			if (tools != null)
-			{
-				foreach (var tool in tools.Tools)
-					result.Add(new McpClientTool(tool, client));
-			}
+			foreach (var tool in tools)
+				result.Add(new McpClientTool(tool, client));
 		}
 
 		return result.ToArray();
@@ -150,9 +143,9 @@ public static class Tools
 		return Environment.ExpandEnvironmentVariables(argument);
 	}
 
-	private static McpDotNet.Client.McpClientOptions CreateMcpClientOptions(McpClientOptions? clientOptions)
+	private static ModelContextProtocolClient.McpClientOptions CreateMcpClientOptions(McpClientOptions? clientOptions)
 	{
-		return new McpDotNet.Client.McpClientOptions
+		return new ModelContextProtocolClient.McpClientOptions
 		{
 			Capabilities = clientOptions?.Capabilities,
 			InitializationTimeout = clientOptions?.InitializationTimeout ?? TimeSpan.FromSeconds(60),
@@ -170,4 +163,3 @@ public static class Tools
 		public Dictionary<string, McpServerConfiguration> Servers { get; set; } = [];
 	}
 }
-

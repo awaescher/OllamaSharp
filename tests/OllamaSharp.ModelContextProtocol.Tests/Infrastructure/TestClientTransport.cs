@@ -1,7 +1,8 @@
 using System.Threading.Channels;
-using McpDotNet.Configuration;
-using McpDotNet.Protocol.Messages;
-using McpDotNet.Protocol.Transport;
+using ModelContextProtocol.Configuration;
+using ModelContextProtocol.Protocol.Messages;
+using ModelContextProtocol.Protocol.Transport;
+using ModelContextProtocolTypes = ModelContextProtocol.Protocol.Types;
 
 namespace OllamaSharp.ModelContextProtocol.Tests.Infrastructure;
 
@@ -48,11 +49,11 @@ internal class TestClientTransport : IClientTransport
 		await WriteMessageAsync(new JsonRpcResponse
 		{
 			Id = request.Id,
-			Result = new McpDotNet.Protocol.Types.ListToolsResult
+			Result = new ModelContextProtocolTypes.ListToolsResult
 			{
 				Tools =
 				[
-					new McpDotNet.Protocol.Types.Tool
+					new ModelContextProtocolTypes.Tool
 					{
 						Name = $"test_for_{Config.Name}",
 						Description = $"This is a test tool for {Config} server"
@@ -67,7 +68,7 @@ internal class TestClientTransport : IClientTransport
 		await WriteMessageAsync(new JsonRpcResponse
 		{
 			Id = request.Id,
-			Result = new McpDotNet.Protocol.Types.InitializeResult
+			Result = new ModelContextProtocolTypes.InitializeResult
 			{
 				ServerInfo = new() { Name = "TestServer", Version = "1.0.0" },
 				ProtocolVersion = "2024-11-05",

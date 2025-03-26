@@ -1,4 +1,7 @@
-using McpDotNet.Client;
+using System.Text.Json;
+using ModelContextProtocol.Client;
+using OllamaSharp.ModelContextProtocol.Server.Types;
+using ModelContextProtocolTypes = ModelContextProtocol.Protocol.Types;
 
 namespace OllamaSharp.ModelContextProtocol.Server;
 
@@ -12,29 +15,32 @@ public class McpClientTool : OllamaSharp.Models.Chat.Tool, OllamaSharp.Tools.IAs
 	/// <summary>
 	/// Initializes a new instance with metadata about the original method.
 	/// </summary>
-	public McpClientTool(McpDotNet.Protocol.Types.Tool mcpTool, IMcpClient client)
+	public McpClientTool(ModelContextProtocolTypes.Tool mcpTool, IMcpClient client)
 	{
 		_client = client;
 
-		this.Function = new OllamaSharp.Models.Chat.Function
+		Function = new OllamaSharp.Models.Chat.Function
 		{
 			Name = mcpTool.Name,
 			Description = mcpTool.Description
 		};
 
-		var properties = mcpTool.InputSchema?.Properties;
+		var inputSchema = JsonSerializer.Deserialize<JsonSchema>(mcpTool.InputSchema.GetRawText());
+		var properties = inputSchema?.Properties;
 		if (properties == null)
-			return;
-
-		this.Function.Parameters = new OllamaSharp.Models.Chat.Parameters
 		{
-			Type = mcpTool.InputSchema!.Type,
+			return;
+		}
+
+		Function.Parameters = new OllamaSharp.Models.Chat.Parameters
+		{
+			Type = inputSchema!.Type,
 			Properties = properties.ToDictionary(kvp => kvp.Key, kvp => new OllamaSharp.Models.Chat.Property
 			{
 				Type = kvp.Value.Type,
 				Description = kvp.Value.Description
 			}),
-			Required = mcpTool.InputSchema?.Required ?? []
+			Required = inputSchema.Required ?? []
 		};
 	}
 
