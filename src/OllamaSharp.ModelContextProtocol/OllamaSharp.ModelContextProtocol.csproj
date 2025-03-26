@@ -36,7 +36,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="mcpdotnet" />
+	  <PackageReference Include="ModelContextProtocol" />
 	</ItemGroup>
 
   <ItemGroup>

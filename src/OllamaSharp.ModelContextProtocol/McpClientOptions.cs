@@ -1,8 +1,8 @@
-using McpDotNet.Client;
-using McpDotNet.Configuration;
-using McpDotNet.Protocol.Transport;
-using McpDotNet.Protocol.Types;
 using Microsoft.Extensions.Logging;
+using ModelContextProtocol.Client;
+using ModelContextProtocol.Configuration;
+using ModelContextProtocol.Protocol.Transport;
+using ModelContextProtocol.Protocol.Types;
 
 namespace OllamaSharp.ModelContextProtocol;
 
@@ -19,12 +19,12 @@ public class McpClientOptions
 	/// <summary>
 	/// An optional factory method which returns transport implementations based on a server configuration.
 	/// </summary>
-	public Func<McpServerConfig, IClientTransport>? TransportFactoryMethod { get; set; }
+	public Func<McpServerConfig, ILoggerFactory, IClientTransport>? TransportFactoryMethod { get; set; }
 
 	/// <summary>
 	/// An optional factory method which creates a client based on client options and transport implementation.
 	/// </summary>
-	public Func<IClientTransport, McpServerConfig, McpDotNet.Client.McpClientOptions, IMcpClient>? ClientFactoryMethod { get; set; }
+	public Func<IClientTransport, McpServerConfig, McpClientOptions, IMcpClient>? ClientFactoryMethod { get; set; }
 
 	/// <summary>
 	/// Client capabilities to advertise to the server.
