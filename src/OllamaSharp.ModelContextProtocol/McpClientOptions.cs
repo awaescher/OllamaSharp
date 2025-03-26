@@ -19,7 +19,7 @@ public class McpClientOptions
 	/// <summary>
 	/// An optional factory method which returns transport implementations based on a server configuration.
 	/// </summary>
-	public Func<McpServerConfig, ILoggerFactory, IClientTransport>? TransportFactoryMethod { get; set; }
+	public Func<McpServerConfig, ILoggerFactory?, IClientTransport>? TransportFactoryMethod { get; set; }
 
 	/// <summary>
 	/// An optional factory method which creates a client based on client options and transport implementation.
