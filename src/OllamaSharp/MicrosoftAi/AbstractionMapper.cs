@@ -309,9 +309,7 @@ internal static class AbstractionMapper
 	/// <returns>A <see cref="ChatResponseUpdate"/> object containing the latest chat completion chunk.</returns>
 	public static ChatResponseUpdate ToChatResponseUpdate(ChatResponseStream? response, string responseId)
 	{
-		// TODO: Check if "Message" can ever actually be null.
-		List<AIContent> contents = response?.Message is null ?
-			[new TextContent(string.Empty)] : GetAIContentsFromMessage(response.Message);
+		var contents = response?.Message is null ? [new TextContent(string.Empty)] : GetAIContentsFromMessage(response.Message);
 
 		return new ChatResponseUpdate(ToAbstractionRole(response?.Message.Role), contents)
 		{
@@ -337,6 +335,9 @@ internal static class AbstractionMapper
 	private static List<AIContent> GetAIContentsFromMessage(Message message)
 	{
 		var contents = new List<AIContent>();
+
+		if (message is null)
+			return contents;
 
 		if (message.ToolCalls?.Any() ?? false)
 		{
