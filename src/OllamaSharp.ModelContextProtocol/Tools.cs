@@ -5,7 +5,6 @@ using Microsoft.Extensions.Logging.Abstractions;
 using ModelContextProtocol.Client;
 using ModelContextProtocol.Configuration;
 using OllamaSharp.ModelContextProtocol.Server;
-using OllamaSharp.ModelContextProtocol.Server.Extensions;
 using ModelContextProtocolClient = ModelContextProtocol.Client;
 
 namespace OllamaSharp.ModelContextProtocol;
@@ -79,9 +78,7 @@ public static class Tools
 		{
 			var client = await McpClientFactory.CreateAsync(server, options, clientOptions?.TransportFactoryMethod, clientOptions?.LoggerFactory ?? NullLoggerFactory.Instance);
 
-			var tools = await client.ListToolsAsync().ToListAsync();
-
-			foreach (var tool in tools)
+			await foreach (var tool in client.ListToolsAsync())
 				result.Add(new McpClientTool(tool, client));
 		}
 
