@@ -309,8 +309,11 @@ internal static class AbstractionMapper
 	/// <returns>A <see cref="ChatResponseUpdate"/> object containing the latest chat completion chunk.</returns>
 	public static ChatResponseUpdate ToChatResponseUpdate(ChatResponseStream? response, string responseId)
 	{
-		// TODO: Check if "Message" can ever actually be null. If not, remove the null-coalescing operator
-		return new(ToAbstractionRole(response?.Message?.Role), response?.Message?.Content ?? string.Empty)
+		// TODO: Check if "Message" can ever actually be null.
+		List<AIContent> contents = response?.Message is null ?
+			[new TextContent(string.Empty)] : GetAIContentsFromMessage(response.Message);
+
+		return new ChatResponseUpdate(ToAbstractionRole(response?.Message.Role), contents)
 		{
 			// no need to set "Contents" as we set the text
 			CreatedAt = response?.CreatedAt,
@@ -327,6 +330,11 @@ internal static class AbstractionMapper
 	/// <param name="message">The message to convert.</param>
 	/// <returns>A <see cref="ChatMessage"/> object containing the converted data.</returns>
 	public static ChatMessage ToChatMessage(Message message)
+	{
+		return new ChatMessage(ToAbstractionRole(message.Role), GetAIContentsFromMessage(message)) { RawRepresentation = message };
+	}
+
+	private static List<AIContent> GetAIContentsFromMessage(Message message)
 	{
 		var contents = new List<AIContent>();
 
@@ -347,7 +355,7 @@ internal static class AbstractionMapper
 		if (message.Content?.Length > 0 || contents.Count == 0)
 			contents.Insert(0, new TextContent(message.Content));
 
-		return new ChatMessage(ToAbstractionRole(message.Role), contents) { RawRepresentation = message };
+		return contents;
 	}
 
 	/// <summary>
