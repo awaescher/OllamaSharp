@@ -737,13 +737,12 @@ public class AbstractionMapperTests
 			streamingChatCompletion.Role.ShouldBe(Microsoft.Extensions.AI.ChatRole.Assistant);
 			streamingChatCompletion.Text.ShouldBe("Hi.");
 		}
-	}
 
-	public class ToChatMessageMethod : AbstractionMapperTests
-	{
 		[Test]
 		public void Maps_ToolCalls()
 		{
+			var ollamaCreated = new DateTimeOffset(2023, 08, 04, 08, 52, 19, 385, 406, TimeSpan.FromHours(-7));
+
 			var message = new Message
 			{
 				Role = OllamaSharp.Models.Chat.ChatRole.Assistant,
@@ -765,7 +764,15 @@ public class AbstractionMapperTests
 				]
 			};
 
-			var chatMessage = AbstractionMapper.ToChatMessage(message);
+			var stream = new ChatResponseStream
+			{
+				CreatedAt = ollamaCreated,
+				Done = true,
+				Message = message,
+				Model = "llama3.1:8b"
+			};
+
+			var chatMessage = AbstractionMapper.ToChatResponseUpdate(stream, "12345");
 
 			chatMessage.AdditionalProperties.ShouldBeNull();
 			chatMessage.AuthorName.ShouldBeNull();
@@ -781,81 +788,129 @@ public class AbstractionMapperTests
 			toolCall.Exception.ShouldBeNull();
 			toolCall.Name.ShouldBe("get_weather");
 			toolCall.RawRepresentation.ShouldBe(message.ToolCalls.Single());
-			chatMessage.RawRepresentation.ShouldBe(message);
+			chatMessage.RawRepresentation.ShouldBe(stream);
 			chatMessage.Role.ShouldBe(Microsoft.Extensions.AI.ChatRole.Assistant);
 			chatMessage.Text.ShouldBe("It seems the sun will be out all day.");
 		}
 	}
+}
 
-	public class ToOllamaEmbedRequestMethod : AbstractionMapperTests
+public class ToChatMessageMethod : AbstractionMapperTests
+{
+	[Test]
+	public void Maps_ToolCalls()
 	{
-		[Test]
-		public void Maps_Request()
+		var message = new Message
 		{
-			var values = new string[] { "Teenage ", " Dirtbag." };
+			Role = OllamaSharp.Models.Chat.ChatRole.Assistant,
+			Content = "It seems the sun will be out all day.",
+			ToolCalls =
+			[
+				new Message.ToolCall
+					{
+						Function = new Message.Function
+						{
+							Arguments = new Dictionary<string, object?>
+							{
+								["city"] = "Honululu",
+								["unit"] = "celsius"
+							},
+							Name = "get_weather"
+						}
+					}
+			]
+		};
 
-			var options = new EmbeddingGenerationOptions
-			{
-				Dimensions = 8,
-				ModelId = "nomic_embed"
-			};
+		var chatMessage = AbstractionMapper.ToChatMessage(message);
 
-			var request = AbstractionMapper.ToOllamaEmbedRequest(values, options);
+		chatMessage.AdditionalProperties.ShouldBeNull();
+		chatMessage.AuthorName.ShouldBeNull();
+		chatMessage.Contents.Count.ShouldBe(2);
+		chatMessage.Contents.First().ShouldBeOfType<TextContent>();
+		((TextContent)chatMessage.Contents.First()).Text.ShouldBe("It seems the sun will be out all day.");
+		var toolCall = chatMessage.Contents.Last() as FunctionCallContent;
+		toolCall.AdditionalProperties.ShouldBeNull();
+		toolCall.Arguments.Count.ShouldBe(2);
+		toolCall.Arguments["city"].ShouldBe("Honululu");
+		toolCall.Arguments["unit"].ShouldBe("celsius");
+		toolCall.CallId.Length.ShouldBe(8); // random guid
+		toolCall.Exception.ShouldBeNull();
+		toolCall.Name.ShouldBe("get_weather");
+		toolCall.RawRepresentation.ShouldBe(message.ToolCalls.Single());
+		chatMessage.RawRepresentation.ShouldBe(message);
+		chatMessage.Role.ShouldBe(Microsoft.Extensions.AI.ChatRole.Assistant);
+		chatMessage.Text.ShouldBe("It seems the sun will be out all day.");
+	}
+}
 
-			request.Input.ShouldBe(["Teenage ", " Dirtbag."], ignoreOrder: true);
-			request.KeepAlive.ShouldBeNull();
-			request.Model.ShouldBe("nomic_embed");
-			request.Options.ShouldBeNull();
-			request.Truncate.ShouldBeNull();
-		}
+public class ToOllamaEmbedRequestMethod : AbstractionMapperTests
+{
+	[Test]
+	public void Maps_Request()
+	{
+		var values = new string[] { "Teenage ", " Dirtbag." };
 
-		[Test]
-		public void Maps_KeepAlive_And_Truncate_From_AdditionalProperties()
+		var options = new EmbeddingGenerationOptions
 		{
-			var options = new EmbeddingGenerationOptions
-			{
-				AdditionalProperties = []
-			};
-			options.AdditionalProperties["keep_alive"] = 123456789;
-			options.AdditionalProperties["truncate"] = true;
+			Dimensions = 8,
+			ModelId = "nomic_embed"
+		};
 
-			var request = AbstractionMapper.ToOllamaEmbedRequest([], options);
+		var request = AbstractionMapper.ToOllamaEmbedRequest(values, options);
 
-			request.KeepAlive.ShouldBe(123456789);
-			request.Truncate.ShouldBe(true);
-		}
+		request.Input.ShouldBe(["Teenage ", " Dirtbag."], ignoreOrder: true);
+		request.KeepAlive.ShouldBeNull();
+		request.Model.ShouldBe("nomic_embed");
+		request.Options.ShouldBeNull();
+		request.Truncate.ShouldBeNull();
 	}
 
-	public class ToGeneratedEmbeddingsMethod : AbstractionMapperTests
+	[Test]
+	public void Maps_KeepAlive_And_Truncate_From_AdditionalProperties()
 	{
-		[Test]
-		public void Maps_Response()
+		var options = new EmbeddingGenerationOptions
 		{
-			var request = new EmbedRequest();
-			var response = new EmbedResponse
-			{
-				Embeddings =
-				[
-					[0.101f, 0.102f, 0.103f],
+			AdditionalProperties = []
+		};
+		options.AdditionalProperties["keep_alive"] = 123456789;
+		options.AdditionalProperties["truncate"] = true;
+
+		var request = AbstractionMapper.ToOllamaEmbedRequest([], options);
+
+		request.KeepAlive.ShouldBe(123456789);
+		request.Truncate.ShouldBe(true);
+	}
+}
+
+public class ToGeneratedEmbeddingsMethod : AbstractionMapperTests
+{
+	[Test]
+	public void Maps_Response()
+	{
+		var request = new EmbedRequest();
+		var response = new EmbedResponse
+		{
+			Embeddings =
+			[
+				[0.101f, 0.102f, 0.103f],
 					[0.201f, 0.202f, 0.203f]
-				],
-				LoadDuration = 1_100_000,
-				PromptEvalCount = 18,
-				TotalDuration = 3_200_000
-			};
+			],
+			LoadDuration = 1_100_000,
+			PromptEvalCount = 18,
+			TotalDuration = 3_200_000
+		};
 
-			var mappedResponse = AbstractionMapper.ToGeneratedEmbeddings(request, response, usedModel: "model");
+		var mappedResponse = AbstractionMapper.ToGeneratedEmbeddings(request, response, usedModel: "model");
 
-			mappedResponse.AdditionalProperties.ShouldNotBeNull();
-			mappedResponse.Count.ShouldBe(2);
-			mappedResponse[0].ModelId.ShouldBe("model");
-			mappedResponse[0].Vector.ToArray().ShouldBe([0.101f, 0.102f, 0.103f], ignoreOrder: true);
-			mappedResponse[1].ModelId.ShouldBe("model");
-			mappedResponse[1].Vector.ToArray().ShouldBe([0.201f, 0.202f, 0.203f], ignoreOrder: true);
-			mappedResponse.Usage.InputTokenCount.ShouldBe(18);
-			mappedResponse.Usage.OutputTokenCount.ShouldBeNull();
-			mappedResponse.Usage.TotalTokenCount.ShouldBe(18);
-		}
+		mappedResponse.AdditionalProperties.ShouldNotBeNull();
+		mappedResponse.Count.ShouldBe(2);
+		mappedResponse[0].ModelId.ShouldBe("model");
+		mappedResponse[0].Vector.ToArray().ShouldBe([0.101f, 0.102f, 0.103f], ignoreOrder: true);
+		mappedResponse[1].ModelId.ShouldBe("model");
+		mappedResponse[1].Vector.ToArray().ShouldBe([0.201f, 0.202f, 0.203f], ignoreOrder: true);
+		mappedResponse.Usage.InputTokenCount.ShouldBe(18);
+		mappedResponse.Usage.OutputTokenCount.ShouldBeNull();
+		mappedResponse.Usage.TotalTokenCount.ShouldBe(18);
 	}
 }
 
