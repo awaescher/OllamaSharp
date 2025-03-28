@@ -1,7 +1,7 @@
 using System.Text.Json;
 using ModelContextProtocol.Client;
 using OllamaSharp.ModelContextProtocol.Server.Types;
-using ModelContextProtocolTypes = ModelContextProtocol.Protocol.Types;
+using ModelContextProtocolClient = ModelContextProtocol.Client;
 
 namespace OllamaSharp.ModelContextProtocol.Server;
 
@@ -15,7 +15,7 @@ public class McpClientTool : OllamaSharp.Models.Chat.Tool, OllamaSharp.Tools.IAs
 	/// <summary>
 	/// Initializes a new instance with metadata about the original method.
 	/// </summary>
-	public McpClientTool(ModelContextProtocolTypes.Tool mcpTool, IMcpClient client)
+	public McpClientTool(ModelContextProtocolClient.McpClientTool mcpTool, IMcpClient client)
 	{
 		_client = client;
 
@@ -25,7 +25,7 @@ public class McpClientTool : OllamaSharp.Models.Chat.Tool, OllamaSharp.Tools.IAs
 			Description = mcpTool.Description
 		};
 
-		var inputSchema = JsonSerializer.Deserialize<JsonSchema>(mcpTool.InputSchema.GetRawText());
+		var inputSchema = JsonSerializer.Deserialize<JsonSchema>(mcpTool.JsonSchema.GetRawText());
 		var properties = inputSchema?.Properties;
 		if (properties == null)
 		{
