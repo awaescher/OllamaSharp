@@ -41,7 +41,7 @@ public class ToolsTests
 		var options = new McpClientOptions
 		{
 			LoggerFactory = loggerFactory,
-			TransportFactoryMethod = config => new TestClientTransport(config),
+			TransportFactoryMethod = (config, _) => new TestClientTransport(config)
 		};
 
 		var tools = await Tools.GetFromMcpServers("./TestData/server_config.json", options);
