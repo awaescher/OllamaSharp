@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+  </Folder>
+  <Project Path="demo/OllamaApiConsole.csproj" />
+  <Project Path="src/OllamaSharp.ModelContextProtocol/OllamaSharp.ModelContextProtocol.csproj" />
+  <Project Path="src/OllamaSharp/OllamaSharp.csproj" />
+  <Project Path="src/SourceGenerators/OllamaSharp.SourceGenerators.csproj" />
+  <Project Path="test/Tests.csproj" />
+  <Project Path="tests/OllamaSharp.ModelContextProtocol.Tests/OllamaSharp.ModelContextProtocol.Tests.csproj" />
+</Solution>
