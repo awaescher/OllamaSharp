@@ -39,7 +39,7 @@ jobs:
           9.0.x
 
     - name: Restore dependencies
-      run: dotnet restore OllamaSharp.sln
+      run: dotnet restore OllamaSharp.slnx
       
     - name: Build
       run: dotnet build --no-restore --configuration=Release /p:Version=${{steps.gitversion.outputs.semVer}}
