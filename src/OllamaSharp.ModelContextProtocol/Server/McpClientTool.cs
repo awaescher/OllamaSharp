@@ -25,7 +25,7 @@ public class McpClientTool : OllamaSharp.Models.Chat.Tool, OllamaSharp.Tools.IAs
 			Description = mcpTool.Description
 		};
 
-		var inputSchema = JsonSerializer.Deserialize<JsonSchema>(mcpTool.JsonSchema.GetRawText());
+		var inputSchema = mcpTool.JsonSchema.Deserialize<JsonSchema>();
 		var properties = inputSchema?.Properties;
 		if (properties == null)
 		{
