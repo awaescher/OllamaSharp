@@ -74,7 +74,7 @@ public class ShowModelResponse
 	/// Gets or sets model capabilities such as completion and vision.
 	/// </summary>
 	[JsonPropertyName(Application.Capabilities)]
-	public IEnumerable<string>? Capabilities { get; set; } = null!;
+	public string[]? Capabilities { get; set; } = null!;
 }
 
 /// <summary>
