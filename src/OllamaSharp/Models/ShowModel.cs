@@ -69,6 +69,12 @@ public class ShowModelResponse
 	/// </summary>
 	[JsonPropertyName(Application.Projector)]
 	public ProjectorInfo? Projector { get; set; } = null!;
+
+	/// <summary>
+	/// Gets or sets model capabilities such as completion and vision.
+	/// </summary>
+	[JsonPropertyName(Application.Capabilities)]
+	public string[]? Capabilities { get; set; } = null!;
 }
 
 /// <summary>
