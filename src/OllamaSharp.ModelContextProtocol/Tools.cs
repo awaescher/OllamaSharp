@@ -2,7 +2,7 @@ using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.Extensions.Logging.Abstractions;
-using ModelContextProtocol.Configuration;
+using ModelContextProtocol;
 using OllamaSharp.ModelContextProtocol.Server;
 using ModelContextProtocolClient = ModelContextProtocol.Client;
 
@@ -95,7 +95,6 @@ public static class Tools
 				Id = server.Name ?? Guid.NewGuid().ToString("n"),
 				Name = server.Name ?? Guid.NewGuid().ToString("n"),
 				TransportType = server.TransportType.ToString(),
-				Arguments = ResolveVariables(server.Arguments),
 				Location = server.Command,
 				TransportOptions = server.Options ?? []
 			};
@@ -106,8 +105,8 @@ public static class Tools
 					config.TransportOptions[$"env:{kvp.Key}"] = Environment.GetEnvironmentVariable(GetEnvironmentVariableName(kvp.Value)) ?? kvp.Value;
 			}
 
-			if (config.Arguments != null)
-				config.TransportOptions["arguments"] = string.Join(' ', config.Arguments);
+			if (server.Arguments != null)
+				config.TransportOptions["arguments"] = string.Join(' ', ResolveVariables(server.Arguments));
 
 			if (config.TransportOptions?.TryGetValue("workingDirectory", out var dir) == true)
 				config.TransportOptions["workingDirectory"] = ResolveVariables(dir);
@@ -126,11 +125,8 @@ public static class Tools
 		return name;
 	}
 
-	private static string[]? ResolveVariables(string[]? arguments)
+	private static string[] ResolveVariables(string[] arguments)
 	{
-		if (arguments == null)
-			return null;
-
 		return arguments.Select(a => ResolveVariables(a)).ToArray();
 	}
 
