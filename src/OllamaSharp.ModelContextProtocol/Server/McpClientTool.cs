@@ -47,7 +47,7 @@ public class McpClientTool : OllamaSharp.Models.Chat.Tool, OllamaSharp.Tools.IAs
 	/// <inheritdoc />
 	public async Task<object?> InvokeMethodAsync(IDictionary<string, object?>? args)
 	{
-		var arguments = args?.ToDictionary(a => a.Key, a => a.Value ?? string.Empty) ?? [];
+		var arguments = args?.ToDictionary(a => a.Key, a => (object?) (a.Value ?? string.Empty)) ?? [];
 
 		try
 		{

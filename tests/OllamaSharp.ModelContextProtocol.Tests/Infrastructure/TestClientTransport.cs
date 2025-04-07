@@ -1,7 +1,9 @@
+using System.Text.Json;
 using System.Threading.Channels;
-using ModelContextProtocol.Configuration;
+using ModelContextProtocol;
 using ModelContextProtocol.Protocol.Messages;
 using ModelContextProtocol.Protocol.Transport;
+using Moq;
 using ModelContextProtocolTypes = ModelContextProtocol.Protocol.Types;
 
 namespace OllamaSharp.ModelContextProtocol.Tests.Infrastructure;
@@ -27,8 +29,8 @@ internal class TestClientTransport : IClientTransport
 
 	public McpServerConfig Config { get; }
 
-	public Task ConnectAsync(CancellationToken cancellationToken = default)
-		=> Task.CompletedTask;
+	public Task<ITransport> ConnectAsync(CancellationToken cancellationToken = default)
+		=> Task.FromResult(Mock.Of<ITransport>());
 
 	public ValueTask DisposeAsync()
 		=> ValueTask.CompletedTask;
@@ -49,7 +51,7 @@ internal class TestClientTransport : IClientTransport
 		await WriteMessageAsync(new JsonRpcResponse
 		{
 			Id = request.Id,
-			Result = new ModelContextProtocolTypes.ListToolsResult
+			Result = JsonSerializer.SerializeToNode(new ModelContextProtocolTypes.ListToolsResult
 			{
 				Tools =
 				[
@@ -59,7 +61,7 @@ internal class TestClientTransport : IClientTransport
 						Description = $"This is a test tool for {Config} server"
 					}
 				]
-			}
+			})
 		}, cancellationToken);
 	}
 
@@ -68,12 +70,12 @@ internal class TestClientTransport : IClientTransport
 		await WriteMessageAsync(new JsonRpcResponse
 		{
 			Id = request.Id,
-			Result = new ModelContextProtocolTypes.InitializeResult
+			Result = JsonSerializer.SerializeToNode(new ModelContextProtocolTypes.InitializeResult
 			{
 				ServerInfo = new() { Name = "TestServer", Version = "1.0.0" },
 				ProtocolVersion = "2024-11-05",
 				Capabilities = new() { },
-			}
+			})
 		}, cancellationToken);
 	}
 
