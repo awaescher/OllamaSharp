@@ -12,8 +12,8 @@
       <PackageVersion Include="Microsoft.CodeAnalysis.Common" Version="4.12.0" />
       <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" PrivateAssets="all" Version="4.12.0" />
       <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="4.12.0" />
-      <PackageVersion Include="Microsoft.Extensions.AI.Abstractions" Version="9.3.0-preview.1.25161.3" />
-      <PackageVersion Include="Microsoft.Extensions.AI" Version="9.3.0-preview.1.25161.3" />
+      <PackageVersion Include="Microsoft.Extensions.AI.Abstractions" Version="9.4.0-preview.1.25207.5" />
+      <PackageVersion Include="Microsoft.Extensions.AI" Version="9.4.0-preview.1.25207.5" />
       <PackageVersion Include="Microsoft.Extensions.Logging.Debug" Version="9.0.2" />
       <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
       <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
