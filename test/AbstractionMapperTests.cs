@@ -249,6 +249,20 @@ public class AbstractionMapperTests
 		}
 
 		[Test]
+		public void Maps_KeepAliveAll_From_AdditionalProperties()
+		{
+			var options = new ChatOptions
+			{
+				AdditionalProperties = []
+			};
+			options.AdditionalProperties["keep_alive"] = "60m";
+
+			var request = AbstractionMapper.ToOllamaSharpChatRequest([], options, false, JsonSerializerOptions.Default);
+
+			request.KeepAlive.ShouldBe("60m");
+		}
+
+		[Test]
 		public void Maps_All_Options_With_AdditionalProperties()
 		{
 			// Arrange
@@ -872,12 +886,12 @@ public class ToOllamaEmbedRequestMethod : AbstractionMapperTests
 		{
 			AdditionalProperties = []
 		};
-		options.AdditionalProperties["keep_alive"] = 123456789;
+		options.AdditionalProperties["keep_alive"] = "60m";
 		options.AdditionalProperties["truncate"] = true;
 
 		var request = AbstractionMapper.ToOllamaEmbedRequest([], options);
 
-		request.KeepAlive.ShouldBe(123456789);
+		request.KeepAlive.ShouldBe("60m");
 		request.Truncate.ShouldBe(true);
 	}
 }
