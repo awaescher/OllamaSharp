@@ -112,6 +112,8 @@ internal static class AbstractionMapper
 		TryAddOllamaOption<bool?>(options, OllamaOption.UseMlock, v => request.Options.UseMlock = (bool?)v);
 		TryAddOllamaOption<bool?>(options, OllamaOption.UseMmap, v => request.Options.UseMmap = (bool?)v);
 		TryAddOllamaOption<bool?>(options, OllamaOption.VocabOnly, v => request.Options.VocabOnly = (bool?)v);
+		
+		TryAddOption<string?>(options, Application.KeepAlive, v => request.KeepAlive = (string?)v);
 
 		return request;
 	}
@@ -125,7 +127,12 @@ internal static class AbstractionMapper
 	/// <param name="optionSetter">The setter to set the Ollama option if available in the chat options</param>
 	private static void TryAddOllamaOption<T>(ChatOptions? microsoftChatOptions, OllamaOption option, Action<object?> optionSetter)
 	{
-		if ((microsoftChatOptions?.AdditionalProperties?.TryGetValue(option.Name, out var value) ?? false) && value is not null)
+		TryAddOption<T>(microsoftChatOptions, option.Name, optionSetter);
+	}
+	
+	private static void TryAddOption<T>(ChatOptions? microsoftChatOptions, string option, Action<object?> optionSetter)
+	{
+		if ((microsoftChatOptions?.AdditionalProperties?.TryGetValue(option, out var value) ?? false) && value is not null)
 			optionSetter(value);
 	}
 
@@ -445,7 +452,7 @@ internal static class AbstractionMapper
 
 		if (options?.AdditionalProperties is { } requestProps)
 		{
-			if (requestProps.TryGetValue(Application.KeepAlive, out long keepAlive))
+			if (requestProps.TryGetValue(Application.KeepAlive, out string? keepAlive))
 				request.KeepAlive = keepAlive;
 
 			if (requestProps.TryGetValue(Application.Truncate, out bool truncate))
