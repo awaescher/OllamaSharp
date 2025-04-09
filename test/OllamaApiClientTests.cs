@@ -1,15 +1,21 @@
 using System.Net;
 using System.Text;
 using System.Text.Json;
+
 using Microsoft.Extensions.AI;
+
 using Moq;
 using Moq.Protected;
+
 using NUnit.Framework;
+
 using OllamaSharp;
 using OllamaSharp.Models;
 using OllamaSharp.Models.Chat;
 using OllamaSharp.Models.Exceptions;
+
 using Shouldly;
+
 using ChatRole = OllamaSharp.Models.Chat.ChatRole;
 
 namespace Tests;
@@ -82,6 +88,62 @@ public class OllamaApiClientTests
 		}
 
 		return true;
+	}
+
+	/// <summary>
+	/// PullModelMethod Testing
+	/// </summary>
+	public class PullModelMethod : OllamaApiClientTests
+	{
+		/// <summary>
+		/// This is to simulate the failing PullModelRequest when behind a proxy like zscaler
+		/// </summary>
+		/// <returns></returns>
+		[Test, NonParallelizable]
+		public async Task Streams_Status_Error()
+		{
+			var pullModelRequest = new PullModelRequest()
+			{
+				Model = "llama3.2:1b"
+			};
+
+			await using var stream = new MemoryStream();
+			_response = new HttpResponseMessage
+			{
+				StatusCode = HttpStatusCode.OK,
+				Content = new StreamContent(stream)
+			};
+
+			await using var writer = new StreamWriter(stream, leaveOpen: true);
+			writer.AutoFlush = true;
+
+			var message = $"pull model manifest: Get '{pullModelRequest.Model}' : tls failed to verify certificate: x509: certificate signed by unknown authority";
+
+			await writer.WriteLineAsync("{\"status\":\"pulling manifest\"}");
+			await writer.WriteLineAsync($"{{\"error\":\"{message}\"}}");
+
+			stream.Seek(0, SeekOrigin.Begin);
+
+			var builder = new StringBuilder();
+
+			try
+			{
+				var modelStream = _client.PullModelAsync(
+					pullModelRequest, CancellationToken.None);
+				await foreach (var status in modelStream)
+					builder.Append(status?.Status);
+
+				Assert.Fail("PullModelRequest didn't throw");
+			}
+			catch (ResponseError ex)
+			{
+				Assert.Pass(ex.Message);
+			}
+			finally
+			{
+
+			}
+		}
 	}
 
 	public class CreateModelMethod : OllamaApiClientTests
@@ -663,6 +725,7 @@ public static class WriterExtensions
 		var json = new { message = new { content, role = role.ToString() }, role = role.ToString(), done = true };
 		await writer.WriteLineAsync(JsonSerializer.Serialize(json));
 	}
+
 }
 
 #pragma warning restore CS8602 // Dereference of a possibly null reference.

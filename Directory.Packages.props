@@ -3,31 +3,24 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="coverlet.collector" Version="6.0.3" />
-    <PackageVersion Include="coverlet.collector" Version="6.0.3" />
-    <PackageVersion Include="Microsoft.Bcl.AsyncInterfaces" Version="9.0.0" />
-    <PackageVersion Include="Microsoft.CodeAnalysis.Common" Version="4.12.0" />
-    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" PrivateAssets="all" Version="4.12.0" />
-    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="4.12.0" />
-    <PackageVersion Include="Microsoft.Extensions.AI.Abstractions" Version="9.3.0-preview.1.25161.3" />
-    <PackageVersion Include="Microsoft.Extensions.AI" Version="9.3.0-preview.1.25161.3" />
-    <PackageVersion Include="Microsoft.Extensions.Logging.Debug" Version="9.0.2" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
-    <PackageVersion Include="ModelContextProtocol" Version="0.1.0-preview.6" />
-    <PackageVersion Include="Moq" Version="4.20.72" />
-    <PackageVersion Include="Moq" Version="4.20.72" />
-    <PackageVersion Include="NUnit.Analyzers" Version="4.5.0" />
-    <PackageVersion Include="NUnit.Analyzers" Version="4.5.0" />
-    <PackageVersion Include="NUnit" Version="4.3.2" />
-    <PackageVersion Include="NUnit" Version="4.3.2" />
-    <PackageVersion Include="NUnit3TestAdapter" Version="4.6.0" />
-    <PackageVersion Include="NUnit3TestAdapter" Version="4.6.0" />
-    <PackageVersion Include="Shouldly" Version="4.3.0" />
-    <PackageVersion Include="Shouldly" Version="4.3.0" />
-    <PackageVersion Include="SixLabors.ImageSharp" Version="3.1.7" />
-    <PackageVersion Include="Spectre.Console.ImageSharp" Version="0.49.1" />
-    <PackageVersion Include="Spectre.Console" Version="0.49.1" />
-    <PackageVersion Include="System.Linq.Async" Version="6.0.1" />
+      <PackageVersion Include="coverlet.collector" Version="6.0.3" />
+      <PackageVersion Include="coverlet.collector" Version="6.0.3" />
+      <PackageVersion Include="Microsoft.Bcl.AsyncInterfaces" Version="9.0.0" />
+      <PackageVersion Include="Microsoft.CodeAnalysis.Common" Version="4.12.0" />
+      <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="4.12.0" />
+      <PackageVersion Include="Microsoft.Extensions.AI.Abstractions" Version="9.3.0-preview.1.25161.3" />
+      <PackageVersion Include="Microsoft.Extensions.AI" Version="9.3.0-preview.1.25161.3" />
+      <PackageVersion Include="Microsoft.Extensions.Logging.Debug" Version="9.0.2" />
+      <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
+      <PackageVersion Include="Moq" Version="4.20.72" />
+      <PackageVersion Include="NUnit.Analyzers" Version="4.5.0" />
+      <PackageVersion Include="NUnit" Version="4.3.2" />
+      <PackageVersion Include="NUnit3TestAdapter" Version="4.6.0" />
+      <PackageVersion Include="Shouldly" Version="4.3.0" />
+      <PackageVersion Include="SixLabors.ImageSharp" Version="3.1.7" />
+      <PackageVersion Include="Spectre.Console.ImageSharp" Version="0.49.1" />
+      <PackageVersion Include="Spectre.Console" Version="0.49.1" />
+      <PackageVersion Include="System.Linq.Async" Version="6.0.1" />
+      <PackageVersion Include="ModelContextProtocol" Version="0.1.0-preview.6" />
   </ItemGroup>
 </Project>
