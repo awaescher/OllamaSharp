@@ -240,10 +240,10 @@ public class AbstractionMapperTests
 			tool.Function.Parameters.Properties["city"].Description.ShouldBe("The city to get the weather for");
 			tool.Function.Parameters.Properties["city"].Enum.ShouldBeNull();
 			tool.Function.Parameters.Properties["city"].Type.ShouldBe("string");
-			tool.Function.Parameters.Properties["unit"].Description.ShouldBe("The unit to calculate the current temperature to");
+			tool.Function.Parameters.Properties["unit"].Description.ShouldBe("The unit to calculate the current temperature to (Default value: \"celsius\")");
 			tool.Function.Parameters.Properties["unit"].Enum.ShouldBeNull();
 			tool.Function.Parameters.Properties["unit"].Type.ShouldBe("string");
-			tool.Function.Parameters.Required.ShouldBe(["city"], ignoreOrder: true);
+			tool.Function.Parameters.Required.ShouldBe(["city", "unit"], ignoreOrder: true); // AIJsonSchemaCreateOptions.RequireAllProperties is true by default.
 			tool.Function.Parameters.Type.ShouldBe("object");
 			tool.Type.ShouldBe("function");
 		}
