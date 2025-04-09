@@ -35,7 +35,7 @@ public class EmbedRequest : OllamaRequest
 	/// </summary>
 	[JsonPropertyName(Application.KeepAlive)]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-	public long? KeepAlive { get; set; }
+	public string? KeepAlive { get; set; }
 
 	/// <summary>
 	/// Truncates the end of each input to fit within context length.
