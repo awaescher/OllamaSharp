@@ -106,6 +106,6 @@ internal static class Application
 	public const string Adapters = "adapters";
 	public const string Files = "files";
 	public const string From = "from";
-
 	public const string Error = "error";
+	public const string Capabilities = "capabilities";
 }
