@@ -1,10 +1,11 @@
 using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using McpDotNet.Client;
-using McpDotNet.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using ModelContextProtocol.Protocol.Transport;
 using OllamaSharp.ModelContextProtocol.Server;
+using ModelContextProtocolClient = ModelContextProtocol.Client;
 
 namespace OllamaSharp.ModelContextProtocol;
 
@@ -68,65 +69,64 @@ public static class Tools
 		if (mcpServers == null || mcpServers.Length == 0)
 			throw new ArgumentNullException(nameof(mcpServers));
 
+		var loggerFactory = clientOptions?.LoggerFactory ?? NullLoggerFactory.Instance;
 		var options = CreateMcpClientOptions(clientOptions);
-		var servers = ConvertServerConfigurations(mcpServers);
-
-		var factory = new McpClientFactory(
-			servers,
-			options,
-			clientOptions?.LoggerFactory ?? NullLoggerFactory.Instance, clientOptions?.TransportFactoryMethod, clientOptions?.ClientFactoryMethod
-		);
 
 		var result = new List<object>();
-
-		foreach (var server in servers)
+		foreach (var server in mcpServers)
 		{
-			var client = await factory.GetClientAsync(server.Id);
+			var clientTransport = clientOptions?.ClientTransportFactoryMethod != null ?
+				clientOptions.ClientTransportFactoryMethod(server, loggerFactory) :
+				ConvertServerConfigurations(server, loggerFactory);
 
-			var tools = await client.ListToolsAsync();
-
-			if (tools != null)
+			var client = await ModelContextProtocolClient.McpClientFactory.CreateAsync(clientTransport, options, loggerFactory);
+			foreach (var tool in await ModelContextProtocolClient.McpClientExtensions.ListToolsAsync(client))
 			{
-				foreach (var tool in tools.Tools)
-					result.Add(new McpClientTool(tool, client));
+				result.Add(new McpClientTool(tool, client));
 			}
 		}
 
 		return result.ToArray();
 	}
 
-	private static List<McpServerConfig> ConvertServerConfigurations(McpServerConfiguration[] mcpServers)
+	private static IClientTransport ConvertServerConfigurations(McpServerConfiguration server, ILoggerFactory loggerFactory)
 	{
-		var result = new List<McpServerConfig>();
-
-		foreach (var server in mcpServers)
+		if (server.TransportType == McpServerTransportType.Stdio)
 		{
-			var config = new McpServerConfig
+			var stdioOptions = new StdioClientTransportOptions
 			{
-				Id = server.Name ?? Guid.NewGuid().ToString("n"),
-				Name = server.Name ?? Guid.NewGuid().ToString("n"),
-				TransportType = server.TransportType.ToString(),
-				Arguments = ResolveVariables(server.Arguments),
-				Location = server.Command,
-				TransportOptions = server.Options ?? []
+				Command = server.Command,
+				Name = server.Name
 			};
+
+			if (server.Arguments != null)
+			{
+				stdioOptions.Arguments = ResolveVariables(server.Arguments);
+			}
 
 			if (server.Environment != null)
 			{
+				stdioOptions.EnvironmentVariables = [];
 				foreach (var kvp in server.Environment)
-					config.TransportOptions[$"env:{kvp.Key}"] = Environment.GetEnvironmentVariable(GetEnvironmentVariableName(kvp.Value)) ?? kvp.Value;
+				{
+					stdioOptions.EnvironmentVariables[kvp.Key] = Environment.GetEnvironmentVariable(GetEnvironmentVariableName(kvp.Value)) ?? kvp.Value;
+				}
 			}
 
-			if (config.Arguments != null)
-				config.TransportOptions["arguments"] = string.Join(' ', config.Arguments);
+			if (server.Options?.TryGetValue("workingDirectory", out var workingDirectory) == true)
+			{
+				stdioOptions.WorkingDirectory = workingDirectory;
+			}
 
-			if (config.TransportOptions?.TryGetValue("workingDirectory", out var dir) == true)
-				config.TransportOptions["workingDirectory"] = ResolveVariables(dir);
-
-			result.Add(config);
+			return new StdioClientTransport(stdioOptions, loggerFactory);
 		}
 
-		return result;
+		var sseOptions = new SseClientTransportOptions
+		{
+			Endpoint = new Uri(server.Command),
+			Name = server.Name
+		};
+		return new SseClientTransport(sseOptions, loggerFactory);
 	}
 
 	private static string GetEnvironmentVariableName(string name)
@@ -137,12 +137,9 @@ public static class Tools
 		return name;
 	}
 
-	private static string[]? ResolveVariables(string[]? arguments)
+	private static string[] ResolveVariables(string[] arguments)
 	{
-		if (arguments == null)
-			return null;
-
-		return arguments.Select(a => ResolveVariables(a)).ToArray();
+		return arguments.Select(ResolveVariables).ToArray();
 	}
 
 	private static string ResolveVariables(string argument)
@@ -150,9 +147,9 @@ public static class Tools
 		return Environment.ExpandEnvironmentVariables(argument);
 	}
 
-	private static McpDotNet.Client.McpClientOptions CreateMcpClientOptions(McpClientOptions? clientOptions)
+	private static ModelContextProtocolClient.McpClientOptions CreateMcpClientOptions(McpClientOptions? clientOptions)
 	{
-		return new McpDotNet.Client.McpClientOptions
+		return new ModelContextProtocolClient.McpClientOptions
 		{
 			Capabilities = clientOptions?.Capabilities,
 			InitializationTimeout = clientOptions?.InitializationTimeout ?? TimeSpan.FromSeconds(60),
@@ -170,4 +167,3 @@ public static class Tools
 		public Dictionary<string, McpServerConfiguration> Servers { get; set; } = [];
 	}
 }
-

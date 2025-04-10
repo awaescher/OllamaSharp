@@ -41,12 +41,12 @@ public class ToolsTests
 		var options = new McpClientOptions
 		{
 			LoggerFactory = loggerFactory,
-			TransportFactoryMethod = config => new TestClientTransport(config),
+			ClientTransportFactoryMethod = (cfg, _) => new TestClientTransport(cfg.Name!)
 		};
 
 		var tools = await Tools.GetFromMcpServers("./TestData/server_config.json", options);
 		tools.ShouldNotBeEmpty();
-		tools.Count().ShouldBe(2);
+		tools.Length.ShouldBe(2);
 
 		var tool = tools[0];
 		tool.ShouldBeOfType<McpClientTool>();
@@ -55,7 +55,6 @@ public class ToolsTests
 		clientTools.Function.ShouldNotBeNull();
 		clientTools.Function!.Name.ShouldBe("test_for_filesystem");
 	}
-
 }
 
 #pragma warning restore CS8602 // Dereference of a possibly null reference.

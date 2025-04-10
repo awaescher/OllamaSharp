@@ -1,6 +1,7 @@
 <Solution>
   <Folder Name="/Solution Items/">
     <File Path=".editorconfig" />
+    <File Path="Directory.Packages.props" />
   </Folder>
   <Project Path="demo/OllamaApiConsole.csproj" />
   <Project Path="src/OllamaSharp.ModelContextProtocol/OllamaSharp.ModelContextProtocol.csproj" />
