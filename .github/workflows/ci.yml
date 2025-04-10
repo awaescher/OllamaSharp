@@ -3,7 +3,7 @@ name: .NET Build, Test, and Publish Nuget Package
 on:
   push:
     branches: [ "main", "master" ]
-    paths: [ 'src/**' ]
+    paths: [ 'src/**', 'Directory.Build.targets', 'Directory.Packages.props' ]
   pull_request:
     branches: [ "main", "master" ]
     paths: [ 'src/**' ]
