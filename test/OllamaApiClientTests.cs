@@ -699,6 +699,51 @@ public class OllamaApiClientTests
 			info.Embeddings[0][0].ShouldBe(0.567f, tolerance: 0.01f);
 		}
 	}
+
+	public class GetVersionMethod : OllamaApiClientTests
+	{
+		[Test]
+		public async Task Returns_Empty_String_For_Empty_Version()
+		{
+			_response = new HttpResponseMessage
+			{
+				StatusCode = HttpStatusCode.OK,
+				Content = new StringContent("{ }")
+			};
+
+			var version = await _client.GetVersionAsync(CancellationToken.None);
+
+			version.ShouldBe("");
+		}
+
+		[Test]
+		public async Task Returns_Simple_Version_Number()
+		{
+			_response = new HttpResponseMessage
+			{
+				StatusCode = HttpStatusCode.OK,
+				Content = new StringContent("{\"version\":\"0.6.8\"}")
+			};
+
+			var version = await _client.GetVersionAsync(CancellationToken.None);
+
+			version.ShouldBe("0.6.8");
+		}
+
+		[Test]
+		public async Task Supports_Alphanumerical_Versions()
+		{
+			_response = new HttpResponseMessage
+			{
+				StatusCode = HttpStatusCode.OK,
+				Content = new StringContent("{\"version\":\"0.6.8-rc1\"}")
+			};
+
+			var version = await _client.GetVersionAsync(CancellationToken.None);
+
+			version.ShouldBe("0.6.8-rc1");
+		}
+	}
 }
 
 public static class WriterExtensions

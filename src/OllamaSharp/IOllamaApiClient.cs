@@ -131,7 +131,7 @@ public interface IOllamaApiClient
 	/// </summary>
 	/// <param name="cancellationToken">The token to cancel the operation with.</param>
 	/// <returns>A task that represents the asynchronous operation. The task result contains the <see cref="Version"/>.</returns>
-	Task<Version> GetVersionAsync(CancellationToken cancellationToken = default);
+	Task<string> GetVersionAsync(CancellationToken cancellationToken = default);
 
 	/// <summary>
 	/// Push a file to the Ollama server to create a "blob" (Binary Large Object).

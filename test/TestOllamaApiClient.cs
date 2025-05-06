@@ -64,7 +64,7 @@ public class TestOllamaApiClient : IOllamaApiClient
 		}
 	}
 
-	public Task<Version> GetVersionAsync(CancellationToken cancellationToken = default)
+	public Task<string> GetVersionAsync(CancellationToken cancellationToken = default)
 	{
 		throw new NotImplementedException();
 	}
