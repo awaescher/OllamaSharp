@@ -206,11 +206,10 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 	}
 
 	/// <inheritdoc />
-	public async Task<Version> GetVersionAsync(CancellationToken cancellationToken = default)
+	public async Task<string> GetVersionAsync(CancellationToken cancellationToken = default)
 	{
 		var data = await GetAsync<JsonNode>(Endpoints.Version, cancellationToken).ConfigureAwait(false);
-		var versionString = data["version"]?.ToString() ?? throw new InvalidOperationException("Could not get version from response.");
-		return Version.Parse(versionString);
+		return data["version"]?.ToString() ?? string.Empty;
 	}
 
 	/// <inheritdoc />
@@ -308,10 +307,9 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 
 		while (!reader.EndOfStream && !cancellationToken.IsCancellationRequested)
 		{
-			var line = await reader.ReadLineAsync()
-				.ConfigureAwait(false) ?? "";
+			var line = await reader.ReadLineAsync().ConfigureAwait(false) ?? "";
 
-			var error = JsonSerializer.Deserialize<ErrorResponse?>(line,IncomingJsonSerializerOptions);
+			var error = JsonSerializer.Deserialize<ErrorResponse?>(line, IncomingJsonSerializerOptions);
 			if ((error?.Message ?? null) is not null)
 			{
 				throw new ResponseError(error.Message);
