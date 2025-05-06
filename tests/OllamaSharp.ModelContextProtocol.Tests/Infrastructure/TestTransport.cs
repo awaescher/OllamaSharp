@@ -9,9 +9,9 @@ namespace OllamaSharp.ModelContextProtocol.Tests.Infrastructure;
 internal class TestTransport : ITransport
 {
 	private readonly string _name;
-	private readonly ChannelWriter<IJsonRpcMessage> _messageWriter;
+	private readonly ChannelWriter<JsonRpcMessage> _messageWriter;
 
-	public TestTransport(string name, Channel<IJsonRpcMessage> channel)
+	public TestTransport(string name, Channel<JsonRpcMessage> channel)
 	{
 		_name = name;
 		MessageReader = channel.Reader;
@@ -25,7 +25,7 @@ internal class TestTransport : ITransport
 		return ValueTask.CompletedTask;
 	}
 
-	public async Task SendMessageAsync(IJsonRpcMessage message, CancellationToken cancellationToken = default)
+	public async Task SendMessageAsync(JsonRpcMessage message, CancellationToken cancellationToken = default)
 	{
 		if (message is JsonRpcRequest request)
 		{
@@ -42,7 +42,7 @@ internal class TestTransport : ITransport
 
 	public bool IsConnected { get; }
 
-	public ChannelReader<IJsonRpcMessage> MessageReader { get; }
+	public ChannelReader<JsonRpcMessage> MessageReader { get; }
 
 	private async Task ListTools(JsonRpcRequest request, CancellationToken cancellationToken)
 	{

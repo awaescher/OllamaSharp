@@ -6,13 +6,13 @@ namespace OllamaSharp.ModelContextProtocol.Tests.Infrastructure;
 
 internal class TestClientTransport : IClientTransport, IAsyncDisposable
 {
-	private readonly Channel<IJsonRpcMessage> _messageChannel;
+	private readonly Channel<JsonRpcMessage> _messageChannel;
 
 	public TestClientTransport(string name)
 	{
 		Name = name;
 
-		_messageChannel = Channel.CreateUnbounded<IJsonRpcMessage>(new UnboundedChannelOptions
+		_messageChannel = Channel.CreateUnbounded<JsonRpcMessage>(new UnboundedChannelOptions
 		{
 			SingleReader = true,
 			SingleWriter = true,

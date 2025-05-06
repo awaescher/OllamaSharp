@@ -25,7 +25,7 @@ namespace Tests;
 
 public class OllamaApiClientTests
 {
-	private OllamaApiClient _client;
+	private IOllamaApiClient _client;
 	private HttpResponseMessage? _response;
 	private HttpRequestMessage? _request;
 	private string? _requestContent;
@@ -45,9 +45,10 @@ public class OllamaApiClientTests
 			.ReturnsAsync(() => _response);
 
 		var httpClient = new HttpClient(mockHandler.Object) { BaseAddress = new Uri("http://empty") };
-		_client = new OllamaApiClient(httpClient);
+		var client = new OllamaApiClient(httpClient);
 
-		_client.DefaultRequestHeaders["default_header"] = "ok";
+		client.DefaultRequestHeaders["default_header"] = "ok";
+		_client = client;
 	}
 
 	[SetUp]
@@ -59,7 +60,7 @@ public class OllamaApiClientTests
 	[OneTimeTearDown]
 	public void OneTimeTearDown()
 	{
-		_client.Dispose();
+		(_client as IDisposable)?.Dispose();
 	}
 
 	/// <summary>
