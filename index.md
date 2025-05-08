@@ -38,7 +38,7 @@ Console.WriteLine("You're now talking with Ollama. Hit Ctrl+C to exit.");
 while (true)
 {
     Console.Write("You: ");
-    var input = Console.ReadLine();
+    var message = Console.ReadLine();
 
     Console.Write("Assistant: ");
     await foreach (var stream in chat.SendAsync(message))
