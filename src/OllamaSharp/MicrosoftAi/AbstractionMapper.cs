@@ -13,6 +13,13 @@ namespace OllamaSharp.MicrosoftAi;
 /// </summary>
 internal static class AbstractionMapper
 {
+	private static readonly AIJsonSchemaTransformCache _schemaTransformCache = new(new()
+	{
+		ConvertBooleanSchemas = true,
+		DisallowAdditionalProperties = true,
+		RequireAllProperties = true,
+	});
+
 	/// <summary>
 	/// Maps a <see cref="ChatRequest"/> and <see cref="ChatDoneResponseStream"/> to a <see cref="ChatResponse"/>.
 	/// </summary>
@@ -112,7 +119,6 @@ internal static class AbstractionMapper
 		TryAddOllamaOption<bool?>(options, OllamaOption.UseMlock, v => request.Options.UseMlock = (bool?)v);
 		TryAddOllamaOption<bool?>(options, OllamaOption.UseMmap, v => request.Options.UseMmap = (bool?)v);
 		TryAddOllamaOption<bool?>(options, OllamaOption.VocabOnly, v => request.Options.VocabOnly = (bool?)v);
-		
 		TryAddOption<string?>(options, Application.KeepAlive, v => request.KeepAlive = (string?)v);
 
 		return request;
@@ -129,7 +135,6 @@ internal static class AbstractionMapper
 	{
 		TryAddOption<T>(microsoftChatOptions, option.Name, optionSetter);
 	}
-	
 	private static void TryAddOption<T>(ChatOptions? microsoftChatOptions, string option, Action<object?> optionSetter)
 	{
 		if ((microsoftChatOptions?.AdditionalProperties?.TryGetValue(option, out var value) ?? false) && value is not null)
@@ -169,13 +174,14 @@ internal static class AbstractionMapper
 	/// <returns>A <see cref="Tool"/> object containing the converted data.</returns>
 	private static Tool ToOllamaSharpTool(AIFunction function)
 	{
+		JsonElement transformedSchema = _schemaTransformCache.GetOrCreateTransformedSchema(function);
 		return new Tool
 		{
 			Function = new Function
 			{
 				Description = function.Description,
 				Name = function.Name,
-				Parameters = JsonSerializer.Deserialize<Parameters>(function.JsonSchema),
+				Parameters = JsonSerializer.Deserialize<Parameters>(transformedSchema),
 			},
 			Type = Application.Function
 		};
