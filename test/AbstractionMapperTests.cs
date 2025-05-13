@@ -243,7 +243,7 @@ public class AbstractionMapperTests
 			tool.Function.Parameters.Properties["unit"].Description.ShouldBe("The unit to calculate the current temperature to");
 			tool.Function.Parameters.Properties["unit"].Enum.ShouldBeNull();
 			tool.Function.Parameters.Properties["unit"].Type.ShouldBe("string");
-			tool.Function.Parameters.Required.ShouldBe(["city", "unit"], ignoreOrder: true); // We're marking all parameters as required in the schema transformer
+			tool.Function.Parameters.Required.ShouldBe(["city"], ignoreOrder: true);
 			tool.Function.Parameters.Type.ShouldBe("object");
 			tool.Type.ShouldBe("function");
 		}

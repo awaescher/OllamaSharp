@@ -17,7 +17,6 @@ internal static class AbstractionMapper
 	{
 		ConvertBooleanSchemas = true,
 		DisallowAdditionalProperties = true,
-		RequireAllProperties = true,
 	});
 
 	/// <summary>
