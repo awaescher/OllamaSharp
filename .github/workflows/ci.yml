@@ -6,7 +6,7 @@ on:
     paths: [ 'src/**', 'Directory.Build.targets', 'Directory.Packages.props' ]
   pull_request:
     branches: [ "main", "master" ]
-    paths: [ 'src/**' ]
+    paths: [ 'src/**', 'Directory.Build.targets', 'Directory.Packages.props' ]
 
 
 jobs:
