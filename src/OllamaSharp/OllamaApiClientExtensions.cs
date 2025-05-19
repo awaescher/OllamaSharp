@@ -91,6 +91,26 @@ public static class OllamaApiClientExtensions
 	}
 
 	/// <summary>
+	/// Send a request to /api/generate with keep_alive set to 0 to immediately unload a model from memory.
+	/// </summary>
+	/// <param name="client">The client used to execute the command.</param>
+	/// <param name="model">The name of the model to unload.</param>
+	/// <param name="cancellationToken">The token to cancel the operation with.</param>
+	public static async Task RequestModelUnloadAsync(this IOllamaApiClient client, string model, CancellationToken cancellationToken = default)
+	{
+		var request = new GenerateRequest
+		{
+			Model = client.SelectedModel,
+			Stream = false,
+			KeepAlive = "0s"
+		};
+		await foreach (var _ in client.GenerateAsync(request, cancellationToken))
+		{
+			break;
+		}
+	}
+
+	/// <summary>
 	/// Sends a request to the /api/show endpoint to show the information of a model.
 	/// </summary>
 	/// <param name="client">The client used to execute the command.</param>
