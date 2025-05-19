@@ -91,12 +91,12 @@ public static class OllamaApiClientExtensions
 	}
 
 	/// <summary>
-	/// Send a request to /api/generate with keep_alive set to 0 to immediately stop the running model.
+	/// Send a request to /api/generate with keep_alive set to 0 to immediately unload a model from memory.
 	/// </summary>
 	/// <param name="client">The client used to execute the command.</param>
-	/// <param name="model">The name of the model to stop.</param>
+	/// <param name="model">The name of the model to unload.</param>
 	/// <param name="cancellationToken">The token to cancel the operation with.</param>
-	public static async Task StopRunningModel(this IOllamaApiClient client, string model, CancellationToken cancellationToken = default)
+	public static async Task RequestModelUnload(this IOllamaApiClient client, string model, CancellationToken cancellationToken = default)
 	{
 		var request = new GenerateRequest
 		{
