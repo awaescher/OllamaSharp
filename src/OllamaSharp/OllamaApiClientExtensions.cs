@@ -96,7 +96,7 @@ public static class OllamaApiClientExtensions
 	/// <param name="client">The client used to execute the command.</param>
 	/// <param name="model">The name of the model to unload.</param>
 	/// <param name="cancellationToken">The token to cancel the operation with.</param>
-	public static async Task RequestModelUnload(this IOllamaApiClient client, string model, CancellationToken cancellationToken = default)
+	public static async Task RequestModelUnloadAsync(this IOllamaApiClient client, string model, CancellationToken cancellationToken = default)
 	{
 		var request = new GenerateRequest
 		{
