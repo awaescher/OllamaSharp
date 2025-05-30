@@ -55,6 +55,14 @@ public class ChatRequest : OllamaRequest
 	public bool Stream { get; set; } = true;
 
 	/// <summary>
+	/// Gets or sets a value to enable or disable thinking. To enable thinking, first use openthinker, qwen3,
+	/// deepseek-r1, phi4-reasoning, and other models that support thinking.  (When unset, thinking is not parsed)
+	/// </summary>
+	[JsonPropertyName("think")]
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public bool? Think { get; set; }
+
+	/// <summary>
 	/// Gets or sets the tools for the model to use if supported. Requires stream to be set to false.
 	/// </summary>
 	[JsonPropertyName("tools")]

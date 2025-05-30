@@ -72,6 +72,13 @@ public class Message
 	public string[]? Images { get; set; }
 
 	/// <summary>
+	/// Gets or sets the parsed content of the thinking and reasoning. To make this work, enable <see cref="ChatRequest.Think"/>.
+	/// </summary>
+	[JsonPropertyName("thinking")]
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public string? Thinking { get; set; }
+
+	/// <summary>
 	/// Gets or sets a list of tools the model wants to use (for models that support function calls, such as llama3.1).
 	/// </summary>
 	[JsonPropertyName("tool_calls")]
