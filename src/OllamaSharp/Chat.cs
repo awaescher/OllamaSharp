@@ -62,6 +62,14 @@ public class Chat
 	public IToolInvoker ToolInvoker { get; set; }
 
 	/// <summary>
+	/// Gets or sets a value to enable or disable thinking. Use reasoning models like openthinker, qwen3,
+	/// deepseek-r1, phi4-reasoning that support thinking when activating this option.
+	/// This might cause errors with non-reasoning models, see https://github.com/awaescher/OllamaSharp/releases/tag/5.2.0
+	/// More information: https://github.com/ollama/ollama/releases/tag/v0.9.0
+	/// </summary>
+	public bool Think { get; set; }
+
+	/// <summary>
 	/// Initializes a new instance of the <see cref="Chat"/> class.
 	/// This basic constructor sets up the chat without a predefined system prompt.
 	/// </summary>
@@ -404,7 +412,8 @@ public class Chat
 			Stream = true,
 			Tools = tools,
 			Format = format,
-			Options = Options
+			Options = Options,
+			Think = Think,
 		};
 
 		var messageBuilder = new MessageBuilder();
