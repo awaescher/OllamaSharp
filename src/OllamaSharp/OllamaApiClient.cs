@@ -10,6 +10,7 @@ using OllamaSharp.MicrosoftAi;
 using OllamaSharp.Models;
 using OllamaSharp.Models.Chat;
 using OllamaSharp.Models.Exceptions;
+using Triassic.AICore.OllamaAPI;
 
 namespace OllamaSharp;
 
@@ -175,8 +176,16 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 	}
 
 	/// <inheritdoc />
-	public async IAsyncEnumerable<ChatResponseStream?> ChatAsync(ChatRequest request, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+	public virtual async IAsyncEnumerable<ChatResponseStream?> ChatAsync(ChatRequest request, [EnumeratorCancellation] CancellationToken cancellationToken = default)
 	{
+		//For Microsoft AI
+		if (request.MicrosoftAi != null)
+		{
+			if (request.MicrosoftAi?.OllamaMessageHistory?.Count == 0 && request.Messages != null)
+			{
+				request.MicrosoftAi?.OllamaMessageHistory?.AddRange(request.Messages);
+			}
+		}
 		if (string.IsNullOrEmpty(request.Model))
 			request.Model = SelectedModel;
 
@@ -190,7 +199,28 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 		using var response = await SendToOllamaAsync(requestMessage, request, completion, cancellationToken).ConfigureAwait(false);
 
 		await foreach (var result in ProcessStreamedChatResponseAsync(response, cancellationToken).ConfigureAwait(false))
+		{
 			yield return result;
+			//Microsoft AI Tools Calling
+			//For Microsoft AI
+			if (request.MicrosoftAi != null)
+			{
+				if (result?.Message.ToolCalls != null && result.Message.ToolCalls.Any())
+				{
+					request.MicrosoftAi?.OllamaMessageHistory?.Add(result.Message);
+					var toolMessages = await MsAIToolInvoker.InvokeAsync(result.Message.ToolCalls, request, cancellationToken);
+					request.MicrosoftAi?.OllamaMessageHistory?.AddRange(toolMessages);
+					request.Messages = request.MicrosoftAi?.OllamaMessageHistory;
+					await foreach (var toolResponse in ChatAsync(request, cancellationToken).ConfigureAwait(false))
+					{
+						if (toolResponse is null)
+							continue;
+						request.MicrosoftAi?.OllamaMessageHistory?.Add(toolResponse.Message);
+						yield return toolResponse;
+					}
+				}
+			}
+		}
 	}
 
 	/// <inheritdoc />

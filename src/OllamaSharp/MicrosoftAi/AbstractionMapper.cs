@@ -79,7 +79,12 @@ internal static class AbstractionMapper
 			},
 			Stream = stream,
 			Template = null,
-			Tools = ToOllamaSharpTools(options?.Tools)
+			Tools = ToOllamaSharpTools(options?.Tools),
+			MicrosoftAi = new MicrosoftAiOptions()
+			{
+				ChatOptions = options,
+				OllamaMessageHistory = []
+			}
 		};
 
 		var hasAdditionalProperties = options?.AdditionalProperties?.Any() ?? false;

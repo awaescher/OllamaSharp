@@ -56,10 +56,7 @@
 
 	<ItemGroup>
 		<!-- make sure to include the source generator dll to the nuget package under analyzers/dotnet/cs -->
-		<None Include="..\SourceGenerators\bin\$(Configuration)\netstandard2.0\OllamaSharp.SourceGenerators.dll"
-					Pack="true"
-					PackagePath="analyzers/dotnet/cs"
-					Visible="false" />
+		<None Include="..\SourceGenerators\bin\$(Configuration)\netstandard2.0\OllamaSharp.SourceGenerators.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
 	</ItemGroup>
 
 </Project>
