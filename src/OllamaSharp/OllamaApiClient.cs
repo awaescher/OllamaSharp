@@ -202,7 +202,6 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 		{
 			yield return result;
 			//Microsoft AI Tools Calling
-			//For Microsoft AI
 			if (request.MicrosoftAi != null)
 			{
 				if (result?.Message.ToolCalls != null && result.Message.ToolCalls.Any())
@@ -211,12 +210,24 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 					var toolMessages = await MsAIToolInvoker.InvokeAsync(result.Message.ToolCalls, request, cancellationToken);
 					request.MicrosoftAi?.OllamaMessageHistory?.AddRange(toolMessages);
 					request.Messages = request.MicrosoftAi?.OllamaMessageHistory;
-					await foreach (var toolResponse in ChatAsync(request, cancellationToken).ConfigureAwait(false))
+					//Return the tool call result with the Tool role, this message should not appear on the client side.
+					foreach (var toolMessage in toolMessages)
 					{
-						if (toolResponse is null)
+						var toolResultResponse = new ChatResponseStream
+						{
+							Message = toolMessage,
+							Model = request.Model,
+							CreatedAt = DateTime.UtcNow
+						};
+						yield return toolResultResponse;
+					}
+					//Return the model's response to the tool call result.
+					await foreach (var modelResponseForToolResult in ChatAsync(request, cancellationToken).ConfigureAwait(false))
+					{
+						if (modelResponseForToolResult is null)
 							continue;
-						request.MicrosoftAi?.OllamaMessageHistory?.Add(toolResponse.Message);
-						yield return toolResponse;
+						request.MicrosoftAi?.OllamaMessageHistory?.Add(modelResponseForToolResult.Message);
+						yield return modelResponseForToolResult;
 					}
 				}
 			}
