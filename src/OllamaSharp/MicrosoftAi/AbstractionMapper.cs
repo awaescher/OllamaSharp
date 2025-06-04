@@ -371,7 +371,17 @@ internal static class AbstractionMapper
 		// Ollama frequently sends back empty content with tool calls. Rather than always adding an empty
 		// content, we only add the content if either it's not empty or there weren't any tool calls.
 		if (message.Content?.Length > 0 || contents.Count == 0)
-			contents.Insert(0, new TextContent(message.Content));
+		{
+			if(message.Role == ChatRole.Tool)
+			{
+				// If the message is a tool message, we create a FunctionResultContent
+				// to hold the content as a function result.
+				contents.Insert(0, new FunctionResultContent(Guid.NewGuid().ToString().Substring(0, 8), JsonSerializer.SerializeToElement(message.Content)));
+			}
+			else
+				// Otherwise, we just add the content as a TextContent.
+				contents.Insert(0, new TextContent(message.Content));
+		}
 
 		return contents;
 	}
