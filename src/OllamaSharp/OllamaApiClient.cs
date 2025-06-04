@@ -453,8 +453,20 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 	async Task<ChatResponse> IChatClient.GetResponseAsync(IEnumerable<ChatMessage> messages, ChatOptions? options, CancellationToken cancellationToken)
 	{
 		var request = AbstractionMapper.ToOllamaSharpChatRequest(messages, options, stream: false, OutgoingJsonSerializerOptions);
-		var response = await ChatAsync(request, cancellationToken).StreamToEndAsync().ConfigureAwait(false);
-		return AbstractionMapper.ToChatResponse(response, response?.Model ?? request.Model ?? SelectedModel) ?? new ChatResponse([]);
+		//var response = await ChatAsync(request, cancellationToken).StreamToEndAsync().ConfigureAwait(false);
+		//return AbstractionMapper.ToChatResponse(response, response?.Model ?? request.Model ?? SelectedModel) ?? new ChatResponse([]);
+		var responseMessages = new List<Message>();
+		var lastResponse = new ChatResponseStream();
+		await foreach (var response in ChatAsync(request, cancellationToken).ConfigureAwait(false))
+		{
+			if (response?.Message != null)
+			{
+				responseMessages.Add(response?.Message);
+			}
+			lastResponse = response;
+		}
+		var doneResponse = lastResponse as ChatDoneResponseStream;
+		return AbstractionMapper.ToChatResponse(doneResponse, doneResponse?.Model ?? request.Model ?? SelectedModel, responseMessages) ?? new ChatResponse([]);
 	}
 
 	/// <inheritdoc/>
