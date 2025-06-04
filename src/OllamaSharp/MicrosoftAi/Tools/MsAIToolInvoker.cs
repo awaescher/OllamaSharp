@@ -10,7 +10,7 @@ namespace OllamaSharp.MicrosoftAi.Tools;
 public class MsAIToolInvoker()
 {
 	/// <summary>
-	/// Invoke the AI Function and return the result the tool ollama Messages
+	/// Invoke the AI Function and return the tool result messages
 	/// </summary>
 	/// <param name="toolCalls"></param>
 	/// <param name="chatRequest"></param>
