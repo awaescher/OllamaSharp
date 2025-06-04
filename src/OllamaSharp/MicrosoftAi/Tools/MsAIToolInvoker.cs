@@ -2,7 +2,7 @@ using System.Runtime.CompilerServices;
 using OllamaSharp.Models.Chat;
 using AIFunction = Microsoft.Extensions.AI.AIFunction;
 using AIFunctionArguments = Microsoft.Extensions.AI.AIFunctionArguments;
-namespace Triassic.AICore.OllamaAPI;
+namespace OllamaSharp.MicrosoftAi.Tools;
 
 /// <summary>
 /// A tool invoker that continues a ollamaCLient conversation by sending results from invoked tools back to the ollamaCLient.
@@ -10,7 +10,7 @@ namespace Triassic.AICore.OllamaAPI;
 public class MsAIToolInvoker()
 {
 	/// <summary>
-	/// Invoke Tool Function
+	/// Invoke the AI Function and return the result the tool ollama Messages
 	/// </summary>
 	/// <param name="toolCalls"></param>
 	/// <param name="chatRequest"></param>
@@ -22,13 +22,11 @@ public class MsAIToolInvoker()
 		var toolMessages = new List<Message>();
 		if (chatRequest.MicrosoftAi?.ChatOptions?.Tools != null)
 		{
-			//var callableTools = chatRequest.Tools?.OfType<Tool>().ToArray() ?? [];
+			var aiTools = chatRequest.MicrosoftAi?.ChatOptions.Tools;
 			foreach (var toolCall in toolCalls)
 			{
 				var toolCallFunctionName = toolCall?.Function?.Name;
 				var toolCallArgs = toolCall?.Function?.Arguments;
-				var aiTools = chatRequest.MicrosoftAi?.ChatOptions.Tools;
-
 				var aiTool = (aiTools?.FirstOrDefault(t => t.Name.Equals(toolCallFunctionName, StringComparison.OrdinalIgnoreCase))) ?? throw new Exception($"AI Function \"{toolCallFunctionName}\" does not exists");
 				object? toolResult = null;
 				var normalizedArguments = new Dictionary<string, object?>();

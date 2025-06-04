@@ -6,11 +6,11 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using Microsoft.Extensions.AI;
 using OllamaSharp.Constants;
-using OllamaSharp.MicrosoftAi;
 using OllamaSharp.Models;
 using OllamaSharp.Models.Chat;
 using OllamaSharp.Models.Exceptions;
-using Triassic.AICore.OllamaAPI;
+using OllamaSharp.MicrosoftAi;
+using OllamaSharp.MicrosoftAi.Tools;
 
 namespace OllamaSharp;
 
