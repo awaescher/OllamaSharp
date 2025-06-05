@@ -372,7 +372,7 @@ internal static class AbstractionMapper
 		// content, we only add the content if either it's not empty or there weren't any tool calls.
 		if (message.Content?.Length > 0 || contents.Count == 0)
 		{
-			if(message.Role == ChatRole.Tool)
+			if (message.Role == ChatRole.Tool)
 			{
 				// If the message is a tool message, we create a FunctionResultContent
 				// to hold the content as a function result.
