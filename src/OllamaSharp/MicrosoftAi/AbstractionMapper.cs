@@ -24,15 +24,19 @@ internal static class AbstractionMapper
 	/// </summary>
 	/// <param name="stream">The response stream with completion data.</param>
 	/// <param name="usedModel">The used model. This has to be a separate argument because there might be fallbacks from the calling method.</param>
+	/// <param name="ollamaMessages">The response ollma messages to build the AI contents. This has to be a separate argument because there might be multiple messages return(Function Call, Assistant, Function Call Result).</param>
 	/// <returns>A <see cref="ChatResponse"/> object containing the mapped data.</returns>
-	public static ChatResponse? ToChatResponse(ChatDoneResponseStream? stream, string? usedModel)
+	public static ChatResponse? ToChatResponse(ChatDoneResponseStream? stream, string? usedModel, List<Message>? ollamaMessages = null)
 	{
 		if (stream is null)
 			return null;
 
-		var chatMessage = ToChatMessage(stream.Message);
-
-		return new ChatResponse(chatMessage)
+		List<ChatMessage> chatMessages = [];
+		if (ollamaMessages is not null)
+		{
+			chatMessages.AddRange(ollamaMessages.Select(message => ToChatMessage(message)));
+		}
+		return new ChatResponse(chatMessages)
 		{
 			FinishReason = ToFinishReason(stream.DoneReason),
 			AdditionalProperties = ParseOllamaChatResponseProps(stream),
@@ -79,7 +83,12 @@ internal static class AbstractionMapper
 			},
 			Stream = stream,
 			Template = null,
-			Tools = ToOllamaSharpTools(options?.Tools)
+			Tools = ToOllamaSharpTools(options?.Tools),
+			MicrosoftAi = new MicrosoftAiOptions()
+			{
+				ChatOptions = options,
+				OllamaMessageHistory = []
+			}
 		};
 
 		var hasAdditionalProperties = options?.AdditionalProperties?.Any() ?? false;
@@ -366,7 +375,17 @@ internal static class AbstractionMapper
 		// Ollama frequently sends back empty content with tool calls. Rather than always adding an empty
 		// content, we only add the content if either it's not empty or there weren't any tool calls.
 		if (message.Content?.Length > 0 || contents.Count == 0)
-			contents.Insert(0, new TextContent(message.Content));
+		{
+			if (message.Role == ChatRole.Tool)
+			{
+				// If the message is a tool message, we create a FunctionResultContent
+				// to hold the content as a function result.
+				contents.Insert(0, new FunctionResultContent(Guid.NewGuid().ToString().Substring(0, 8), JsonSerializer.SerializeToElement(message.Content)));
+			}
+			else
+				// Otherwise, we just add the content as a TextContent.
+				contents.Insert(0, new TextContent(message.Content));
+		}
 
 		return contents;
 	}
