@@ -24,14 +24,18 @@ internal static class AbstractionMapper
 	/// </summary>
 	/// <param name="stream">The response stream with completion data.</param>
 	/// <param name="usedModel">The used model. This has to be a separate argument because there might be fallbacks from the calling method.</param>
-	/// <param name="messages">The used model. This has to be a separate argument because there might be fallbacks from the calling method.</param>
+	/// <param name="ollamaMessages">The used model. This has to be a separate argument because there might be fallbacks from the calling method.</param>
 	/// <returns>A <see cref="ChatResponse"/> object containing the mapped data.</returns>
-	public static ChatResponse? ToChatResponse(ChatDoneResponseStream? stream, string? usedModel, List<Message> messages)
+	public static ChatResponse? ToChatResponse(ChatDoneResponseStream? stream, string? usedModel, List<Message>? ollamaMessages = null)
 	{
 		if (stream is null)
 			return null;
 
-		List<ChatMessage> chatMessages = [.. messages.Select(message => ToChatMessage(message))];
+		List<ChatMessage> chatMessages = [];
+		if (ollamaMessages is not null)
+		{
+			chatMessages.AddRange(ollamaMessages.Select(message => ToChatMessage(message)));
+		}
 		return new ChatResponse(chatMessages)
 		{
 			FinishReason = ToFinishReason(stream.DoneReason),
