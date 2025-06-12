@@ -1,6 +1,6 @@
 using System.Threading.Channels;
-using ModelContextProtocol.Protocol.Messages;
-using ModelContextProtocol.Protocol.Transport;
+using ModelContextProtocol.Client;
+using ModelContextProtocol.Protocol;
 
 namespace OllamaSharp.ModelContextProtocol.Tests.Infrastructure;
 

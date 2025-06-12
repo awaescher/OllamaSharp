@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Logging;
-using ModelContextProtocol.Protocol.Transport;
-using ModelContextProtocol.Protocol.Types;
+using ModelContextProtocol.Client;
+using ModelContextProtocol.Protocol;
 using OllamaSharp.ModelContextProtocol.Server;
 
 namespace OllamaSharp.ModelContextProtocol;
