@@ -691,14 +691,18 @@ public class AbstractionMapperTests
 				EvalCount = 111,
 				EvalDuration = 2222222222,
 				LoadDuration = 3333333333,
-				Message = new Message { Role = OllamaSharp.Models.Chat.ChatRole.Assistant, Content = "Hi." },
 				Model = "llama3.1:8b",
 				PromptEvalCount = 411,
 				PromptEvalDuration = 5555555555,
 				TotalDuration = 6666666666
 			};
-
-			var response = AbstractionMapper.ToChatResponse(stream, usedModel: null);
+			var responseMessages = new List<Message>() {
+				new Message(){
+					Role = OllamaSharp.Models.Chat.ChatRole.Assistant,
+					Content = "Hi."
+				}
+			};
+			var response = AbstractionMapper.ToChatResponse(stream, usedModel: null, responseMessages);
 
 			response.AdditionalProperties.ShouldNotBeNull();
 			response.AdditionalProperties[Application.EvalDuration].ShouldBe(TimeSpan.FromSeconds(2.222222222));
@@ -708,7 +712,7 @@ public class AbstractionMapperTests
 			response.CreatedAt.ShouldBe(new DateTimeOffset(2023, 08, 04, 08, 52, 19, 385, 406, TimeSpan.FromHours(-7)));
 			response.FinishReason.ShouldBe(ChatFinishReason.Stop);
 			response.Messages[0].AuthorName.ShouldBeNull();
-			response.Messages[0].RawRepresentation.ShouldBe(stream.Message);
+			response.Messages[0].RawRepresentation.ShouldBe(responseMessages[0]);
 			response.Messages[0].Role.ShouldBe(Microsoft.Extensions.AI.ChatRole.Assistant);
 			response.Messages[0].Text.ShouldBe("Hi.");
 			response.Messages[0].Contents.Count.ShouldBe(1);

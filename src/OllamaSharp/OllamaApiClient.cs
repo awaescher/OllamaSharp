@@ -6,10 +6,11 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using Microsoft.Extensions.AI;
 using OllamaSharp.Constants;
-using OllamaSharp.MicrosoftAi;
 using OllamaSharp.Models;
 using OllamaSharp.Models.Chat;
 using OllamaSharp.Models.Exceptions;
+using OllamaSharp.MicrosoftAi;
+using OllamaSharp.MicrosoftAi.Tools;
 
 namespace OllamaSharp;
 
@@ -175,8 +176,16 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 	}
 
 	/// <inheritdoc />
-	public async IAsyncEnumerable<ChatResponseStream?> ChatAsync(ChatRequest request, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+	public virtual async IAsyncEnumerable<ChatResponseStream?> ChatAsync(ChatRequest request, [EnumeratorCancellation] CancellationToken cancellationToken = default)
 	{
+		//For Microsoft AI
+		if (request.MicrosoftAi != null)
+		{
+			if (request.MicrosoftAi?.OllamaMessageHistory?.Count == 0 && request.Messages != null)
+			{
+				request.MicrosoftAi?.OllamaMessageHistory?.AddRange(request.Messages);
+			}
+		}
 		if (string.IsNullOrEmpty(request.Model))
 			request.Model = SelectedModel;
 
@@ -190,7 +199,39 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 		using var response = await SendToOllamaAsync(requestMessage, request, completion, cancellationToken).ConfigureAwait(false);
 
 		await foreach (var result in ProcessStreamedChatResponseAsync(response, cancellationToken).ConfigureAwait(false))
+		{
 			yield return result;
+			//Microsoft AI Tools Calling
+			if (request.MicrosoftAi != null)
+			{
+				if (result?.Message.ToolCalls != null && result.Message.ToolCalls.Any())
+				{
+					request.MicrosoftAi?.OllamaMessageHistory?.Add(result.Message);
+					var toolMessages = await MsAIToolInvoker.InvokeAsync(result.Message.ToolCalls, request, cancellationToken);
+					request.MicrosoftAi?.OllamaMessageHistory?.AddRange(toolMessages);
+					request.Messages = request.MicrosoftAi?.OllamaMessageHistory;
+					//Return the tool call result with the Tool role, this message should not appear on the client side.
+					foreach (var toolMessage in toolMessages)
+					{
+						var toolResultResponse = new ChatResponseStream
+						{
+							Message = toolMessage,
+							Model = request.Model,
+							CreatedAt = DateTime.UtcNow
+						};
+						yield return toolResultResponse;
+					}
+					//Return the model's response to the tool call result.
+					await foreach (var modelResponseForToolResult in ChatAsync(request, cancellationToken).ConfigureAwait(false))
+					{
+						if (modelResponseForToolResult is null)
+							continue;
+						request.MicrosoftAi?.OllamaMessageHistory?.Add(modelResponseForToolResult.Message);
+						yield return modelResponseForToolResult;
+					}
+				}
+			}
+		}
 	}
 
 	/// <inheritdoc />
@@ -412,8 +453,20 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 	async Task<ChatResponse> IChatClient.GetResponseAsync(IEnumerable<ChatMessage> messages, ChatOptions? options, CancellationToken cancellationToken)
 	{
 		var request = AbstractionMapper.ToOllamaSharpChatRequest(messages, options, stream: false, OutgoingJsonSerializerOptions);
-		var response = await ChatAsync(request, cancellationToken).StreamToEndAsync().ConfigureAwait(false);
-		return AbstractionMapper.ToChatResponse(response, response?.Model ?? request.Model ?? SelectedModel) ?? new ChatResponse([]);
+		//var response = await ChatAsync(request, cancellationToken).StreamToEndAsync().ConfigureAwait(false);
+		//return AbstractionMapper.ToChatResponse(response, response?.Model ?? request.Model ?? SelectedModel) ?? new ChatResponse([]);
+		var responseMessages = new List<Message>();
+		var lastResponse = new ChatResponseStream();
+		await foreach (var response in ChatAsync(request, cancellationToken).ConfigureAwait(false))
+		{
+			if (response?.Message != null)
+			{
+				responseMessages.Add(response?.Message);
+			}
+			lastResponse = response;
+		}
+		var doneResponse = lastResponse as ChatDoneResponseStream;
+		return AbstractionMapper.ToChatResponse(doneResponse, doneResponse?.Model ?? request.Model ?? SelectedModel, responseMessages) ?? new ChatResponse([]);
 	}
 
 	/// <inheritdoc/>

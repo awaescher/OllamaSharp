@@ -9,6 +9,12 @@ namespace OllamaSharp.Models.Chat;
 public class ChatRequest : OllamaRequest
 {
 	/// <summary>
+	/// Gets or sets the Microsoft AI Options
+	/// </summary>
+	[JsonIgnore]
+	public MicrosoftAi.MicrosoftAiOptions? MicrosoftAi { get; set; }
+
+	/// <summary>
 	/// Gets or sets the model name (required).
 	/// </summary>
 	[JsonPropertyName("model")]
