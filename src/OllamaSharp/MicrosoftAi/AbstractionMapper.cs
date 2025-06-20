@@ -127,6 +127,7 @@ internal static class AbstractionMapper
 		TryAddOllamaOption<bool?>(options, OllamaOption.UseMlock, v => request.Options.UseMlock = (bool?)v);
 		TryAddOllamaOption<bool?>(options, OllamaOption.UseMmap, v => request.Options.UseMmap = (bool?)v);
 		TryAddOllamaOption<bool?>(options, OllamaOption.VocabOnly, v => request.Options.VocabOnly = (bool?)v);
+		TryAddOllamaOption<bool?>(options, OllamaOption.Think, v => request.Think = (bool?)v);
 		TryAddOption<string?>(options, Application.KeepAlive, v => request.KeepAlive = (string?)v);
 
 		return request;
@@ -370,23 +371,28 @@ internal static class AbstractionMapper
 					contents.Add(new FunctionCallContent(id, function.Name ?? Application.NotApplicable, function.Arguments) { RawRepresentation = toolCall });
 				}
 			}
+			return contents;
 		}
 
 		// Ollama frequently sends back empty content with tool calls. Rather than always adding an empty
 		// content, we only add the content if either it's not empty or there weren't any tool calls.
-		if (message.Content?.Length > 0 || contents.Count == 0)
+		if (message.Content?.Length > 0)
 		{
 			if (message.Role == ChatRole.Tool)
 			{
 				// If the message is a tool message, we create a FunctionResultContent
 				// to hold the content as a function result.
-				contents.Insert(0, new FunctionResultContent(Guid.NewGuid().ToString().Substring(0, 8), JsonSerializer.SerializeToElement(message.Content)));
+				contents.Add(new FunctionResultContent(Guid.NewGuid().ToString().Substring(0, 8), JsonSerializer.SerializeToElement(message.Content)));
 			}
 			else
 				// Otherwise, we just add the content as a TextContent.
 				contents.Insert(0, new TextContent(message.Content));
 		}
-
+		// If has thinking content
+		if (message.Thinking?.Length > 0)
+		{
+			contents.Insert(0, new TextReasoningContent(message.Thinking));
+		}
 		return contents;
 	}
 
