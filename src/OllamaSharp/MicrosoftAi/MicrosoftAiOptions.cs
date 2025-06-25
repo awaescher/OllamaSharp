@@ -13,7 +13,7 @@ public class MicrosoftAiOptions
 
 
 	/// <summary>
-	/// The ollama messge history for tool calling purpose
+	/// The ollama message history for tool calling purpose
 	/// </summary>
 	public List<Models.Chat.Message>? OllamaMessageHistory { get; set; }
 }

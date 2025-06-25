@@ -29,7 +29,6 @@ public class MsAIToolInvoker()
 				var toolCallArgs = toolCall?.Function?.Arguments;
 				var aiTool = (aiTools?.FirstOrDefault(t => t.Name.Equals(toolCallFunctionName, StringComparison.OrdinalIgnoreCase))) ?? throw new Exception($"AI Function \"{toolCallFunctionName}\" does not exists");
 				object? toolResult = null;
-				var normalizedArguments = new Dictionary<string, object?>();
 				var aiFunctionArgs = new AIFunctionArguments();
 				if (toolCallArgs is not null)
 				{
@@ -38,12 +37,10 @@ public class MsAIToolInvoker()
 					{
 						if (pair.Value is System.Text.Json.JsonElement je)
 						{
-							normalizedArguments[pair.Key] = je.ToString();
 							aiFunctionArgs.Add(pair.Key, je.ToString());
 						}
 						else
 						{
-							normalizedArguments[pair.Key] = pair.Value;
 							aiFunctionArgs.Add(pair.Key, pair.Value);
 						}
 					}
