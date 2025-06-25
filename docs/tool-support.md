@@ -103,7 +103,7 @@ public class SampleTools
 	/// <param name="city">Name of the city</param>
 	/// <param name="unit">Temperature unit for the weather</param>
 	[OllamaTool]
-	public static string GetWeather(string city, Unit unit = Unit.Celsius) => $"It's cold at only 6° {unit} in {location}.";
+	public static string GetWeather(string city, Unit unit = Unit.Celsius) => $"It's cold at only 6° {unit} in {city}.";
 
     public enum Unit
     {

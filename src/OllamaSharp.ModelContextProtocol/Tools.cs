@@ -3,7 +3,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
-using ModelContextProtocol.Protocol.Transport;
+using ModelContextProtocol.Client;
 using OllamaSharp.ModelContextProtocol.Server;
 using ModelContextProtocolClient = ModelContextProtocol.Client;
 
@@ -82,7 +82,7 @@ public static class Tools
 			var client = await ModelContextProtocolClient.McpClientFactory.CreateAsync(clientTransport, options, loggerFactory);
 			foreach (var tool in await ModelContextProtocolClient.McpClientExtensions.ListToolsAsync(client))
 			{
-				result.Add(new McpClientTool(tool, client));
+				result.Add(new Server.McpClientTool(tool, client));
 			}
 		}
 
