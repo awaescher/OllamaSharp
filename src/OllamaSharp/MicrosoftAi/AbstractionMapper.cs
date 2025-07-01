@@ -321,6 +321,18 @@ internal static class AbstractionMapper
 	/// <returns>A <see cref="ChatResponseUpdate"/> object containing the latest chat completion chunk.</returns>
 	public static ChatResponseUpdate ToChatResponseUpdate(ChatResponseStream? response, string responseId)
 	{
+		if (response is ChatDoneResponseStream done)
+		{
+			return new ChatResponseUpdate(ToAbstractionRole(done.Message.Role), [new UsageContent(ParseOllamaChatResponseUsage(done))])
+			{
+				CreatedAt = done.CreatedAt,
+				FinishReason = done.DoneReason is null ? null : new ChatFinishReason(done.DoneReason),
+				RawRepresentation = response,
+				ResponseId = responseId,
+				ModelId = done.Model
+			};
+		}
+
 		var contents = response?.Message is null ? [new TextContent(string.Empty)] : GetAIContentsFromMessage(response.Message);
 
 		return new ChatResponseUpdate(ToAbstractionRole(response?.Message.Role), contents)
@@ -426,6 +438,9 @@ internal static class AbstractionMapper
 	/// </summary>
 	/// <param name="response">The response to parse.</param>
 	/// <returns>A <see cref="UsageDetails"/> object containing the parsed usage details.</returns>
+#if NETSTANDARD2_1_OR_GREATER || NET8_0_OR_GREATER
+	[return: System.Diagnostics.CodeAnalysis.NotNullIfNotNull("response")]
+#endif
 	private static UsageDetails? ParseOllamaChatResponseUsage(ChatDoneResponseStream? response)
 	{
 		if (response is not null)
