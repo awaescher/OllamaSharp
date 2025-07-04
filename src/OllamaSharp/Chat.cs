@@ -67,7 +67,7 @@ public class Chat
 	/// This might cause errors with non-reasoning models, see https://github.com/awaescher/OllamaSharp/releases/tag/5.2.0
 	/// More information: https://github.com/ollama/ollama/releases/tag/v0.9.0
 	/// </summary>
-	public bool? Think { get; set; } = false;
+	public bool? Think { get; set; }
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="Chat"/> class.

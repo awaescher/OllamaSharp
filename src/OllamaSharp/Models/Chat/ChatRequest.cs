@@ -62,7 +62,7 @@ public class ChatRequest : OllamaRequest
 	/// </summary>
 	[JsonPropertyName("think")]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-	public bool? Think { get; set; } = false;
+	public bool? Think { get; set; }
 
 	/// <summary>
 	/// Gets or sets the tools for the model to use if supported. Requires stream to be set to false.
