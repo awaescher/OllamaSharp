@@ -69,6 +69,12 @@ public class Chat
 	/// </summary>
 	public bool? Think { get; set; }
 
+
+	/// <summary>
+	/// Gets or sets an action that is called when the AI model is thinking and Think is set to true.
+	/// </summary>
+	public Action<string>? OnThink { get; set; }
+
 	/// <summary>
 	/// Initializes a new instance of the <see cref="Chat"/> class.
 	/// This basic constructor sets up the chat without a predefined system prompt.
@@ -424,7 +430,12 @@ public class Chat
 
 			messageBuilder.Append(answer);
 
-			yield return answer.Message.Content ?? string.Empty;
+			// yield the message content or call the delegate to handle thinking
+			var isThinking = Think == true && !string.IsNullOrEmpty(answer.Message.Thinking);
+			if (isThinking)
+				OnThink?.Invoke(answer.Message.Thinking!);
+			else
+				yield return answer.Message.Content ?? string.Empty;
 		}
 
 		if (messageBuilder.HasValue)

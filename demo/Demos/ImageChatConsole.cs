@@ -25,7 +25,8 @@ public partial class ImageChatConsole(IOllamaApiClient ollama) : OllamaConsole(o
 				AnsiConsole.MarkupLine($"[{HintTextColor}]To send an image, simply enter its full filename like \"[{AccentTextColor}]c:/image.jpg[/]\"[/]");
 				WriteChatInstructionHint();
 
-				var chat = new Chat(Ollama, systemPrompt);
+				var chat = new Chat(Ollama, systemPrompt) { Think = Think };
+				chat.OnThink = (thoughts) => AnsiConsole.MarkupInterpolated($"[{AiThinkTextColor}]{thoughts}[/]");
 
 				string message;
 
@@ -38,6 +39,14 @@ public partial class ImageChatConsole(IOllamaApiClient ollama) : OllamaConsole(o
 					{
 						keepChatting = false;
 						break;
+					}
+
+					if (message.Equals(TOGGLETHINK_COMMAND, StringComparison.OrdinalIgnoreCase))
+					{
+						ToggleThink();
+						keepChatting = true;
+						chat.Think = Think;
+						continue;
 					}
 
 					if (message.Equals(START_NEW_COMMAND, StringComparison.OrdinalIgnoreCase))

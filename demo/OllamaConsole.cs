@@ -19,6 +19,7 @@ public abstract class OllamaConsole(IOllamaApiClient ollama)
 	public static string ErrorTextColor { get; } = "red";
 
 	public static string AiTextColor { get; } = "cyan";
+	public static string AiThinkTextColor { get; } = "magenta";
 
 	public static string START_NEW_COMMAND { get; } = "/new";
 	public static string USE_MCP_SERVER_COMMAND { get; } = "/mcp";
@@ -26,7 +27,11 @@ public abstract class OllamaConsole(IOllamaApiClient ollama)
 
 	public static string EXIT_COMMAND { get; } = "/exit";
 
+	public static string TOGGLETHINK_COMMAND { get; } = "/togglethink";
+
 	public IOllamaApiClient Ollama { get; } = ollama ?? throw new ArgumentNullException(nameof(ollama));
+
+	public bool? Think { get; private set; }
 
 	public abstract Task Run();
 
@@ -69,6 +74,14 @@ public abstract class OllamaConsole(IOllamaApiClient ollama)
 	{
 		AnsiConsole.MarkupLine($"[{HintTextColor}]Enter [{AccentTextColor}]{START_NEW_COMMAND}[/] to start over or [{AccentTextColor}]{EXIT_COMMAND}[/] to leave.[/]");
 		AnsiConsole.MarkupLine($"[{HintTextColor}]Begin with [{AccentTextColor}]{Markup.Escape(MULTILINE_OPEN.ToString())}[/] to start multiline input. Sumbmit it by ending with [{AccentTextColor}]{Markup.Escape(MULTILINE_CLOSE.ToString())}[/].[/]");
+		AnsiConsole.MarkupLine($"[{HintTextColor}]Think mode is [{AccentTextColor}]{Think?.ToString().ToLower() ?? "(null)"}[/]. Type [{AccentTextColor}]{TOGGLETHINK_COMMAND}[/] to change.[/]");
+	}
+
+	internal void ToggleThink()
+	{ 
+		// null -> false -> true -> null -> ...
+		Think = Think == null ? false : (Think == false ? true : (Think == true ? null : false));
+		AnsiConsole.MarkupLine($"[{HintTextColor}]Think mode is [{AccentTextColor}]{Think?.ToString().ToLower() ?? "(null)"}[/].[/]");
 	}
 
 	protected async Task<string> SelectModel(string prompt, string additionalInformation = "")

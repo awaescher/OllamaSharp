@@ -38,7 +38,8 @@ public class ToolConsole(IOllamaApiClient ollama) : OllamaConsole(ollama)
 				}
 				AnsiConsole.MarkupLine($"[{HintTextColor}]Enter [{AccentTextColor}]{LIST_TOOLS_COMMAND}[/] to list all available tools.[/]");
 
-				var chat = new Chat(Ollama, systemPrompt);
+				var chat = new Chat(Ollama, systemPrompt) { Think = Think };
+				chat.OnThink = (thoughts) => AnsiConsole.MarkupInterpolated($"[{AiThinkTextColor}]{thoughts}[/]");
 
 				string message;
 
@@ -51,6 +52,14 @@ public class ToolConsole(IOllamaApiClient ollama) : OllamaConsole(ollama)
 					{
 						keepChatting = false;
 						break;
+					}
+
+					if (message.Equals(TOGGLETHINK_COMMAND, StringComparison.OrdinalIgnoreCase))
+					{
+						ToggleThink();
+						keepChatting = true;
+						chat.Think = Think;
+						continue;
 					}
 
 					if (message.Equals(START_NEW_COMMAND, StringComparison.OrdinalIgnoreCase))

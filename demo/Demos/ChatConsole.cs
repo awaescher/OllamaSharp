@@ -23,7 +23,8 @@ public class ChatConsole(IOllamaApiClient ollama) : OllamaConsole(ollama)
 				AnsiConsole.MarkupLine($"You are talking to [{AccentTextColor}]{Ollama.SelectedModel}[/] now.");
 				WriteChatInstructionHint();
 
-				var chat = new Chat(Ollama, systemPrompt);
+				var chat = new Chat(Ollama, systemPrompt) { Think = Think };
+				chat.OnThink = (thoughts) => AnsiConsole.MarkupInterpolated($"[{AiThinkTextColor}]{thoughts}[/]");
 
 				string message;
 
@@ -36,6 +37,14 @@ public class ChatConsole(IOllamaApiClient ollama) : OllamaConsole(ollama)
 					{
 						keepChatting = false;
 						break;
+					}
+
+					if (message.Equals(TOGGLETHINK_COMMAND, StringComparison.OrdinalIgnoreCase))
+					{
+						ToggleThink();
+						keepChatting = true;
+						chat.Think = Think;
+						continue;
 					}
 
 					if (message.Equals(START_NEW_COMMAND, StringComparison.OrdinalIgnoreCase))
