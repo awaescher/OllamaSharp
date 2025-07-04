@@ -8,6 +8,7 @@ namespace OllamaSharp.Models.Chat;
 public class MessageBuilder
 {
 	private readonly StringBuilder _contentBuilder = new();
+	private readonly StringBuilder _thinkContentBuilder = new();
 	private List<string> _images = [];
 	private List<Message.ToolCall> _toolCalls = [];
 
@@ -44,6 +45,7 @@ public class MessageBuilder
 			return;
 
 		_contentBuilder.Append(chunk.Message.Content ?? "");
+		_thinkContentBuilder.Append(chunk.Message.Thinking ?? "");
 		Role = chunk.Message.Role;
 
 		_images.AddRangeIfNotNull(chunk.Message.Images);
@@ -81,8 +83,7 @@ public class MessageBuilder
 	/// Console.WriteLine(finalMessage.Role);    // Output: Assistant
 	/// </code>
 	/// </example>
-	public Message ToMessage() =>
-		new() { Content = _contentBuilder.ToString(), Images = _images.ToArray(), Role = Role, ToolCalls = _toolCalls };
+	public Message ToMessage() => new() { Content = _contentBuilder.ToString(), Thinking = _thinkContentBuilder.ToString(), Images = _images.ToArray(), Role = Role, ToolCalls = _toolCalls };
 
 
 	/// <summary>
