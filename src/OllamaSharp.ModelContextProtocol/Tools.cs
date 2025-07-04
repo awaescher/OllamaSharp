@@ -33,7 +33,7 @@ public static class Tools
 	/// <exception cref="ArgumentNullException"></exception>
 	/// <exception cref="FileNotFoundException"></exception>
 	/// <exception cref="InvalidOperationException"></exception>
-	public static async Task<object[]> GetFromMcpServers(string configurationFilePath, McpClientOptions? clientOptions = null)
+	public static async Task<Server.McpClientTool[]> GetFromMcpServers(string configurationFilePath, McpClientOptions? clientOptions = null)
 	{
 		if (string.IsNullOrEmpty(configurationFilePath))
 			throw new ArgumentNullException(nameof(configurationFilePath));
@@ -54,8 +54,7 @@ public static class Tools
 	/// <param name="mcpServers"></param>
 	/// <returns></returns>
 	/// <exception cref="ArgumentNullException"></exception>
-	public static async Task<object[]> GetFromMcpServers(params McpServerConfiguration[] mcpServers)
-		=> await GetFromMcpServers(null, mcpServers);
+	public static async Task<Server.McpClientTool[]> GetFromMcpServers(params McpServerConfiguration[] mcpServers) => await GetFromMcpServers(null, mcpServers);
 
 	/// <summary>
 	/// Gets the tools from the specified MCP server configurations.
@@ -64,7 +63,7 @@ public static class Tools
 	/// <param name="clientOptions">The client options to use when connecting to the MCP servers.</param>
 	/// <returns></returns>
 	/// <exception cref="ArgumentNullException"></exception>
-	public static async Task<object[]> GetFromMcpServers(McpClientOptions? clientOptions, params McpServerConfiguration[] mcpServers)
+	public static async Task<Server.McpClientTool[]> GetFromMcpServers(McpClientOptions? clientOptions, params McpServerConfiguration[] mcpServers)
 	{
 		if (mcpServers == null || mcpServers.Length == 0)
 			throw new ArgumentNullException(nameof(mcpServers));
@@ -72,18 +71,16 @@ public static class Tools
 		var loggerFactory = clientOptions?.LoggerFactory ?? NullLoggerFactory.Instance;
 		var options = CreateMcpClientOptions(clientOptions);
 
-		var result = new List<object>();
+		var result = new List<Server.McpClientTool>();
 		foreach (var server in mcpServers)
 		{
-			var clientTransport = clientOptions?.ClientTransportFactoryMethod != null ?
-				clientOptions.ClientTransportFactoryMethod(server, loggerFactory) :
-				ConvertServerConfigurations(server, loggerFactory);
+			var clientTransport = clientOptions?.ClientTransportFactoryMethod != null
+									? clientOptions.ClientTransportFactoryMethod(server, loggerFactory)
+									: ConvertServerConfigurations(server, loggerFactory);
 
 			var client = await ModelContextProtocolClient.McpClientFactory.CreateAsync(clientTransport, options, loggerFactory);
 			foreach (var tool in await ModelContextProtocolClient.McpClientExtensions.ListToolsAsync(client))
-			{
 				result.Add(new Server.McpClientTool(tool, client));
-			}
 		}
 
 		return result.ToArray();
@@ -100,23 +97,17 @@ public static class Tools
 			};
 
 			if (server.Arguments != null)
-			{
 				stdioOptions.Arguments = ResolveVariables(server.Arguments);
-			}
 
 			if (server.Environment != null)
 			{
 				stdioOptions.EnvironmentVariables = [];
 				foreach (var kvp in server.Environment)
-				{
 					stdioOptions.EnvironmentVariables[kvp.Key] = Environment.GetEnvironmentVariable(GetEnvironmentVariableName(kvp.Value)) ?? kvp.Value;
-				}
 			}
 
 			if (server.Options?.TryGetValue("workingDirectory", out var workingDirectory) == true)
-			{
 				stdioOptions.WorkingDirectory = workingDirectory;
-			}
 
 			return new StdioClientTransport(stdioOptions, loggerFactory);
 		}
@@ -137,15 +128,9 @@ public static class Tools
 		return name;
 	}
 
-	private static string[] ResolveVariables(string[] arguments)
-	{
-		return arguments.Select(ResolveVariables).ToArray();
-	}
+	private static string[] ResolveVariables(string[] arguments) => arguments.Select(ResolveVariables).ToArray();
 
-	private static string ResolveVariables(string argument)
-	{
-		return Environment.ExpandEnvironmentVariables(argument);
-	}
+	private static string ResolveVariables(string argument) => Environment.ExpandEnvironmentVariables(argument);
 
 	private static ModelContextProtocolClient.McpClientOptions CreateMcpClientOptions(McpClientOptions? clientOptions)
 	{
