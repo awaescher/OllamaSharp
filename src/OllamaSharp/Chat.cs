@@ -42,17 +42,17 @@ public class Chat
 	/// If Think is set to null, think tokens will be written to the default model output.
 	/// If Think is false, think tokens will not be emitted.
 	/// </summary>
-	public event EventHandler<string> OnThink;
+	public event EventHandler<string>? OnThink;
 
 	/// <summary>
 	/// Gets fired when the AI model wants to invoke a tool.
 	/// </summary>
-	public event EventHandler<Message.ToolCall> OnToolCall;
+	public event EventHandler<Message.ToolCall>? OnToolCall;
 
 	/// <summary>
 	/// Gets fired after a tool was invoked and the result is available.
 	/// </summary>
-	public event EventHandler<ToolResult> OnToolResult;
+	public event EventHandler<ToolResult>? OnToolResult;
 
 	/// <summary>
 	/// Gets or sets the messages of the chat history
@@ -452,23 +452,26 @@ public class Chat
 			var answerMessage = messageBuilder.ToMessage();
 			Messages.Add(answerMessage);
 
-			var toolResultMessages = new List<Message>();
-			foreach (var toolCall in answerMessage.ToolCalls ?? [])
+			if (ToolInvoker is not null && role != ChatRole.Tool)
 			{
-				// call tools if available and requested by the AI model and yield the results
-				OnToolCall?.Invoke(this, toolCall);
-				var toolResult = await ToolInvoker.InvokeAsync(toolCall, tools ?? [], cancellationToken).ConfigureAwait(false);
-				toolResultMessages.Add(new Message(ChatRole.Tool, $"Tool: {StringifyToolCall(toolCall)}:\nResult: {toolResult.Result}")); // TODO Arguments
-				OnToolResult?.Invoke(this, toolResult);
-			}
+				var toolResultMessages = new List<Message>();
+				foreach (var toolCall in answerMessage.ToolCalls ?? [])
+				{
+					// call tools if available and requested by the AI model and yield the results
+					OnToolCall?.Invoke(this, toolCall);
+					var toolResult = await ToolInvoker.InvokeAsync(toolCall, tools ?? [], cancellationToken).ConfigureAwait(false);
+					toolResultMessages.Add(new Message(ChatRole.Tool, $"Tool: {StringifyToolCall(toolCall)}:\nResult: {toolResult.Result}")); // TODO Arguments
+					OnToolResult?.Invoke(this, toolResult);
+				}
 
-			if (toolResultMessages.Any())
-			{
-				// in case of multiple tool calls, add these to the message history except the last one.
-				// the last one will be used as message to send back to the AI model which causes the chat to go on.
-				Messages.AddRange(toolResultMessages.Take(toolResultMessages.Count - 1));
-				await foreach (var answer in SendAsAsync(ChatRole.Tool, toolResultMessages.Last()!.Content ?? "", cancellationToken).ConfigureAwait(false))
-					yield return answer;
+				if (toolResultMessages.Any())
+				{
+					// in case of multiple tool calls, add these to the message history except the last one.
+					// the last one will be used as message to send back to the AI model which causes the chat to go on.
+					Messages.AddRange(toolResultMessages.Take(toolResultMessages.Count - 1));
+					await foreach (var answer in SendAsAsync(ChatRole.Tool, toolResultMessages.Last()!.Content ?? "", cancellationToken).ConfigureAwait(false))
+						yield return answer;
+				}
 			}
 		}
 	}
