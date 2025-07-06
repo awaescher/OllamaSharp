@@ -13,7 +13,7 @@ public class OllamaApiClientTests
 {
 	private readonly Uri _baseUri = new("http://localhost:11434");
 	private readonly string _model = "llama3.2:1b";
-	private readonly string _localModel = "OllamaSharpTest";
+	private readonly string _createModel = "OllamaSharpTest";
 	private readonly string _embeddingModel = "all-minilm:22m";
 
 	private OllamaApiClient _client = null!;
@@ -22,13 +22,13 @@ public class OllamaApiClientTests
 	public async Task Setup()
 	{
 		_client = new OllamaApiClient(_baseUri);
-		await CleanupModel(_localModel);
+		await CleanupModel(_createModel);
 	}
 
 	[OneTimeTearDown]
 	public async Task Teardown()
 	{
-		await CleanupModel(_localModel + ":latest");
+		await CleanupModel(_createModel + ":latest");
 		_client?.Dispose();
 	}
 
@@ -49,7 +49,7 @@ public class OllamaApiClientTests
 	}
 
 
-	[Test, Order(1), Ignore("Prevent the model from being downloaded each test run")]
+	[Test, Order(1)]
 	public async Task PullModel()
 	{
 		var response = await _client
@@ -71,7 +71,7 @@ public class OllamaApiClientTests
 
 		var model = new CreateModelRequest
 		{
-			Model = _localModel,
+			Model = _createModel,
 			From = _model,
 			Parameters = new Dictionary<string, object>()
 			{
@@ -88,25 +88,21 @@ public class OllamaApiClientTests
 		response.ShouldContain(r => r!.Status == "success");
 
 		var models = await _client.ListLocalModelsAsync();
-		models.ShouldContain(m => m.Name.StartsWith(_localModel));
+		models.ShouldContain(m => m.Name.StartsWith(_createModel));
 	}
 
 	[Test, Order(3)]
 	public async Task CopyModel()
 	{
-		await PullIfNotExists(_localModel);
-
-		var model = new CopyModelRequest { Source = _localModel, Destination = $"{_localModel}-copy" };
+		var model = new CopyModelRequest { Source = _createModel, Destination = $"{_createModel}-copy" };
 
 		await _client.CopyModelAsync(model);
 
 		var models = await _client.ListLocalModelsAsync();
-		models.ShouldContain(m => m.Name == $"{_localModel}-copy:latest");
-
-		await _client.DeleteModelAsync(new DeleteModelRequest { Model = $"{_localModel}-copy:latest" });
+		models.ShouldContain(m => m.Name == $"{_createModel}-copy:latest");
 	}
 
-	[Test]
+	[Test, Order(4)]
 	public async Task Embed()
 	{
 		await PullIfNotExists(_embeddingModel);
@@ -121,7 +117,7 @@ public class OllamaApiClientTests
 		response.TotalDuration!.Value.ShouldBeGreaterThan(100, "Because generating embeddings should take some time");
 	}
 
-	[Test]
+	[Test, Order(5)]
 	public async Task ListLocalModels()
 	{
 		var models = (await _client.ListLocalModelsAsync()).ToList();
@@ -130,7 +126,7 @@ public class OllamaApiClientTests
 		models.ShouldContain(m => m.Name == _model);
 	}
 
-	[Test]
+	[Test, Order(6)]
 	public async Task ListRunningModels()
 	{
 		await PullIfNotExists(_model);
@@ -153,7 +149,7 @@ public class OllamaApiClientTests
 		models.ShouldContain(m => m.Name == _model);
 	}
 
-	[Test]
+	[Test, Order(7)]
 	public async Task ShowModel()
 	{
 		await PullIfNotExists(_model);
@@ -168,27 +164,20 @@ public class OllamaApiClientTests
 		response.Details.Family.ShouldBe("llama");
 	}
 
-	[Test]
+	[Test, Order(8)]
 	public async Task DeleteModel()
 	{
-		await PullIfNotExists(_localModel);
-		await _client.CopyModelAsync(new CopyModelRequest
-		{
-			Source = _localModel,
-			Destination = $"{_localModel}-copy"
-		});
-
-		var exists = (await _client.ListLocalModelsAsync()).Any(m => m.Name == $"{_localModel}-copy:latest");
+		var exists = (await _client.ListLocalModelsAsync()).Any(m => m.Name == $"{_createModel}-copy:latest");
 
 		exists.ShouldBeTrue();
 
-		await _client.DeleteModelAsync(new DeleteModelRequest { Model = $"{_localModel}-copy:latest" });
+		await _client.DeleteModelAsync(new DeleteModelRequest { Model = $"{_createModel}-copy:latest" });
 
 		var models = await _client.ListLocalModelsAsync();
-		models.ShouldNotContain(m => m.Name == $"{_localModel}-copy:latest");
+		models.ShouldNotContain(m => m.Name == $"{_createModel}-copy:latest");
 	}
 
-	[Test]
+	[Test, Order(9)]
 	public async Task GenerateAsync()
 	{
 		await PullIfNotExists(_model);
@@ -207,7 +196,7 @@ public class OllamaApiClientTests
 		joined.ShouldContain("42");
 	}
 
-	[Test]
+	[Test, Order(10)]
 	public async Task ChatAsync()
 	{
 		await PullIfNotExists(_model);
@@ -242,14 +231,14 @@ public class OllamaApiClientTests
 		joined.ShouldContain("Douglas Adams");
 	}
 
-	[Test]
+	[Test, Order(11)]
 	public async Task IsRunningAsync()
 	{
 		var response = await _client.IsRunningAsync();
 		response.ShouldBeTrue();
 	}
 
-	[Test]
+	[Test, Order(12)]
 	public async Task GetVersionAsync()
 	{
 		var response = await _client.GetVersionAsync();
