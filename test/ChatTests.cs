@@ -59,7 +59,7 @@ public class ChatTests
 					}
 				});
 
-			var chat = new Chat(_ollama);
+			var chat = new Chat(_ollama) { ToolInvoker = null }; // we have no tool implementation in this test
 			await chat.SendAsync("How is the weather in LA?", CancellationToken.None).StreamToEndAsync();
 
 			chat.Messages.Last().Role.ShouldBe(ChatRole.Assistant);

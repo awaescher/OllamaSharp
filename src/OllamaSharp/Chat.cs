@@ -37,6 +37,24 @@ namespace OllamaSharp;
 public class Chat
 {
 	/// <summary>
+	/// Event that gets fired for each token that the AI model is thinking. This will just work for models that support thinking according to their Ollama
+	/// manifest and if Think is set to true.
+	/// If Think is set to null, think tokens will be written to the default model output.
+	/// If Think is false, think tokens will not be emitted.
+	/// </summary>
+	public event EventHandler<string>? OnThink;
+
+	/// <summary>
+	/// Gets fired when the AI model wants to invoke a tool.
+	/// </summary>
+	public event EventHandler<Message.ToolCall>? OnToolCall;
+
+	/// <summary>
+	/// Gets fired after a tool was invoked and the result is available.
+	/// </summary>
+	public event EventHandler<ToolResult>? OnToolResult;
+
+	/// <summary>
 	/// Gets or sets the messages of the chat history
 	/// </summary>
 	public List<Message> Messages { get; set; } = [];
@@ -59,7 +77,7 @@ public class Chat
 	/// <summary>
 	/// Gets or sets the class instance that invokes provided tools requested by the AI model
 	/// </summary>
-	public IToolInvoker ToolInvoker { get; set; }
+	public IToolInvoker ToolInvoker { get; set; } = new DefaultToolInvoker();
 
 	/// <summary>
 	/// Gets or sets a value to enable or disable thinking. Use reasoning models like openthinker, qwen3,
@@ -68,12 +86,6 @@ public class Chat
 	/// More information: https://github.com/ollama/ollama/releases/tag/v0.9.0
 	/// </summary>
 	public bool? Think { get; set; }
-
-
-	/// <summary>
-	/// Gets or sets an action that is called when the AI model is thinking and Think is set to true.
-	/// </summary>
-	public Action<string>? OnThink { get; set; }
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="Chat"/> class.
@@ -99,9 +111,6 @@ public class Chat
 	{
 		Client = client ?? throw new ArgumentNullException(nameof(client));
 		Model = Client.SelectedModel;
-
-		// continues the conversation with automatically sending messages (role=tool) from the results of the tools into the chat
-		ToolInvoker = new ChatContinuingToolInvoker(this);
 	}
 
 	/// <summary>
@@ -433,7 +442,7 @@ public class Chat
 			// yield the message content or call the delegate to handle thinking
 			var isThinking = Think == true && !string.IsNullOrEmpty(answer.Message.Thinking);
 			if (isThinking)
-				OnThink?.Invoke(answer.Message.Thinking!);
+				OnThink?.Invoke(this, answer.Message.Thinking!);
 			else
 				yield return answer.Message.Content ?? string.Empty;
 		}
@@ -443,9 +452,33 @@ public class Chat
 			var answerMessage = messageBuilder.ToMessage();
 			Messages.Add(answerMessage);
 
-			// call tools if available and requested by the AI model and yield the results
-			await foreach (var answer2 in ToolInvoker.InvokeAsync(answerMessage.ToolCalls ?? [], tools ?? [], cancellationToken).ConfigureAwait(false))
-				yield return answer2;
+			if (ToolInvoker is not null && role != ChatRole.Tool)
+			{
+				var toolResultMessages = new List<Message>();
+				foreach (var toolCall in answerMessage.ToolCalls ?? [])
+				{
+					// call tools if available and requested by the AI model and yield the results
+					OnToolCall?.Invoke(this, toolCall);
+					var toolResult = await ToolInvoker.InvokeAsync(toolCall, tools ?? [], cancellationToken).ConfigureAwait(false);
+					toolResultMessages.Add(new Message(ChatRole.Tool, $"Tool: {StringifyToolCall(toolCall)}:\nResult: {toolResult.Result}")); // TODO Arguments
+					OnToolResult?.Invoke(this, toolResult);
+				}
+
+				if (toolResultMessages.Any())
+				{
+					// in case of multiple tool calls, add these to the message history except the last one.
+					// the last one will be used as message to send back to the AI model which causes the chat to go on.
+					Messages.AddRange(toolResultMessages.Take(toolResultMessages.Count - 1));
+					await foreach (var answer in SendAsAsync(ChatRole.Tool, toolResultMessages.Last()!.Content ?? "", cancellationToken).ConfigureAwait(false))
+						yield return answer;
+				}
+			}
 		}
 	}
+
+	private static string StringifyToolCall(Message.ToolCall toolCall)
+	{
+		return $"{toolCall.Function?.Name ?? "(unnamed tool)"}({string.Join(", ", toolCall.Function?.Arguments?.Select(kvp => $"{kvp.Key}: {kvp.Value}") ?? [])})";
+	}
+
 }

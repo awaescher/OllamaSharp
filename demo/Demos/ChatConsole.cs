@@ -24,7 +24,7 @@ public class ChatConsole(IOllamaApiClient ollama) : OllamaConsole(ollama)
 				WriteChatInstructionHint();
 
 				var chat = new Chat(Ollama, systemPrompt) { Think = Think };
-				chat.OnThink = (thoughts) => AnsiConsole.MarkupInterpolated($"[{AiThinkTextColor}]{thoughts}[/]");
+				chat.OnThink += (sender, thoughts) => AnsiConsole.MarkupInterpolated($"[{AiThinkTextColor}]{thoughts}[/]");
 
 				string message;
 

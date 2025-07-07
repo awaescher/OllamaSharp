@@ -1,13 +1,15 @@
 using System.Reflection;
+using System.Text;
 using OllamaSharp;
 using OllamaSharp.Models.Exceptions;
+using OllamaSharp.Tools;
 using Spectre.Console;
 
 namespace OllamaApiConsole.Demos;
 
 public class ToolConsole(IOllamaApiClient ollama) : OllamaConsole(ollama)
 {
-	public List<object> Tools { get; } = [new GetWeatherTool(), new GetLatLonAsyncTool()];
+	public List<object> Tools { get; } = [new GetWeatherTool(), new GetLatLonAsyncTool(), new GetPopulationTool()];
 
 	public override async Task Run()
 	{
@@ -26,7 +28,7 @@ public class ToolConsole(IOllamaApiClient ollama) : OllamaConsole(ollama)
 			{
 				AnsiConsole.MarkupLine("");
 				AnsiConsole.MarkupLineInterpolated($"You are talking to [{AccentTextColor}]{Ollama.SelectedModel}[/] now.");
-				AnsiConsole.MarkupLine("When asked for the weather or the news for a given location, it will try to use a predefined tool.");
+				AnsiConsole.MarkupLine("When asked for the weather, population or the GPS coordinates for a city, it will try to use a predefined tool.");
 				AnsiConsole.MarkupLine("If any tool is used, the intended usage information is printed.");
 				WriteChatInstructionHint();
 
@@ -39,7 +41,8 @@ public class ToolConsole(IOllamaApiClient ollama) : OllamaConsole(ollama)
 				AnsiConsole.MarkupLine($"[{HintTextColor}]Enter [{AccentTextColor}]{LIST_TOOLS_COMMAND}[/] to list all available tools.[/]");
 
 				var chat = new Chat(Ollama, systemPrompt) { Think = Think };
-				chat.OnThink = (thoughts) => AnsiConsole.MarkupInterpolated($"[{AiThinkTextColor}]{thoughts}[/]");
+				chat.OnThink += (sender, thoughts) => AnsiConsole.MarkupInterpolated($"[{AiThinkTextColor}]{thoughts}[/]");
+				chat.OnToolResult += (sender, result) => RenderToolResult(result);
 
 				string message;
 
@@ -94,8 +97,6 @@ public class ToolConsole(IOllamaApiClient ollama) : OllamaConsole(ollama)
 						break;
 					}
 
-					var currentMessageCount = chat.Messages.Count;
-
 					try
 					{
 						await foreach (var answerToken in chat.SendAsync(message, Tools))
@@ -106,36 +107,37 @@ public class ToolConsole(IOllamaApiClient ollama) : OllamaConsole(ollama)
 						AnsiConsole.MarkupLineInterpolated($"[{ErrorTextColor}]{ex.Message}[/]");
 					}
 
-					// find the latest message from the assistant and possible tools
-					var newMessages = chat.Messages.Skip(currentMessageCount);
-
-					foreach (var newMessage in newMessages)
-					{
-						if (newMessage.ToolCalls?.Any() ?? false)
-						{
-							AnsiConsole.MarkupLine("\n[purple]Tools used:[/]");
-
-							foreach (var function in newMessage.ToolCalls.Where(t => t.Function != null).Select(t => t.Function))
-							{
-								AnsiConsole.MarkupLineInterpolated($"  - [purple]{function!.Name}[/]");
-								AnsiConsole.MarkupLineInterpolated($"    - [purple]parameters[/]");
-
-								if (function?.Arguments is not null)
-								{
-									foreach (var argument in function.Arguments)
-										AnsiConsole.MarkupLineInterpolated($"      - [purple]{argument.Key}[/]: [purple]{argument.Value}[/]");
-								}
-							}
-						}
-
-						if (newMessage.Role.GetValueOrDefault() == OllamaSharp.Models.Chat.ChatRole.Tool)
-							AnsiConsole.MarkupLineInterpolated($"    [blue]-> \"{newMessage.Content}\"[/]");
-					}
-
 					AnsiConsole.WriteLine();
 				} while (!string.IsNullOrEmpty(message));
 			} while (keepChatting);
 		}
+	}
+
+	private static void RenderToolResult(ToolResult toolResult)
+	{
+		AnsiConsole.MarkupLine($"[gray]Tool: [/][purple]{RenderToolSignature(toolResult)}[/]");
+		AnsiConsole.MarkupLineInterpolated($"      = [blue]{toolResult.Result?.ToString() ?? ""}[/]");
+		AnsiConsole.WriteLine("");
+	}
+
+	private static string RenderToolSignature(ToolResult toolResult)
+	{
+		var builder = new StringBuilder(toolResult.Tool.Function?.Name ?? "Unknown");
+		builder.Append('(');
+
+		var separator = "";
+
+		if (toolResult.ToolCall?.Function?.Arguments is not null)
+		{
+			foreach (var argument in toolResult.ToolCall.Function.Arguments)
+			{
+				builder.Append($"[gray]{separator}{argument.Key}:[/] {argument.Value}");
+				separator = ", ";
+			}
+		}
+
+		builder.Append(")");
+		return builder.ToString();
 	}
 
 	private static void ListTools(IEnumerable<object> tools)
@@ -181,7 +183,15 @@ public class ToolConsole(IOllamaApiClient ollama) : OllamaConsole(ollama)
 	[OllamaTool]
 	public async static Task<string> GetLatLonAsync(string location)
 	{
-		await Task.Delay(1000).ConfigureAwait(false);
+		await Task.Delay(200).ConfigureAwait(false);
 		return $"{new Random().Next(20, 50)}.4711, {new Random().Next(3, 15)}.0815";
 	}
+
+	/// <summary>
+	/// Gets the amount of people living in a given city
+	/// </summary>
+	/// <param name="city">The city to get the population info for</param>
+	/// <returns>The population of a given city</returns>
+	[OllamaTool]
+	public static int GetPopulation(string city) => new Random().Next(1000, 10000000);
 }
