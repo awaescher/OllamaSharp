@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -43,7 +44,7 @@ public class ToolSourceGenerator : IIncrementalGenerator
 			var className = methodSymbol.ContainingType.Name;
 			var toolClassName = methodSymbol.Name + "Tool";
 
-			var docCommentXml = methodSymbol.GetDocumentationCommentXml();
+			var docCommentXml = Regex.Replace(methodSymbol.GetDocumentationCommentXml(), @"\n\s*", "\n"); // replace whitespace indentation of the summary
 			var (methodSummary, paramComments) = ExtractDocComments(docCommentXml);
 
 			var (propertiesCode, requiredParams) = GeneratePropertiesCode(methodSymbol.Parameters, paramComments);
@@ -91,9 +92,7 @@ public class ToolSourceGenerator : IIncrementalGenerator
 			var sStart = xmlDoc!.IndexOf("<summary>", StringComparison.OrdinalIgnoreCase);
 			var sEnd = xmlDoc.IndexOf("</summary>", StringComparison.OrdinalIgnoreCase);
 			if (sStart != -1 && sEnd != -1)
-			{
-				summary = xmlDoc.Substring(sStart + 9, sEnd - (sStart + 9)).Trim();
-			}
+				summary = xmlDoc.Substring(sStart + 9, sEnd - (sStart + 9)).Replace("\n", " ").Trim();
 
 			var paramTag = "<param name=\"";
 			var idx = 0;

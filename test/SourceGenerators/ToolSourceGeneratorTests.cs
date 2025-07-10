@@ -62,6 +62,32 @@ public class Test
 		}
 
 		[Test]
+		public void Allows_Line_Breaks_In_Summary()
+		{
+			var code = """
+namespace TestNamespace;
+public class Test
+{
+	/// <summary>
+	/// Gets the current weather
+	/// for a given
+	/// 
+	/// location.
+	/// </summary>
+	/// <param name="location">The location or city to get the weather for</param>
+	/// <param name="unit">The unit to measure the temperature in</param>
+	/// <returns>The weather for the given location</returns>
+	[OllamaTool]
+	public static string GetWeather(string location) => $"It's cold at only 6° C in {location}.";
+}
+""";
+
+			var result = RunGenerator(code);
+
+			result.GeneratedTool.Function.Description.ShouldBe("Gets the current weather for a given location.");
+		}
+
+		[Test]
 		public void Supports_Enums()
 		{
 			var code = """
