@@ -174,7 +174,7 @@ public class Test
 		}
 
 		[Test]
-		public void Requires_Namespace()
+		public void Allows_Default_Namespace()
 		{
 			var code = """
 public class Test
@@ -184,10 +184,8 @@ public class Test
 }
 """;
 
-			var result = RunGenerator(code, allowErrors: true);
-
-			var namespaceErrors = result.Diagnostics.Where(d => d.ToString().Contains("A namespace is required!"));
-			namespaceErrors.Count().ShouldBe(1);
+			var result = RunGenerator(code);
+			result.GeneratedTool.ShouldNotBeNull();
 		}
 
 		[Test]
