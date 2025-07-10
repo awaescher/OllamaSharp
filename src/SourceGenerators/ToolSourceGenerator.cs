@@ -250,9 +250,19 @@ public class ToolSourceGenerator : IIncrementalGenerator
 		var paramBlock = string.Join("\r\n", paramLines);
 		var joinedParams = string.Join(", ", usageParams);
 
-		var asyncSignature = isAsync
-			? $"        public async Task<object?> InvokeMethodAsync(IDictionary<string, object?>? args)"
-			: $"        public object? InvokeMethod(IDictionary<string, object?>? args)";
+		const string SYNC_SIGNATURE = @"        /// <summary>
+        /// Invokes the tool with given arguments synchronously
+        /// </summary>
+        /// <param name=""args"">The arguments to invoke the tool with</param>
+        /// <returns>The result of the invoked tool</returns>
+        public object? InvokeMethod(IDictionary<string, object?>? args)";
+
+		const string ASYNC_SIGNATURE = @"        /// <summary>
+        /// Invokes the tool with given arguments asynchronously
+        /// </summary>
+        /// <param name=""args"">The arguments to invoke the tool with</param>
+        /// <returns>The result of the invoked tool</returns>
+        public async Task<object?> InvokeMethodAsync(IDictionary<string, object?>? args)";
 
 		var callPart = isAsync
 			? $@"var result = await {className}.{methodName}({joinedParams});
@@ -264,7 +274,7 @@ public class ToolSourceGenerator : IIncrementalGenerator
             return result;";
 
 		return
-$@"{asyncSignature}
+$@"{(isAsync ? ASYNC_SIGNATURE : SYNC_SIGNATURE)}
         {{
             if (args == null) args = new Dictionary<string, object?>();
 {paramBlock}
