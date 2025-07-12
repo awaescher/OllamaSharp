@@ -118,6 +118,7 @@ internal static class AbstractionMapper
 		TryAddOllamaOption<bool?>(options, OllamaOption.UseMlock, v => request.Options.UseMlock = (bool?)v);
 		TryAddOllamaOption<bool?>(options, OllamaOption.UseMmap, v => request.Options.UseMmap = (bool?)v);
 		TryAddOllamaOption<bool?>(options, OllamaOption.VocabOnly, v => request.Options.VocabOnly = (bool?)v);
+		TryAddOllamaOption<bool?>(options, OllamaOption.Think, v => request.Think = (bool?)v);
 		TryAddOption<string?>(options, Application.KeepAlive, v => request.KeepAlive = (string?)v);
 
 		return request;
