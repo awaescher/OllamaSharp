@@ -638,7 +638,8 @@ public class AbstractionMapperTests
 				.AddOllamaOption(OllamaOption.TypicalP, 1.01f)
 				.AddOllamaOption(OllamaOption.UseMlock, false)
 				.AddOllamaOption(OllamaOption.UseMmap, true)
-				.AddOllamaOption(OllamaOption.VocabOnly, false);
+				.AddOllamaOption(OllamaOption.VocabOnly, false)
+				.AddOllamaOption(OllamaOption.Think, false);
 
 			var ollamaRequest = AbstractionMapper.ToOllamaSharpChatRequest([], options, stream: true, JsonSerializerOptions.Default);
 
@@ -673,6 +674,7 @@ public class AbstractionMapperTests
 			ollamaRequest.Options.UseMlock.ShouldBe(false);
 			ollamaRequest.Options.UseMmap.ShouldBe(true);
 			ollamaRequest.Options.VocabOnly.ShouldBe(false);
+			ollamaRequest.Think.ShouldBe(false);
 		}
 	}
 
