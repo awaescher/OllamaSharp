@@ -222,4 +222,11 @@ public class OllamaOption(string name)
 	/// (Default: False)
 	/// </summary>
 	public static OllamaOption VocabOnly { get; } = new(Application.VocabOnly);
+
+	/// <summary>
+	/// Gets or sets a value to enable or disable thinking. Use reasoning models like OpenThinker, Qwen3,
+	/// DeepSeek-R1, Phi4-Reasoning that support thinking when activating this option.
+	/// (Default: Null)
+	/// </summary>
+	public static OllamaOption Think { get; } = new(Application.Think);
 }

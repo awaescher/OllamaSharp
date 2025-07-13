@@ -108,4 +108,5 @@ internal static class Application
 	public const string From = "from";
 	public const string Error = "error";
 	public const string Capabilities = "capabilities";
+	public const string Think = "think";
 }
