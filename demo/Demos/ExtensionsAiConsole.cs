@@ -44,6 +44,7 @@ public class ExtensionsAiConsole(IOllamaApiClient ollama) : OllamaConsole(ollama
 				AnsiConsole.MarkupLine("If any tool is used, the intended usage information is printed.");
 				WriteChatInstructionHint();
 
+				AnsiConsole.MarkupLine($"[{HintTextColor}]Enter [{AccentTextColor}]{LIST_TOOLS_COMMAND}[/] to list all available tools.[/]");
 				string message;
 
 				do
@@ -68,6 +69,13 @@ public class ExtensionsAiConsole(IOllamaApiClient ollama) : OllamaConsole(ollama
 					if (message.Equals(START_NEW_COMMAND, StringComparison.OrdinalIgnoreCase))
 					{
 						keepChatting = true;
+						break;
+					}
+
+					if (message.Equals(LIST_TOOLS_COMMAND, StringComparison.OrdinalIgnoreCase))
+					{
+						keepChatting = true;
+						ListTools(chatOptions.Tools);
 						break;
 					}
 
@@ -100,6 +108,16 @@ public class ExtensionsAiConsole(IOllamaApiClient ollama) : OllamaConsole(ollama
 					AnsiConsole.WriteLine();
 				} while (!string.IsNullOrEmpty(message));
 			} while (keepChatting);
+		}
+	}
+
+	private static void ListTools(IEnumerable<AITool> tools)
+	{
+		AnsiConsole.MarkupLine("\n[purple]Available tools:[/]");
+
+		foreach (var tool in tools)
+		{
+			AnsiConsole.MarkupLineInterpolated($"{tool.Name ?? "Unknown"}\t\t[purple]{tool.Description}[/]");
 		}
 	}
 
