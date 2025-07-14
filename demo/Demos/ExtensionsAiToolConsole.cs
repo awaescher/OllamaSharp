@@ -8,7 +8,7 @@ using Spectre.Console;
 
 namespace OllamaApiConsole.Demos;
 
-public class ExtensionsAiConsole(IOllamaApiClient ollama) : OllamaConsole(ollama)
+public class ExtensionsAiToolConsole(IOllamaApiClient ollama) : OllamaConsole(ollama)
 {
 	public override async Task Run()
 	{
