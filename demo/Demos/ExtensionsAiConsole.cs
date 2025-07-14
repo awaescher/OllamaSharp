@@ -28,7 +28,7 @@ public class ExtensionsAiConsole(IOllamaApiClient ollama) : OllamaConsole(ollama
 
 			var chatClient = serviceProvider.GetRequiredService<IChatClient>();
 			var chatOptions = new ChatOptions();
-			chatOptions.AddOllamaOption(OllamaOption.Think, Think ?? true);
+			chatOptions.AddOllamaOption(OllamaOption.Think, Think);
 			chatOptions.Tools = [AIFunctionFactory.Create(GetWeather), AIFunctionFactory.Create(GetLatLonAsync), AIFunctionFactory.Create(GetPopulation)];
 
 			var messages = new List<ChatMessage>();
@@ -62,7 +62,7 @@ public class ExtensionsAiConsole(IOllamaApiClient ollama) : OllamaConsole(ollama
 					{
 						ToggleThink();
 						keepChatting = true;
-						chatOptions.AddOllamaOption(OllamaOption.Think, Think ?? true);
+						chatOptions.AddOllamaOption(OllamaOption.Think, Think);
 						continue;
 					}
 
