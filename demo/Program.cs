@@ -55,7 +55,7 @@ do
 				new SelectionPrompt<string>()
 					.PageSize(10)
 					.Title("What demo do you want to run?")
-					.AddChoices("Chat", "Image chat", "Tool chat", "Tool chat (Extensions.AI)", "Model manager", "Exit"));
+					.AddChoices("Chat", "Image chat", "Tool chat", "Tool chat (Microsoft.Extensions.AI)", "Model manager", "Exit"));
 
 	AnsiConsole.Clear();
 
@@ -75,8 +75,8 @@ do
 				await new ToolConsole(ollama!).Run();
 				break;
 
-			case "Tool chat (Extensions.AI)":
-				await new ExtensionsAiConsole(ollama!).Run();
+			case "Tool chat (Microsoft.Extensions.AI)":
+				await new ExtensionsAiToolConsole(ollama!).Run();
 				break;
 
 			case "Model manager":
