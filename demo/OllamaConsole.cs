@@ -78,7 +78,7 @@ public abstract class OllamaConsole(IOllamaApiClient ollama)
 	}
 
 	internal void ToggleThink()
-	{ 
+	{
 		// null -> false -> true -> null -> ...
 		Think = Think == null ? false : (Think == false ? true : (Think == true ? null : false));
 		AnsiConsole.MarkupLine($"[{HintTextColor}]Think mode is [{AccentTextColor}]{Think?.ToString().ToLower() ?? "(null)"}[/].[/]");

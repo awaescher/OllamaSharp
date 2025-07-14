@@ -755,6 +755,33 @@ public class AbstractionMapperTests
 		}
 
 		[Test]
+		public void Maps_Thinking_Tokens()
+		{
+			var ollamaCreated = new DateTimeOffset(2023, 08, 04, 08, 52, 19, 385, 406, TimeSpan.FromHours(-7));
+
+			var stream = new ChatResponseStream
+			{
+				CreatedAt = ollamaCreated,
+				Done = true,
+				Message = new Message { Role = OllamaSharp.Models.Chat.ChatRole.Assistant, Content = "", Thinking = "Beer." },
+				Model = "llama3.1:8b"
+			};
+
+			var streamingChatCompletion = AbstractionMapper.ToChatResponseUpdate(stream, "12345");
+
+			streamingChatCompletion.AdditionalProperties.ShouldBeNull();
+			streamingChatCompletion.AuthorName.ShouldBeNull();
+			streamingChatCompletion.Contents.Count.ShouldBe(1);
+			((TextReasoningContent)streamingChatCompletion.Contents[0]).Text.ShouldBe("Beer.");
+			streamingChatCompletion.CreatedAt.ShouldBe(new DateTimeOffset(2023, 08, 04, 08, 52, 19, 385, 406, TimeSpan.FromHours(-7)));
+			streamingChatCompletion.FinishReason.ShouldBe(ChatFinishReason.Stop);
+			streamingChatCompletion.RawRepresentation.ShouldBe(stream);
+			streamingChatCompletion.ResponseId.ShouldBe("12345");
+			streamingChatCompletion.Role.ShouldBe(Microsoft.Extensions.AI.ChatRole.Assistant);
+			streamingChatCompletion.Text.ShouldBeEmpty();
+		}
+
+		[Test]
 		public void Maps_ToolCalls()
 		{
 			var ollamaCreated = new DateTimeOffset(2023, 08, 04, 08, 52, 19, 385, 406, TimeSpan.FromHours(-7));

@@ -16,7 +16,7 @@ public static class ChatOptionsExtensions
 	/// <param name="option">The Ollama option to set, like OllamaOption.NumCtx for the option 'num_ctx'</param>
 	/// <param name="value">The value for the option</param>
 	/// <returns>The <see cref="ChatOptions"/> with the Ollama option set</returns>
-	public static ChatOptions AddOllamaOption(this ChatOptions chatOptions, OllamaOption option, object value)
+	public static ChatOptions AddOllamaOption(this ChatOptions chatOptions, OllamaOption option, object? value)
 	{
 		chatOptions.AdditionalProperties ??= [];
 		chatOptions.AdditionalProperties[option.Name] = value;
