@@ -97,7 +97,13 @@ public class ExtensionsAiConsole(IOllamaApiClient ollama) : OllamaConsole(ollama
 								continue;
 							}
 
-							AnsiConsole.MarkupInterpolated($"[{AiTextColor}]{answerToken}[/]");
+							// model thoughts
+							foreach (var toughts in answerToken.Contents.OfType<TextReasoningContent>())
+								AnsiConsole.MarkupInterpolated($"[{AiThinkTextColor}]{toughts.Text}[/]");
+
+							// model response
+							if (!string.IsNullOrEmpty(answerToken.Text))
+								AnsiConsole.MarkupInterpolated($"[{AiTextColor}]{answerToken}[/]");
 						}
 					}
 					catch (Exception ex)

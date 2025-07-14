@@ -376,6 +376,9 @@ internal static class AbstractionMapper
 			}
 		}
 
+		if (message.Thinking?.Length > 0)
+			contents.Insert(0, new TextReasoningContent(message.Thinking));
+
 		// Ollama frequently sends back empty content with tool calls. Rather than always adding an empty
 		// content, we only add the content if either it's not empty or there weren't any tool calls.
 		if (message.Content?.Length > 0 || contents.Count == 0)
