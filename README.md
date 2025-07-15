@@ -1,10 +1,12 @@
 <a href="https://www.nuget.org/packages/OllamaSharp"><img src="https://img.shields.io/nuget/v/OllamaSharp" alt="nuget version"></a>
 <a href="https://www.nuget.org/packages/OllamaSharp"><img src="https://img.shields.io/nuget/dt/OllamaSharp.svg" alt="nuget downloads"></a>
 <a href="https://awaescher.github.io/OllamaSharp"><img src="https://img.shields.io/badge/api_docs-8A2BE2" alt="Api docs"></a>
-  
+
 # OllamaSharp 🦙
 
 OllamaSharp provides .NET bindings for the [Ollama API](https://github.com/jmorganca/ollama/blob/main/docs/api.md), simplifying interactions with Ollama both locally and remotely.
+
+**🏆 [Recommended by Microsoft](https://www.nuget.org/packages/Microsoft.Extensions.AI.Ollama/)**
 
 ## Features
 
@@ -93,8 +95,9 @@ private static IChatClient CreateChatClient(Arguments arguments)
 }
 ```
 
-> [!NOTE]
-> `IOllamaApiClient` provides many Ollama specific methods that `IChatClient` and `IEmbeddingGenerator` miss. Because these are abstractions, `IChatClient` and `IEmbeddingGenerator` will never implement the full Ollama API specification. However, `OllamaApiClient` implements three interfaces: the native `IOllamaApiClient` and Microsoft `IChatClient` and `IEmbeddingGenerator<string, Embedding<float>>` which allows you to cast it to any of these two interfaces as you need them at any time.
+The `OllamaApiClient` implements both interfaces from Microsoft.Extensions.AI, you just need to cast it accordingly:
+ - `IChatClient` for model inference
+ - `IEmbeddingGenerator<string, Embedding<float>>` for embedding generation
 
 ## Credits
 
