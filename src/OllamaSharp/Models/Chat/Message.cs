@@ -79,6 +79,13 @@ public class Message
 	public string? Thinking { get; set; }
 
 	/// <summary>
+	/// Gets or sets the name of the tool that was executed to inform the model of the result.
+	/// </summary>
+	[JsonPropertyName("tool_name")]
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public string? ToolName { get; set; }
+
+	/// <summary>
 	/// Gets or sets a list of tools the model wants to use (for models that support function calls, such as llama3.1).
 	/// </summary>
 	[JsonPropertyName("tool_calls")]
