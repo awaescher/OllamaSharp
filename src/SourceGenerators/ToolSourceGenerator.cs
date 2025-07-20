@@ -37,7 +37,7 @@ public class ToolSourceGenerator : IIncrementalGenerator
 		foreach (var methodSymbol in methods)
 		{
 			var containingNamespace = methodSymbol.ContainingType.ContainingNamespace?.ToString() ?? "";
-			
+
 			// handle the default namespace which is "<global namespace>"
 			if (containingNamespace.StartsWith("<global"))
 				containingNamespace = string.Empty;
@@ -218,6 +218,21 @@ public class ToolSourceGenerator : IIncrementalGenerator
 				else
 				{
 					paramLines.Add($@"            {pType} {safeName} = ({pType})Enum.Parse(typeof({pType}), args[""{pName}""]?.ToString() ?? """", ignoreCase: true);");
+				}
+			}
+			else if (pType.StartsWith("bool", StringComparison.OrdinalIgnoreCase))
+			{
+				if (!p.IsOptional)
+				{
+					paramLines.Add($@"            {pType} {safeName} = ({pType})args[""{pName}""];");
+				}
+				else if (p.ExplicitDefaultValue is bool defaultBoolValue)
+				{
+					paramLines.Add($@"            {pType} {safeName} = args.ContainsKey(""{pName}"") ? ({pType})args[""{pName}""] : {defaultBoolValue.ToString().ToLowerInvariant()};");
+				}
+				else
+				{
+					paramLines.Add($@"            {pType} {safeName} = args.ContainsKey(""{pName}"") ? ({pType})args[""{pName}""] : null;");
 				}
 			}
 			else if (IsNumericType(tName))
