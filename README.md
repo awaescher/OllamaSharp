@@ -99,10 +99,14 @@ The `OllamaApiClient` implements both interfaces from Microsoft.Extensions.AI, y
  - `IChatClient` for model inference
  - `IEmbeddingGenerator<string, Embedding<float>>` for embedding generation
 
-## Credits
+## Thanks
+
+**I would like to thank all the contributors who take the time to improve OllamaSharp. First and foremost [mili-tan](https://github.com/mili-tan), who always keeps OllamaSharp in sync with the Ollama API.**
 
 The icon and name were reused from the amazing [Ollama project](https://github.com/jmorganca/ollama).
 
-**I would like to thank all the contributors who take the time to improve OllamaSharp. First and foremost [mili-tan](https://github.com/mili-tan), who always keeps OllamaSharp in sync with the Ollama API. ❤**
+Special thanks to JetBrains for supporting this project.
+
+[![JetBrains logo.](https://resources.jetbrains.com/storage/products/company/brand/logos/jetbrains.svg)](https://jb.gg/OpenSource)
 
 
