@@ -48,39 +48,46 @@ internal static class AbstractionMapper
 	/// Converts Microsoft.Extensions.AI <see cref="ChatMessage"/> objects and
 	/// an option <see cref="ChatOptions"/> instance to an OllamaSharp <see cref="ChatRequest"/>.
 	/// </summary>
+	/// <param name="chatClient">The IChatClient being used to make the request.</param>
 	/// <param name="messages">A list of chat messages.</param>
 	/// <param name="options">Optional chat options to configure the request.</param>
 	/// <param name="stream">Indicates if the request should be streamed.</param>
 	/// <param name="serializerOptions">Serializer options</param>
 	/// <returns>A <see cref="ChatRequest"/> object containing the converted data.</returns>
-	public static ChatRequest ToOllamaSharpChatRequest(IEnumerable<ChatMessage> messages, ChatOptions? options, bool stream, JsonSerializerOptions serializerOptions)
+	public static ChatRequest ToOllamaSharpChatRequest(IChatClient? chatClient, IEnumerable<ChatMessage> messages, ChatOptions? options, bool stream, JsonSerializerOptions serializerOptions)
 	{
 		object? format = null;
 
 		if (options?.ResponseFormat is ChatResponseFormatJson jsonFormat)
 			format = jsonFormat.Schema.HasValue ? jsonFormat.Schema.Value : Application.Json;
 
-		var request = new ChatRequest
-		{
-			Format = format,
-			KeepAlive = null,
-			Messages = ToOllamaSharpMessages(messages, serializerOptions),
-			Model = options?.ModelId ?? string.Empty, // will be set OllamaApiClient.SelectedModel if not set
-			Options = new RequestOptions
-			{
-				FrequencyPenalty = options?.FrequencyPenalty,
-				PresencePenalty = options?.PresencePenalty,
-				Seed = (int?)options?.Seed,
-				Stop = options?.StopSequences?.ToArray(),
-				Temperature = options?.Temperature,
-				TopP = options?.TopP,
-				TopK = options?.TopK,
-				NumPredict = options?.MaxOutputTokens
-			},
-			Stream = stream,
-			Template = null,
-			Tools = ToOllamaSharpTools(options?.Tools)
-		};
+		var mappedTools = ToOllamaSharpTools(options?.Tools);
+		var mappedMessages = ToOllamaSharpMessages(messages, options, serializerOptions);
+
+		ChatRequest request = chatClient is not null && options?.RawRepresentationFactory?.Invoke(chatClient) is ChatRequest cr ? cr : new();
+		request.Format ??= format;
+		request.Stream = stream;
+		request.Model ??= options?.ModelId ?? string.Empty; // will be set OllamaApiClient.SelectedModel if not set
+
+		request.Options ??= new RequestOptions();
+		request.Options.FrequencyPenalty ??= options?.FrequencyPenalty;
+		request.Options.PresencePenalty ??= options?.PresencePenalty;
+		request.Options.Seed ??= (int?)options?.Seed;
+		request.Options.Stop ??= options?.StopSequences?.ToArray();
+		request.Options.Temperature ??= options?.Temperature;
+		request.Options.TopP ??= options?.TopP;
+		request.Options.TopK ??= options?.TopK;
+		request.Options.NumPredict = options?.MaxOutputTokens;
+
+		request.Messages =
+			request.Messages is null ? mappedMessages :
+			mappedMessages is null ? request.Messages :
+			[.. request.Messages, .. mappedMessages];
+
+		request.Tools =
+			request.Tools is null ? mappedTools :
+			mappedTools is null ? request.Tools :
+			[.. request.Tools, .. mappedTools];
 
 		var hasAdditionalProperties = options?.AdditionalProperties?.Any() ?? false;
 		if (!hasAdditionalProperties)
@@ -211,10 +218,20 @@ internal static class AbstractionMapper
 	/// Converts a list of Microsoft.Extensions.AI.<see cref="ChatMessage"/> to a list of Ollama <see cref="Message"/>.
 	/// </summary>
 	/// <param name="messages">The chat messages to convert.</param>
+	/// <param name="options">The options used with the request.</param>
 	/// <param name="serializerOptions">Serializer options</param>
 	/// <returns>An enumeration of <see cref="Message"/> objects containing the converted data.</returns>
-	private static IEnumerable<Message> ToOllamaSharpMessages(IEnumerable<ChatMessage> messages, JsonSerializerOptions serializerOptions)
+	private static IEnumerable<Message> ToOllamaSharpMessages(IEnumerable<ChatMessage> messages, ChatOptions? options, JsonSerializerOptions serializerOptions)
 	{
+		if (options?.Instructions is string instructions && !string.IsNullOrWhiteSpace(instructions))
+		{
+			yield return new Message
+			{
+				Content = instructions,
+				Role = Application.System,
+			};
+		}
+
 		foreach (var cm in messages)
 		{
 			var images = cm.Contents.OfType<DataContent>().Where(dc => dc.HasTopLevelMediaType("image")).Select(ToOllamaImage).ToArray();
