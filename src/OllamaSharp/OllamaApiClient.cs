@@ -411,7 +411,7 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 	/// <inheritdoc/>
 	async Task<ChatResponse> IChatClient.GetResponseAsync(IEnumerable<ChatMessage> messages, ChatOptions? options, CancellationToken cancellationToken)
 	{
-		var request = AbstractionMapper.ToOllamaSharpChatRequest(messages, options, stream: false, OutgoingJsonSerializerOptions);
+		var request = AbstractionMapper.ToOllamaSharpChatRequest(this, messages, options, stream: false, OutgoingJsonSerializerOptions);
 		var response = await ChatAsync(request, cancellationToken).StreamToEndAsync().ConfigureAwait(false);
 		return AbstractionMapper.ToChatResponse(response, response?.Model ?? request.Model ?? SelectedModel) ?? new ChatResponse([]);
 	}
@@ -419,7 +419,7 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 	/// <inheritdoc/>
 	async IAsyncEnumerable<ChatResponseUpdate> IChatClient.GetStreamingResponseAsync(IEnumerable<ChatMessage> messages, ChatOptions? options, [EnumeratorCancellation] CancellationToken cancellationToken)
 	{
-		var request = AbstractionMapper.ToOllamaSharpChatRequest(messages, options, stream: true, OutgoingJsonSerializerOptions);
+		var request = AbstractionMapper.ToOllamaSharpChatRequest(this, messages, options, stream: true, OutgoingJsonSerializerOptions);
 
 		string responseId = Guid.NewGuid().ToString("N");
 		await foreach (var response in ChatAsync(request, cancellationToken).ConfigureAwait(false))

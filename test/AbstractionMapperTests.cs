@@ -28,7 +28,7 @@ public class AbstractionMapperTests
 
 			var options = new ChatOptions { Temperature = 0.5f, /* other properties are left out */ };
 
-			var request = AbstractionMapper.ToOllamaSharpChatRequest(messages, options, stream: true, JsonSerializerOptions.Default);
+			var request = AbstractionMapper.ToOllamaSharpChatRequest(null, messages, options, stream: true, JsonSerializerOptions.Default);
 
 			request.Options.F16kv.ShouldBeNull();
 			request.Options.FrequencyPenalty.ShouldBeNull();
@@ -91,7 +91,7 @@ public class AbstractionMapperTests
 				},
 			};
 
-			var chatRequest = AbstractionMapper.ToOllamaSharpChatRequest(chatMessages, null, stream: true, JsonSerializerOptions.Default);
+			var chatRequest = AbstractionMapper.ToOllamaSharpChatRequest(null, chatMessages, null, stream: true, JsonSerializerOptions.Default);
 
 			chatRequest.Messages.Count().ShouldBe(3);
 
@@ -144,7 +144,7 @@ public class AbstractionMapperTests
 				},
 			};
 
-			var chatRequest = AbstractionMapper.ToOllamaSharpChatRequest(chatMessages, null, stream: true, JsonSerializerOptions.Default);
+			var chatRequest = AbstractionMapper.ToOllamaSharpChatRequest(null, chatMessages, null, stream: true, JsonSerializerOptions.Default);
 
 			chatRequest.Messages.Count().ShouldBe(2);
 
@@ -176,7 +176,7 @@ public class AbstractionMapperTests
 				}
 			};
 
-			var request = AbstractionMapper.ToOllamaSharpChatRequest(chatMessages, null, stream: true, JsonSerializerOptions.Default);
+			var request = AbstractionMapper.ToOllamaSharpChatRequest(null, chatMessages, null, stream: true, JsonSerializerOptions.Default);
 			request.Messages.Single().Images.Single().ShouldBe("QUJD");
 		}
 
@@ -203,7 +203,7 @@ public class AbstractionMapperTests
 
 			Action act = () =>
 			{
-				var request = AbstractionMapper.ToOllamaSharpChatRequest(chatMessages, null, stream: true, JsonSerializerOptions.Default);
+				var request = AbstractionMapper.ToOllamaSharpChatRequest(null, chatMessages, null, stream: true, JsonSerializerOptions.Default);
 				request.Messages.ShouldNotBeEmpty(); // access .Messages to invoke the evaluation of IEnumerable<Message>
 			};
 
@@ -231,7 +231,7 @@ public class AbstractionMapperTests
 					"get_weather", "Gets the current weather for a current location")],
 			};
 
-			var chatRequest = AbstractionMapper.ToOllamaSharpChatRequest(chatMessages, options, stream: true, JsonSerializerOptions.Default);
+			var chatRequest = AbstractionMapper.ToOllamaSharpChatRequest(null, chatMessages, options, stream: true, JsonSerializerOptions.Default);
 
 			var tool = (Tool)chatRequest.Tools.Single();
 			tool.Function.Description.ShouldBe("Gets the current weather for a current location");
@@ -257,7 +257,7 @@ public class AbstractionMapperTests
 			};
 			options.AdditionalProperties["keep_alive"] = "60m";
 
-			var request = AbstractionMapper.ToOllamaSharpChatRequest([], options, false, JsonSerializerOptions.Default);
+			var request = AbstractionMapper.ToOllamaSharpChatRequest(null, [], options, false, JsonSerializerOptions.Default);
 
 			request.KeepAlive.ShouldBe("60m");
 		}
@@ -315,7 +315,7 @@ public class AbstractionMapperTests
 			};
 
 			// Act
-			var chatRequest = AbstractionMapper.ToOllamaSharpChatRequest(chatMessages, options, stream: true, JsonSerializerOptions.Default);
+			var chatRequest = AbstractionMapper.ToOllamaSharpChatRequest(null, chatMessages, options, stream: true, JsonSerializerOptions.Default);
 
 			// Assert
 			chatRequest.Options.ShouldNotBeNull();
@@ -379,7 +379,7 @@ public class AbstractionMapperTests
 				AdditionalProperties = new AdditionalPropertiesDictionary() { ["stop"] = enumerable }
 			};
 
-			var chatRequest = AbstractionMapper.ToOllamaSharpChatRequest(chatMessages, options, stream: true, JsonSerializerOptions.Default);
+			var chatRequest = AbstractionMapper.ToOllamaSharpChatRequest(null, chatMessages, options, stream: true, JsonSerializerOptions.Default);
 
 			var stopSequences = chatRequest.Options.Stop;
 			var typedEnumerable = (IEnumerable<string>?)enumerable;
@@ -419,7 +419,7 @@ public class AbstractionMapperTests
 				}
 			};
 
-			var chatRequest = AbstractionMapper.ToOllamaSharpChatRequest(chatMessages, new(), stream: true, JsonSerializerOptions.Default);
+			var chatRequest = AbstractionMapper.ToOllamaSharpChatRequest(null, chatMessages, new(), stream: true, JsonSerializerOptions.Default);
 
 			var tool = chatRequest.Messages.Single();
 			tool.Content.ShouldContain("The weather in Honolulu is 25°C.");
@@ -451,7 +451,7 @@ public class AbstractionMapperTests
 				}
 			};
 
-			var chatRequest = AbstractionMapper.ToOllamaSharpChatRequest(aiChatMessages, new(), stream: true, JsonSerializerOptions.Default);
+			var chatRequest = AbstractionMapper.ToOllamaSharpChatRequest(null, aiChatMessages, new(), stream: true, JsonSerializerOptions.Default);
 			var chatMessages = chatRequest.Messages?.ToList();
 
 			chatMessages.Count.ShouldBe(3);
@@ -493,7 +493,7 @@ public class AbstractionMapperTests
 				}
 			};
 
-			var chatRequest = AbstractionMapper.ToOllamaSharpChatRequest(aiChatMessages, new(), stream: true, JsonSerializerOptions.Default);
+			var chatRequest = AbstractionMapper.ToOllamaSharpChatRequest(null, aiChatMessages, new(), stream: true, JsonSerializerOptions.Default);
 			var chatMessages = chatRequest.Messages?.ToList();
 
 			chatMessages.Count.ShouldBe(2);
@@ -526,7 +526,7 @@ public class AbstractionMapperTests
 				TopP = 10.1f
 			};
 
-			var chatRequest = AbstractionMapper.ToOllamaSharpChatRequest(chatMessages, options, stream: true, JsonSerializerOptions.Default);
+			var chatRequest = AbstractionMapper.ToOllamaSharpChatRequest(null, chatMessages, options, stream: true, JsonSerializerOptions.Default);
 
 			chatRequest.Format.ShouldBe("json");
 			chatRequest.Model.ShouldBe("llama3.1:405b");
@@ -579,7 +579,7 @@ public class AbstractionMapperTests
 				ResponseFormat = ChatResponseFormat.Json
 			};
 
-			var chatRequest = AbstractionMapper.ToOllamaSharpChatRequest(chatMessages, options, stream: true, JsonSerializerOptions.Default);
+			var chatRequest = AbstractionMapper.ToOllamaSharpChatRequest(null, chatMessages, options, stream: true, JsonSerializerOptions.Default);
 			chatRequest.Format.ShouldBe("json");
 		}
 
@@ -594,7 +594,7 @@ public class AbstractionMapperTests
 				ResponseFormat = ChatResponseFormat.ForJsonSchema(schemaElement)
 			};
 
-			var chatRequest = AbstractionMapper.ToOllamaSharpChatRequest(chatMessages, options, stream: true, JsonSerializerOptions.Default);
+			var chatRequest = AbstractionMapper.ToOllamaSharpChatRequest(null, chatMessages, options, stream: true, JsonSerializerOptions.Default);
 			chatRequest.Format.ShouldBe(schemaElement);
 		}
 
@@ -641,7 +641,7 @@ public class AbstractionMapperTests
 				.AddOllamaOption(OllamaOption.VocabOnly, false)
 				.AddOllamaOption(OllamaOption.Think, false);
 
-			var ollamaRequest = AbstractionMapper.ToOllamaSharpChatRequest([], options, stream: true, JsonSerializerOptions.Default);
+			var ollamaRequest = AbstractionMapper.ToOllamaSharpChatRequest(null, [], options, stream: true, JsonSerializerOptions.Default);
 
 			ollamaRequest.Options.F16kv.ShouldBe(true);
 			ollamaRequest.Options.FrequencyPenalty.ShouldBe(0.11f);
@@ -675,6 +675,39 @@ public class AbstractionMapperTests
 			ollamaRequest.Options.UseMmap.ShouldBe(true);
 			ollamaRequest.Options.VocabOnly.ShouldBe(false);
 			ollamaRequest.Think.ShouldBe(false);
+		}
+
+		[Test]
+		public void Maps_UsesRawRepresentation()
+		{
+			ChatOptions options = new()
+			{
+				Temperature = 0.7f,
+				RawRepresentationFactory = _ => new ChatRequest()
+				{
+					Think = true,
+					Options = new() { VocabOnly = true },
+				},
+			};
+
+			var ollamaRequest = AbstractionMapper.ToOllamaSharpChatRequest(new MockChatClient(), [], options, stream: true, JsonSerializerOptions.Default);
+
+			options.Temperature.ShouldBe(0.7f);
+			ollamaRequest.Think.HasValue.ShouldBeTrue();
+			ollamaRequest.Think.Value.ShouldBeTrue();
+			ollamaRequest.Options.VocabOnly.HasValue.ShouldBeTrue();
+			ollamaRequest.Options.VocabOnly.Value.ShouldBeTrue();
+		}
+
+		private sealed class MockChatClient : IChatClient
+		{
+			public void Dispose() { }
+			public Task<ChatResponse> GetResponseAsync(IEnumerable<ChatMessage> messages, ChatOptions? options = null, CancellationToken cancellationToken = default) =>
+				throw new NotSupportedException();
+			public object? GetService(Type serviceType, object? serviceKey = null) =>
+				throw new NotSupportedException();
+			public IAsyncEnumerable<ChatResponseUpdate> GetStreamingResponseAsync(IEnumerable<ChatMessage> messages, ChatOptions? options = null, CancellationToken cancellationToken = default) =>
+				throw new NotSupportedException();
 		}
 	}
 
