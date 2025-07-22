@@ -120,6 +120,47 @@ public class Test
 		}
 
 		[Test]
+		public void Supports_Booleans()
+		{
+			var code = """
+namespace TestNamespace;
+public class Test
+{
+    /// <summary>
+    /// Tests boolean parameter handling.
+    /// </summary>
+    /// <param name="required">A required boolean parameter</param>
+    /// <param name="nullableRequired">A required nullable boolean</param>
+    /// <param name="optionalTrue">An optional boolean with true default</param>
+    /// <param name="nullableOptionalNull">An optional nullable boolean with null default</param>
+    /// <param name="nullableOptionalTrue">An optional nullable boolean with true default</param>
+    [OllamaTool]
+    public static string TestBooleans(
+        bool required, 
+        bool? nullableRequired,
+        bool optionalTrue = true, 
+        bool? nullableOptionalNull = null,
+        bool? nullableOptionalTrue = true) => "test";
+}
+""";
+
+			var result = RunGenerator(code);
+
+			result.GeneratedTool.Function.Parameters.Required.ShouldBe(["required", "nullableRequired"], ignoreOrder: true);
+			result.GeneratedTool.Function.Parameters.Properties["required"].Description.ShouldBe("A required boolean parameter");
+			result.GeneratedTool.Function.Parameters.Properties["optionalTrue"].Description.ShouldBe("An optional boolean with true default");
+			result.GeneratedTool.Function.Parameters.Properties["nullableRequired"].Description.ShouldBe("A required nullable boolean");
+			result.GeneratedTool.Function.Parameters.Properties["nullableOptionalNull"].Description.ShouldBe("An optional nullable boolean with null default");
+			result.GeneratedTool.Function.Parameters.Properties["nullableOptionalTrue"].Description.ShouldBe("An optional nullable boolean with true default");
+
+			result.GeneratedCode.ShouldContain("bool required = (bool)args[\"required\"];");
+			result.GeneratedCode.ShouldContain("bool? nullableRequired = (bool?)args[\"nullableRequired\"];");
+			result.GeneratedCode.ShouldContain("bool optionalTrue = args.ContainsKey(\"optionalTrue\") ? (bool)args[\"optionalTrue\"] : true;");
+			result.GeneratedCode.ShouldContain("bool? nullableOptionalNull = args.ContainsKey(\"nullableOptionalNull\") ? (bool?)args[\"nullableOptionalNull\"] : null;");
+			result.GeneratedCode.ShouldContain("bool? nullableOptionalTrue = args.ContainsKey(\"nullableOptionalTrue\") ? (bool?)args[\"nullableOptionalTrue\"] : true;");
+		}
+
+		[Test]
 		public void Supports_String_And_Number_Arguments()
 		{
 			var code = """
