@@ -39,7 +39,7 @@ public class RunningModel : Model
 	public DateTime ExpiresAt { get; set; }
 
 	/// <summary>
-	/// The available content length of the currently loaded model.
+	/// The context length of the loaded model.
 	/// </summary>
 	[JsonPropertyName(Application.ContextLength)]
 	public int ContextLength { get; set; }
