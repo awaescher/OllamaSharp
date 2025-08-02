@@ -37,4 +37,10 @@ public class RunningModel : Model
 	/// </summary>
 	[JsonPropertyName(Application.ExpiresAt)]
 	public DateTime ExpiresAt { get; set; }
+
+	/// <summary>
+	/// The context length of the loaded model.
+	/// </summary>
+	[JsonPropertyName(Application.ContextLength)]
+	public int ContextLength { get; set; }
 }
