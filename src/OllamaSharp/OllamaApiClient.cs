@@ -27,12 +27,12 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 	/// <summary>
 	/// Gets the serializer options for outgoing web requests like Post or Delete.
 	/// </summary>
-	public JsonSerializerOptions OutgoingJsonSerializerOptions { get; } = new() { Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping };
+	public JsonSerializerOptions OutgoingJsonSerializerOptions { get; } = new() { Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping, TypeInfoResolver = JsonSourceGenerationContext.Default };
 
 	/// <summary>
 	/// Gets the serializer options used for deserializing HTTP responses.
 	/// </summary>
-	public JsonSerializerOptions IncomingJsonSerializerOptions { get; } = new();
+	public JsonSerializerOptions IncomingJsonSerializerOptions { get; } = new() { TypeInfoResolver = JsonSourceGenerationContext.Default };
 
 	/// <summary>
 	/// Gets the current configuration of the API client.
