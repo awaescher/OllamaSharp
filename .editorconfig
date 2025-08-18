@@ -59,6 +59,10 @@ dotnet_diagnostic.IDE0005.severity = warning      # Using directive is unnecessa
 dotnet_diagnostic.IDE0055.severity = error        # formatting rules
 dotnet_diagnostic.IDE1006.severity = warning      # naming rules
 dotnet_diagnostic.IDE0150.severity = none 		  # Null check can be clarified
+dotnet_diagnostic.IDE0011.severity = none		  # Add braces to 'if' statement
+dotnet_diagnostic.IDE2000.severity = suggestion   # Avoid multiple blank lines
+dotnet_diagnostic.IDE2002.severity = suggestion   # Consecutive braces must not have blank line between them
+dotnet_diagnostic.IDE0055.severity = suggestion   # Fix formatting
 
 dotnet_diagnostic.BC42104.severity = error # BC42104: Variable is used before it has been assigned a value
 dotnet_diagnostic.BC42358.severity = error # because this call is not awaited, execution of the current method continues before the call is completed
