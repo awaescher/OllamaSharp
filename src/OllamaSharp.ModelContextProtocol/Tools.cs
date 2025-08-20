@@ -103,7 +103,7 @@ public static class Tools
 			{
 				stdioOptions.EnvironmentVariables = [];
 				foreach (var kvp in server.Environment)
-					stdioOptions.EnvironmentVariables[kvp.Key] = Environment.GetEnvironmentVariable(GetEnvironmentVariableName(kvp.Value)) ?? kvp.Value;
+					stdioOptions.EnvironmentVariables[kvp.Key] = GetEnvironmentVariableName(kvp);
 			}
 
 			if (server.Options?.TryGetValue("workingDirectory", out var workingDirectory) == true)
@@ -117,8 +117,19 @@ public static class Tools
 			Endpoint = new Uri(server.Command),
 			Name = server.Name
 		};
+
+		if (server.Environment != null)
+		{
+			sseOptions.AdditionalHeaders = [];
+			foreach (var kvp in server.Environment)
+				sseOptions.AdditionalHeaders[kvp.Key] = GetEnvironmentVariableName(kvp);
+		}
+
 		return new SseClientTransport(sseOptions, loggerFactory);
 	}
+
+	private static string GetEnvironmentVariableName(KeyValuePair<string, string> kvp)
+		=> Environment.GetEnvironmentVariable(GetEnvironmentVariableName(kvp.Value)) ?? kvp.Value;
 
 	private static string GetEnvironmentVariableName(string name)
 	{
