@@ -52,11 +52,12 @@ public class McpClientTool : OllamaSharp.Models.Chat.Tool, OllamaSharp.Tools.IAs
 		try
 		{
 			var toolresult = await _client.CallToolAsync(Function!.Name!, arguments);
+			var textContent = string.Join('\n', toolresult.Content.Select(c => c.Text));
 
 			if (toolresult.IsError)
-				return null;
+				return "Error: " + textContent;
 
-			return string.Join('\n', toolresult.Content.Select(c => c.Text));
+			return textContent;
 		}
 		catch (Exception ex)
 		{
