@@ -130,21 +130,13 @@ public class OllamaApiClientTests
 	public async Task ListRunningModels()
 	{
 		await PullIfNotExists(_model);
-		var backgroundTask = Task.Run(async () =>
-		{
-			var generate = _client
-				.GenerateAsync(new GenerateRequest { Model = _model, Prompt = "Write a long song." })
-				.ToListAsync();
 
-			await Task.Yield();
+		// Make sure the model is running.
+		_ = await _client.GenerateAsync(new GenerateRequest { Model = _model, Prompt = "Please say 'hello'." })
+						 .ToListAsync();
 
-			await generate;
-		});
+		var models = (await _client.ListRunningModelsAsync()).ToList();
 
-		var modelsTask = _client.ListRunningModelsAsync();
-		await Task.WhenAll(backgroundTask, modelsTask);
-
-		var models = modelsTask.Result.ToList();
 		models.ShouldNotBeEmpty();
 		models.ShouldContain(m => m.Name == _model);
 	}
