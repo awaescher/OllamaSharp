@@ -339,9 +339,14 @@ internal static class AbstractionMapper
 	/// <returns>A <see cref="ChatResponseUpdate"/> object containing the latest chat completion chunk.</returns>
 	public static ChatResponseUpdate ToChatResponseUpdate(ChatResponseStream? response, string responseId)
 	{
+		var contents = response?.Message is null ? [new TextContent(string.Empty)] : 
+			GetAIContentsFromMessage(response.Message);
+		
 		if (response is ChatDoneResponseStream done)
 		{
-			return new ChatResponseUpdate(ToAbstractionRole(done.Message.Role), [new UsageContent(ParseOllamaChatResponseUsage(done))])
+			contents.Add(new UsageContent(ParseOllamaChatResponseUsage(done)));
+			
+			return new ChatResponseUpdate(ToAbstractionRole(done.Message.Role), contents)
 			{
 				CreatedAt = done.CreatedAt,
 				FinishReason = done.DoneReason is null ? null : new ChatFinishReason(done.DoneReason),
@@ -350,9 +355,7 @@ internal static class AbstractionMapper
 				ModelId = done.Model
 			};
 		}
-
-		var contents = response?.Message is null ? [new TextContent(string.Empty)] : GetAIContentsFromMessage(response.Message);
-
+		
 		return new ChatResponseUpdate(ToAbstractionRole(response?.Message.Role), contents)
 		{
 			// no need to set "Contents" as we set the text
