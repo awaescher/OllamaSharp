@@ -469,7 +469,7 @@ public class Chat
 					// in case of multiple tool calls, add these to the message history except the last one.
 					// the last one will be used as message to send back to the AI model which causes the chat to go on.
 					Messages.AddRange(toolResultMessages.Take(toolResultMessages.Count - 1));
-					await foreach (var answer in SendAsAsync(ChatRole.Tool, toolResultMessages.Last()!.Content ?? "", cancellationToken).ConfigureAwait(false))
+					await foreach (var answer in SendAsAsync(ChatRole.Tool, toolResultMessages.Last()!.Content ?? "", tools, cancellationToken: cancellationToken).ConfigureAwait(false))
 						yield return answer;
 				}
 			}
