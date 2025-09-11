@@ -17,7 +17,7 @@ OllamaSharp provides .NET bindings for the [Ollama API](https://github.com/jmorg
 - **Progress reporting:** Real-time progress feedback on tasks like model pulling.
 - **Tools engine:** [Sophisticated tool support with source generators](https://awaescher.github.io/OllamaSharp/docs/tool-support.html).
 - **Multi modality:** Support for [vision models](https://ollama.com/blog/vision-models).
-- **Native AOT support:** Full compatibility with .NET Native AOT for improved startup performance.
+- **Native AOT support:** [Opt-in support for Native AOT](https://awaescher.github.io/OllamaSharp/docs/native-aot-support.html) for improved performance.
 
 ## Usage
 
