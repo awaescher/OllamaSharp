@@ -4,6 +4,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.Text.Json.Serialization;
 using Microsoft.Extensions.AI;
 using OllamaSharp.Constants;
 using OllamaSharp.MicrosoftAi;
@@ -27,12 +28,12 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 	/// <summary>
 	/// Gets the serializer options for outgoing web requests like Post or Delete.
 	/// </summary>
-	public JsonSerializerOptions OutgoingJsonSerializerOptions { get; } = new() { Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping, TypeInfoResolver = JsonSourceGenerationContext.Default };
+	public JsonSerializerOptions OutgoingJsonSerializerOptions { get; }
 
 	/// <summary>
 	/// Gets the serializer options used for deserializing HTTP responses.
 	/// </summary>
-	public JsonSerializerOptions IncomingJsonSerializerOptions { get; } = new() { TypeInfoResolver = JsonSourceGenerationContext.Default };
+	public JsonSerializerOptions IncomingJsonSerializerOptions { get; }
 
 	/// <summary>
 	/// Gets the current configuration of the API client.
@@ -79,7 +80,7 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 	/// </summary>
 	/// <param name="config">The configuration for the Ollama API client.</param>
 	public OllamaApiClient(Configuration config)
-		: this(new HttpClient() { BaseAddress = config.Uri }, config.Model)
+		: this(new HttpClient() { BaseAddress = config.Uri }, config.Model, config.JsonSerializerContext)
 	{
 		_disposeHttpClient = true;
 	}
@@ -89,16 +90,32 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 	/// </summary>
 	/// <param name="client">The HTTP client to access the Ollama API with.</param>
 	/// <param name="defaultModel">The default model that should be used with Ollama.</param>
+	/// <param name="jsonSerializerContext">The JSON serializer context for source generation (optional, for NativeAOT scenarios).</param>
 	/// <exception cref="ArgumentNullException"></exception>
-	public OllamaApiClient(HttpClient client, string defaultModel = "")
+	public OllamaApiClient(HttpClient client, string defaultModel = "", JsonSerializerContext? jsonSerializerContext = null)
 	{
 		_client = client ?? throw new ArgumentNullException(nameof(client));
 		Config = new Configuration
 		{
 			Uri = client.BaseAddress ?? throw new InvalidOperationException("HttpClient base address is not set!"),
-			Model = defaultModel
+			Model = defaultModel,
+			JsonSerializerContext = jsonSerializerContext
 		};
 		SelectedModel = defaultModel;
+
+		// Configure JSON serialization options
+		if (jsonSerializerContext is null)
+		{
+			// Use standard serialization without source generation for better compatibility
+			OutgoingJsonSerializerOptions = new JsonSerializerOptions { Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping };
+			IncomingJsonSerializerOptions = new JsonSerializerOptions();
+		}
+		else
+		{
+			// Use source generation for NativeAOT scenarios
+			OutgoingJsonSerializerOptions = new JsonSerializerOptions { Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping, TypeInfoResolver = jsonSerializerContext };
+			IncomingJsonSerializerOptions = new JsonSerializerOptions { TypeInfoResolver = jsonSerializerContext };
+		}
 	}
 
 	/// <inheritdoc />
@@ -255,8 +272,6 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 		return (await JsonSerializer.DeserializeAsync<TResponse>(responseStream, IncomingJsonSerializerOptions, cancellationToken))!;
 	}
 
-
-
 	private async Task PostAsync<TRequest>(string endpoint, TRequest ollamaRequest, CancellationToken cancellationToken) where TRequest : OllamaRequest
 	{
 		using var requestMessage = CreateRequestMessage(HttpMethod.Post, endpoint, ollamaRequest);
@@ -284,7 +299,6 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 		await foreach (var result in ProcessStreamedResponseAsync<TResponse>(response, cancellationToken).ConfigureAwait(false))
 			yield return result;
 	}
-
 
 	private HttpRequestMessage CreateRequestMessage(HttpMethod method, string endpoint) => new(method, endpoint);
 
@@ -476,6 +490,12 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 		/// Gets or sets the model that should be used.
 		/// </summary>
 		public string Model { get; set; } = null!;
+
+		/// <summary>
+		/// Gets or sets the JSON serializer context for source generation (optional, for NativeAOT scenarios).
+		/// When null, standard System.Text.Json serialization is used without source generation for better compatibility.
+		/// </summary>
+		public JsonSerializerContext? JsonSerializerContext { get; set; } = null;
 	}
 }
 
