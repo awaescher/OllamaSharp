@@ -40,14 +40,14 @@ ollama.SelectedModel = "llama3.1:8b";
 
 ### Native AOT Support
 
-For .NET Native AOT scenarios, create a custom JsonSerializerContext with your types:
+For .NET Native AOT scenarios, create a custom JsonSerializerContext with your types and pass it into the constructor.
 
 ```csharp
 [JsonSerializable(typeof(MyCustomType))]
 public partial class MyJsonContext : JsonSerializerContext { }
 
 // Use the static factory method for NativeAOT
-var ollama = OllamaApiClient.CreateForNativeAOT(uri, "llama3.1:8b", MyJsonContext.Default);
+var ollama = new OllamaApiClient(uri, "llama3.1:8b", MyJsonContext.Default);
 ```
 
 See the [Native AOT documentation](./docs/native-aot-support.md) for detailed guidance.

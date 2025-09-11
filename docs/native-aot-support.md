@@ -32,13 +32,7 @@ public partial class MyCustomJsonContext : JsonSerializerContext
 ### Using OllamaApiClient with Custom Context
 
 ```csharp
-// Option 1: Using the static factory method (recommended)
-var client = OllamaApiClient.CreateForNativeAOT(
-    "http://localhost:11434", 
-    "llama3.2", 
-    MyCustomJsonContext.Default);
-
-// Option 2: Using Configuration
+// pass your configuration context to the OllamaApiClient
 var config = new OllamaApiClient.Configuration
 {
     Uri = new Uri("http://localhost:11434"),
@@ -46,10 +40,6 @@ var config = new OllamaApiClient.Configuration
     JsonSerializerContext = MyCustomJsonContext.Default
 };
 var client = new OllamaApiClient(config);
-
-// Option 3: Using HttpClient constructor
-var httpClient = new HttpClient { BaseAddress = new Uri("http://localhost:11434") };
-var client = new OllamaApiClient(httpClient, "llama3.2", MyCustomJsonContext.Default);
 ```
 
 ## Important Notes
