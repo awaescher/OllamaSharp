@@ -27,12 +27,12 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 	/// <summary>
 	/// Gets the serializer options for outgoing web requests like Post or Delete.
 	/// </summary>
-	public JsonSerializerOptions OutgoingJsonSerializerOptions { get; } = new() { Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping, TypeInfoResolver = JsonSourceGenerationContext.Default };
+	public JsonSerializerOptions OutgoingJsonSerializerOptions { get; }
 
 	/// <summary>
 	/// Gets the serializer options used for deserializing HTTP responses.
 	/// </summary>
-	public JsonSerializerOptions IncomingJsonSerializerOptions { get; } = new() { TypeInfoResolver = JsonSourceGenerationContext.Default };
+	public JsonSerializerOptions IncomingJsonSerializerOptions { get; }
 
 	/// <summary>
 	/// Gets the current configuration of the API client.
@@ -79,7 +79,7 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 	/// </summary>
 	/// <param name="config">The configuration for the Ollama API client.</param>
 	public OllamaApiClient(Configuration config)
-		: this(new HttpClient() { BaseAddress = config.Uri }, config.Model)
+		: this(new HttpClient() { BaseAddress = config.Uri }, config.Model, config.JsonSerializerContext)
 	{
 		_disposeHttpClient = true;
 	}
@@ -89,16 +89,64 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 	/// </summary>
 	/// <param name="client">The HTTP client to access the Ollama API with.</param>
 	/// <param name="defaultModel">The default model that should be used with Ollama.</param>
+	/// <param name="jsonSerializerContext">The JSON serializer context for source generation (optional, for NativeAOT scenarios).</param>
 	/// <exception cref="ArgumentNullException"></exception>
-	public OllamaApiClient(HttpClient client, string defaultModel = "")
+	public OllamaApiClient(HttpClient client, string defaultModel = "", JsonSerializerContext? jsonSerializerContext = null)
 	{
 		_client = client ?? throw new ArgumentNullException(nameof(client));
 		Config = new Configuration
 		{
 			Uri = client.BaseAddress ?? throw new InvalidOperationException("HttpClient base address is not set!"),
-			Model = defaultModel
+			Model = defaultModel,
+			JsonSerializerContext = jsonSerializerContext
 		};
 		SelectedModel = defaultModel;
+
+		// Configure JSON serialization options
+		if (jsonSerializerContext != null)
+		{
+			// Use source generation for NativeAOT scenarios
+			OutgoingJsonSerializerOptions = new JsonSerializerOptions { Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping, TypeInfoResolver = jsonSerializerContext };
+			IncomingJsonSerializerOptions = new JsonSerializerOptions { TypeInfoResolver = jsonSerializerContext };
+		}
+		else
+		{
+			// Use standard serialization without source generation for better compatibility
+			OutgoingJsonSerializerOptions = new JsonSerializerOptions { Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping };
+			IncomingJsonSerializerOptions = new JsonSerializerOptions();
+		}
+	}
+
+	/// <summary>
+	/// Creates a new instance of the Ollama API client configured for NativeAOT with a custom JsonSerializerContext.
+	/// Use this method if you need to serialize custom types that are not included in the default JsonSourceGenerationContext.
+	/// </summary>
+	/// <param name="uri">The URI of the Ollama API endpoint.</param>
+	/// <param name="defaultModel">The default model that should be used with Ollama.</param>
+	/// <param name="jsonSerializerContext">The JSON serializer context containing all required types for serialization.</param>
+	/// <returns>A new OllamaApiClient instance configured for NativeAOT.</returns>
+	public static OllamaApiClient CreateForNativeAOT(Uri uri, string defaultModel, JsonSerializerContext jsonSerializerContext)
+	{
+		var config = new Configuration 
+		{ 
+			Uri = uri, 
+			Model = defaultModel, 
+			JsonSerializerContext = jsonSerializerContext 
+		};
+		return new OllamaApiClient(config);
+	}
+
+	/// <summary>
+	/// Creates a new instance of the Ollama API client configured for NativeAOT with a custom JsonSerializerContext.
+	/// Use this method if you need to serialize custom types that are not included in the default JsonSourceGenerationContext.
+	/// </summary>
+	/// <param name="uriString">The URI string of the Ollama API endpoint.</param>
+	/// <param name="defaultModel">The default model that should be used with Ollama.</param>
+	/// <param name="jsonSerializerContext">The JSON serializer context containing all required types for serialization.</param>
+	/// <returns>A new OllamaApiClient instance configured for NativeAOT.</returns>
+	public static OllamaApiClient CreateForNativeAOT(string uriString, string defaultModel, JsonSerializerContext jsonSerializerContext)
+	{
+		return CreateForNativeAOT(new Uri(uriString), defaultModel, jsonSerializerContext);
 	}
 
 	/// <inheritdoc />
@@ -476,6 +524,12 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 		/// Gets or sets the model that should be used.
 		/// </summary>
 		public string Model { get; set; } = null!;
+
+		/// <summary>
+		/// Gets or sets the JSON serializer context for source generation (optional, for NativeAOT scenarios).
+		/// When null, standard System.Text.Json serialization is used without source generation for better compatibility.
+		/// </summary>
+		public JsonSerializerContext? JsonSerializerContext { get; set; } = null;
 	}
 }
 

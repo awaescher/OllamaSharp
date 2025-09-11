@@ -17,6 +17,7 @@ OllamaSharp provides .NET bindings for the [Ollama API](https://github.com/jmorg
 - **Progress reporting:** Real-time progress feedback on tasks like model pulling.
 - **Tools engine:** [Sophisticated tool support with source generators](https://awaescher.github.io/OllamaSharp/docs/tool-support.html).
 - **Multi modality:** Support for [vision models](https://ollama.com/blog/vision-models).
+- **Native AOT support:** Full compatibility with .NET Native AOT for improved startup performance.
 
 ## Usage
 
@@ -36,6 +37,20 @@ var ollama = new OllamaApiClient(uri);
 // select a model which should be used for further operations
 ollama.SelectedModel = "llama3.1:8b";
 ```
+
+### Native AOT Support
+
+For .NET Native AOT scenarios, create a custom JsonSerializerContext with your types:
+
+```csharp
+[JsonSerializable(typeof(MyCustomType))]
+public partial class MyJsonContext : JsonSerializerContext { }
+
+// Use the static factory method for NativeAOT
+var ollama = OllamaApiClient.CreateForNativeAOT(uri, "llama3.1:8b", MyJsonContext.Default);
+```
+
+See the [Native AOT documentation](./docs/native-aot-support.md) for detailed guidance.
 
 ### Listing all models that are available locally
 

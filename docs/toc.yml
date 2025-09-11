@@ -4,3 +4,5 @@
   href: getting-started.md
 - name: Tool support
   href: tool-support.md
+- name: Native AOT support
+  href: native-aot-support.md
