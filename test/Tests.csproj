@@ -11,10 +11,9 @@
 
 	<ItemGroup>
 		<PackageReference Include="Shouldly" />
-		<PackageReference Include="Microsoft.CodeAnalysis.Common" />
 		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" />
-		<PackageReference Include="Moq"  />
+		<PackageReference Include="Moq" />
 		<PackageReference Include="NUnit" />
 		<PackageReference Include="NUnit3TestAdapter" />
 		<PackageReference Include="NUnit.Analyzers">
@@ -26,7 +25,7 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="System.Linq.Async" />
-		<PackageReference Include="Microsoft.Extensions.AI"  />
+		<PackageReference Include="Microsoft.Extensions.AI" />
 	</ItemGroup>
 
 	<ItemGroup>
