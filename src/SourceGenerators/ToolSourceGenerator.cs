@@ -36,11 +36,9 @@ public class ToolSourceGenerator : IIncrementalGenerator
 	{
 		foreach (var methodSymbol in methods)
 		{
-			var containingNamespace = methodSymbol.ContainingType.ContainingNamespace?.ToString() ?? "";
-
-			// handle the default namespace which is "<global namespace>"
-			if (containingNamespace.StartsWith("<global"))
-				containingNamespace = string.Empty;
+			var containingNamespace = (methodSymbol.ContainingNamespace is null || methodSymbol.ContainingNamespace.IsGlobalNamespace)
+				? string.Empty
+				: methodSymbol.ContainingNamespace.ToString();
 
 			var className = methodSymbol.ContainingType.Name;
 			var toolClassName = methodSymbol.Name + "Tool";
