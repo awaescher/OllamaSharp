@@ -31,6 +31,7 @@ internal static class AbstractionMapper
 			return null;
 
 		var chatMessage = ToChatMessage(stream.Message);
+		chatMessage.CreatedAt = stream.CreatedAt;
 
 		return new ChatResponse(chatMessage)
 		{
@@ -168,18 +169,18 @@ internal static class AbstractionMapper
 	/// </returns>
 	private static object? ToOllamaSharpTool(AITool tool)
 	{
-		if (tool is AIFunction f)
+		if (tool is AIFunctionDeclaration f)
 			return ToOllamaSharpTool(f);
 
 		return null;
 	}
 
 	/// <summary>
-	/// Converts an <see cref="AIFunction"/> to a <see cref="Tool"/>.
+	/// Converts an <see cref="AIFunctionDeclaration"/> to a <see cref="Tool"/>.
 	/// </summary>
 	/// <param name="function">The function to convert.</param>
 	/// <returns>A <see cref="Tool"/> object containing the converted data.</returns>
-	private static Tool ToOllamaSharpTool(AIFunction function)
+	private static Tool ToOllamaSharpTool(AIFunctionDeclaration function)
 	{
 		JsonElement transformedSchema = _schemaTransformCache.GetOrCreateTransformedSchema(function);
 		return new Tool
@@ -274,7 +275,7 @@ internal static class AbstractionMapper
 	/// <returns>A string containing the base64 image data.</returns>
 	private static string ToOllamaImage(DataContent content)
 	{
-		return Convert.ToBase64String(content.Data.ToArray());
+		return content.Base64Data.ToString();
 	}
 
 	/// <summary>
