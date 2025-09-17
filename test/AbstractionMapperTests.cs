@@ -678,6 +678,28 @@ public class AbstractionMapperTests
 		}
 
 		[Test]
+		public void Maps_Ollama_Options_With_ThinkValue_Boolean()
+		{
+			var options = new Microsoft.Extensions.AI.ChatOptions()
+				.AddOllamaOption(OllamaOption.Think, true);
+
+			var ollamaRequest = AbstractionMapper.ToOllamaSharpChatRequest(null, [], options, stream: true, JsonSerializerOptions.Default);
+			
+			ollamaRequest.Think.ShouldBe(true);
+		}
+		
+		[Test]
+		public void Maps_Ollama_Options_With_ThinkValue_String()
+		{
+			var options = new Microsoft.Extensions.AI.ChatOptions()
+				.AddOllamaOption(OllamaOption.Think, "high");
+
+			var ollamaRequest = AbstractionMapper.ToOllamaSharpChatRequest(null, [], options, stream: true, JsonSerializerOptions.Default);
+			
+			ollamaRequest.Think.ShouldBe("high");
+		}
+		
+		[Test]
 		public void Maps_UsesRawRepresentation()
 		{
 			ChatOptions options = new()
@@ -694,7 +716,7 @@ public class AbstractionMapperTests
 
 			options.Temperature.ShouldBe(0.7f);
 			ollamaRequest.Think.HasValue.ShouldBeTrue();
-			ollamaRequest.Think.Value.ShouldBeTrue();
+			ollamaRequest.Think.Value.ShouldBe(true);
 			ollamaRequest.Options.VocabOnly.HasValue.ShouldBeTrue();
 			ollamaRequest.Options.VocabOnly.Value.ShouldBeTrue();
 		}
