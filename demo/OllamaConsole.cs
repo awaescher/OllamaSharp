@@ -1,5 +1,6 @@
 using System.Text;
 using OllamaSharp;
+using OllamaSharp.Models.Chat;
 using Spectre.Console;
 
 namespace OllamaApiConsole;
@@ -31,7 +32,7 @@ public abstract class OllamaConsole(IOllamaApiClient ollama)
 
 	public IOllamaApiClient Ollama { get; } = ollama ?? throw new ArgumentNullException(nameof(ollama));
 
-	public bool? Think { get; private set; }
+	public ThinkValue? Think { get; private set; }
 
 	public abstract Task Run();
 
@@ -80,7 +81,7 @@ public abstract class OllamaConsole(IOllamaApiClient ollama)
 	internal void ToggleThink()
 	{
 		// null -> false -> true -> null -> ...
-		Think = Think == null ? false : (Think == false ? true : (Think == true ? null : false));
+		Think = Think == null ? false : ((bool?)Think == false ? true : ((bool?)Think == true ? null : false));
 		AnsiConsole.MarkupLine($"[{HintTextColor}]Think mode is [{AccentTextColor}]{Think?.ToString().ToLower() ?? "(null)"}[/].[/]");
 	}
 
