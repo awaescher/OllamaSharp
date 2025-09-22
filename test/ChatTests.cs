@@ -10,19 +10,18 @@ namespace Tests;
 
 public class ChatTests
 {
-	private readonly TestOllamaApiClient _ollama = new();
-
 	public class SendMethod : ChatTests
 	{
 		[Test]
 		public async Task Sends_Assistant_Answer_To_Streamer()
 		{
-			_ollama.SetExpectedChatResponses(
+			var ollama = new TestOllamaApiClient();
+			ollama.SetExpectedChatResponses(
 				new ChatResponseStream { Message = CreateMessage(ChatRole.Assistant, "Hi hu") },
 				new ChatResponseStream { Message = CreateMessage(ChatRole.Assistant, "man, how") },
 				new ChatResponseStream { Message = CreateMessage(ChatRole.Assistant, " are you?") });
 
-			var chat = new Chat(_ollama);
+			var chat = new Chat(ollama);
 			var answer = await chat.SendAsync("henlo", CancellationToken.None).StreamToEndAsync();
 
 			answer.ShouldBe("Hi human, how are you?");
@@ -34,7 +33,8 @@ public class ChatTests
 		[Test]
 		public async Task Sends_Assistant_ToolsCall_To_Streamer()
 		{
-			_ollama.SetExpectedChatResponses(
+			var ollama = new TestOllamaApiClient();
+			ollama.SetExpectedChatResponses(
 				new ChatResponseStream
 				{
 					Message = new Message
@@ -50,7 +50,7 @@ public class ChatTests
 									Arguments = new Dictionary<string, object?>()
 									{
 										["format"] = "celsius",
-										["location"] = "Los Angeles, CA",
+										["location"] = "Los Angeles2, CA",
 										["number"] = 30,
 									}
 								}
@@ -59,7 +59,8 @@ public class ChatTests
 					}
 				});
 
-			var chat = new Chat(_ollama) { ToolInvoker = null }; // we have no tool implementation in this test
+			var chat = new Chat(ollama) { ToolInvoker = null }; // we have no tool implementation in this test
+			chat.AllowRecursiveToolCalls = false; // this is required because the expected chat response contains a tool call that would cause an infinite loop
 			await chat.SendAsync("How is the weather in LA?", CancellationToken.None).StreamToEndAsync();
 
 			chat.Messages.Last().Role.ShouldBe(ChatRole.Assistant);
@@ -70,7 +71,8 @@ public class ChatTests
 		[Test]
 		public async Task Sends_System_Prompt_Message()
 		{
-			var chat = new Chat(_ollama, "Speak like a pirate.");
+			var ollama = new TestOllamaApiClient();
+			var chat = new Chat(ollama, "Speak like a pirate.");
 			await chat.SendAsync("henlo", CancellationToken.None).StreamToEndAsync();
 
 			chat.Messages.First().Role.ShouldBe(ChatRole.System);
@@ -80,7 +82,9 @@ public class ChatTests
 		[Test]
 		public async Task Sends_Messages_As_User()
 		{
-			var chat = new Chat(_ollama);
+			var ollama = new TestOllamaApiClient();
+			var chat = new Chat(ollama);
+
 			await chat.SendAsync("henlo", CancellationToken.None).StreamToEndAsync();
 
 			chat.Messages.First().Role.ShouldBe(ChatRole.User);
@@ -93,7 +97,9 @@ public class ChatTests
 			var bytes1 = System.Text.Encoding.ASCII.GetBytes("ABC");
 			var bytes2 = System.Text.Encoding.ASCII.GetBytes("ABD");
 
-			var chat = new Chat(_ollama);
+			var ollama = new TestOllamaApiClient();
+
+			var chat = new Chat(ollama);
 			await chat.SendAsync("", [bytes1, bytes2], CancellationToken.None).StreamToEndAsync();
 
 			chat.Messages.Single(m => m.Role == ChatRole.User).Images.ShouldBe(["QUJD", "QUJE"], ignoreOrder: true);
@@ -105,11 +111,12 @@ public class ChatTests
 		[Test]
 		public async Task Sends_Messages_As_Defined_Role()
 		{
-			_ollama.SetExpectedChatResponses(
+			var ollama = new TestOllamaApiClient();
+			ollama.SetExpectedChatResponses(
 				new ChatResponseStream { Message = CreateMessage(ChatRole.Assistant, "Hi") },
 				new ChatResponseStream { Message = CreateMessage(ChatRole.Assistant, " tool.") });
 
-			var chat = new Chat(_ollama);
+			var chat = new Chat(ollama);
 			await chat.SendAsAsync(ChatRole.Tool, "Henlo assistant.", CancellationToken.None).StreamToEndAsync();
 
 			var history = chat.Messages.ToArray();
@@ -123,10 +130,12 @@ public class ChatTests
 		[Test]
 		public async Task Sends_Image_Bytes_As_Base64()
 		{
+			var ollama = new TestOllamaApiClient();
+
 			var bytes1 = System.Text.Encoding.ASCII.GetBytes("ABC");
 			var bytes2 = System.Text.Encoding.ASCII.GetBytes("ABD");
 
-			var chat = new Chat(_ollama);
+			var chat = new Chat(ollama);
 			await chat.SendAsAsync(ChatRole.User, "", [bytes1, bytes2], CancellationToken.None).StreamToEndAsync();
 
 			chat.Messages.Single(m => m.Role == ChatRole.User).Images.ShouldBe(["QUJD", "QUJE"], ignoreOrder: true);
@@ -138,7 +147,9 @@ public class ChatTests
 		[Test]
 		public void Replaces_Chat_History()
 		{
-			var chat = new Chat(_ollama)
+			var ollama = new TestOllamaApiClient();
+
+			var chat = new Chat(ollama)
 			{
 				Messages = [new Message { Content = "A", Role = ChatRole.System }]
 			};

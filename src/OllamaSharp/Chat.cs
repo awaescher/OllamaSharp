@@ -88,6 +88,11 @@ public class Chat
 	public ThinkValue? Think { get; set; }
 
 	/// <summary>
+	/// Allow recursive tool calls when a model decides to call different tools after each other.
+	/// </summary>
+	public bool AllowRecursiveToolCalls { get; set; } = true;
+
+	/// <summary>
 	/// Initializes a new instance of the <see cref="Chat"/> class.
 	/// This basic constructor sets up the chat without a predefined system prompt.
 	/// </summary>
@@ -452,10 +457,11 @@ public class Chat
 			var answerMessage = messageBuilder.ToMessage();
 			Messages.Add(answerMessage);
 
-			if (ToolInvoker is not null && role != ChatRole.Tool)
+			// support recursive tool calls when a model decides to call tools several times in a row
+			if (ToolInvoker is not null && answerMessage.ToolCalls?.Any() == true && AllowRecursiveToolCalls)
 			{
 				var toolResultMessages = new List<Message>();
-				foreach (var toolCall in answerMessage.ToolCalls ?? [])
+				foreach (var toolCall in answerMessage.ToolCalls)
 				{
 					// call tools if available and requested by the AI model and yield the results
 					OnToolCall?.Invoke(this, toolCall);
