@@ -44,6 +44,13 @@ public class EmbedRequest : OllamaRequest
 	[JsonPropertyName(Application.Truncate)]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public bool? Truncate { get; set; }
+
+	/// <summary>
+	/// Number of dimensions for the embedding.
+	/// </summary>
+	[JsonPropertyName(Application.Dimensions)]
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public int? Dimensions { get; set; }
 }
 
 /// <summary>
