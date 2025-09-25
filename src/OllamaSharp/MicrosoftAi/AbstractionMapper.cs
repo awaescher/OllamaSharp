@@ -502,6 +502,9 @@ internal static class AbstractionMapper
 
 			if (requestProps.TryGetValue(Application.Truncate, out bool truncate))
 				request.Truncate = truncate;
+
+			if (requestProps.TryGetValue(Application.Dimensions, out int? dimensions))
+				request.Dimensions = dimensions;
 		}
 
 		return request;

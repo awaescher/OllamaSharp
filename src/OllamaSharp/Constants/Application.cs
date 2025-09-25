@@ -110,4 +110,5 @@ internal static class Application
 	public const string Capabilities = "capabilities";
 	public const string Think = "think";
 	public const string ContextLength = "context_length";
+	public const string Dimensions = "dimensions";
 }
