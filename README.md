@@ -35,7 +35,7 @@ var uri = new Uri("http://localhost:11434");
 var ollama = new OllamaApiClient(uri);
 
 // select a model which should be used for further operations
-ollama.SelectedModel = "llama3.1:8b";
+ollama.SelectedModel = "qwen3:4b";
 ```
 
 ### Native AOT Support
@@ -114,14 +114,39 @@ The `OllamaApiClient` implements both interfaces from Microsoft.Extensions.AI, y
  - `IChatClient` for model inference
  - `IEmbeddingGenerator<string, Embedding<float>>` for embedding generation
 
+## Cloud models aka Ollama Turbo
+
+OllamaSharp can be used with [Ollama cloud models](https://ollama.com/cloud) as well. Use the constructor that takes an `HttpClient` and set it up to send the api key as default request header.
+
+```csharp
+var client = new HttpClient();
+client.BaseAddress = new Uri("http://localhost:11434");
+client.DefaultRequestHeaders.Add(/* you api key here*/);
+var ollama = new OllamaApiClient(client);
+```
+
+## OllamaSharp vs. Microsoft.Extensions.AI vs. Semantic Kernel
+
+It can be confusing which library to use with AI in C#. The following paragraph should help you decide which library to start with.
+
+Prefer OllamaSharp if ...
+ - you plan to use Ollama models only
+ - you want to use the native Ollama API, not only chats and embeddings but model management, usage information and more
+
+Prefer Microsoft.Extensions.AI if ...
+ - you only need chat and embedding functionality
+ - you want to be able to use different providers like Ollama, OpenAI, Hugging Face, etc.
+
+Prefer Semantic Kernel if ...
+ - you need the highest flexibility with different providers, plugins, middlewares, caching, memory and more
+ - you need advanced prompt techniques like variable substitution and templating
+ - you want to build agentic systems
+
+No matter which one you choose, OllamaSharp should always be the bridge to Ollama behind the scenes as recommended by Microsoft [(1)](https://learn.microsoft.com/en-us/dotnet/ai/microsoft-extensions-ai) [(2)](https://learn.microsoft.com/en-us/dotnet/ai/quickstarts/chat-local-model) [(3)](https://devblogs.microsoft.com/dotnet/gpt-oss-csharp-ollama/).
+
 ## Thanks
 
 **I would like to thank all the contributors who take the time to improve OllamaSharp. First and foremost [mili-tan](https://github.com/mili-tan), who always keeps OllamaSharp in sync with the Ollama API.**
 
 The icon and name were reused from the amazing [Ollama project](https://github.com/jmorganca/ollama).
-
-Special thanks to JetBrains for supporting this project.
-
-[![JetBrains logo.](https://resources.jetbrains.com/storage/products/company/brand/logos/jetbrains.svg)](https://jb.gg/OpenSource)
-
 
