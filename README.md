@@ -47,7 +47,7 @@ For .NET Native AOT scenarios, create a custom JsonSerializerContext with your t
 public partial class MyJsonContext : JsonSerializerContext { }
 
 // Use the static factory method for NativeAOT
-var ollama = new OllamaApiClient(uri, "llama3.1:8b", MyJsonContext.Default);
+var ollama = new OllamaApiClient(uri, "qwen3:4b", MyJsonContext.Default);
 ```
 
 See the [Native AOT documentation](./docs/native-aot-support.md) for detailed guidance.
@@ -61,7 +61,7 @@ var models = await ollama.ListLocalModelsAsync();
 ### Pulling a model and reporting progress
 
 ```csharp
-await foreach (var status in ollama.PullModelAsync("llama3.1:405b"))
+await foreach (var status in ollama.PullModelAsync("qwen3:32b"))
     Console.WriteLine($"{status.Percent}% {status.Status}");
 ```
 
@@ -121,7 +121,7 @@ OllamaSharp can be used with [Ollama cloud models](https://ollama.com/cloud) as 
 ```csharp
 var client = new HttpClient();
 client.BaseAddress = new Uri("http://localhost:11434");
-client.DefaultRequestHeaders.Add(/* you api key here*/);
+client.DefaultRequestHeaders.Add(/* your api key here */);
 var ollama = new OllamaApiClient(client);
 ```
 
