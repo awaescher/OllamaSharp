@@ -1,6 +1,6 @@
-<a href="https://www.nuget.org/packages/OllamaSharp"><img src="https://img.shields.io/nuget/v/OllamaSharp" alt="nuget version"></a>
-<a href="https://www.nuget.org/packages/OllamaSharp"><img src="https://img.shields.io/nuget/dt/OllamaSharp.svg" alt="nuget downloads"></a>
-<a href="https://awaescher.github.io/OllamaSharp"><img src="https://img.shields.io/badge/api_docs-8A2BE2" alt="Api docs"></a>
+[![nuget version](https://img.shields.io/nuget/v/OllamaSharp)](https://www.nuget.org/packages/OllamaSharp)
+[![nuget downloads](https://img.shields.io/nuget/dt/OllamaSharp.svg)](https://www.nuget.org/packages/OllamaSharp)
+[![Api docs](https://img.shields.io/badge/api_docs-8A2BE2)](https://awaescher.github.io/OllamaSharp)
 
 # OllamaSharp 🦙
 
