@@ -7,10 +7,10 @@
     <PackageVersion Include="Microsoft.Bcl.AsyncInterfaces" Version="9.0.9" />
     <PackageVersion Include="Microsoft.CodeAnalysis.Common" Version="4.14.0" />
     <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="4.14.0" />
-    <PackageVersion Include="Microsoft.Extensions.AI.Abstractions" Version="9.9.0" />
-    <PackageVersion Include="Microsoft.Extensions.AI" Version="9.9.0" />
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="9.0.9" />
-    <PackageVersion Include="Microsoft.Extensions.Logging.Debug" Version="9.0.9" />
+    <PackageVersion Include="Microsoft.Extensions.AI.Abstractions" Version="9.10.0" />
+    <PackageVersion Include="Microsoft.Extensions.AI" Version="9.10.0" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="9.0.10" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Debug" Version="9.0.10" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
     <PackageVersion Include="Moq" Version="4.20.72" />
     <PackageVersion Include="NUnit.Analyzers" Version="4.10.0" />
