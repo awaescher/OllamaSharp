@@ -106,8 +106,8 @@ public class Message
 		/// <summary>
 		/// Gets or sets the ID of the ToolCall.
 		/// </summary>
-		[JsonPropertyName("ID")]
-		public string? ID { get; set; }
+		[JsonPropertyName("id")]
+		public string? Id { get; set; }
 	}
 
 	/// <summary>
