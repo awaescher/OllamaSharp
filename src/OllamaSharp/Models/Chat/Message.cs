@@ -102,6 +102,12 @@ public class Message
 		/// </summary>
 		[JsonPropertyName("function")]
 		public Function? Function { get; set; }
+
+		/// <summary>
+		/// Gets or sets the ID of the ToolCall.
+		/// </summary>
+		[JsonPropertyName("ID")]
+		public string? ID { get; set; }
 	}
 
 	/// <summary>
