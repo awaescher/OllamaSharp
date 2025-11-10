@@ -961,7 +961,7 @@ public class ToOllamaEmbedRequestMethod : AbstractionMapperTests
 		request.Model.ShouldBe("nomic_embed");
 		request.Options.ShouldBeNull();
 		request.Truncate.ShouldBeNull();
-		request.Dimensions.ShouldBeNull();
+		request.Dimensions.ShouldBe(8);
 	}
 
 	[Test]

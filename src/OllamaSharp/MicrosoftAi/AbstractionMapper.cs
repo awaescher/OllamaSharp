@@ -491,6 +491,7 @@ internal static class AbstractionMapper
 	{
 		var request = new EmbedRequest()
 		{
+			Dimensions = options?.Dimensions,
 			Input = values.ToList(),
 			Model = options?.ModelId ?? "" // will be set OllamaApiClient.SelectedModel if not set
 		};
@@ -502,9 +503,6 @@ internal static class AbstractionMapper
 
 			if (requestProps.TryGetValue(Application.Truncate, out bool truncate))
 				request.Truncate = truncate;
-
-			if (requestProps.TryGetValue(Application.Dimensions, out int? dimensions))
-				request.Dimensions = dimensions;
 		}
 
 		return request;
