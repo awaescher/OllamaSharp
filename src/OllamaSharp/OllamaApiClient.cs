@@ -324,10 +324,8 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 			var line = await reader.ReadLineAsync().ConfigureAwait(false) ?? "";
 
 			var error = JsonSerializer.Deserialize<ErrorResponse?>(line, IncomingJsonSerializerOptions);
-			if ((error?.Message ?? null) is not null)
-			{
-				throw new ResponseError(error.Message);
-			}
+			if (!string.IsNullOrEmpty(error?.Message))
+				throw new ResponseError(error!.Message);
 
 			yield return JsonSerializer
 				.Deserialize<TLine?>(

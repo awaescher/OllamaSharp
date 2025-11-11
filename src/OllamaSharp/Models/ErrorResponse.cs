@@ -8,6 +8,9 @@ namespace OllamaSharp.Models;
 /// </summary>
 public class ErrorResponse
 {
+	/// <summary>
+	/// The error message
+	/// </summary>
 	[JsonPropertyName(Application.Error)]
-	public string Message { get; set; }
+	public string Message { get; set; } = string.Empty;
 }
