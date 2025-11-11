@@ -59,7 +59,7 @@ public class ChatTests
 					}
 				});
 
-			var chat = new Chat(ollama) { ToolInvoker = null }; // we have no tool implementation in this test
+			var chat = new Chat(ollama) { ToolInvoker = null! }; // we have no tool implementation in this test
 			chat.AllowRecursiveToolCalls = false; // this is required because the expected chat response contains a tool call that would cause an infinite loop
 			await chat.SendAsync("How is the weather in LA?", CancellationToken.None).StreamToEndAsync();
 
