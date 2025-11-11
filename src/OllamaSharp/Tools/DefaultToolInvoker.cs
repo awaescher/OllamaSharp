@@ -30,10 +30,10 @@ public class DefaultToolInvoker : IToolInvoker
 		}
 
 		if (tool is IInvokableTool i)
-		toolResult = i.InvokeMethod(normalizedArguments);
-	else if (tool is IAsyncInvokableTool ai)
-		toolResult = await ai.InvokeMethodAsync(normalizedArguments).ConfigureAwait(false);
+			toolResult = i.InvokeMethod(normalizedArguments);
+		else if (tool is IAsyncInvokableTool ai)
+			toolResult = await ai.InvokeMethodAsync(normalizedArguments).ConfigureAwait(false);
 
-	return new ToolResult(Tool: tool!, ToolCall: toolCall!, Result: toolResult);
+		return new ToolResult(Tool: tool!, ToolCall: toolCall!, Result: toolResult);
 	}
 }
