@@ -24,6 +24,9 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="System.Linq.Async" />
 		<PackageReference Include="Microsoft.Extensions.AI" />
 	</ItemGroup>
