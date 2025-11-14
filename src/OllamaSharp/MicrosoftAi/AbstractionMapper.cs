@@ -358,8 +358,8 @@ internal static class AbstractionMapper
 				ModelId = done.Model
 			};
 		}
-		
-		return new ChatResponseUpdate(ToAbstractionRole(response?.Message.Role), contents)
+
+		return new ChatResponseUpdate(ToAbstractionRole(response?.Message?.Role), contents)
 		{
 			// no need to set "Contents" as we set the text
 			CreatedAt = response?.CreatedAt,
