@@ -104,7 +104,6 @@ public class GenerateRequest : OllamaRequest
 	/// </summary>
 	[JsonPropertyName(Application.Logprobs)]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-
 	public bool? Logprobs { get; set; }
 
 	/// <summary>
@@ -177,7 +176,7 @@ public class GenerateResponseStream
 	/// Gets or sets the log probabilities of output tokens.
 	/// </summary>
 	[JsonPropertyName(Application.Logprobs)]
-	public IEnumerable<Logprob> Logprobs { get; set; }
+	public IEnumerable<Logprob>? Logprobs { get; set; }
 }
 
 /// <summary>
