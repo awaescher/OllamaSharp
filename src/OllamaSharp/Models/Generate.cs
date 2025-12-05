@@ -95,7 +95,25 @@ public class GenerateRequest : OllamaRequest
 	/// a full prompt. In this case, you can use the raw parameter to disable formatting.
 	/// </summary>
 	[JsonPropertyName(Application.Raw)]
-	public bool Raw { get; set; }
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public bool? Raw { get; set; }
+
+	/// <summary>
+	/// When log probabilities are requested, response chunks will now include a Logprobs field with the token,
+	/// log probability and raw bytes (for partial unicode).
+	/// </summary>
+	[JsonPropertyName(Application.Logprobs)]
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+
+	public bool? Logprobs { get; set; }
+
+	/// <summary>
+	/// When setting TopLogprobs, a number of most-likely tokens are also provided,
+	/// making it possible to introspect alternative tokens.
+	/// </summary>
+	[JsonPropertyName(Application.TopLogprobs)]
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public int? TopLogprobs { get; set; }
 }
 
 /// <summary>
@@ -154,6 +172,12 @@ public class GenerateResponseStream
 	/// </summary>
 	[JsonPropertyName(Application.Done)]
 	public bool Done { get; set; }
+
+	/// <summary>
+	/// Gets or sets the log probabilities of output tokens.
+	/// </summary>
+	[JsonPropertyName(Application.Logprobs)]
+	public IEnumerable<Logprob> Logprobs { get; set; }
 }
 
 /// <summary>
@@ -203,4 +227,19 @@ public class GenerateDoneResponseStream : GenerateResponseStream
 	/// </summary>
 	[JsonPropertyName(Application.EvalDuration)]
 	public long EvalDuration { get; set; }
+}
+
+/// <summary>
+/// Log probability information for a generated token
+/// </summary>
+public class Logprob
+{
+	[JsonPropertyName("token")]
+	public string? Token { get; set; }
+	[JsonPropertyName("logprob")]
+	public double? LogProbability { get; set; }
+	[JsonPropertyName("bytes")]
+	public int[]? Bytes { get; set; }
+	[JsonPropertyName("top_logprobs")]
+	public IEnumerable<Logprob>? TopLogprobs { get; set; }
 }

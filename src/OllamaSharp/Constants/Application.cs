@@ -111,4 +111,6 @@ internal static class Application
 	public const string Think = "think";
 	public const string ContextLength = "context_length";
 	public const string Dimensions = "dimensions";
+	public const string Logprobs = "logprobs";
+	public const string TopLogprobs = "top_logprobs";
 }
