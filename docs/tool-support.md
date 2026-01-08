@@ -160,7 +160,7 @@ OllamaSharp will automatically match tool calls from the AI model with the provi
  
 ## Model context protocol (MCP) servers
 
-OllamaSharp also supports the [model context protocol](https://modelcontextprotocol.io/introduction). In the past, we shipped a small package `OllamaSharp.ModelContextProtocol` for this but which we discontinued it because of the quickly evolving nature of the MCP standard. 
+OllamaSharp also supports the [model context protocol](https://modelcontextprotocol.io/introduction). In the past, we shipped a small package `OllamaSharp.ModelContextProtocol` for this but we discontinued it because of the quickly evolving nature of the MCP standard. 
 
 Instead, we highly recommend using the [official C# SDK](https://github.com/modelcontextprotocol/csharp-sdk) in combination with OllamaSharp or libraries that build upon OllamaSharp such as [Semantic Kernel or the Microsoft Agent Framework](https://devblogs.microsoft.com/semantic-kernel/semantic-kernel-and-microsoft-agent-framework/).
 
