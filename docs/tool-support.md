@@ -167,3 +167,5 @@ Instead, we highly recommend using the [official C# SDK](https://github.com/mode
 The community made some samples how to combine the MCP SDK with OllamaSharp
 - [Invoke MCP tool from local LLM using OllamaSharp](https://www.youtube.com/watch?v=NBlIZ2TlHsU)
 - [Tiny code sample by @strabu](https://github.com/strabu/ollama-mcp-csharp/blob/3ed3f587e15dec94a67fa2bceea191e3a6da5e73/src/OllamaPlaywrightMCPExample/Program.cs#L1)
+
+For larger projects, we recommend using frameworks like Semantic Kernel instead of OllamaSharp directly. Semantic Kernel is a huge library maintained by Microsoft and makes use of OllamaSharp behind the scenes when talking to Ollama endpoints. Once you moved to Semantic Kernel (+OllamaSharp), you can find a lot of resources and further extensions. A broad support for MCP is one of the benefits as well as countless resources like the following, for example: [Building a Model Context Protocol Server with Semantic Kernel](https://devblogs.microsoft.com/semantic-kernel/building-a-model-context-protocol-server-with-semantic-kernel/).
