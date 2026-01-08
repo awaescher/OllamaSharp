@@ -158,17 +158,12 @@ OllamaSharp will automatically match tool calls from the AI model with the provi
 
  > The project containing the Ollama tools must generate a documentation file, see "Important details".
  
-## Model context protocol servers
+## Model context protocol (MCP) servers
 
-OllamaSharp also supports the [model context protocol](https://modelcontextprotocol.io/introduction) which allows to define tools in a more generic way.
-This way, tools can be defined in a separate project and be used by multiple models.
-The "server"" will receive tool calls from the AI model and return the result back to the model. 
-This way, tools can be implemented in any language and be used by any AI model that supports the model context protocol.
+OllamaSharp also supports the [model context protocol](https://modelcontextprotocol.io/introduction). In the past, we shipped a small package `OllamaSharp.ModelContextProtocol` for this but which we discontinued it because of the quickly evolving nature of the MCP standard. 
 
-### Usage
+Instead, we highly recommend using the [official C# SDK](https://github.com/modelcontextprotocol/csharp-sdk) in combination with OllamaSharp or libraries that build upon OllamaSharp such as [Semantic Kernel or the Microsoft Agent Framework](https://devblogs.microsoft.com/semantic-kernel/semantic-kernel-and-microsoft-agent-framework/).
 
-Please use the `OllamaSharp.ModelContextProtocol` NuGet package.
-
-Tools from the model context protocol server(s) can be added by the `Tools.GetFromMcpServers()` method.
-
-It supports reading MCP servers from a configuration file or via code.
+The community made some samples how to combine the MCP SDK with OllamaSharp
+- [Invoke MCP tool from local LLM using OllamaSharp](https://www.youtube.com/watch?v=NBlIZ2TlHsU)
+- [Tiny code sample by @strabu](https://github.com/strabu/ollama-mcp-csharp/blob/3ed3f587e15dec94a67fa2bceea191e3a6da5e73/src/OllamaPlaywrightMCPExample/Program.cs#L1)
