@@ -247,7 +247,7 @@ public class ToolSourceGenerator : IIncrementalGenerator
 					if (p.IsOptional)
 					{
 						var def = p.ExplicitDefaultValue is null ? "\"\"" : $"\"{p.ExplicitDefaultValue}\"";
-						paramLines.Add($@"            {pType} {safeName} = ({pType}?)args[""{pName}""] ?? {def};");
+						paramLines.Add($@"            {pType} {safeName} = ({pType}?)(args.ContainsKey(""{pName}"") ? args[""{pName}""] : null) ?? {def};");
 					}
 					else
 					{
@@ -257,7 +257,7 @@ public class ToolSourceGenerator : IIncrementalGenerator
 				else
 				{
 					if (p.IsOptional && p.ExplicitDefaultValue != null)
-						paramLines.Add($@"            {pType} {safeName} = ({pType}?)args[""{pName}""] ?? ({pType}){p.ExplicitDefaultValue};");
+						paramLines.Add($@"            {pType} {safeName} = ({pType}?)(args.ContainsKey(""{pName}"") ? args[""{pName}""] : null) ?? ({pType}){p.ExplicitDefaultValue};");
 					else
 						paramLines.Add($@"            {pType} {safeName} = ({pType}?)args[""{pName}""];");
 				}
