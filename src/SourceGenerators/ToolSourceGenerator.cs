@@ -138,7 +138,7 @@ public class ToolSourceGenerator : IIncrementalGenerator
 		{
 			var paramName = param.Name;
 			var pType = param.Type;
-			var desc = paramComments.ContainsKey(paramName) ? paramComments[paramName] : "";
+			var desc = paramComments.TryGetValue(paramName, out var descValue) ? descValue : "";
 			var typeName = pType.Name;
 			var jsonType = "string";
 			IEnumerable<string>? enumValues = null;
@@ -154,7 +154,7 @@ public class ToolSourceGenerator : IIncrementalGenerator
 						.Select(f => f.Name);
 				}
 			}
-			else if (IsNumericType(typeName))
+			else if (IsNumericType(pType))
 			{
 				jsonType = "number";
 			}
@@ -179,13 +179,19 @@ public class ToolSourceGenerator : IIncrementalGenerator
 		return (propsJoined, req);
 	}
 
-	private static bool IsNumericType(string typeName)
+	private static ITypeSymbol GetUnderlyingType(ITypeSymbol type)
 	{
-		return typeName.Equals("Int16", StringComparison.OrdinalIgnoreCase)
-			|| typeName.Equals("Int32", StringComparison.OrdinalIgnoreCase)
-			|| typeName.Equals("Int64", StringComparison.OrdinalIgnoreCase)
-			|| typeName.Equals("Double", StringComparison.OrdinalIgnoreCase)
-			|| typeName.Equals("Single", StringComparison.OrdinalIgnoreCase);
+		if (type is INamedTypeSymbol named && named.OriginalDefinition.SpecialType == SpecialType.System_Nullable_T)
+		{
+			return named.TypeArguments[0];
+		}
+		return type;
+	}
+
+	private static bool IsNumericType(ITypeSymbol typeSymbol)
+	{
+		return GetUnderlyingType(typeSymbol).Name
+			is "SByte" or "Byte" or "Int16" or "UInt16" or "Int32" or "UInt32" or "Int64" or "UInt64" or "Int128" or "UInt128" or "Half" or "Single" or "Double" or "Decimal";
 	}
 
 	private static string GenerateInvokeMethodCode(IMethodSymbol methodSymbol)
@@ -197,28 +203,29 @@ public class ToolSourceGenerator : IIncrementalGenerator
 		var methodName = methodSymbol.Name;
 		var className = methodSymbol.ContainingType.ToDisplayString();
 		var returnType = methodSymbol.ReturnType;
-		var isAsync = returnType.Name.Equals("Task", StringComparison.OrdinalIgnoreCase);
+		var isAsync = returnType.Name is "Task" or "ValueTask";
 
 		foreach (var p in parameters)
 		{
 			var pName = p.Name;
-			var safeName = ToValidIdentifier(pName);
+			var safeName = EscapeIdentifier(pName);
+			var safeNameObject = $"{safeName}Object";
 			var pType = p.Type.ToDisplayString();
-			var tName = p.Type.Name;
+			var pTypeName = p.Type.Name;
 
 			if (p.Type.TypeKind == TypeKind.Enum)
 			{
 				if (p.IsOptional)
 				{
 					var defaultValue = p.ExplicitDefaultValue?.ToString() ?? p.Type.GetMembers().OfType<IFieldSymbol>().FirstOrDefault()?.Name;
-					paramLines.Add($@"            {pType} {safeName} = ({pType})(Enum.TryParse(typeof({pType}), args.ContainsKey(""{pName}"") ? args[""{pName}""]?.ToString() ?? ""{defaultValue}"" : ""{defaultValue}"", ignoreCase: true, out var parsedEnumValue) ? parsedEnumValue : {defaultValue});");
+					paramLines.Add($@"            {pType} {safeName} = Enum.TryParse<{pType}>(args.TryGetValue(""{pName}"", out var {safeNameObject}) ? {safeNameObject}?.ToString() ?? ""{defaultValue}"" : ""{defaultValue}"", ignoreCase: true, out var parsedEnumValue) ? parsedEnumValue : {defaultValue};");
 				}
 				else
 				{
 					paramLines.Add($@"            {pType} {safeName} = ({pType})Enum.Parse(typeof({pType}), args[""{pName}""]?.ToString() ?? """", ignoreCase: true);");
 				}
 			}
-			else if (pType.StartsWith("bool", StringComparison.OrdinalIgnoreCase))
+			else if (GetUnderlyingType(p.Type).Name is "Boolean")
 			{
 				if (!p.IsOptional)
 				{
@@ -226,40 +233,45 @@ public class ToolSourceGenerator : IIncrementalGenerator
 				}
 				else if (p.ExplicitDefaultValue is bool defaultBoolValue)
 				{
-					paramLines.Add($@"            {pType} {safeName} = args.ContainsKey(""{pName}"") ? ({pType})args[""{pName}""] : {defaultBoolValue.ToString().ToLowerInvariant()};");
+					paramLines.Add($@"            {pType} {safeName} = args.TryGetValue(""{pName}"", out var {safeNameObject}) ? ({pType}){safeNameObject} : {(defaultBoolValue ? "true" : "false")};");
 				}
 				else
 				{
-					paramLines.Add($@"            {pType} {safeName} = args.ContainsKey(""{pName}"") ? ({pType})args[""{pName}""] : null;");
+					paramLines.Add($@"            {pType} {safeName} = args.TryGetValue(""{pName}"", out var {safeNameObject}) ? ({pType}){safeNameObject} : null;");
 				}
 			}
-			else if (IsNumericType(tName))
+			else if (IsNumericType(p.Type))
 			{
 				if (p.IsOptional)
-					paramLines.Add($@"            {pType} {safeName} = args.ContainsKey(""{pName}"") ? Convert.To{tName}(args[""{pName}""]) : {(p.ExplicitDefaultValue ?? 0)};");
+				{
+					paramLines.Add($@"            {pType} {safeName} = args.TryGetValue(""{pName}"", out var {safeNameObject}) ? Convert.To{pTypeName}({safeNameObject}) : {p.ExplicitDefaultValue ?? 0};");
+				}
 				else
-					paramLines.Add($@"            {pType} {safeName} = Convert.To{tName}(args[""{pName}""]);");
+				{
+					paramLines.Add($@"            {pType} {safeName} = Convert.To{pTypeName}(args[""{pName}""]);");
+				}
+			}
+			else if (pTypeName is "String")
+			{
+				if (p.IsOptional)
+				{
+					var def = p.ExplicitDefaultValue is null ? "\"\"" : $"\"{p.ExplicitDefaultValue}\"";
+					paramLines.Add($@"            {pType} {safeName} = ({pType}?)(args.TryGetValue(""{pName}"", out var {safeNameObject}) ? {safeNameObject} : null) ?? {def};");
+				}
+				else
+				{
+					paramLines.Add($@"            {pType} {safeName} = ({pType}?)args[""{pName}""] ?? """";");
+				}
 			}
 			else
 			{
-				if (tName.Equals("String", StringComparison.OrdinalIgnoreCase))
+				if (p.IsOptional)
 				{
-					if (p.IsOptional)
-					{
-						var def = p.ExplicitDefaultValue is null ? "\"\"" : $"\"{p.ExplicitDefaultValue}\"";
-						paramLines.Add($@"            {pType} {safeName} = ({pType}?)(args.ContainsKey(""{pName}"") ? args[""{pName}""] : null) ?? {def};");
-					}
-					else
-					{
-						paramLines.Add($@"            {pType} {safeName} = ({pType}?)args[""{pName}""] ?? """";");
-					}
+					paramLines.Add($@"            {pType} {safeName} = ({pType}?)(args.TryGetValue(""{pName}"", out var {safeNameObject}) ? {safeNameObject} : null) ?? ({pType}){p.ExplicitDefaultValue};");
 				}
 				else
 				{
-					if (p.IsOptional && p.ExplicitDefaultValue != null)
-						paramLines.Add($@"            {pType} {safeName} = ({pType}?)(args.ContainsKey(""{pName}"") ? args[""{pName}""] : null) ?? ({pType}){p.ExplicitDefaultValue};");
-					else
-						paramLines.Add($@"            {pType} {safeName} = ({pType}?)args[""{pName}""];");
+					paramLines.Add($@"            {pType} {safeName} = ({pType}?)args[""{pName}""];");
 				}
 			}
 
@@ -359,5 +371,5 @@ using System.Threading.Tasks;
 
 	private static string Escape(string input) => input.Replace("\\", "\\\\").Replace("\"", "\\\"").Replace("\n", " ").Replace("\r", " ").Replace("  ", " ");
 
-	private static string ToValidIdentifier(string name) => SyntaxFacts.GetKeywordKind(name) != SyntaxKind.None ? "_" + name : name;
+	private static string EscapeIdentifier(string name) => SyntaxFacts.GetKeywordKind(name) != SyntaxKind.None ? "@" + name : name;
 }
