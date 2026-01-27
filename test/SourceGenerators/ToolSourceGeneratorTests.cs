@@ -155,9 +155,9 @@ public class Test
 
 			result.GeneratedCode.ShouldContain("bool required = (bool)args[\"required\"];");
 			result.GeneratedCode.ShouldContain("bool? nullableRequired = (bool?)args[\"nullableRequired\"];");
-			result.GeneratedCode.ShouldContain("bool optionalTrue = args.ContainsKey(\"optionalTrue\") ? (bool)args[\"optionalTrue\"] : true;");
-			result.GeneratedCode.ShouldContain("bool? nullableOptionalNull = args.ContainsKey(\"nullableOptionalNull\") ? (bool?)args[\"nullableOptionalNull\"] : null;");
-			result.GeneratedCode.ShouldContain("bool? nullableOptionalTrue = args.ContainsKey(\"nullableOptionalTrue\") ? (bool?)args[\"nullableOptionalTrue\"] : true;");
+			result.GeneratedCode.ShouldContain("bool optionalTrue = args.TryGetValue(\"optionalTrue\", out var optionalTrueObject) ? (bool)optionalTrueObject : true;");
+			result.GeneratedCode.ShouldContain("bool? nullableOptionalNull = args.TryGetValue(\"nullableOptionalNull\", out var nullableOptionalNullObject) ? (bool?)nullableOptionalNullObject : null;");
+			result.GeneratedCode.ShouldContain("bool? nullableOptionalTrue = args.TryGetValue(\"nullableOptionalTrue\", out var nullableOptionalTrueObject) ? (bool?)nullableOptionalTrueObject : true;");
 		}
 
 		[Test]
