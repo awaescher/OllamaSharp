@@ -62,7 +62,7 @@ public class McpClientTool : OllamaSharp.Models.Chat.Tool, OllamaSharp.Tools.IAs
 			return textContent;
 		}
 		catch (Exception ex)
-	{
+		{
 			return ex.Message;
 		}
 	}

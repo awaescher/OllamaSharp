@@ -340,16 +340,16 @@ internal static class AbstractionMapper
 	/// <returns>A <see cref="ChatResponseUpdate"/> object containing the latest chat completion chunk.</returns>
 	public static ChatResponseUpdate ToChatResponseUpdate(ChatResponseStream? response, string responseId)
 	{
-		var contents = response?.Message is null ? [new TextContent(string.Empty)] : 
+		var contents = response?.Message is null ? [new TextContent(string.Empty)] :
 			GetAIContentsFromMessage(response.Message);
-		
+
 		if (response is ChatDoneResponseStream done)
-	{
-		var usage = ParseOllamaChatResponseUsage(done);
-		if (usage is not null)
-			contents.Add(new UsageContent(usage));
-		
-		return new ChatResponseUpdate(ToAbstractionRole(done.Message.Role), contents)
+		{
+			var usage = ParseOllamaChatResponseUsage(done);
+			if (usage is not null)
+				contents.Add(new UsageContent(usage));
+
+			return new ChatResponseUpdate(ToAbstractionRole(done.Message.Role), contents)
 			{
 				CreatedAt = done.CreatedAt,
 				FinishReason = done.DoneReason is null ? null : new ChatFinishReason(done.DoneReason),

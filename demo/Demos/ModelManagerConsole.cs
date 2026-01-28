@@ -9,180 +9,180 @@ namespace OllamaApiConsole.Demos;
 /// </summary>
 public class ModelManagerConsole(IOllamaApiClient ollama) : OllamaConsole(ollama)
 {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="ModelManagerConsole"/> class.
-    /// </summary>
-    /// <param name="ollama">The Ollama API client used to communicate with the server.</param>
+	/// <summary>
+	/// Initializes a new instance of the <see cref="ModelManagerConsole"/> class.
+	/// </summary>
+	/// <param name="ollama">The Ollama API client used to communicate with the server.</param>
 
-    /// <inheritdoc/>
-    public override async Task Run()
-    {
-        AnsiConsole.Write(new Rule("Model manager").LeftJustified());
-        AnsiConsole.WriteLine();
+	/// <inheritdoc/>
+	public override async Task Run()
+	{
+		AnsiConsole.Write(new Rule("Model manager").LeftJustified());
+		AnsiConsole.WriteLine();
 
-        string command;
-        var exit = false;
+		string command;
+		var exit = false;
 
-        do
-        {
-            command = AnsiConsole.Prompt(
-                new SelectionPrompt<string>()
-                    .PageSize(10)
-                    .Title("What do you want to do?")
-                    .AddChoices("..", "Copy model", "Create model", "Delete model", "Generate embeddings", "Show model information", "List local models", "Pull model", "Push model"));
+		do
+		{
+			command = AnsiConsole.Prompt(
+				new SelectionPrompt<string>()
+					.PageSize(10)
+					.Title("What do you want to do?")
+					.AddChoices("..", "Copy model", "Create model", "Delete model", "Generate embeddings", "Show model information", "List local models", "Pull model", "Push model"));
 
-            switch (command)
-            {
-                case "Copy model":
-                    await CopyModel();
-                    break;
+			switch (command)
+			{
+				case "Copy model":
+					await CopyModel();
+					break;
 
-                case "Create model":
-                    await CreateModel();
-                    break;
+				case "Create model":
+					await CreateModel();
+					break;
 
-                case "Delete model":
-                    await DeleteModel();
-                    break;
+				case "Delete model":
+					await DeleteModel();
+					break;
 
-                case "Generate embeddings":
-                    await GenerateEmbedding();
-                    break;
+				case "Generate embeddings":
+					await GenerateEmbedding();
+					break;
 
-                case "Show model information":
-                    await ShowModelInformation();
-                    break;
+				case "Show model information":
+					await ShowModelInformation();
+					break;
 
-                case "List local models":
-                    await ListLocalModels();
-                    break;
+				case "List local models":
+					await ListLocalModels();
+					break;
 
-                case "Pull model":
-                    await PullModel();
-                    break;
+				case "Pull model":
+					await PullModel();
+					break;
 
-                case "Push model":
-                    await PushModel();
-                    break;
+				case "Push model":
+					await PushModel();
+					break;
 
-                default:
-                    exit = true;
-                    break;
-            }
+				default:
+					exit = true;
+					break;
+			}
 
-            Console.WriteLine();
-        } while (!exit);
-    }
+			Console.WriteLine();
+		} while (!exit);
+	}
 
-    private async Task CopyModel()
-    {
-        var source = await SelectModel("Which model should be copied?");
-        if (!string.IsNullOrEmpty(source))
-        {
-            var destination = ReadInput($"Enter a name for the copy of [{AccentTextColor}]{source}[/]:");
-            await Ollama.CopyModelAsync(source, destination);
-        }
-    }
+	private async Task CopyModel()
+	{
+		var source = await SelectModel("Which model should be copied?");
+		if (!string.IsNullOrEmpty(source))
+		{
+			var destination = ReadInput($"Enter a name for the copy of [{AccentTextColor}]{source}[/]:");
+			await Ollama.CopyModelAsync(source, destination);
+		}
+	}
 
-    private async Task CreateModel()
-    {
-        var createName = ReadInput("Enter a name for your new model:");
+	private async Task CreateModel()
+	{
+		var createName = ReadInput("Enter a name for your new model:");
 
-        var fromModel = ReadInput("Enter the name of the model to create from:", $"[{HintTextColor}]See [/][{AccentTextColor}][link]https://ollama.ai/library[/][/][{HintTextColor}] for available models[/]");
+		var fromModel = ReadInput("Enter the name of the model to create from:", $"[{HintTextColor}]See [/][{AccentTextColor}][link]https://ollama.ai/library[/][/][{HintTextColor}] for available models[/]");
 
-        var systemPrompt = ReadInput("Set a new system prompt word for the model:");
+		var systemPrompt = ReadInput("Set a new system prompt word for the model:");
 
-        await foreach (var status in Ollama.CreateModelAsync(new CreateModelRequest { From = fromModel, System = systemPrompt, Model = createName }))
-            AnsiConsole.MarkupLineInterpolated($"{status?.Status ?? ""}");
-    }
+		await foreach (var status in Ollama.CreateModelAsync(new CreateModelRequest { From = fromModel, System = systemPrompt, Model = createName }))
+			AnsiConsole.MarkupLineInterpolated($"{status?.Status ?? ""}");
+	}
 
-    private async Task DeleteModel()
-    {
-        var deleteModel = await SelectModel("Which model do you want to delete?");
-        if (!string.IsNullOrEmpty(deleteModel))
-            await Ollama.DeleteModelAsync(deleteModel);
-    }
+	private async Task DeleteModel()
+	{
+		var deleteModel = await SelectModel("Which model do you want to delete?");
+		if (!string.IsNullOrEmpty(deleteModel))
+			await Ollama.DeleteModelAsync(deleteModel);
+	}
 
-    private async Task GenerateEmbedding()
-    {
-        var embedModel = await SelectModel("Which model should be used to create embeddings?");
-        if (!string.IsNullOrEmpty(embedModel))
-        {
-            var embedContent = ReadInput("Enter a string to to embed:");
-            Ollama.SelectedModel = embedModel;
-            var embedResponse = await Ollama.EmbedAsync(embedContent);
-            AnsiConsole.MarkupLineInterpolated($"[{AiTextColor}]{string.Join(", ", embedResponse.Embeddings[0])}[/]");
-        }
-    }
+	private async Task GenerateEmbedding()
+	{
+		var embedModel = await SelectModel("Which model should be used to create embeddings?");
+		if (!string.IsNullOrEmpty(embedModel))
+		{
+			var embedContent = ReadInput("Enter a string to to embed:");
+			Ollama.SelectedModel = embedModel;
+			var embedResponse = await Ollama.EmbedAsync(embedContent);
+			AnsiConsole.MarkupLineInterpolated($"[{AiTextColor}]{string.Join(", ", embedResponse.Embeddings[0])}[/]");
+		}
+	}
 
-    private async Task ShowModelInformation()
-    {
-        var infoModel = await SelectModel("Which model do you want to retrieve information for?");
-        if (!string.IsNullOrEmpty(infoModel))
-        {
-            var infoResponse = await Ollama.ShowModelAsync(infoModel);
-            PropertyConsoleRenderer.Render(infoResponse);
-        }
-    }
+	private async Task ShowModelInformation()
+	{
+		var infoModel = await SelectModel("Which model do you want to retrieve information for?");
+		if (!string.IsNullOrEmpty(infoModel))
+		{
+			var infoResponse = await Ollama.ShowModelAsync(infoModel);
+			PropertyConsoleRenderer.Render(infoResponse);
+		}
+	}
 
-    private async Task ListLocalModels()
-    {
-        var models = await Ollama.ListLocalModelsAsync();
-        foreach (var model in models.OrderBy(m => m.Name))
-            AnsiConsole.MarkupLineInterpolated($"[{AiTextColor}]{model.Name}[/]");
-    }
+	private async Task ListLocalModels()
+	{
+		var models = await Ollama.ListLocalModelsAsync();
+		foreach (var model in models.OrderBy(m => m.Name))
+			AnsiConsole.MarkupLineInterpolated($"[{AiTextColor}]{model.Name}[/]");
+	}
 
-    private async Task PullModel()
-    {
-        var pullModel = ReadInput("Enter the name of the model you want to pull:", $"[{HintTextColor}]See [/][{AccentTextColor}][link]https://github.com/jmorganca/ollama/blob/main/docs/modelfile.md[/][/][{HintTextColor}] for reference[/]");
+	private async Task PullModel()
+	{
+		var pullModel = ReadInput("Enter the name of the model you want to pull:", $"[{HintTextColor}]See [/][{AccentTextColor}][link]https://github.com/jmorganca/ollama/blob/main/docs/modelfile.md[/][/][{HintTextColor}] for reference[/]");
 
-        await AnsiConsole.Progress().StartAsync(async context =>
-        {
-            ProgressTask? task = null;
-            await foreach (var status in Ollama.PullModelAsync(pullModel))
-                UpdateProgressTaskByStatus(context, ref task, status);
-            task?.StopTask();
-        });
-    }
+		await AnsiConsole.Progress().StartAsync(async context =>
+		{
+			ProgressTask? task = null;
+			await foreach (var status in Ollama.PullModelAsync(pullModel))
+				UpdateProgressTaskByStatus(context, ref task, status);
+			task?.StopTask();
+		});
+	}
 
-    private async Task PushModel()
-    {
-        var pushModel = ReadInput("Which model do you want to push?");
-        await foreach (var status in Ollama.PushModelAsync(pushModel))
-            AnsiConsole.MarkupLineInterpolated($"{status?.Status ?? ""}");
-    }
+	private async Task PushModel()
+	{
+		var pushModel = ReadInput("Which model do you want to push?");
+		await foreach (var status in Ollama.PushModelAsync(pushModel))
+			AnsiConsole.MarkupLineInterpolated($"{status?.Status ?? ""}");
+	}
 
-    private static void UpdateProgressTaskByStatus(ProgressContext context, ref ProgressTask? task, PullModelResponse? modelResponse)
-    {
-        if (modelResponse is null)
-            return;
+	private static void UpdateProgressTaskByStatus(ProgressContext context, ref ProgressTask? task, PullModelResponse? modelResponse)
+	{
+		if (modelResponse is null)
+			return;
 
-        if (modelResponse.Status != task?.Description)
-        {
-            task?.StopTask();
-            task = context.AddTask(modelResponse.Status);
-        }
+		if (modelResponse.Status != task?.Description)
+		{
+			task?.StopTask();
+			task = context.AddTask(modelResponse.Status);
+		}
 
-        task.Increment(modelResponse.Percent - task.Value);
-    }
+		task.Increment(modelResponse.Percent - task.Value);
+	}
 
-    /// <summary>
-    /// Provides helper methods for rendering object properties to the console.
-    /// </summary>
-    public static class PropertyConsoleRenderer
-    {
-        /// <summary>
-        /// Renders the public properties of an object to the console.
-        /// </summary>
-        /// <param name="o">The object whose properties will be displayed.</param>
-        public static void Render(object o)
-        {
-            foreach (var pi in o.GetType().GetProperties())
-            {
-                AnsiConsole.MarkupLineInterpolated($"[{OllamaConsole.AccentTextColor}][underline][bold]{pi.Name}:[/][/][/]");
-                AnsiConsole.MarkupLineInterpolated($"[{OllamaConsole.AccentTextColor}]{pi.GetValue(o)?.ToString() ?? ""}[/]");
-                AnsiConsole.WriteLine();
-            }
-        }
-    }
+	/// <summary>
+	/// Provides helper methods for rendering object properties to the console.
+	/// </summary>
+	public static class PropertyConsoleRenderer
+	{
+		/// <summary>
+		/// Renders the public properties of an object to the console.
+		/// </summary>
+		/// <param name="o">The object whose properties will be displayed.</param>
+		public static void Render(object o)
+		{
+			foreach (var pi in o.GetType().GetProperties())
+			{
+				AnsiConsole.MarkupLineInterpolated($"[{OllamaConsole.AccentTextColor}][underline][bold]{pi.Name}:[/][/][/]");
+				AnsiConsole.MarkupLineInterpolated($"[{OllamaConsole.AccentTextColor}]{pi.GetValue(o)?.ToString() ?? ""}[/]");
+				AnsiConsole.WriteLine();
+			}
+		}
+	}
 }
