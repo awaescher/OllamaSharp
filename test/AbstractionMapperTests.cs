@@ -233,7 +233,7 @@ public class AbstractionMapperTests
 		{
 			var chatMessages = new List<Microsoft.Extensions.AI.ChatMessage>
 			{
-				new(Microsoft.Extensions.AI.ChatRole.User, "What's the weather in Honululu?")
+				new(Microsoft.Extensions.AI.ChatRole.User, "What's the weather in Honolulu?")
 				{
 					AdditionalProperties = [],
 					AuthorName = "a1",
@@ -394,7 +394,7 @@ public class AbstractionMapperTests
 		{
 			var chatMessages = new List<Microsoft.Extensions.AI.ChatMessage>
 			{
-				new(Microsoft.Extensions.AI.ChatRole.User, "What's the weather in Honululu?")
+				new(Microsoft.Extensions.AI.ChatRole.User, "What's the weather in Honolulu?")
 				{
 					AdditionalProperties = [],
 					AuthorName = "a1",
@@ -929,7 +929,7 @@ public class AbstractionMapperTests
 						{
 							Arguments = new Dictionary<string, object?>
 							{
-								["city"] = "Honululu",
+								["city"] = "Honolulu",
 								["unit"] = "celsius"
 							},
 							Name = "get_weather"
@@ -956,7 +956,7 @@ public class AbstractionMapperTests
 			var toolCall = chatMessage.Contents.Last() as FunctionCallContent;
 			toolCall.AdditionalProperties.ShouldBeNull();
 			toolCall.Arguments.Count.ShouldBe(2);
-			toolCall.Arguments["city"].ShouldBe("Honululu");
+			toolCall.Arguments["city"].ShouldBe("Honolulu");
 			toolCall.Arguments["unit"].ShouldBe("celsius");
 			toolCall.CallId.Length.ShouldBe(8); // random guid
 			toolCall.Exception.ShouldBeNull();
@@ -992,7 +992,7 @@ public class ToChatMessageMethod : AbstractionMapperTests
 						{
 							Arguments = new Dictionary<string, object?>
 							{
-								["city"] = "Honululu",
+								["city"] = "Honolulu",
 								["unit"] = "celsius"
 							},
 							Name = "get_weather"
@@ -1011,7 +1011,7 @@ public class ToChatMessageMethod : AbstractionMapperTests
 		var toolCall = chatMessage.Contents.Last() as FunctionCallContent;
 		toolCall.AdditionalProperties.ShouldBeNull();
 		toolCall.Arguments.Count.ShouldBe(2);
-		toolCall.Arguments["city"].ShouldBe("Honululu");
+		toolCall.Arguments["city"].ShouldBe("Honolulu");
 		toolCall.Arguments["unit"].ShouldBe("celsius");
 		toolCall.CallId.Length.ShouldBe(8); // random guid
 		toolCall.Exception.ShouldBeNull();

@@ -45,7 +45,7 @@ public abstract class SourceGeneratorTest
 
 		var generatedCode = generatedTrees[0].ToString();
 
-		// add System.- and OllamaSharp references
+		// add System and OllamaSharp references
 		var references = AppDomain.CurrentDomain
 			.GetAssemblies()
 			.Where(a => (a.FullName?.StartsWith("System.") ?? false) || (a.FullName?.Contains("OllamaSharp") ?? false))
