@@ -9,10 +9,7 @@ namespace OllamaApiConsole.Demos;
 /// </summary>
 public class ModelManagerConsole(IOllamaApiClient ollama) : OllamaConsole(ollama)
 {
-	/// <summary>
-	/// Initializes a new instance of the <see cref="ModelManagerConsole"/> class.
-	/// </summary>
-	/// <param name="ollama">The Ollama API client used to communicate with the server.</param>
+
 
 	/// <inheritdoc/>
 	public override async Task Run()

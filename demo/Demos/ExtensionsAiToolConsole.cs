@@ -167,7 +167,13 @@ public class ExtensionsAiToolConsole(IOllamaApiClient ollama) : OllamaConsole(ol
 	/// </summary>
 	public enum Unit
 	{
+		/// <summary>
+		/// Celsius temperature unit.
+		/// </summary>
 		Celsius,
+		/// <summary>
+		/// Fahrenheit temperature unit.
+		/// </summary>
 		Fahrenheit
 	}
 
