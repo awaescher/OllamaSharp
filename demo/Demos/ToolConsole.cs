@@ -172,7 +172,13 @@ public class ToolConsole(IOllamaApiClient ollama) : OllamaConsole(ollama)
 	/// </summary>
 	public enum Unit
 	{
+		/// <summary>
+		/// Celsius temperature unit.
+		/// </summary>
 		Celsius,
+		/// <summary>
+		/// Fahrenheit temperature unit.
+		/// </summary>
 		Fahrenheit
 	}
 
