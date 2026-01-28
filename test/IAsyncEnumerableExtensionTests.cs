@@ -8,10 +8,19 @@ namespace Tests;
 
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
 
+/// <summary>
+/// Contains tests for the <see cref="IAsyncEnumerableExtension.StreamToEndAsync"/> extension method.
+/// </summary>
 public class IAsyncEnumerableExtensionTests
 {
+	/// <summary>
+	/// Tests for the <c>StreamToEndAsync</c> method.
+	/// </summary>
 	public class StreamToEndAsyncMethod : IAsyncEnumerableExtensionTests
 	{
+		/// <summary>
+		/// Verifies that a stream of chat responses is concatenated into a single response value.
+		/// </summary>
 		[Test]
 		public async Task Appends_Stream_To_One_Single_Response_Value()
 		{
@@ -27,6 +36,9 @@ public class IAsyncEnumerableExtensionTests
 			answer.Message.Content.ShouldBe("Hi human, how are you?");
 		}
 
+		/// <summary>
+		/// Ensures that the optional callback is invoked for each streamed item.
+		/// </summary>
 		[Test]
 		public async Task Calls_The_Optional_Callback_For_Each_Item()
 		{
@@ -45,8 +57,8 @@ public class IAsyncEnumerableExtensionTests
 		}
 
 		/// <summary>
-		/// This test documents the expected behavior that a stream of chat responses needs to end with a
-		/// message that sets Done to true.
+		/// Verifies that an <see cref="InvalidOperationException"/> is thrown when the stream does not end with a
+		/// response marked as done.
 		/// </summary>
 		[Test]
 		public async Task Throws_If_No_Done_Response_Was_Send()

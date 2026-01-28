@@ -8,6 +8,9 @@ namespace Tests.FunctionalTests;
 
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
 
+/// <summary>
+/// Contains functional tests that verify JSON schema generation and deserialization using the Ollama API.
+/// </summary>
 public class JsonSchemaTests
 {
 	private readonly Uri _baseUri = new("http://localhost:11434");
@@ -16,6 +19,10 @@ public class JsonSchemaTests
 	private OllamaApiClient _client = null!;
 	private Chat _chat = null!;
 
+	/// <summary>
+	/// Initializes the test fixture by creating an <see cref="OllamaApiClient"/> and a <see cref="Chat"/>
+	/// instance, and ensures that the required model is available locally.
+	/// </summary>
 	[SetUp]
 	public async Task Setup()
 	{
@@ -27,6 +34,9 @@ public class JsonSchemaTests
 			await _client.PullModelAsync(_model).ToListAsync();
 	}
 
+	/// <summary>
+	/// Cleans up resources after each test execution.
+	/// </summary>
 	[TearDown]
 	public Task Teardown()
 	{
@@ -34,6 +44,9 @@ public class JsonSchemaTests
 		return Task.CompletedTask;
 	}
 
+	/// <summary>
+	/// Generates a sword description via the Ollama chat API and verifies that the response conforms to the expected JSON schema.
+	/// </summary>
 	[Test]
 	public async Task GenerateSword_ShouldSucceed()
 	{

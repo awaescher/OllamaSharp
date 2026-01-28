@@ -5,10 +5,19 @@ namespace Tests.SourceGenerators;
 
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
 
+/// <summary>
+/// Base test class for the tool source generator tests.
+/// </summary>
 public class ToolSourceGeneratorTests : SourceGeneratorTest
 {
+	/// <summary>
+	/// Contains tests that verify metadata generation from XML documentation comments.
+	/// </summary>
 	public class MetaDataTests : ToolSourceGeneratorTests
 	{
+		/// <summary>
+		/// Verifies that the generator extracts function name, description and parameter information from a method's summary and param tags.
+		/// </summary>
 		[Test]
 		public void Generates_Meta_Data_From_Summary()
 		{
@@ -42,6 +51,9 @@ public class Test
 			result.GeneratedTool.GetType().Name.ShouldBe("GetWeatherTool");
 		}
 
+		/// <summary>
+		/// Ensures that a method without a summary still generates a tool with an empty description.
+		/// </summary>
 		[Test]
 		public void Allows_No_Summary()
 		{
@@ -61,6 +73,9 @@ public class Test
 			result.GeneratedTool.Function.Parameters.Properties["location"].Description.ShouldBeEmpty();
 		}
 
+		/// <summary>
+		/// Checks that line breaks inside a summary are normalized into a single description string.
+		/// </summary>
 		[Test]
 		public void Allows_Line_Breaks_In_Summary()
 		{
@@ -87,6 +102,9 @@ public class Test
 			result.GeneratedTool.Function.Description.ShouldBe("Gets the current weather for a given location.");
 		}
 
+		/// <summary>
+		/// Validates that enum parameters are represented with their possible values and string type.
+		/// </summary>
 		[Test]
 		public void Supports_Enums()
 		{
@@ -119,6 +137,9 @@ public class Test
 			result.GeneratedTool.Function.Parameters.Properties["unit"].Type.ShouldBe("string");
 		}
 
+		/// <summary>
+		/// Ensures that boolean parameters, including nullable and optional variants, are handled correctly.
+		/// </summary>
 		[Test]
 		public void Supports_Booleans()
 		{
@@ -160,6 +181,9 @@ public class Test
 			result.GeneratedCode.ShouldContain("bool? nullableOptionalTrue = args.ContainsKey(\"nullableOptionalTrue\") ? (bool?)args[\"nullableOptionalTrue\"] : true;");
 		}
 
+		/// <summary>
+		/// Checks that string and numeric arguments are mapped to the correct JSON schema types.
+		/// </summary>
 		[Test]
 		public void Supports_String_And_Number_Arguments()
 		{
@@ -182,6 +206,9 @@ public class Test
 			result.GeneratedTool.Function.Parameters.Properties["f"].Type.ShouldBe("number");
 		}
 
+		/// <summary>
+		/// Verifies that optional arguments are not marked as required and retain their metadata.
+		/// </summary>
 		[Test]
 		public void Supports_Optional_Arguments()
 		{
@@ -214,6 +241,9 @@ public class Test
 			result.GeneratedTool.Function.Parameters.Properties["unit"].Type.ShouldBe("string");
 		}
 
+		/// <summary>
+		/// Confirms that a tool can be generated when the source file has no explicit namespace.
+		/// </summary>
 		[Test]
 		public void Allows_Default_Namespace()
 		{
@@ -229,6 +259,9 @@ public class Test
 			result.GeneratedTool.ShouldNotBeNull();
 		}
 
+		/// <summary>
+		/// Ensures that a tool can be generated from a static class definition.
+		/// </summary>
 		[Test]
 		public void Requires_Class_Definition()
 		{
@@ -246,8 +279,14 @@ public static class Test
 		}
 	}
 
+	/// <summary>
+	/// Contains tests that verify invocation of generated tools using static methods.
+	/// </summary>
 	public class StaticInvocationTests : ToolSourceGeneratorTests
 	{
+		/// <summary>
+		/// Checks that a simple static method can be invoked through the generated tool.
+		/// </summary>
 		[Test]
 		public async Task Can_Be_Invoked()
 		{
@@ -264,6 +303,9 @@ public class Test
 			toolResult.ShouldBe(42);
 		}
 
+		/// <summary>
+		/// Verifies that tools inside static classes are invocable.
+		/// </summary>
 		[Test]
 		public async Task Can_Be_Invoked_Within_Static_Classes()
 		{
@@ -280,6 +322,9 @@ public static class Test
 			toolResult.ShouldBe(42);
 		}
 
+		/// <summary>
+		/// Ensures that asynchronous static methods returning a Task are handled correctly.
+		/// </summary>
 		[Test]
 		public async Task Can_Be_Invoked_As_Async_Task()
 		{
@@ -300,6 +345,9 @@ public class Test
 			toolResult.ShouldBe(42);
 		}
 
+		/// <summary>
+		/// Tests that arguments are passed correctly to the generated tool.
+		/// </summary>
 		[Test]
 		public async Task Uses_Arguments()
 		{
@@ -323,6 +371,9 @@ public class Test
 			toolResult.ShouldBe("It's cold at only 6° Fahrenheit in Berlin.");
 		}
 
+		/// <summary>
+		/// Confirms that optional arguments can be omitted when invoking the tool.
+		/// </summary>
 		[Test]
 		public async Task Allows_Skipping_Optional_Arguments()
 		{
@@ -346,6 +397,9 @@ public class Test
 			toolResult.ShouldBe("It's cold at only 6° Celsius in Berlin.");
 		}
 
+		/// <summary>
+		/// Verifies that an invalid enum value for a required argument throws an exception.
+		/// </summary>
 		[Test]
 		public async Task Throws_On_Invalid_Enums_If_Argument_Is_Required()
 		{
@@ -369,6 +423,9 @@ public class Test
 			await act.ShouldThrowAsync<ArgumentException>();
 		}
 
+		/// <summary>
+		/// Ensures that an invalid enum value for an optional argument falls back to the default.
+		/// </summary>
 		[Test]
 		public async Task Allows_Invalid_Enums_For_Optional_Arguments()
 		{

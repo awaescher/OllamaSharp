@@ -9,6 +9,9 @@ namespace Tests.FunctionalTests;
 
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
 
+/// <summary>
+/// Contains functional tests for the <see cref="OllamaApiClient"/> class.
+/// </summary>
 public class OllamaApiClientTests
 {
 	private readonly Uri _baseUri = new("http://localhost:11434");
@@ -18,6 +21,9 @@ public class OllamaApiClientTests
 
 	private OllamaApiClient _client = null!;
 
+	/// <summary>
+	/// Sets up the test fixture by creating an <see cref="OllamaApiClient"/> instance and ensuring a clean state.
+	/// </summary>
 	[OneTimeSetUp]
 	public async Task Setup()
 	{
@@ -25,6 +31,9 @@ public class OllamaApiClientTests
 		await CleanupModel(_createModel);
 	}
 
+	/// <summary>
+	/// Tears down the test fixture by deleting any created models and disposing the client.
+	/// </summary>
 	[OneTimeTearDown]
 	public async Task Teardown()
 	{
@@ -49,6 +58,9 @@ public class OllamaApiClientTests
 	}
 
 
+	/// <summary>
+	/// Tests that a model can be pulled successfully.
+	/// </summary>
 	[Test, Order(1)]
 	public async Task PullModel()
 	{
@@ -64,6 +76,9 @@ public class OllamaApiClientTests
 		response.ShouldContain(r => r!.Status == "success");
 	}
 
+	/// <summary>
+	/// Tests that a new model can be created from an existing one.
+	/// </summary>
 	[Test, Order(2)]
 	public async Task CreateModel()
 	{
@@ -91,6 +106,9 @@ public class OllamaApiClientTests
 		models.ShouldContain(m => m.Name.StartsWith(_createModel));
 	}
 
+	/// <summary>
+	/// Tests that a model can be copied.
+	/// </summary>
 	[Test, Order(3)]
 	public async Task CopyModel()
 	{
@@ -102,6 +120,9 @@ public class OllamaApiClientTests
 		models.ShouldContain(m => m.Name == $"{_createModel}-copy:latest");
 	}
 
+	/// <summary>
+	/// Tests that embeddings can be generated for a given input.
+	/// </summary>
 	[Test, Order(4)]
 	public async Task Embed()
 	{
@@ -117,6 +138,9 @@ public class OllamaApiClientTests
 		response.TotalDuration!.Value.ShouldBeGreaterThan(100, "Because generating embeddings should take some time");
 	}
 
+	/// <summary>
+	/// Tests that locally stored models can be listed.
+	/// </summary>
 	[Test, Order(5)]
 	public async Task ListLocalModels()
 	{
@@ -126,6 +150,9 @@ public class OllamaApiClientTests
 		models.ShouldContain(m => m.Name == _model);
 	}
 
+	/// <summary>
+	/// Tests that running models can be listed.
+	/// </summary>
 	[Test, Order(6)]
 	public async Task ListRunningModels()
 	{
@@ -141,6 +168,9 @@ public class OllamaApiClientTests
 		models.ShouldContain(m => m.Name == _model);
 	}
 
+	/// <summary>
+	/// Tests that model details can be retrieved.
+	/// </summary>
 	[Test, Order(7)]
 	public async Task ShowModel()
 	{
@@ -156,6 +186,9 @@ public class OllamaApiClientTests
 		response.Details.Family.ShouldBe("llama");
 	}
 
+	/// <summary>
+	/// Tests that a model can be deleted.
+	/// </summary>
 	[Test, Order(8)]
 	public async Task DeleteModel()
 	{
@@ -169,6 +202,9 @@ public class OllamaApiClientTests
 		models.ShouldNotContain(m => m.Name == $"{_createModel}-copy:latest");
 	}
 
+	/// <summary>
+	/// Tests that text can be generated from a model.
+	/// </summary>
 	[Test, Order(9)]
 	public async Task GenerateAsync()
 	{
@@ -188,6 +224,9 @@ public class OllamaApiClientTests
 		joined.ShouldContain("42");
 	}
 
+	/// <summary>
+	/// Tests that a chat interaction can be performed with a model.
+	/// </summary>
 	[Test, Order(10)]
 	public async Task ChatAsync()
 	{
@@ -223,6 +262,9 @@ public class OllamaApiClientTests
 		joined.ShouldContain("Douglas Adams");
 	}
 
+	/// <summary>
+	/// Tests that the server reports it is running.
+	/// </summary>
 	[Test, Order(11)]
 	public async Task IsRunningAsync()
 	{
@@ -230,6 +272,9 @@ public class OllamaApiClientTests
 		response.ShouldBeTrue();
 	}
 
+	/// <summary>
+	/// Tests that the server version can be retrieved.
+	/// </summary>
 	[Test, Order(12)]
 	public async Task GetVersionAsync()
 	{

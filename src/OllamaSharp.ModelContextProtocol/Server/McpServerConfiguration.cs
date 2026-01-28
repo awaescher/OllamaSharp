@@ -35,15 +35,15 @@ public class McpServerConfiguration
 	public McpServerTransportType TransportType { get; set; } = McpServerTransportType.Stdio;
 
 	/// <summary>
-	/// Gets or sets any additional options
+	/// Gets or sets any additional options.
 	/// </summary>	
 	public Dictionary<string, string>? Options { get; set; }
 
 	/// <summary>
-	/// Sets the name of the configuration if empty.
+	/// Sets the name of the configuration if it is currently empty.
 	/// </summary>
-	/// <param name="name">The new name</param>
-	/// <returns></returns>
+	/// <param name="name">The new name to assign when <see cref="Name"/> is null or empty.</param>
+	/// <returns>The current <see cref="McpServerConfiguration"/> instance.</returns>
 	public McpServerConfiguration SetNameIfEmpty(string name)
 	{
 		if (string.IsNullOrEmpty(Name))

@@ -4,6 +4,9 @@ using Shouldly;
 
 namespace Tests.FunctionalTests;
 
+/// <summary>
+/// Contains functional tests for chat functionality.
+/// </summary>
 public class ChatTests
 {
 	private readonly Uri _baseUri = new("http://localhost:11434");
@@ -12,6 +15,9 @@ public class ChatTests
 	private OllamaApiClient _client = null!;
 	private Chat _chat = null!;
 
+	/// <summary>
+	/// Initializes the Ollama client and ensures the test model is available.
+	/// </summary>
 	[SetUp]
 	public async Task Setup()
 	{
@@ -23,6 +29,9 @@ public class ChatTests
 			await _client.PullModelAsync(_model).ToListAsync();
 	}
 
+	/// <summary>
+	/// Disposes the Ollama client after each test.
+	/// </summary>
 	[TearDown]
 	public Task Teardown()
 	{
@@ -31,6 +40,9 @@ public class ChatTests
 	}
 
 
+	/// <summary>
+	/// Verifies that sending a message returns the expected response.
+	/// </summary>
 	[Test]
 	public async Task SendAsync_ShouldSucceed()
 	{

@@ -23,6 +23,9 @@ namespace Tests;
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
 #pragma warning disable CS8604 // Possible null reference argument.
 
+/// <summary>
+/// Contains integration tests for the <see cref="IOllamaApiClient"/> implementation.
+/// </summary>
 public class OllamaApiClientTests
 {
 	private IOllamaApiClient _client;
@@ -92,14 +95,13 @@ public class OllamaApiClientTests
 	}
 
 	/// <summary>
-	/// PullModelMethod Testing
+	/// Contains tests for the PullModel method.
 	/// </summary>
 	public class PullModelMethod : OllamaApiClientTests
 	{
 		/// <summary>
-		/// This is to simulate the failing PullModelRequest when behind a proxy like zscaler
+		/// Simulates a failing PullModel request when behind a proxy like Zscaler.
 		/// </summary>
-		/// <returns></returns>
 		[Test, NonParallelizable]
 		public async Task Streams_Status_Error()
 		{
@@ -147,6 +149,9 @@ public class OllamaApiClientTests
 		}
 	}
 
+	/// <summary>
+	/// Contains tests for the CreateModel method.
+	/// </summary>
 	public class CreateModelMethod : OllamaApiClientTests
 	{
 		[Test, NonParallelizable]
@@ -177,7 +182,7 @@ public class OllamaApiClientTests
 		}
 
 		/// <summary>
-		/// Applies to all methods on the OllamaApiClient
+		/// Verifies that default request headers are sent for all methods on the <see cref="IOllamaApiClient"/>.
 		/// </summary>
 		[Test, NonParallelizable]
 		public async Task Sends_Default_Request_Headers()
@@ -201,7 +206,7 @@ public class OllamaApiClientTests
 		}
 
 		/// <summary>
-		/// Applies to all methods on the OllamaApiClient
+		/// Verifies that custom request headers are sent for all methods on the <see cref="IOllamaApiClient"/>.
 		/// </summary>
 		[Test, NonParallelizable]
 		public async Task Sends_Custom_Request_Headers()
@@ -229,7 +234,7 @@ public class OllamaApiClientTests
 		}
 
 		/// <summary>
-		/// Applies to all methods on the OllamaApiClient
+		/// Verifies that custom request headers can overwrite default HTTP headers.
 		/// </summary>
 		[Test, NonParallelizable]
 		public async Task Overwrites_Http_Headers()
@@ -256,6 +261,9 @@ public class OllamaApiClientTests
 		}
 	}
 
+	/// <summary>
+	/// Contains tests for the Generate method.
+	/// </summary>
 	public class GenerateMethod : OllamaApiClientTests
 	{
 		[Test, NonParallelizable]
@@ -285,29 +293,32 @@ public class OllamaApiClientTests
 		}
 	}
 
+	/// <summary>
+	/// Contains tests for the Complete method.
+	/// </summary>
 	public class CompleteMethod : OllamaApiClientTests
 	{
 		[Test, NonParallelizable]
 		public async Task Sends_Parameters_With_Request()
 		{
 			var payload = """
-				{
-				    "model": "llama2",
-				    "created_at": "2024-07-12T12:34:39.63897616Z",
-				    "message": {
-				        "role": "assistant",
-				        "content": "Test content."
-				    },
-				    "done_reason": "stop",
-				    "done": true,
-				    "total_duration": 137729492272,
-				    "load_duration": 133071702768,
-				    "prompt_eval_count": 26,
-				    "prompt_eval_duration": 35137000,
-				    "eval_count": 323,
-				    "eval_duration": 4575154000
-				}
-				""".ReplaceLineEndings(""); // the JSON stream reader reads by line, so we need to make this one single line
+			{
+			    "model": "llama2",
+			    "created_at": "2024-07-12T12:34:39.63897616Z",
+			    "message": {
+			        "role": "assistant",
+			        "content": "Test content."
+			    },
+			    "done_reason": "stop",
+			    "done": true,
+			    "total_duration": 137729492272,
+			    "load_duration": 133071702768,
+			    "prompt_eval_count": 26,
+			    "prompt_eval_duration": 35137000,
+			    "eval_count": 323,
+			    "eval_duration": 4575154000
+			}
+			""".ReplaceLineEndings(""); // the JSON stream reader reads by line, so we need to make this one single line
 
 			await using var stream = new MemoryStream();
 
@@ -362,29 +373,32 @@ public class OllamaApiClientTests
 		}
 	}
 
+	/// <summary>
+	/// Contains tests for the Chat method.
+	/// </summary>
 	public class ChatMethod : OllamaApiClientTests
 	{
 		[Test, NonParallelizable]
 		public async Task Receives_Response_Message_With_Metadata()
 		{
 			var payload = """
-				{
-				    "model": "llama2",
-				    "created_at": "2024-07-12T12:34:39.63897616Z",
-				    "message": {
-				        "role": "assistant",
-				        "content": "Test content."
-				    },
-				    "done_reason": "stop",
-				    "done": true,
-				    "total_duration": 137729492272,
-				    "load_duration": 133071702768,
-				    "prompt_eval_count": 26,
-				    "prompt_eval_duration": 35137000,
-				    "eval_count": 323,
-				    "eval_duration": 4575154000
-				}
-				""".ReplaceLineEndings(""); // the JSON stream reader reads by line, so we need to make this one single line
+			{
+			    "model": "llama2",
+			    "created_at": "2024-07-12T12:34:39.63897616Z",
+			    "message": {
+			        "role": "assistant",
+			        "content": "Test content."
+			    },
+			    "done_reason": "stop",
+			    "done": true,
+			    "total_duration": 137729492272,
+			    "load_duration": 133071702768,
+			    "prompt_eval_count": 26,
+			    "prompt_eval_duration": 35137000,
+			    "eval_count": 323,
+			    "eval_duration": 4575154000
+			}
+			""".ReplaceLineEndings(""); // the JSON stream reader reads by line, so we need to make this one single line
 
 			await using var stream = new MemoryStream();
 
@@ -404,8 +418,8 @@ public class OllamaApiClientTests
 				Model = "model",
 				Messages = [
 					new(ChatRole.User, "Why?"),
-					new(ChatRole.Assistant, "Because!"),
-					new(ChatRole.User, "And where?")]
+				new(ChatRole.Assistant, "Because!"),
+				new(ChatRole.User, "And where?")]
 			};
 
 			var result = await _client.ChatAsync(chat, CancellationToken.None).StreamToEndAsync();
@@ -427,35 +441,35 @@ public class OllamaApiClientTests
 		public async Task Receives_Response_Message_With_ToolsCalls()
 		{
 			var payload = """
-				{
-				    "model": "llama3.1:latest",
-				    "created_at": "2024-09-01T16:12:28.639564938Z",
-				    "message": {
-				        "role": "assistant",
-				        "content": "",
-				        "tool_calls": [
-				            {
-				                "function": {
-				                    "name": "get_current_weather",
-				                    "arguments": {
-				                        "format": "celsius",
-				                        "location": "Los Angeles, CA",
-										"number": 42
-				                    }
-				                }
-				            }
-				        ]
-				    },
-				    "done_reason": "stop",
-				    "done": true,
-				    "total_duration": 24808639002,
-				    "load_duration": 5084890970,
-				    "prompt_eval_count": 311,
-				    "prompt_eval_duration": 15120086000,
-				    "eval_count": 28,
-				    "eval_duration": 4602334000
-				}
-				""".ReplaceLineEndings(""); // the JSON stream reader reads by line, so we need to make this one single line
+			{
+			    "model": "llama3.1:latest",
+			    "created_at": "2024-09-01T16:12:28.639564938Z",
+			    "message": {
+			        "role": "assistant",
+			        "content": "",
+			        "tool_calls": [
+			            {
+			                "function": {
+			                    "name": "get_current_weather",
+			                    "arguments": {
+			                        "format": "celsius",
+			                        "location": "Los Angeles, CA",
+									"number": 42
+			                    }
+			                }
+			            }
+			        ]
+			    },
+			    "done_reason": "stop",
+			    "done": true,
+			    "total_duration": 24808639002,
+			    "load_duration": 5084890970,
+			    "prompt_eval_count": 311,
+			    "prompt_eval_duration": 15120086000,
+			    "eval_count": 28,
+			    "eval_duration": 4602334000
+			}
+			""".ReplaceLineEndings(""); // the JSON stream reader reads by line, so we need to make this one single line
 
 			await using var stream = new MemoryStream();
 
@@ -476,40 +490,40 @@ public class OllamaApiClientTests
 				Stream = false,
 				Messages = [
 					new(ChatRole.User, "How is the weather in LA?"),
-				],
+			],
 				Tools = [
 					new Tool
+				{
+					Function = new Function
 					{
-						Function = new Function
+						Description = "Get the current weather for a location",
+						Name = "get_current_weather",
+						Parameters = new Parameters
 						{
-							Description = "Get the current weather for a location",
-							Name = "get_current_weather",
-							Parameters = new Parameters
+							Properties = new Dictionary<string, OllamaSharp.Models.Chat.Property>
 							{
-								Properties = new Dictionary<string, OllamaSharp.Models.Chat.Property>
+								["location"] = new()
 								{
-									["location"] = new()
-									{
-										Type = "string",
-										Description = "The location to get the weather for, e.g. San Francisco, CA"
-									},
-									["format"] = new()
-									{
-										Type = "string",
-										Description = "The format to return the weather in, e.g. 'celsius' or 'fahrenheit'",
-										Enum = ["celsius", "fahrenheit"]
-									},
-									["number"] = new()
-									{
-										Type = "integer",
-										Description = "The number of the day to get the weather for, e.g. 42"
-									}
+									Type = "string",
+									Description = "The location to get the weather for, e.g. San Francisco, CA"
 								},
-								Required = ["location", "format"],
-							}
-						},
-						Type = "function"
-					}
+								["format"] = new()
+								{
+									Type = "string",
+									Description = "The format to return the weather in, e.g. 'celsius' or 'fahrenheit'",
+									Enum = ["celsius", "fahrenheit"]
+								},
+								["number"] = new()
+								{
+									Type = "integer",
+									Description = "The number of the day to get the weather for, e.g. 42"
+								}
+							},
+							Required = ["location", "format"],
+						}
+					},
+					Type = "function"
+				}
 				]
 			};
 
@@ -535,6 +549,9 @@ public class OllamaApiClientTests
 		}
 	}
 
+	/// <summary>
+	/// Contains tests for streaming chat responses.
+	/// </summary>
 	public class StreamChatMethod : OllamaApiClientTests
 	{
 		[Test, NonParallelizable]
@@ -561,9 +578,9 @@ public class OllamaApiClientTests
 				Messages =
 				[
 					new(ChatRole.User, "Why?"),
-					new(ChatRole.Assistant, "Because!"),
-					new(ChatRole.User, "And where?"),
-				]
+				new(ChatRole.Assistant, "Because!"),
+				new(ChatRole.User, "And where?"),
+			]
 			};
 
 			var chatStream = _client.ChatAsync(chat, CancellationToken.None);
@@ -612,6 +629,9 @@ public class OllamaApiClientTests
 		}
 	}
 
+	/// <summary>
+	/// Contains tests for listing local models.
+	/// </summary>
 	public class ListLocalModelsMethod : OllamaApiClientTests
 	{
 		[Test, NonParallelizable]
@@ -620,7 +640,7 @@ public class OllamaApiClientTests
 			_response = new HttpResponseMessage
 			{
 				StatusCode = HttpStatusCode.OK,
-				Content = new StringContent("{\r\n\"models\": [\r\n{\r\n\"name\": \"codellama:latest\",\r\n\"modified_at\": \"2023-10-12T14:17:04.967950259+02:00\",\r\n\"size\": 3791811617,\r\n\"digest\": \"36893bf9bc7ff7ace56557cd28784f35f834290c85d39115c6b91c00a031cfad\"\r\n},\r\n{\r\n\"name\": \"llama2:latest\",\r\n\"modified_at\": \"2023-10-02T14:10:14.78152065+02:00\",\r\n\"size\": 3791737662,\r\n\"digest\": \"d5611f7c428cf71fb05660257d18e043477f8b46cf561bf86940c687c1a59f70\"\r\n},\r\n{\r\n\"name\": \"mistral:latest\",\r\n\"modified_at\": \"2023-10-02T14:16:24.841447764+02:00\",\r\n\"size\": 4108916688,\r\n\"digest\": \"8aa307f73b2622af521e8f22d46e4b777123c4df91898dcb2e4079dc8fdf579e\"\r\n},\r\n{\r\n\"name\": \"vicuna:latest\",\r\n\"modified_at\": \"2023-10-06T09:44:16.936312659+02:00\",\r\n\"size\": 3825517709,\r\n\"digest\": \"675fa173a76abc48325d395854471961abf74b664d91e92ffb4fc03e0bde652b\"\r\n}\r\n]\r\n}\r\n")
+				Content = new StringContent("{\r\n\"models\": [\r\n{\r\n\"name\": \"codellama:latest\",\r\n\"modified_at\": \"2023-10-12T14:17:04.967950259+02:00\",\r\n\"size\": 3791811617,\r\n\"digest\": \"36893bf9bc7ff7ace56557cd28784f35f834290c85d39115c6b91c00a031cfad\"\r\n},\r\n{\r\n\"name\": \"llama2:latest\",\r\n\"modified_at\": \"2023-10-02T14:10:14.78152065+02:00\",\r\n\"size\": 3791737662,\r\n\"digest\": \"d5611f7c428cf71fb05660257d18e043477f8b46cf561bf86940c687c1a59f70\"\r\n},\r\n{\r\n\"name\": \"mistral:latest\",\r\n\"modified_at\": \"2023-10-02T14:16:24.841447764+02:00\",\r\n\"size\": 4108916688,\r\n\"digest\": \"8aa307f73b2622af521e8f22d46e4b777123c4df91898dcb2e4079dc8fdf579e\"\r\n},\r\n{\r\n\"name\": \"vicuna:latest\",\r\n\"modified_at\": \"2023-10-06T09:44:16.936312659+02:00\",\r\n\"size\": 3825517709,\r\n\"digest\": \"675fa173a76abc48325d395854471961abf74b664d91e92ffb4fc03e0bde652b\"\r\n}\r\n]\r\n}")
 			};
 
 			var models = await _client.ListLocalModelsAsync(CancellationToken.None);
@@ -634,6 +654,9 @@ public class OllamaApiClientTests
 		}
 	}
 
+	/// <summary>
+	/// Contains tests for the Show method.
+	/// </summary>
 	public class ShowMethod : OllamaApiClientTests
 	{
 		[Test, NonParallelizable]
@@ -682,6 +705,9 @@ public class OllamaApiClientTests
 		}
 	}
 
+	/// <summary>
+	/// Contains tests for the GenerateEmbeddings method.
+	/// </summary>
 	public class GenerateEmbeddingsMethod : OllamaApiClientTests
 	{
 		[Test, NonParallelizable]
@@ -700,6 +726,9 @@ public class OllamaApiClientTests
 		}
 	}
 
+	/// <summary>
+	/// Contains tests for the GetVersion method.
+	/// </summary>
 	public class GetVersionMethod : OllamaApiClientTests
 	{
 		[Test]
@@ -746,32 +775,61 @@ public class OllamaApiClientTests
 	}
 }
 
+/// <summary>
+/// Provides extension methods for writing simulated Ollama streaming responses in tests.
+/// </summary>
 public static class WriterExtensions
 {
+	/// <summary>
+	/// Writes a completion stream response line with the specified partial <paramref name="response"/>.
+	/// The generated JSON contains <c>done = false</c>.
+	/// </summary>
+	/// <param name="writer">The writer to which the JSON line is written.</param>
+	/// <param name="response">The partial response text.</param>
 	public static async Task WriteCompletionStreamResponse(this StreamWriter writer, string response)
 	{
 		var json = new { response, done = false };
 		await writer.WriteLineAsync(JsonSerializer.Serialize(json));
 	}
 
+	/// <summary>
+	/// Writes the final completion stream response line with the specified <paramref name="response"/> and <paramref name="context"/>.
+	/// The generated JSON contains <c>done = true</c>.
+	/// </summary>
+	/// <param name="writer">The writer to which the JSON line is written.</param>
+	/// <param name="response">The final response text.</param>
+	/// <param name="context">An array of integer context identifiers.</param>
 	public static async Task FinishCompletionStreamResponse(this StreamWriter writer, string response, int[] context)
 	{
 		var json = new { response, done = true, context };
 		await writer.WriteLineAsync(JsonSerializer.Serialize(json));
 	}
 
+	/// <summary>
+	/// Writes a chat stream response line with the specified <paramref name="content"/> and <paramref name="role"/>.
+	/// The generated JSON contains <c>done = false</c>.
+	/// </summary>
+	/// <param name="writer">The writer to which the JSON line is written.</param>
+	/// <param name="content">The partial chat message content.</param>
+	/// <param name="role">The role of the message sender.</param>
 	public static async Task WriteChatStreamResponse(this StreamWriter writer, string content, ChatRole role)
 	{
 		var json = new { message = new { content, role }, role, done = false };
 		await writer.WriteLineAsync(JsonSerializer.Serialize(json));
 	}
 
+	/// <summary>
+	/// Writes the final chat stream response line with the specified <paramref name="content"/> and <paramref name="role"/>.
+	/// The generated JSON contains <c>done = true</c>.
+	/// </summary>
+	/// <param name="writer">The writer to which the JSON line is written.</param>
+	/// <param name="content">The final chat message content.</param>
+	/// <param name="role">The role of the message sender.</param>
 	public static async Task FinishChatStreamResponse(this StreamWriter writer, string content, ChatRole role)
 	{
 		var json = new { message = new { content, role = role.ToString() }, role = role.ToString(), done = true };
 		await writer.WriteLineAsync(JsonSerializer.Serialize(json));
 	}
-
 }
 
 #pragma warning restore CS8602 // Dereference of a possibly null reference.

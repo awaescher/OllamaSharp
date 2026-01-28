@@ -8,8 +8,12 @@ using Spectre.Console;
 
 namespace OllamaApiConsole.Demos;
 
+/// <summary>
+/// Demonstrates the use of Extensions.AI function invocation with an Ollama model in a console application.
+/// </summary>
 public class ExtensionsAiToolConsole(IOllamaApiClient ollama) : OllamaConsole(ollama)
 {
+	/// <inheritdoc/>
 	public override async Task Run()
 	{
 		AnsiConsole.Write(new Rule("Extensions.AI").LeftJustified());
@@ -158,6 +162,9 @@ public class ExtensionsAiToolConsole(IOllamaApiClient ollama) : OllamaConsole(ol
 		return builder.ToString();
 	}
 
+	/// <summary>
+	/// Units of temperature measurement.
+	/// </summary>
 	public enum Unit
 	{
 		Celsius,
@@ -181,5 +188,4 @@ public class ExtensionsAiToolConsole(IOllamaApiClient ollama) : OllamaConsole(ol
 
 	[Description("Gets the amount of people living in a given city")]
 	private static int GetPopulation([Description("The city to get the population info for")] string city) => new Random().Next(1000, 10000000);
-
 }

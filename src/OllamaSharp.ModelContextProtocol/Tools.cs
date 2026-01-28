@@ -27,12 +27,12 @@ public static class Tools
 	/// <summary>
 	/// Gets the tools from the specified MCP server configuration file.
 	/// </summary>
-	/// <param name="configurationFilePath">File path to the configuration file.</param>
-	/// <param name="clientOptions">The client options to use when connecting to the MCP servers.</param>
-	/// <returns></returns>
-	/// <exception cref="ArgumentNullException"></exception>
-	/// <exception cref="FileNotFoundException"></exception>
-	/// <exception cref="InvalidOperationException"></exception>
+	/// <param name="configurationFilePath">The path to the JSON configuration file.</param>
+	/// <param name="clientOptions">Optional client options to use when connecting to the MCP servers.</param>
+	/// <returns>An array of <see cref="Server.McpClientTool"/> objects representing the tools discovered on the configured servers.</returns>
+	/// <exception cref="ArgumentNullException">Thrown when <paramref name="configurationFilePath"/> is null or empty.</exception>
+	/// <exception cref="FileNotFoundException">Thrown when the configuration file does not exist at the specified path.</exception>
+	/// <exception cref="InvalidOperationException">Thrown when the configuration file cannot be deserialized.</exception>
 	public static async Task<Server.McpClientTool[]> GetFromMcpServers(string configurationFilePath, McpClientOptions? clientOptions = null)
 	{
 		if (string.IsNullOrEmpty(configurationFilePath))
@@ -51,18 +51,18 @@ public static class Tools
 	/// <summary>
 	/// Gets the tools from the specified MCP server configurations.
 	/// </summary>
-	/// <param name="mcpServers"></param>
-	/// <returns></returns>
-	/// <exception cref="ArgumentNullException"></exception>
+	/// <param name="mcpServers">An array of MCP server configurations.</param>
+	/// <returns>An array of <see cref="Server.McpClientTool"/> objects representing the tools discovered on the provided servers.</returns>
+	/// <exception cref="ArgumentNullException">Thrown when <paramref name="mcpServers"/> is null or empty.</exception>
 	public static async Task<Server.McpClientTool[]> GetFromMcpServers(params McpServerConfiguration[] mcpServers) => await GetFromMcpServers(null, mcpServers);
 
 	/// <summary>
 	/// Gets the tools from the specified MCP server configurations.
 	/// </summary>
-	/// <param name="mcpServers">List of MCP server configurations</param>
-	/// <param name="clientOptions">The client options to use when connecting to the MCP servers.</param>
-	/// <returns></returns>
-	/// <exception cref="ArgumentNullException"></exception>
+	/// <param name="clientOptions">Optional client options to use when connecting to the MCP servers.</param>
+	/// <param name="mcpServers">An array of MCP server configurations.</param>
+	/// <returns>An array of <see cref="Server.McpClientTool"/> objects representing the tools discovered on the provided servers.</returns>
+	/// <exception cref="ArgumentNullException">Thrown when <paramref name="mcpServers"/> is null or empty.</exception>
 	public static async Task<Server.McpClientTool[]> GetFromMcpServers(McpClientOptions? clientOptions, params McpServerConfiguration[] mcpServers)
 	{
 		if (mcpServers == null || mcpServers.Length == 0)

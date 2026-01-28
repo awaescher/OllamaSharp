@@ -13,10 +13,19 @@ namespace Tests;
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
 #pragma warning disable CS8604 // Possible null reference argument.
 
+/// <summary>
+/// Contains unit tests for the <see cref="AbstractionMapper"/> conversion methods.
+/// </summary>
 public class AbstractionMapperTests
 {
+	/// <summary>
+	/// Tests for <see cref="AbstractionMapper.ToOllamaSharpChatRequest"/>.
+	/// </summary>
 	public class ToOllamaSharpChatRequestMethod : AbstractionMapperTests
 	{
+		/// <summary>
+		/// Verifies that a partially populated <see cref="ChatOptions"/> instance is correctly mapped.
+		/// </summary>
 		[Test]
 		public void Maps_Partial_Options_Class()
 		{
@@ -63,6 +72,9 @@ public class AbstractionMapperTests
 			request.Options.VocabOnly.ShouldBeNull();
 		}
 
+		/// <summary>
+		/// Verifies that chat messages are correctly mapped to OllamaSharp messages.
+		/// </summary>
 		[Test]
 		public void Maps_Messages()
 		{
@@ -109,7 +121,7 @@ public class AbstractionMapperTests
 		}
 
 		/// <summary>
-		/// Ollama wants images without the metadata like "data:image/png;base64,"
+		/// Ollama wants images without the metadata like "data:image/png;base64,".
 		/// </summary>
 		[Test]
 		public void Maps_Base64_Images()
@@ -157,6 +169,9 @@ public class AbstractionMapperTests
 			message.Images.Count().ShouldBe(4);
 		}
 
+		/// <summary>
+		/// Verifies that byte‑array images are correctly base64‑encoded.
+		/// </summary>
 		[Test]
 		public void Maps_Byte_Array_Images()
 		{
@@ -181,8 +196,8 @@ public class AbstractionMapperTests
 		}
 
 		/// <summary>
-		/// Ollama only supports images provided as base64 string, that means with the image content
-		/// Links to images are not supported
+		/// Ollama only supports images provided as base64 string, that means with the image content.
+		/// Links to images are not supported.
 		/// </summary>
 		[Test]
 		public void Ignores_UriContent()
@@ -210,6 +225,9 @@ public class AbstractionMapperTests
 			act.ShouldNotThrow();
 		}
 
+		/// <summary>
+		/// Verifies that tool definitions are correctly mapped.
+		/// </summary>
 		[Test]
 		public void Maps_Messages_With_Tools()
 		{
@@ -226,6 +244,7 @@ public class AbstractionMapperTests
 			var options = new ChatOptions
 			{
 				Tools = [AIFunctionFactory.Create((
+
 					[System.ComponentModel.Description("The city to get the weather for")] string city,
 					[System.ComponentModel.Description("The unit to calculate the current temperature to")] string unit = "celsius") => "sunny",
 					"get_weather", "Gets the current weather for a current location")],
@@ -248,6 +267,9 @@ public class AbstractionMapperTests
 			tool.Type.ShouldBe("function");
 		}
 
+		/// <summary>
+		/// Verifies that the keep‑alive value can be supplied via additional properties.
+		/// </summary>
 		[Test]
 		public void Maps_KeepAliveAll_From_AdditionalProperties()
 		{
@@ -262,6 +284,9 @@ public class AbstractionMapperTests
 			request.KeepAlive.ShouldBe("60m");
 		}
 
+		/// <summary>
+		/// Verifies that all supported Ollama options can be supplied through additional properties.
+		/// </summary>
 		[Test]
 		public void Maps_All_Options_With_AdditionalProperties()
 		{
@@ -361,6 +386,9 @@ public class AbstractionMapperTests
 			chatRequest.Options!.Stop.ShouldBe(["stop1", "stop2"], ignoreOrder: true);
 		}
 
+		/// <summary>
+		/// Verifies that various enumerable types for stop sequences are handled correctly.
+		/// </summary>
 		[TestCaseSource(nameof(StopSequencesTestData))]
 		public void Maps_Messages_With_IEnumerable_StopSequences(object? enumerable)
 		{
@@ -406,6 +434,9 @@ public class AbstractionMapperTests
 			}
 		}
 
+		/// <summary>
+		/// Verifies that tool response messages are mapped correctly.
+		/// </summary>
 		[Test]
 		public void Maps_Messages_With_ToolResponse()
 		{
@@ -426,6 +457,9 @@ public class AbstractionMapperTests
 			tool.Role.ShouldBe(OllamaSharp.Models.Chat.ChatRole.Tool);
 		}
 
+		/// <summary>
+		/// Verifies that multiple tool response messages are mapped correctly.
+		/// </summary>
 		[Test]
 		public void Maps_Messages_With_MultipleToolResponse()
 		{
@@ -469,6 +503,9 @@ public class AbstractionMapperTests
 			user.Role.ShouldBe(OllamaSharp.Models.Chat.ChatRole.User);
 		}
 
+		/// <summary>
+		/// Verifies mapping when the original message contains only tool result contents.
+		/// </summary>
 		[Test]
 		public void Maps_Messages_WithoutContent_MultipleToolResponse()
 		{
@@ -508,6 +545,9 @@ public class AbstractionMapperTests
 			tool2.Role.ShouldBe(OllamaSharp.Models.Chat.ChatRole.Tool);
 		}
 
+		/// <summary>
+		/// Verifies mapping of standard chat options.
+		/// </summary>
 		[Test]
 		public void Maps_Options()
 		{
@@ -569,6 +609,9 @@ public class AbstractionMapperTests
 			chatRequest.Options.VocabOnly.ShouldBeNull();
 		}
 
+		/// <summary>
+		/// Verifies mapping of JSON response format without a schema.
+		/// </summary>
 		[Test]
 		public void Maps_JsonWithoutSchema()
 		{
@@ -583,6 +626,9 @@ public class AbstractionMapperTests
 			chatRequest.Format.ShouldBe("json");
 		}
 
+		/// <summary>
+		/// Verifies mapping of JSON response format with a schema.
+		/// </summary>
 		[Test]
 		public void Maps_JsonWithSchema()
 		{
@@ -604,6 +650,9 @@ public class AbstractionMapperTests
 			public required int Damage { get; set; }
 		}
 
+		/// <summary>
+		/// Verifies mapping of Ollama‑specific options added via extension methods.
+		/// </summary>
 		[Test]
 		public void Maps_Ollama_Options()
 		{
@@ -677,6 +726,9 @@ public class AbstractionMapperTests
 			ollamaRequest.Think.ShouldBe(false);
 		}
 
+		/// <summary>
+		/// Verifies that a boolean think value is mapped correctly.
+		/// </summary>
 		[Test]
 		public void Maps_Ollama_Options_With_ThinkValue_Boolean()
 		{
@@ -684,10 +736,13 @@ public class AbstractionMapperTests
 				.AddOllamaOption(OllamaOption.Think, true);
 
 			var ollamaRequest = AbstractionMapper.ToOllamaSharpChatRequest(null, [], options, stream: true, JsonSerializerOptions.Default);
-			
+
 			ollamaRequest.Think.ShouldBe(true);
 		}
-		
+
+		/// <summary>
+		/// Verifies that a string think value is mapped correctly.
+		/// </summary>
 		[Test]
 		public void Maps_Ollama_Options_With_ThinkValue_String()
 		{
@@ -695,10 +750,13 @@ public class AbstractionMapperTests
 				.AddOllamaOption(OllamaOption.Think, "high");
 
 			var ollamaRequest = AbstractionMapper.ToOllamaSharpChatRequest(null, [], options, stream: true, JsonSerializerOptions.Default);
-			
+
 			ollamaRequest.Think.ShouldBe("high");
 		}
-		
+
+		/// <summary>
+		/// Verifies that a raw representation supplied via <see cref="ChatOptions.RawRepresentationFactory"/> is used.
+		/// </summary>
 		[Test]
 		public void Maps_UsesRawRepresentation()
 		{
@@ -733,8 +791,14 @@ public class AbstractionMapperTests
 		}
 	}
 
+	/// <summary>
+	/// Tests for <see cref="AbstractionMapper.ToChatResponse"/>.
+	/// </summary>
 	public class ToChatCompletionMethod : AbstractionMapperTests
 	{
+		/// <summary>
+		/// Verifies that known properties from a completed response are mapped correctly.
+		/// </summary>
 		[Test]
 		public void Maps_Known_Properties()
 		{
@@ -780,8 +844,14 @@ public class AbstractionMapperTests
 		}
 	}
 
+	/// <summary>
+	/// Tests for <see cref="AbstractionMapper.ToChatResponseUpdate"/>.
+	/// </summary>
 	public class ToChatResponseUpdateMethod : AbstractionMapperTests
 	{
+		/// <summary>
+		/// Verifies that known properties from a streaming response are mapped correctly.
+		/// </summary>
 		[Test]
 		public void Maps_Known_Properties()
 		{
@@ -809,6 +879,9 @@ public class AbstractionMapperTests
 			streamingChatCompletion.Text.ShouldBe("Hi.");
 		}
 
+		/// <summary>
+		/// Verifies that thinking tokens are mapped to a reasoning content.
+		/// </summary>
 		[Test]
 		public void Maps_Thinking_Tokens()
 		{
@@ -836,6 +909,9 @@ public class AbstractionMapperTests
 			streamingChatCompletion.Text.ShouldBeEmpty();
 		}
 
+		/// <summary>
+		/// Verifies that tool calls are mapped correctly from a streaming response.
+		/// </summary>
 		[Test]
 		public void Maps_ToolCalls()
 		{
@@ -893,8 +969,14 @@ public class AbstractionMapperTests
 	}
 }
 
+/// <summary>
+/// Tests for <see cref="AbstractionMapper.ToChatMessage"/>.
+/// </summary>
 public class ToChatMessageMethod : AbstractionMapperTests
 {
+	/// <summary>
+	/// Verifies that tool calls are correctly converted to a chat message.
+	/// </summary>
 	[Test]
 	public void Maps_ToolCalls()
 	{
@@ -941,8 +1023,14 @@ public class ToChatMessageMethod : AbstractionMapperTests
 	}
 }
 
+/// <summary>
+/// Tests for <see cref="AbstractionMapper.ToOllamaEmbedRequest"/>.
+/// </summary>
 public class ToOllamaEmbedRequestMethod : AbstractionMapperTests
 {
+	/// <summary>
+	/// Verifies that a basic embed request is mapped correctly.
+	/// </summary>
 	[Test]
 	public void Maps_Request()
 	{
@@ -964,6 +1052,9 @@ public class ToOllamaEmbedRequestMethod : AbstractionMapperTests
 		request.Dimensions.ShouldBe(8);
 	}
 
+	/// <summary>
+	/// Verifies that keep‑alive and truncate values can be supplied via additional properties.
+	/// </summary>
 	[Test]
 	public void Maps_KeepAlive_And_Truncate_From_AdditionalProperties()
 	{
@@ -981,8 +1072,14 @@ public class ToOllamaEmbedRequestMethod : AbstractionMapperTests
 	}
 }
 
+/// <summary>
+/// Tests for <see cref="AbstractionMapper.ToGeneratedEmbeddings"/>.
+/// </summary>
 public class ToGeneratedEmbeddingsMethod : AbstractionMapperTests
 {
+	/// <summary>
+	/// Verifies that an embed response is converted to generated embeddings correctly.
+	/// </summary>
 	[Test]
 	public void Maps_Response()
 	{
