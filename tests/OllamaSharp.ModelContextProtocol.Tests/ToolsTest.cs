@@ -7,8 +7,14 @@ namespace OllamaSharp.ModelContextProtocol.Tests;
 
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
 
+/// <summary>
+/// Contains unit tests for the <see cref="Tools"/> helper class.
+/// </summary>
 public class ToolsTests
 {
+	/// <summary>
+	/// Verifies that an <see cref="ArgumentNullException"/> is thrown when an empty configuration file path is supplied.
+	/// </summary>
 	[Test]
 	public async Task Throws_Exception_When_Empty_File_Path()
 	{
@@ -17,6 +23,9 @@ public class ToolsTests
 		ex.Message.ShouldContain("Value cannot be null. (Parameter 'configurationFilePath')");
 	}
 
+	/// <summary>
+	/// Verifies that a <see cref="FileNotFoundException"/> is thrown when the specified configuration file does not exist.
+	/// </summary>
 	[Test]
 	public async Task Throws_Exception_When_File_Does_Not_Exists()
 	{
@@ -25,6 +34,9 @@ public class ToolsTests
 		ex.Message.ShouldContain("The specified configuration file 'someConfig.txt' does not exist.");
 	}
 
+	/// <summary>
+	/// Verifies that an <see cref="ArgumentNullException"/> is thrown when no MCP server list is provided.
+	/// </summary>
 	[Test]
 	public async Task Throws_Exception_When_Server_Are_Empty()
 	{
@@ -33,6 +45,9 @@ public class ToolsTests
 		ex.Message.ShouldContain("Value cannot be null. (Parameter 'mcpServers')");
 	}
 
+	/// <summary>
+	/// Verifies that tools can be read from a valid configuration file.
+	/// </summary>
 	[Test]
 	public async Task Reads_From_File()
 	{

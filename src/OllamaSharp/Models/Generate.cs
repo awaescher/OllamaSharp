@@ -233,12 +233,27 @@ public class GenerateDoneResponseStream : GenerateResponseStream
 /// </summary>
 public class Logprob
 {
+	/// <summary>
+	/// Gets or sets the token text.
+	/// </summary>
 	[JsonPropertyName("token")]
 	public string? Token { get; set; }
+
+	/// <summary>
+	/// Gets or sets the log probability of the token.
+	/// </summary>
 	[JsonPropertyName("logprob")]
 	public double? LogProbability { get; set; }
+
+	/// <summary>
+	/// Gets or sets the raw byte representation of the token.
+	/// </summary>
 	[JsonPropertyName("bytes")]
 	public int[]? Bytes { get; set; }
+
+	/// <summary>
+	/// Gets or sets the top alternative log probabilities for this token.
+	/// </summary>
 	[JsonPropertyName("top_logprobs")]
 	public IEnumerable<Logprob>? TopLogprobs { get; set; }
 }

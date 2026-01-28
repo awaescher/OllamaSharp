@@ -12,6 +12,10 @@ namespace OllamaSharp;
 [Generator]
 public class ToolSourceGenerator : IIncrementalGenerator
 {
+	/// <summary>
+	/// Registers the incremental generation steps for discovering methods annotated with <c>OllamaTool</c>.
+	/// </summary>
+	/// <param name="context">The initialization context provided by the compiler.</param>
 	public void Initialize(IncrementalGeneratorInitializationContext context)
 	{
 		var methodCandidates = context.SyntaxProvider

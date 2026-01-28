@@ -192,7 +192,7 @@ public readonly struct ThinkValue : IEquatable<ThinkValue>
 	/// Represents a low level for the think value.
 	/// </summary>
 	public const string Low = "low";
-	
+
 	/// <summary>
 	/// Represents a struct that encapsulates a value for "think" that can
 	/// either be a boolean (`true`/`false`) or a string like (`"high"`, `"medium"`, `"low"`) used for gpt-oss models.
@@ -252,9 +252,9 @@ public readonly struct ThinkValue : IEquatable<ThinkValue>
 			_value = null;
 			return;
 		}
-		
-		_value = 
-			bool.TryParse(value!.ToString(), out var result) 
+
+		_value =
+			bool.TryParse(value!.ToString(), out var result)
 				? result.ToString().ToLower() : value.ToString();
 	}
 
@@ -300,11 +300,12 @@ public readonly struct ThinkValue : IEquatable<ThinkValue>
 	/// <returns>A nullable boolean representation of the ThinkValue.</returns>
 	public static implicit operator bool?(ThinkValue value)
 	{
-		if (value._value == null) return null;
-		
-		return 
-			bool.TryParse(value._value, out var result) ? result : 
-				!string.IsNullOrWhiteSpace(value._value)		
+		if (value._value == null)
+			return null;
+
+		return
+			bool.TryParse(value._value, out var result) ? result :
+				!string.IsNullOrWhiteSpace(value._value)
 			;
 	}
 
@@ -312,9 +313,9 @@ public readonly struct ThinkValue : IEquatable<ThinkValue>
 	/// Determines whether the current ThinkValue represents a boolean value.
 	/// </summary>
 	/// <returns>True if the value represents a boolean (true/false), otherwise false.</returns>
-	public bool IsBoolean() => 
+	public bool IsBoolean() =>
 		_value != null && bool.TryParse(_value, out _);
-	
+
 	/// <summary>
 	/// Converts the current <see cref="ThinkValue"/> instance to a nullable boolean value.
 	/// </summary>
@@ -325,14 +326,14 @@ public readonly struct ThinkValue : IEquatable<ThinkValue>
 	/// The conversion is based on the internal representation of the value within the <see cref="ThinkValue"/> instance.
 	/// If the underlying value is a string that can be interpreted as a boolean, it will be converted. Otherwise, <c>null</c> may be returned.
 	/// </remarks>
-	public bool? ToBoolean() =>this;
-	
+	public bool? ToBoolean() => this;
+
 	/// <summary>
 	/// Returns the string representation of the value.
 	/// </summary>
 	/// <returns>The string value.</returns>
 	public override string? ToString() => _value;
-	
+
 	/// <summary>
 	/// Determines whether the specified object is equal to the current <see cref="ThinkValue"/> instance.
 	/// </summary>
@@ -340,7 +341,7 @@ public readonly struct ThinkValue : IEquatable<ThinkValue>
 	/// <returns>
 	/// <c>true</c> if the specified object is equal to the current instance; otherwise, <c>false</c>.
 	/// </returns>
-	public override bool Equals(object? obj) => 
+	public override bool Equals(object? obj) =>
 		obj is ThinkValue other && Equals(other);
 
 	/// <summary>
@@ -350,7 +351,7 @@ public readonly struct ThinkValue : IEquatable<ThinkValue>
 	/// <returns>
 	/// true if the specified <see cref="ThinkValue"/> is equal to the current instance; otherwise, false.
 	/// </returns>
-	public bool Equals(ThinkValue other) => 
+	public bool Equals(ThinkValue other) =>
 		string.Equals(_value, other._value, StringComparison.OrdinalIgnoreCase);
 
 	/// <summary>
@@ -358,7 +359,7 @@ public readonly struct ThinkValue : IEquatable<ThinkValue>
 	/// Computes a hash code for the current instance based on its value.
 	/// </summary>
 	/// <returns>An integer hash code that is case-insensitive and consistent with the string value of the instance.</returns>
-	public override int GetHashCode() => 
+	public override int GetHashCode() =>
 		_value != null ? StringComparer.OrdinalIgnoreCase.GetHashCode(_value) : 0;
 
 	/// <summary>
@@ -368,7 +369,7 @@ public readonly struct ThinkValue : IEquatable<ThinkValue>
 	/// <param name="left">The first ThinkValue instance to compare.</param>
 	/// <param name="right">The second ThinkValue instance to compare.</param>
 	/// <returns>True if both ThinkValue instances are equal; otherwise, false.</returns>
-	public static bool operator ==(ThinkValue left, ThinkValue right) => 
+	public static bool operator ==(ThinkValue left, ThinkValue right) =>
 		left.Equals(right);
 
 	/// <summary>
@@ -378,7 +379,7 @@ public readonly struct ThinkValue : IEquatable<ThinkValue>
 	/// <param name="left">The first ThinkValue instance for comparison.</param>
 	/// <param name="right">The second ThinkValue instance for comparison.</param>
 	/// <returns>A boolean indicating whether the two ThinkValue instances are not equal.</returns>
-	public static bool operator !=(ThinkValue left, ThinkValue right) => 
+	public static bool operator !=(ThinkValue left, ThinkValue right) =>
 		!left.Equals(right);
 }
 
@@ -409,7 +410,7 @@ public class ThinkValueConverter : JsonConverter<ThinkValue>
 		}
 		else
 		{
-			writer.WriteStringValue(value.ToString());				
+			writer.WriteStringValue(value.ToString());
 		}
 	}
 }

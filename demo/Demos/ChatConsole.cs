@@ -3,8 +3,12 @@ using Spectre.Console;
 
 namespace OllamaApiConsole.Demos;
 
+/// <summary>
+/// Provides an interactive chat console that allows the user to converse with a selected Ollama model.
+/// </summary>
 public class ChatConsole(IOllamaApiClient ollama) : OllamaConsole(ollama)
 {
+	/// <inheritdoc/>
 	public override async Task Run()
 	{
 		AnsiConsole.Write(new Rule("Chat").LeftJustified());

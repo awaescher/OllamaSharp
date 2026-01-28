@@ -13,8 +13,10 @@ public class McpClientTool : OllamaSharp.Models.Chat.Tool, OllamaSharp.Tools.IAs
 	private readonly IMcpClient _client;
 
 	/// <summary>
-	/// Initializes a new instance with metadata about the original method.
+	/// Initializes a new instance of <see cref="McpClientTool"/> using the specified MCP tool metadata and client.
 	/// </summary>
+	/// <param name="mcpTool">The MCP tool definition containing name, description, and JSON schema.</param>
+	/// <param name="client">The client used to invoke the underlying MCP calls.</param>
 	public McpClientTool(ModelContextProtocolClient.McpClientTool mcpTool, IMcpClient client)
 	{
 		_client = client;
@@ -44,7 +46,7 @@ public class McpClientTool : OllamaSharp.Models.Chat.Tool, OllamaSharp.Tools.IAs
 		};
 	}
 
-	/// <inheritdoc />
+	/// <inheritdoc/>
 	public async Task<object?> InvokeMethodAsync(IDictionary<string, object?>? args)
 	{
 		var arguments = args?.ToDictionary(a => a.Key, a => (object?)(a.Value ?? string.Empty)) ?? [];

@@ -8,6 +8,9 @@ using Shouldly;
 
 namespace Tests.SourceGenerators;
 
+/// <summary>
+/// Base class for source generator tests providing utilities to run generators and invoke generated tools.
+/// </summary>
 public abstract class SourceGeneratorTest
 {
 	protected static SourceGeneratorResult RunGenerator(string source, bool allowErrors = false)
@@ -79,5 +82,12 @@ public abstract class SourceGeneratorTest
 			throw new NotSupportedException("Tool is not IInvokableTool or IAsyncInvokableTool");
 	}
 
+	/// <summary>
+	/// Represents the result of running a source generator, including generated code,
+	/// the instantiated tool, and any diagnostics produced.
+	/// </summary>
+	/// <param name="GeneratedCode">The source code that was generated.</param>
+	/// <param name="GeneratedTool">An instance of the generated <see cref="Tool"/>, or <c>null</c> if creation failed.</param>
+	/// <param name="Diagnostics">A collection of diagnostics emitted during generation.</param>
 	public record SourceGeneratorResult(string GeneratedCode, Tool? GeneratedTool, IEnumerable<Diagnostic> Diagnostics);
 }

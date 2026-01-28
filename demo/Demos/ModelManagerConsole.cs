@@ -4,8 +4,17 @@ using Spectre.Console;
 
 namespace OllamaApiConsole.Demos;
 
+/// <summary>
+/// Provides an interactive console for managing Ollama models.
+/// </summary>
 public class ModelManagerConsole(IOllamaApiClient ollama) : OllamaConsole(ollama)
 {
+	/// <summary>
+	/// Initializes a new instance of the <see cref="ModelManagerConsole"/> class.
+	/// </summary>
+	/// <param name="ollama">The Ollama API client used to communicate with the server.</param>
+
+	/// <inheritdoc/>
 	public override async Task Run()
 	{
 		AnsiConsole.Write(new Rule("Model manager").LeftJustified());
@@ -157,8 +166,15 @@ public class ModelManagerConsole(IOllamaApiClient ollama) : OllamaConsole(ollama
 		task.Increment(modelResponse.Percent - task.Value);
 	}
 
+	/// <summary>
+	/// Provides helper methods for rendering object properties to the console.
+	/// </summary>
 	public static class PropertyConsoleRenderer
 	{
+		/// <summary>
+		/// Renders the public properties of an object to the console.
+		/// </summary>
+		/// <param name="o">The object whose properties will be displayed.</param>
 		public static void Render(object o)
 		{
 			foreach (var pi in o.GetType().GetProperties())

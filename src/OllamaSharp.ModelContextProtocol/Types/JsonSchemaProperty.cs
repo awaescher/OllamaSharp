@@ -8,15 +8,15 @@ namespace OllamaSharp.ModelContextProtocol.Server.Types;
 /// </summary>
 internal class JsonSchemaProperty
 {
-    /// <summary>
-    /// The type of the property. Should be a JSON Schema type and is required.
-    /// </summary>
-    [JsonPropertyName("type")]
-    public string Type { get; set; } = string.Empty;
+	/// <summary>
+	/// The type of the property. Should be a JSON Schema type and is required.
+	/// </summary>
+	[JsonPropertyName("type")]
+	public string Type { get; set; } = string.Empty;
 
-    /// <summary>
-    /// A human-readable description of the property.
-    /// </summary>
-    [JsonPropertyName("description")]
-    public string? Description { get; set; } = string.Empty;
+	/// <summary>
+	/// A human-readable description of the property.
+	/// </summary>
+	[JsonPropertyName("description")]
+	public string? Description { get; set; } = string.Empty;
 }

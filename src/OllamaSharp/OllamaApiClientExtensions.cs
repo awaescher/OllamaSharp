@@ -67,8 +67,7 @@ public static class OllamaApiClientExtensions
 	}
 
 	/// <summary>
-	/// Sends a request to the /api/generate endpoint to get a completion and streams the returned chunks to a given streamer
-	/// that can be used to update the user interface in real-time.
+	/// Sends a request to the /api/generate endpoint to get a completion and streams the returned chunks to a given streamer that can be used to update the user interface in real-time.
 	/// </summary>
 	/// <param name="client">The client used to execute the command.</param>
 	/// <param name="prompt">The prompt to generate a completion for.</param>
@@ -91,11 +90,12 @@ public static class OllamaApiClientExtensions
 	}
 
 	/// <summary>
-	/// Send a request to /api/generate with keep_alive set to 0 to immediately unload a model from memory.
+	/// Sends a request to /api/generate with <c>keep_alive</c> set to 0 to immediately unload a model from memory.
 	/// </summary>
 	/// <param name="client">The client used to execute the command.</param>
 	/// <param name="model">The name of the model to unload.</param>
 	/// <param name="cancellationToken">The token to cancel the operation with.</param>
+	/// <returns>A task that completes when the unload request has been sent.</returns>
 	public static async Task RequestModelUnloadAsync(this IOllamaApiClient client, string model, CancellationToken cancellationToken = default)
 	{
 		var request = new GenerateRequest
@@ -121,11 +121,12 @@ public static class OllamaApiClientExtensions
 		=> client.ShowModelAsync(new ShowModelRequest { Model = model }, cancellationToken);
 
 	/// <summary>
-	/// Push a file to the Ollama server to create a "blob" (Binary Large Object).
+	/// Pushes a file to the Ollama server to create a "blob" (Binary Large Object).
 	/// </summary>
 	/// <param name="client">The client used to execute the command.</param>
-	/// <param name="bytes">The bytes data of the file.</param>
+	/// <param name="bytes">The byte array containing the file data.</param>
 	/// <param name="cancellationToken">The token to cancel the operation with.</param>
+	/// <returns>A task that represents the asynchronous push operation.</returns>
 	public static Task PushBlobAsync(this IOllamaApiClient client, byte[] bytes, CancellationToken cancellationToken = default)
 		=> client.PushBlobAsync($"sha256:{BitConverter.ToString(SHA256.Create().ComputeHash(bytes)).Replace("-", string.Empty).ToLower()}", bytes, cancellationToken);
 }

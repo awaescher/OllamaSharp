@@ -4,8 +4,13 @@ using Spectre.Console;
 
 namespace OllamaApiConsole.Demos;
 
+/// <summary>
+/// Provides an interactive console for chatting with an Ollama model that supports image inputs.
+/// </summary>
+/// <param name="ollama">The <see cref="IOllamaApiClient"/> used to communicate with the Ollama service.</param>
 public partial class ImageChatConsole(IOllamaApiClient ollama) : OllamaConsole(ollama)
 {
+	/// <inheritdoc/>
 	public override async Task Run()
 	{
 		AnsiConsole.Write(new Rule("Image chat").LeftJustified());
@@ -111,12 +116,14 @@ public partial class ImageChatConsole(IOllamaApiClient ollama) : OllamaConsole(o
 	}
 
 	/// <summary>
+	/// Regex for matching Windows file paths.
 	/// https://stackoverflow.com/a/24703223/704281
 	/// </summary>
 	[GeneratedRegex("\\b[a-zA-Z]:[\\\\/](?:[^<>:\"/\\\\|?*\\n\\r]+[\\\\/])*[^<>:\"/\\\\|?*\\n\\r]+\\.\\w+\\b")]
 	private static partial Regex WindowsFileRegex();
 
 	/// <summary>
+	/// Regex for matching Unix file paths.
 	/// https://stackoverflow.com/a/169021/704281
 	/// </summary>
 	[GeneratedRegex("(.+)\\/([^\\/]+)")]
