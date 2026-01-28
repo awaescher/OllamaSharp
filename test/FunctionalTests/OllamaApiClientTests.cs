@@ -214,7 +214,7 @@ public class OllamaApiClientTests
 		{
 			Model = _model,
 			Prompt =
-				"What is the meaning to life, the universe, and everything according to the Hitchhikers Guide to the Galaxy?"
+				"What is the meaning to life, the universe, and everything according to the Hitchhiker's Guide to the Galaxy?"
 		})
 		.ToListAsync();
 
@@ -240,17 +240,17 @@ public class OllamaApiClientTests
 				new Message
 				{
 					Role = ChatRole.User,
-					Content = "What is the meaning to life, the universe, and everything according to the Hitchhikers Guide to the Galaxy?"
+					Content = "What is the meaning to life, the universe, and everything according to the Hitchhiker's Guide to the Galaxy?"
 				},
 				new Message
 				{
 					Role = ChatRole.System,
-					Content = "According to the Hitchhikers Guide to the Galaxy, the meaning to life, the universe, and everything is 42."
+					Content = "According to the Hitchhiker's Guide to the Galaxy, the meaning to life, the universe, and everything is 42."
 				},
 				new Message
 				{
 					Role = ChatRole.User,
-					Content = "Who is the author of the Hitchhikers Guide to the Galaxy?"
+					Content = "Who is the author of the Hitchhiker's Guide to the Galaxy?"
 				}
 			]
 		})

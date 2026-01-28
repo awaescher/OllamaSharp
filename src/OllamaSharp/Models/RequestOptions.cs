@@ -190,7 +190,7 @@ public class RequestOptions
 	public float? TopP { get; set; }
 
 	/// <summary>
-	/// Alternative to the top_p, and aims to ensure a balance of quality and variety.min_p represents the minimum
+	/// Alternative to the top_p, and aims to ensure a balance of quality and variety. min_p represents the minimum
 	/// probability for a token to be considered, relative to the probability of the most likely token.For
 	/// example, with min_p=0.05 and the most likely token having a probability of 0.9, logits with a value less
 	/// than 0.05*0.9=0.045 are filtered out. (Default: 0.0)
