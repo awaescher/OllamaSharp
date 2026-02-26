@@ -47,6 +47,8 @@ await foreach (var stream in ollama.GenerateAsync("How are you today?"))
 
 ### Building interactive chats
 
+The `Chat` class automatically tracks message history across turns so the model always has full context. You can optionally pass a system prompt to shape the model's behaviour.
+
 ```csharp
 // messages including their roles and tool calls will automatically be tracked within the chat object
 // and are accessible via the Messages property
@@ -61,6 +63,9 @@ while (true)
 }
 ```
 
+For a complete guide to the `Chat` class — including system prompts, multi-modal inputs, structured output, tool calls and reasoning models — see the **[Chat and Generate](chat-and-generate.md)** page.
+
+For managing models (pull, push, copy, delete, embeddings and more) see the **[Model Management](model-management.md)** page.
 
 ## Usage with Microsoft.Extensions.AI
 
