@@ -2,6 +2,10 @@
   href: introduction.md
 - name: Getting started
   href: getting-started.md
+- name: Chat and Generate
+  href: chat-and-generate.md
+- name: Model management
+  href: model-management.md
 - name: Tool support
   href: tool-support.md
 - name: Native AOT support
