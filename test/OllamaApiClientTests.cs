@@ -291,6 +291,67 @@ public class OllamaApiClientTests
 			context.Response.ShouldBe("The sky is blue.");
 			context.Context.ShouldBe([1, 2, 3], ignoreOrder: true);
 		}
+
+		[Test, NonParallelizable]
+		public async Task Sends_Format_In_Request_Body()
+		{
+			await using var stream = new MemoryStream();
+
+			_response = new HttpResponseMessage
+			{
+				StatusCode = HttpStatusCode.OK,
+				Content = new StreamContent(stream)
+			};
+
+			await using var writer = new StreamWriter(stream, leaveOpen: true);
+			writer.AutoFlush = true;
+			await writer.FinishCompletionStreamResponse("Done.", context: []);
+			stream.Seek(0, SeekOrigin.Begin);
+
+			var request = new GenerateRequest
+			{
+				Model = "llama3",
+				Prompt = "test prompt",
+				Format = "json"
+			};
+
+			await _client.GenerateAsync(request, CancellationToken.None).StreamToEndAsync();
+
+			_requestContent.ShouldNotBeNull();
+			_requestContent.ShouldContain("\"format\":\"json\"");
+			_requestContent.ShouldContain("\"prompt\":\"test prompt\"");
+			_requestContent.ShouldNotContain("CustomHeaders");
+		}
+
+		[Test, NonParallelizable]
+		public async Task Does_Not_Send_Prompt_When_Not_Set()
+		{
+			await using var stream = new MemoryStream();
+
+			_response = new HttpResponseMessage
+			{
+				StatusCode = HttpStatusCode.OK,
+				Content = new StreamContent(stream)
+			};
+
+			await using var writer = new StreamWriter(stream, leaveOpen: true);
+			writer.AutoFlush = true;
+			await writer.FinishCompletionStreamResponse("Done.", context: []);
+			stream.Seek(0, SeekOrigin.Begin);
+
+			var request = new GenerateRequest
+			{
+				Model = "llama3",
+				// Prompt is intentionally not set
+				KeepAlive = "0s"
+			};
+
+			await _client.GenerateAsync(request, CancellationToken.None).StreamToEndAsync();
+
+			_requestContent.ShouldNotBeNull();
+			_requestContent.ShouldNotContain("\"prompt\"");
+			_requestContent.ShouldNotContain("CustomHeaders");
+		}
 	}
 
 	/// <summary>
@@ -370,6 +431,7 @@ public class OllamaApiClientTests
 			_requestContent.ShouldNotContain("tools");
 			_requestContent.ShouldNotContain("tool_calls");
 			_requestContent.ShouldNotContain("images");
+			_requestContent.ShouldNotContain("CustomHeaders");
 		}
 	}
 
