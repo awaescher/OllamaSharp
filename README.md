@@ -28,7 +28,7 @@ OllamaSharp provides .NET bindings for the [Ollama API](https://github.com/jmorg
 | [Model Management](https://awaescher.github.io/OllamaSharp/docs/model-management.html) | List, pull, push, copy, delete, show, embed |
 | [Tool support](https://awaescher.github.io/OllamaSharp/docs/tool-support.html) | Function calling with source generators |
 | [Native AOT support](https://awaescher.github.io/OllamaSharp/docs/native-aot-support.html) | Ahead-of-Time compilation guidance |
-| [API reference](https://awaescher.github.io/OllamaSharp) | Full auto-generated API docs |
+| [API reference](https://awaescher.github.io/OllamaSharp/api/OllamaSharp.html) | Full auto-generated API docs |
 
 ## Usage
 
