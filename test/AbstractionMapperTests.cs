@@ -557,7 +557,7 @@ public class AbstractionMapperTests
 			{
 				FrequencyPenalty = 0.5f,
 				MaxOutputTokens = 1000,
-				ModelId = "llama3.1:405b",
+				ModelId = "qwen3.5:35b-a3b",
 				PresencePenalty = 0.3f,
 				ResponseFormat = ChatResponseFormat.Json,
 				Seed = 11,
@@ -569,7 +569,7 @@ public class AbstractionMapperTests
 			var chatRequest = AbstractionMapper.ToOllamaSharpChatRequest(null, chatMessages, options, stream: true, JsonSerializerOptions.Default);
 
 			chatRequest.Format.ShouldBe("json");
-			chatRequest.Model.ShouldBe("llama3.1:405b");
+			chatRequest.Model.ShouldBe("qwen3.5:35b-a3b");
 			chatRequest.Options.FrequencyPenalty.ShouldBe(0.5f);
 			chatRequest.Options.PresencePenalty.ShouldBe(0.3f);
 			chatRequest.Options.Stop.ShouldBe(["stop1", "stop2", "stop3"], ignoreOrder: true);
@@ -813,7 +813,7 @@ public class AbstractionMapperTests
 				EvalDuration = 2222222222,
 				LoadDuration = 3333333333,
 				Message = new Message { Role = OllamaSharp.Models.Chat.ChatRole.Assistant, Content = "Hi." },
-				Model = "llama3.1:8b",
+				Model = "qwen3.5:35b-a3b",
 				PromptEvalCount = 411,
 				PromptEvalDuration = 5555555555,
 				TotalDuration = 6666666666
@@ -834,7 +834,7 @@ public class AbstractionMapperTests
 			response.Messages[0].Text.ShouldBe("Hi.");
 			response.Messages[0].Contents.Count.ShouldBe(1);
 			((TextContent)response.Messages[0].Contents[0]).Text.ShouldBe("Hi.");
-			response.ModelId.ShouldBe("llama3.1:8b");
+			response.ModelId.ShouldBe("qwen3.5:35b-a3b");
 			response.RawRepresentation.ShouldBe(stream);
 			response.ResponseId.ShouldBe(ollamaCreatedStamp);
 			response.Usage.ShouldNotBeNull();
@@ -862,7 +862,7 @@ public class AbstractionMapperTests
 				CreatedAt = ollamaCreated,
 				Done = true,
 				Message = new Message { Role = OllamaSharp.Models.Chat.ChatRole.Assistant, Content = "Hi." },
-				Model = "llama3.1:8b"
+				Model = "qwen3.5:35b-a3b"
 			};
 
 			var streamingChatCompletion = AbstractionMapper.ToChatResponseUpdate(stream, "12345");
@@ -892,7 +892,7 @@ public class AbstractionMapperTests
 				CreatedAt = ollamaCreated,
 				Done = true,
 				Message = new Message { Role = OllamaSharp.Models.Chat.ChatRole.Assistant, Content = "", Thinking = "Beer." },
-				Model = "llama3.1:8b"
+				Model = "qwen3.5:35b-a3b"
 			};
 
 			var streamingChatCompletion = AbstractionMapper.ToChatResponseUpdate(stream, "12345");
@@ -943,7 +943,7 @@ public class AbstractionMapperTests
 				CreatedAt = ollamaCreated,
 				Done = true,
 				Message = message,
-				Model = "llama3.1:8b"
+				Model = "qwen3.5:35b-a3b"
 			};
 
 			var chatMessage = AbstractionMapper.ToChatResponseUpdate(stream, "12345");

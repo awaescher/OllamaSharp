@@ -29,7 +29,7 @@ foreach (var model in running)
 Pull a model from the [Ollama model hub](https://ollama.com/models) and report download progress:
 
 ```csharp
-await foreach (var status in ollama.PullModelAsync("llama3.2"))
+await foreach (var status in ollama.PullModelAsync("qwen3.5:35b-a3b"))
     Console.WriteLine($"{status.Percent:0}%  {status.Status}");
 ```
 
@@ -49,13 +49,13 @@ await foreach (var status in ollama.PushModelAsync("myuser/my-custom-model:lates
 Create a local copy of a model under a new name:
 
 ```csharp
-await ollama.CopyModelAsync("llama3.2", "llama3.2-backup");
+await ollama.CopyModelAsync("qwen3.5:35b-a3b", "qwen3.5:35b-a3b-backup");
 ```
 
 ## Deleting a model
 
 ```csharp
-await ollama.DeleteModelAsync("llama3.2-backup");
+await ollama.DeleteModelAsync("qwen3.5:35b-a3b-backup");
 ```
 
 ## Showing model information
@@ -63,7 +63,7 @@ await ollama.DeleteModelAsync("llama3.2-backup");
 Retrieve detailed metadata for a locally available model, including its Modelfile, parameters and template:
 
 ```csharp
-ShowModelResponse info = await ollama.ShowModelAsync("llama3.2");
+ShowModelResponse info = await ollama.ShowModelAsync("qwen3.5:35b-a3b");
 
 Console.WriteLine(info.ModelInfo);
 Console.WriteLine(info.Parameters);
@@ -77,7 +77,7 @@ Build a new model from an existing one with a custom system prompt or other Mode
 await foreach (var status in ollama.CreateModelAsync(new CreateModelRequest
 {
     Model = "my-assistant",
-    From = "llama3.2",
+    From = "qwen3.5:35b-a3b",
     System = "You are a helpful assistant that only speaks like a pirate.",
 }))
 {
@@ -111,6 +111,19 @@ Console.WriteLine(running ? "Ollama is running" : "Ollama is not available");
 string version = await ollama.GetVersionAsync();
 Console.WriteLine($"Ollama version: {version}");
 ```
+
+## Unloading a model from memory
+
+To immediately free GPU/CPU memory occupied by a loaded model, use `RequestModelUnloadAsync`:
+
+```csharp
+await ollama.RequestModelUnloadAsync("qwen3.5:35b-a3b");
+```
+
+This sends a request with `KeepAlive = "0s"`, telling Ollama to unload the model right away.
+
+> [!TIP]
+> You can control how long a model stays loaded with the `KeepAlive` property on any request. Set it to `"5m"` for five minutes, `"0s"` for immediate unload, or omit it to use the server default.
 
 ## Working with blobs
 

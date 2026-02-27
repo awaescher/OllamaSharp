@@ -46,7 +46,7 @@ var uri = new Uri("http://localhost:11434");
 var ollama = new OllamaApiClient(uri);
 
 // select a model which should be used for further operations
-ollama.SelectedModel = "qwen3:4b";
+ollama.SelectedModel = "qwen3.5:35b-a3b";
 ```
 
 ### Native AOT Support
@@ -58,7 +58,7 @@ For .NET Native AOT scenarios, create a custom JsonSerializerContext with your t
 public partial class MyJsonContext : JsonSerializerContext { }
 
 // Use the static factory method for NativeAOT
-var ollama = new OllamaApiClient(uri, "qwen3:4b", MyJsonContext.Default);
+var ollama = new OllamaApiClient(uri, "qwen3.5:35b-a3b", MyJsonContext.Default);
 ```
 
 See the [Native AOT documentation](./docs/native-aot-support.md) for detailed guidance.
@@ -72,7 +72,7 @@ var models = await ollama.ListLocalModelsAsync();
 ### Pulling a model and reporting progress
 
 ```csharp
-await foreach (var status in ollama.PullModelAsync("qwen3:32b"))
+await foreach (var status in ollama.PullModelAsync("qwen3.5:35b-a3b"))
     Console.WriteLine($"{status.Percent}% {status.Status}");
 ```
 
