@@ -15,6 +15,13 @@ public class ShowModelRequest : OllamaRequest
 	/// </summary>
 	[JsonPropertyName(Application.Model)]
 	public string? Model { get; set; }
+
+	/// <summary>
+	/// Gets or sets a value indicating whether to return full data for verbose response fields (e.g. tokenizer data).
+	/// </summary>
+	[JsonPropertyName(Application.Verbose)]
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public bool? Verbose { get; set; }
 }
 
 /// <summary>
@@ -75,6 +82,12 @@ public class ShowModelResponse
 	/// </summary>
 	[JsonPropertyName(Application.Capabilities)]
 	public string[]? Capabilities { get; set; } = null!;
+
+	/// <summary>
+	/// Gets or sets the date and time the model was last modified.
+	/// </summary>
+	[JsonPropertyName(Application.ModifiedAt)]
+	public DateTimeOffset? ModifiedAt { get; set; }
 }
 
 /// <summary>

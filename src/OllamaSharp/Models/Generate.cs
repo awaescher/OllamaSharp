@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.Text.Json.Serialization;
 using OllamaSharp.Constants;
+using OllamaSharp.Models.Chat;
 
 namespace OllamaSharp.Models;
 
@@ -65,6 +66,7 @@ public class GenerateRequest : OllamaRequest
 	/// The context parameter returned from a previous request to /generate,
 	/// this can be used to keep a short conversational memory
 	/// </summary>
+	[Obsolete("The context parameter is deprecated by the Ollama API. Use the /api/chat endpoint instead for conversational memory.")]
 	[JsonPropertyName(Application.Context)]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public long[]? Context { get; set; }
@@ -113,6 +115,35 @@ public class GenerateRequest : OllamaRequest
 	[JsonPropertyName(Application.TopLogprobs)]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public int? TopLogprobs { get; set; }
+
+	/// <summary>
+	/// Gets or sets a value to enable or disable thinking. Use reasoning models like openthinker, qwen3,
+	/// deepseek-r1, phi4-reasoning that support thinking when activating this option.
+	/// </summary>
+	[JsonPropertyName(Application.Think)]
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public ThinkValue? Think { get; set; }
+
+	/// <summary>
+	/// Gets or sets the width of the generated image in pixels (experimental, for image generation models only).
+	/// </summary>
+	[JsonPropertyName(Application.Width)]
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public int? Width { get; set; }
+
+	/// <summary>
+	/// Gets or sets the height of the generated image in pixels (experimental, for image generation models only).
+	/// </summary>
+	[JsonPropertyName(Application.Height)]
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public int? Height { get; set; }
+
+	/// <summary>
+	/// Gets or sets the number of diffusion steps (experimental, for image generation models only).
+	/// </summary>
+	[JsonPropertyName(Application.Steps)]
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public int? Steps { get; set; }
 }
 
 /// <summary>
@@ -167,6 +198,14 @@ public class GenerateResponseStream
 	public string Response { get; set; } = null!;
 
 	/// <summary>
+	/// Gets or sets the parsed content of the thinking and reasoning.
+	/// To make this work, enable <see cref="GenerateRequest.Think"/>.
+	/// </summary>
+	[JsonPropertyName(Application.Thinking)]
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public string? Thinking { get; set; }
+
+	/// <summary>
 	/// Whether the response is complete
 	/// </summary>
 	[JsonPropertyName(Application.Done)]
@@ -177,6 +216,27 @@ public class GenerateResponseStream
 	/// </summary>
 	[JsonPropertyName(Application.Logprobs)]
 	public IEnumerable<Logprob>? Logprobs { get; set; }
+
+	/// <summary>
+	/// Gets or sets the base64-encoded generated image (experimental, for image generation models only).
+	/// </summary>
+	[JsonPropertyName(Application.Image)]
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public string? Image { get; set; }
+
+	/// <summary>
+	/// Gets or sets the number of completed steps (experimental, for image generation models only).
+	/// </summary>
+	[JsonPropertyName(Application.Completed)]
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public long? CompletedSteps { get; set; }
+
+	/// <summary>
+	/// Gets or sets the total number of steps (experimental, for image generation models only).
+	/// </summary>
+	[JsonPropertyName(Application.Total)]
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public long? TotalSteps { get; set; }
 }
 
 /// <summary>
@@ -188,8 +248,16 @@ public class GenerateDoneResponseStream : GenerateResponseStream
 	/// An encoding of the conversation used in this response, this can be
 	/// sent in the next request to keep a conversational memory
 	/// </summary>
+	[Obsolete("The context parameter is deprecated by the Ollama API. Use the /api/chat endpoint instead for conversational memory.")]
 	[JsonPropertyName(Application.Context)]
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public long[] Context { get; set; } = null!;
+
+	/// <summary>
+	/// The reason for the completion of the generation
+	/// </summary>
+	[JsonPropertyName(Application.DoneReason)]
+	public string? DoneReason { get; set; }
 
 	/// <summary>
 	/// The time spent generating the response

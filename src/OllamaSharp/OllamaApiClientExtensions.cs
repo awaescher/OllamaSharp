@@ -84,7 +84,9 @@ public static class OllamaApiClientExtensions
 			Prompt = prompt,
 			Model = client.SelectedModel,
 			Stream = true,
+#pragma warning disable CS0618 // Obsolete - kept for backwards compatibility
 			Context = context?.Context
+#pragma warning restore CS0618
 		};
 		return client.GenerateAsync(request, cancellationToken);
 	}

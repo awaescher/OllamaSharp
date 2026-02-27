@@ -27,6 +27,7 @@ OllamaSharp provides .NET bindings for the [Ollama API](https://github.com/jmorg
 | [Chat and Generate](https://awaescher.github.io/OllamaSharp/docs/chat-and-generate.html) | `Chat` class, `GenerateAsync`, streaming, images, structured output, thinking models |
 | [Model Management](https://awaescher.github.io/OllamaSharp/docs/model-management.html) | List, pull, push, copy, delete, show, embed |
 | [Tool support](https://awaescher.github.io/OllamaSharp/docs/tool-support.html) | Function calling with source generators |
+| [Advanced Configuration](https://awaescher.github.io/OllamaSharp/docs/advanced-configuration.html) | Configuration options that go beyond the basics |
 | [Native AOT support](https://awaescher.github.io/OllamaSharp/docs/native-aot-support.html) | Ahead-of-Time compilation guidance |
 | [API reference](https://awaescher.github.io/OllamaSharp/api/OllamaSharp.html) | Full auto-generated API docs |
 
