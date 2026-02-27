@@ -12,7 +12,7 @@ namespace OllamaSharp;
 /// <example>
 /// A simple interactive chat can be implemented in just a handful of lines:
 /// <code>
-/// var ollama = new OllamaApiClient("http://localhost:11434", "llama3.2-vision:latest");
+/// var ollama = new OllamaApiClient("http://localhost:11434", "qwen3.5:35b-a3b");
 /// var chat = new Chat(ollama);
 /// // ...
 /// while (true)
@@ -105,7 +105,7 @@ public class Chat
 	/// <example>
 	/// Setting up a chat instance without a system prompt:
 	/// <code>
-	/// var client = new OllamaApiClient("http://localhost:11434", "llama3.2-vision:latest");
+	/// var client = new OllamaApiClient("http://localhost:11434", "qwen3.5:35b-a3b");
 	/// var chat = new Chat(client);
 	///
 	/// // Sending a message to the chat
@@ -134,7 +134,7 @@ public class Chat
 	/// <example>
 	/// Creating a chat instance with a custom system prompt:
 	/// <code>
-	/// var client = new OllamaApiClient("http://localhost:11434", "llama3.2-vision:latest");
+	/// var client = new OllamaApiClient("http://localhost:11434", "qwen3.5:35b-a3b");
 	/// var systemPrompt = "You are an expert assistant specializing in data science.";
 	/// var chat = new Chat(client, systemPrompt);
 	///
@@ -179,7 +179,7 @@ public class Chat
 	/// <code>
 	///  var client = new HttpClient();
 	///  var cat = await client.GetByteArrayAsync("https://cataas.com/cat");
-	///  var ollama = new OllamaApiClient("http://localhost:11434", "llama3.2-vision:latest");
+	///  var ollama = new OllamaApiClient("http://localhost:11434", "qwen3.5:35b-a3b");
 	///  var chat = new Chat(ollama);
 	///  var response = chat.SendAsync("What do you see?", [cat]);
 	///  await foreach (var answerToken in response) Console.Write(answerToken);
@@ -207,7 +207,7 @@ public class Chat
 	/// var client = new HttpClient();
 	/// var cat = await client.GetByteArrayAsync("https://cataas.com/cat");
 	/// var base64Cat = Convert.ToBase64String(cat);
-	/// var ollama = new OllamaApiClient("http://localhost:11434", "llama3.2-vision:latest");
+	/// var ollama = new OllamaApiClient("http://localhost:11434", "qwen3.5:35b-a3b");
 	/// var chat = new Chat(ollama);
 	/// var response = chat.SendAsync("What do you see?", [base64Cat]);
 	/// await foreach (var answerToken in response) Console.Write(answerToken);
@@ -248,7 +248,7 @@ public class Chat
 	/// <example>
 	/// Example usage of <see cref="SendAsync(string, IEnumerable{object}?, IEnumerable{string}?, object?, CancellationToken)"/>:
 	/// <code>
-	/// var client = new OllamaApiClient("http://localhost:11434", "llama3.2-vision:latest");
+	/// var client = new OllamaApiClient("http://localhost:11434", "qwen3.5:35b-a3b");
 	/// var chat = new Chat(client);
 	/// var tools = new List&lt;Tool&gt; { new Tool() }; // Example tools
 	/// var images = new List&lt;string&gt; { ConvertImageToBase64("path-to-image.jpg") };
@@ -287,7 +287,7 @@ public class Chat
 	/// <example>
 	/// Example usage of the <see cref="SendAsAsync(ChatRole, string, CancellationToken)"/> method:
 	/// <code>
-	/// var client = new OllamaApiClient("http://localhost:11434", "llama3.2-vision:latest");
+	/// var client = new OllamaApiClient("http://localhost:11434", "qwen3.5:35b-a3b");
 	/// var chat = new Chat(client);
 	/// var role = new ChatRole("assistant");
 	/// var responseStream = chat.SendAsAsync(role, "How can I assist you today?");
@@ -323,7 +323,7 @@ public class Chat
 	/// <example>
 	/// Sending a user message with optional images:
 	/// <code>
-	/// var client = new OllamaApiClient("http://localhost:11434", "llama3.2-vision:latest");
+	/// var client = new OllamaApiClient("http://localhost:11434", "qwen3.5:35b-a3b");
 	/// var chat = new Chat(client);
 	/// var role = new ChatRole("user");
 	/// var message = "What's the weather like today?";
@@ -358,10 +358,10 @@ public class Chat
 	/// </returns>
 	/// <example>
 	/// <code>
-	/// var client = new OllamaApiClient("http://localhost:11434", "llama3.2-vision:latest");
+	/// var client = new OllamaApiClient("http://localhost:11434", "qwen3.5:35b-a3b");
 	/// var chat = new Chat(client)
 	/// {
-	///   Model = "llama3.2-vision:latest"
+	///   Model = "qwen3.5:35b-a3b"
 	/// };
 	/// // Sending a message as a user role and processing the response
 	/// await foreach (var response in chat.SendAsAsync(ChatRole.User, "Describe the image", null))

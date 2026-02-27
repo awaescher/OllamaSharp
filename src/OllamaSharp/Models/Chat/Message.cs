@@ -86,7 +86,7 @@ public class Message
 	public string? ToolName { get; set; }
 
 	/// <summary>
-	/// Gets or sets a list of tools the model wants to use (for models that support function calls, such as llama3.1).
+	/// Gets or sets a list of tools the model wants to use (for models that support function calls, such as qwen3.5).
 	/// </summary>
 	[JsonPropertyName("tool_calls")]
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

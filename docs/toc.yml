@@ -8,5 +8,7 @@
   href: model-management.md
 - name: Tool support
   href: tool-support.md
+- name: Advanced configuration
+  href: advanced-configuration.md
 - name: Native AOT support
   href: native-aot-support.md

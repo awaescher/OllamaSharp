@@ -9,7 +9,7 @@ The `Chat` class is the recommended starting point for most conversational use c
 ### Basic chat loop
 
 ```csharp
-var ollama = new OllamaApiClient("http://localhost:11434", "llama3.2");
+var ollama = new OllamaApiClient("http://localhost:11434", "qwen3.5:35b-a3b");
 var chat = new Chat(ollama);
 
 while (true)
@@ -38,6 +38,17 @@ await foreach (var token in chat.SendAsync("How do I make pasta carbonara?"))
     Console.Write(token);
 ```
 
+### Overriding the model per chat
+
+By default the `Chat` uses the client's `SelectedModel`, but you can override it per instance:
+
+```csharp
+var chat = new Chat(ollama)
+{
+    Model = "deepseek-r1:14b"
+};
+```
+
 ### Accessing the message history
 
 The full conversation is stored in `chat.Messages` and can be inspected or serialised at any time:
@@ -49,10 +60,10 @@ foreach (var msg in chat.Messages)
 
 ### Sending images (multi-modal models)
 
-Vision models such as `llama3.2-vision` accept images alongside text. Pass image data as raw bytes:
+Vision models such as `qwen3.5:35b-a3b` accept images alongside text. Pass image data as raw bytes:
 
 ```csharp
-var ollama = new OllamaApiClient("http://localhost:11434", "llama3.2-vision");
+var ollama = new OllamaApiClient("http://localhost:11434", "qwen3.5:35b-a3b");
 var chat = new Chat(ollama);
 
 var imageBytes = await File.ReadAllBytesAsync("photo.jpg");
@@ -100,7 +111,11 @@ await foreach (var token in chat.SendAsAsync(ChatRole.User, "What is my name?"))
 
 ### Thinking / reasoning models
 
-For reasoning models (e.g. `deepseek-r1`, `qwen3`, `phi4-reasoning`) you can request "think tokens". When `Think` is `true`, the model's internal reasoning is surfaced through the `OnThink` event and kept separate from the visible answer:
+For reasoning models (e.g. `deepseek-r1`, `qwen3`, `phi4-reasoning`) you can request "think tokens". The model's internal reasoning is surfaced through the `OnThink` event and kept separate from the visible answer.
+
+#### Basic boolean mode
+
+Set `Think` to `true` to enable thinking:
 
 ```csharp
 var chat = new Chat(ollama) { Think = true };
@@ -111,7 +126,37 @@ await foreach (var token in chat.SendAsync("What is the square root of 144?"))
     Console.Write(token);
 ```
 
-See the [Ollama release notes](https://github.com/ollama/ollama/releases/tag/v0.9.0) for supported models.
+#### Thinking budget levels
+
+The `Think` property accepts a `ThinkValue` struct that also supports budget levels to control how much reasoning the model performs:
+
+```csharp
+// Use predefined budget levels
+var chat = new Chat(ollama) { Think = ThinkValue.High };   // maximum reasoning effort
+var chat = new Chat(ollama) { Think = ThinkValue.Medium }; // balanced reasoning
+var chat = new Chat(ollama) { Think = ThinkValue.Low };    // minimal reasoning
+```
+
+> [!NOTE]
+> Not all models support budget levels. See the [Ollama release notes](https://github.com/ollama/ollama/releases/tag/v0.9.0) for supported models.
+
+### Events
+
+The `Chat` class exposes events so you can monitor what happens during a conversation:
+
+| Event | Argument | Fires when |
+|---|---|---|
+| `OnThink` | `string` | The model emits thinking/reasoning tokens |
+| `OnToolCall` | `Message.ToolCall` | The model requests a tool invocation |
+| `OnToolResult` | `ToolResult` | A tool invocation has completed and produced a result |
+
+```csharp
+var chat = new Chat(ollama);
+
+chat.OnThink += (_, thoughts) => Console.Write($"[thinking] {thoughts}");
+chat.OnToolCall += (_, call) => Console.WriteLine($"[calling tool] {call.Function?.Name}");
+chat.OnToolResult += (_, result) => Console.WriteLine($"[tool result] {result.Result}");
+```
 
 ### Model-level options
 
@@ -163,7 +208,7 @@ Tool calls and their results are fed back into `chat.Messages` automatically.
 ### Streaming a completion to the console
 
 ```csharp
-var ollama = new OllamaApiClient("http://localhost:11434", "llama3.2");
+var ollama = new OllamaApiClient("http://localhost:11434", "qwen3.5:35b-a3b");
 
 await foreach (var chunk in ollama.GenerateAsync("Why is the sky blue?"))
     Console.Write(chunk.Response);
@@ -174,12 +219,14 @@ await foreach (var chunk in ollama.GenerateAsync("Why is the sky blue?"))
 If you need multi-turn behaviour without the `Chat` class you can pass the context tokens returned by a previous response:
 
 ```csharp
-GenerateResponseStream? lastResponse = null;
+GenerateDoneResponseStream? lastResponse = null;
 
 await foreach (var chunk in ollama.GenerateAsync("Tell me a joke"))
 {
-    Console.Write(chunk.Response);
-    lastResponse = chunk;
+    Console.Write(chunk?.Response);
+
+    if (chunk is GenerateDoneResponseStream done)
+        lastResponse = done;
 }
 
 // Use the context from the previous turn
@@ -190,8 +237,11 @@ var request = new GenerateRequest
 };
 
 await foreach (var chunk in ollama.GenerateAsync(request))
-    Console.Write(chunk.Response);
+    Console.Write(chunk?.Response);
 ```
+
+> [!TIP]
+> The `Context` property is only available on `GenerateDoneResponseStream` (the final chunk), not on every streamed chunk. Use pattern matching to capture it as shown above.
 
 ### Generating with an image
 
@@ -201,12 +251,15 @@ var imageBytes = await File.ReadAllBytesAsync("chart.png");
 var request = new GenerateRequest
 {
     Prompt = "Summarise this chart",
-    Images = [imageBytes],
+    Images = [Convert.ToBase64String(imageBytes)],
 };
 
 await foreach (var chunk in ollama.GenerateAsync(request))
-    Console.Write(chunk.Response);
+    Console.Write(chunk?.Response);
 ```
+
+> [!NOTE]
+> `GenerateRequest.Images` expects Base64-encoded strings, not raw byte arrays. Use `Convert.ToBase64String()` to convert your image bytes.
 
 ---
 
@@ -217,7 +270,7 @@ await foreach (var chunk in ollama.GenerateAsync(request))
 ```csharp
 var request = new ChatRequest
 {
-    Model = "llama3.2",
+    Model = "qwen3.5:35b-a3b",
     Stream = true,
     Messages =
     [

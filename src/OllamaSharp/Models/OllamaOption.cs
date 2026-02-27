@@ -100,7 +100,7 @@ public class OllamaOption(string name)
 
 	/// <summary>
 	/// The number of GQA groups in the transformer layer. Required for some
-	/// models, for example it is 8 for llama2:70b
+	/// models, for example it is 8 for qwen3.5:35b-a3b
 	/// </summary>
 	public static OllamaOption NumGqa { get; } = new(Application.NumGqa);
 
