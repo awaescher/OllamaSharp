@@ -90,6 +90,10 @@ internal static class AbstractionMapper
 			mappedTools is null ? request.Tools :
 			[.. request.Tools, .. mappedTools];
 
+		// Tools require stream=false per the Ollama API specification
+		if (request.Tools?.Any() == true)
+			request.Stream = false;
+
 		var hasAdditionalProperties = options?.AdditionalProperties?.Any() ?? false;
 		if (!hasAdditionalProperties)
 			return request;

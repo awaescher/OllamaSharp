@@ -15,6 +15,11 @@ public class TestOllamaApiClient : IOllamaApiClient
 	private ChatResponseStream[] _expectedChatResponses = [];
 	private GenerateResponseStream[] _expectedGenerateResponses = [];
 
+	/// <summary>
+	/// Gets the last <see cref="ChatRequest"/> received by <see cref="ChatAsync"/>.
+	/// </summary>
+	public ChatRequest? LastChatRequest { get; private set; }
+
 	/// <inheritdoc/>
 	public Uri Uri { get; } = new("http://localhost");
 
@@ -34,6 +39,7 @@ public class TestOllamaApiClient : IOllamaApiClient
 	/// <inheritdoc/>
 	public async IAsyncEnumerable<ChatResponseStream?> ChatAsync(ChatRequest request, [EnumeratorCancellation] CancellationToken cancellationToken = default)
 	{
+		LastChatRequest = request;
 		foreach (var response in _expectedChatResponses)
 		{
 			await Task.Yield();

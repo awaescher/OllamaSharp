@@ -429,7 +429,7 @@ public class Chat
 		{
 			Messages = Messages,
 			Model = Model,
-			Stream = true,
+			Stream = tools?.Any() != true,
 			Tools = tools,
 			Format = format,
 			Options = Options,

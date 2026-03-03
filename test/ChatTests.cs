@@ -81,6 +81,39 @@ public class ChatTests
 		}
 
 		/// <summary>
+		/// Verifies that streaming is disabled when tools are provided, as required by the Ollama API.
+		/// </summary>
+		[Test]
+		public async Task Disables_Streaming_When_Tools_Are_Provided()
+		{
+			var ollama = new TestOllamaApiClient();
+			ollama.SetExpectedChatResponses(new ChatResponseStream { Message = CreateMessage(ChatRole.Assistant, "Hi") });
+
+			var tools = new[] { new Tool { Function = new Function { Name = "get_weather" } } };
+			var chat = new Chat(ollama);
+			await chat.SendAsync("What's the weather?", tools, cancellationToken: CancellationToken.None).StreamToEndAsync();
+
+			ollama.LastChatRequest.ShouldNotBeNull();
+			ollama.LastChatRequest.Stream.ShouldBeFalse();
+		}
+
+		/// <summary>
+		/// Verifies that streaming is enabled when no tools are provided.
+		/// </summary>
+		[Test]
+		public async Task Enables_Streaming_When_No_Tools_Are_Provided()
+		{
+			var ollama = new TestOllamaApiClient();
+			ollama.SetExpectedChatResponses(new ChatResponseStream { Message = CreateMessage(ChatRole.Assistant, "Hi") });
+
+			var chat = new Chat(ollama);
+			await chat.SendAsync("hello", CancellationToken.None).StreamToEndAsync();
+
+			ollama.LastChatRequest.ShouldNotBeNull();
+			ollama.LastChatRequest.Stream.ShouldBeTrue();
+		}
+
+		/// <summary>
 		/// Verifies that a system prompt supplied to the constructor is sent as the first message.
 		/// </summary>
 		[Test]

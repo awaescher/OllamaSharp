@@ -265,6 +265,7 @@ public class AbstractionMapperTests
 			tool.Function.Parameters.Required.ShouldBe(["city"], ignoreOrder: true);
 			tool.Function.Parameters.Type.ShouldBe("object");
 			tool.Type.ShouldBe("function");
+			chatRequest.Stream.ShouldBeFalse();
 		}
 
 		/// <summary>
