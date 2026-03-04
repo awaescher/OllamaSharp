@@ -30,8 +30,10 @@ internal static class AbstractionMapper
 		if (stream is null)
 			return null;
 
+		var responseId = stream.CreatedAtString ?? Guid.NewGuid().ToString("N");
 		var chatMessage = ToChatMessage(stream.Message);
 		chatMessage.CreatedAt = stream.CreatedAt;
+		chatMessage.MessageId = responseId;
 
 		return new ChatResponse(chatMessage)
 		{
@@ -40,7 +42,7 @@ internal static class AbstractionMapper
 			CreatedAt = stream.CreatedAt,
 			ModelId = usedModel ?? stream.Model,
 			RawRepresentation = stream,
-			ResponseId = stream.CreatedAtString ?? Guid.NewGuid().ToString("N"),
+			ResponseId = responseId,
 			Usage = ParseOllamaChatResponseUsage(stream)
 		};
 	}

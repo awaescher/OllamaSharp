@@ -829,6 +829,7 @@ public class AbstractionMapperTests
 			response.CreatedAt.ShouldBe(new DateTimeOffset(2023, 08, 04, 08, 52, 19, 385, 406, TimeSpan.FromHours(-7)));
 			response.FinishReason.ShouldBe(ChatFinishReason.Stop);
 			response.Messages[0].AuthorName.ShouldBeNull();
+			response.Messages[0].MessageId.ShouldBe(ollamaCreatedStamp);
 			response.Messages[0].RawRepresentation.ShouldBe(stream.Message);
 			response.Messages[0].Role.ShouldBe(Microsoft.Extensions.AI.ChatRole.Assistant);
 			response.Messages[0].Text.ShouldBe("Hi.");
