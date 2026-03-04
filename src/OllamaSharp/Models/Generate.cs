@@ -24,7 +24,8 @@ public class GenerateRequest : OllamaRequest
 	/// The prompt to generate a response for
 	/// </summary>
 	[JsonPropertyName(Application.Prompt)]
-	public string Prompt { get; set; } = null!;
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public string? Prompt { get; set; }
 
 	/// <summary>
 	/// Suffix for Fill-In-the-Middle generate
