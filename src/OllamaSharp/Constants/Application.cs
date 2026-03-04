@@ -102,15 +102,21 @@ internal static class Application
 	public const string Completed = "completed";
 	public const string Embeddings = "embeddings";
 	public const string ParameterSize = "parameter_size";
-	public const string Messages = "message";
+	public const string Messages = "messages";
 	public const string Adapters = "adapters";
 	public const string Files = "files";
 	public const string From = "from";
 	public const string Error = "error";
 	public const string Capabilities = "capabilities";
 	public const string Think = "think";
+	public const string Thinking = "thinking";
 	public const string ContextLength = "context_length";
 	public const string Dimensions = "dimensions";
 	public const string Logprobs = "logprobs";
 	public const string TopLogprobs = "top_logprobs";
+	public const string Verbose = "verbose";
+	public const string Width = "width";
+	public const string Height = "height";
+	public const string Steps = "steps";
+	public const string Image = "image";
 }

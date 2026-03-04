@@ -36,7 +36,7 @@ public partial class MyCustomJsonContext : JsonSerializerContext
 var config = new OllamaApiClient.Configuration
 {
     Uri = new Uri("http://localhost:11434"),
-    Model = "llama3.2",
+    Model = "qwen3.5:35b-a3b",
     JsonSerializerContext = MyCustomJsonContext.Default
 };
 var client = new OllamaApiClient(config);
@@ -44,11 +44,14 @@ var client = new OllamaApiClient(config);
 
 ## Important Notes
 
-1. **Include All Types**: When creating your custom JsonSerializerContext, make sure to include all types that might be serialized, including:
+> [!WARNING]
+> When creating your custom `JsonSerializerContext`, make sure to include **all** types that might be serialised.
+
+1. **Include All Types**: This includes:
    - Standard OllamaSharp types (already included in the default context)
    - Your custom message content types
    - Third-party library types (e.g., from Semantic Kernel, vector databases)
-   - Collection types (List<T>, IEnumerable<T>, etc.)
+   - Collection types (List&lt;T&gt;, IEnumerable&lt;T&gt;, etc.)
 
 2. **Avoid Iterators**: System.Text.Json cannot serialize iterator types like `ListSelectIterator`. Always materialize collections to concrete types (e.g., using `.ToList()`) before serialization.
 
@@ -58,7 +61,7 @@ var client = new OllamaApiClient(config);
 
 ### "JsonTypeInfo metadata was not provided" Error
 
-This error occurs when a type is being serialized that wasn't included in your JsonSerializerContext. To fix:
+This error occurs when a type is being serialised that wasn't included in your `JsonSerializerContext`. To fix:
 
 1. Identify the missing type from the error message
 2. Add it to your JsonSerializerContext with `[JsonSerializable(typeof(YourType))]`

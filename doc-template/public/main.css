@@ -1,3 +1,4 @@
+/* ── Layout helpers ────────────────────────────────────────────── */
 .flex-row {
     display: flex;
     flex-direction: row;
@@ -6,4 +7,176 @@
 .flex-column {
     display: flex;
     flex-direction: column;
+}
+
+/* ── Typography & general polish ──────────────────────────────── */
+:root {
+    --brand-primary: #6366f1;
+    --brand-primary-light: #818cf8;
+    --brand-primary-dark: #4f46e5;
+    --brand-surface: #1e1e2e;
+    --brand-accent: #22d3ee;
+    --brand-success: #34d399;
+    --brand-warning: #fbbf24;
+    --brand-danger: #f87171;
+    --radius: 8px;
+}
+
+article h1 {
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.6em;
+    padding-bottom: 0.35em;
+    border-bottom: 2px solid var(--brand-primary);
+}
+
+article h2 {
+    font-weight: 600;
+    margin-top: 2.4em;
+    margin-bottom: 0.5em;
+    padding-bottom: 0.25em;
+    border-bottom: 1px solid rgba(99, 102, 241, 0.25);
+}
+
+article h3 {
+    font-weight: 600;
+    margin-top: 1.8em;
+}
+
+/* ── Code blocks ──────────────────────────────────────────────── */
+article pre {
+    border-radius: var(--radius);
+    border: 1px solid rgba(99, 102, 241, 0.18);
+    margin: 1.2em 0;
+}
+
+article code:not(pre code) {
+    padding: 0.15em 0.4em;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+/* ── Admonition / alert boxes ─────────────────────────────────── */
+article .NOTE,
+article .TIP,
+article .WARNING,
+article .IMPORTANT,
+article .CAUTION {
+    border-radius: var(--radius);
+    padding: 1em 1.2em;
+    margin: 1.4em 0;
+    border-left: 4px solid;
+}
+
+article .NOTE {
+    border-left-color: var(--brand-primary-light);
+    background: rgba(99, 102, 241, 0.07);
+}
+
+article .TIP {
+    border-left-color: var(--brand-success);
+    background: rgba(52, 211, 153, 0.07);
+}
+
+article .WARNING {
+    border-left-color: var(--brand-warning);
+    background: rgba(251, 191, 36, 0.07);
+}
+
+article .IMPORTANT {
+    border-left-color: var(--brand-danger);
+    background: rgba(248, 113, 113, 0.07);
+}
+
+article .CAUTION {
+    border-left-color: var(--brand-danger);
+    background: rgba(248, 113, 113, 0.07);
+}
+
+/* ── Tables ────────────────────────────────────────────────────── */
+article table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1.2em 0;
+    border-radius: var(--radius);
+    overflow: hidden;
+}
+
+article table th {
+    font-weight: 600;
+    text-align: left;
+    border-bottom: 2px solid var(--brand-primary);
+}
+
+article table th,
+article table td {
+    padding: 0.6em 1em;
+}
+
+article table tr:nth-child(even) {
+    background: rgba(99, 102, 241, 0.04);
+}
+
+/* ── Links ─────────────────────────────────────────────────────── */
+article a {
+    color: var(--brand-primary-light);
+    text-decoration: none;
+    transition: color 0.15s ease;
+}
+
+article a:hover {
+    color: var(--brand-accent);
+    text-decoration: underline;
+}
+
+/* ── Horizontal rules ──────────────────────────────────────────── */
+article hr {
+    border: none;
+    border-top: 1px solid rgba(99, 102, 241, 0.2);
+    margin: 2.5em 0;
+}
+
+/* ── Blockquotes ───────────────────────────────────────────────── */
+article blockquote {
+    border-left: 3px solid var(--brand-primary);
+    padding: 0.5em 1em;
+    margin: 1.2em 0;
+    border-radius: 0 var(--radius) var(--radius) 0;
+    background: rgba(99, 102, 241, 0.04);
+}
+
+/* ── Lists ─────────────────────────────────────────────────────── */
+article ul,
+article ol {
+    padding-left: 1.5em;
+    margin: 0.8em 0;
+}
+
+article li + li {
+    margin-top: 0.3em;
+}
+
+/* ── Badges (use with <span class="badge badge-*">text</span>) ─ */
+.badge {
+    display: inline-block;
+    padding: 0.15em 0.55em;
+    font-size: 0.78em;
+    font-weight: 600;
+    border-radius: 999px;
+    vertical-align: middle;
+}
+
+.badge-new {
+    background: var(--brand-success);
+    color: #000;
+}
+
+.badge-since {
+    background: var(--brand-primary);
+    color: #fff;
+}
+
+.badge-deprecated {
+    background: var(--brand-warning);
+    color: #000;
 }

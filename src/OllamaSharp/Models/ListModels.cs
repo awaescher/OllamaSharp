@@ -31,6 +31,12 @@ public class Model
 	public string Name { get; set; } = null!;
 
 	/// <summary>
+	/// Gets or sets the model identifier. The Ollama API returns both <c>name</c> and <c>model</c>.
+	/// </summary>
+	[JsonPropertyName(Application.Model)]
+	public string? ModelName { get; set; }
+
+	/// <summary>
 	/// Gets or sets the time the model was created or last modified.
 	/// </summary>
 	[JsonPropertyName(Application.ModifiedAt)]

@@ -1,3 +1,7 @@
+#pragma warning disable CS0618 // Obsolete members used in tests
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+#pragma warning disable CS8604 // Possible null reference argument.
+
 using System.Net;
 using System.Text;
 using System.Text.Json;
@@ -832,5 +836,6 @@ public static class WriterExtensions
 	}
 }
 
+#pragma warning restore CS0618
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
 #pragma warning restore CS8604 // Possible null reference argument.

@@ -128,6 +128,37 @@ await foreach (var answerToken in chat.SendAsync("How's the weather in Stuttgart
 
 OllamaSharp will automatically match tool calls from the AI model with the provided tools, call the tools and return results back into the chat so that the AI model can continue.
 
+#### Recursive tool calls
+
+By default, when a model responds with a tool call, OllamaSharp invokes the tool, feeds the result back and lets the model continue — potentially calling more tools. This is controlled by the `AllowRecursiveToolCalls` property (default: `true`):
+
+``` csharp
+var chat = new Chat(...)
+{
+    AllowRecursiveToolCalls = false // disable automatic chaining of tool calls
+};
+```
+
+#### Monitoring tool calls
+
+Use the `OnToolCall` and `OnToolResult` events to observe tool activity:
+
+``` csharp
+chat.OnToolCall += (_, call) => Console.WriteLine($"Model wants to call: {call.Function?.Name}");
+chat.OnToolResult += (_, result) => Console.WriteLine($"Tool returned: {result.Result}");
+```
+
+#### Custom tool invocation
+
+The `Chat` class uses an `IToolInvoker` to invoke tools. The default implementation (`DefaultToolInvoker`) handles argument normalisation and dispatches to `IInvokableTool` or `IAsyncInvokableTool` implementations. You can replace it with your own implementation for custom behaviour like logging, caching or error handling:
+
+``` csharp
+var chat = new Chat(...)
+{
+    ToolInvoker = new MyCustomToolInvoker()
+};
+```
+
 #### Important details
 
  - the entire meta data definition from the json structure above will automatically be taken from the **method signature and its summary**, this includes
@@ -157,12 +188,19 @@ OllamaSharp will automatically match tool calls from the AI model with the provi
   - only available for C#. Visual Basic and F# are not supported <sup>**_not planned_**</sup>
 
  > The project containing the Ollama tools must generate a documentation file, see "Important details".
+
+> [!IMPORTANT]
+> Add `<GenerateDocumentationFile>true</GenerateDocumentationFile>` to your project file, otherwise tool descriptions from XML doc comments will be lost after compilation.
  
 ## Model context protocol (MCP) servers
 
-OllamaSharp also supports the [model context protocol](https://modelcontextprotocol.io/introduction). In the past, we shipped a small package `OllamaSharp.ModelContextProtocol` for this but we discontinued it because of the quickly evolving nature of the MCP standard. 
+OllamaSharp also supports the [model context protocol](https://modelcontextprotocol.io/introduction). A small companion package `OllamaSharp.ModelContextProtocol` bridges MCP tools into the OllamaSharp tool system. Install it alongside the main library:
 
-Instead, we highly recommend using the [official C# SDK](https://github.com/modelcontextprotocol/csharp-sdk) in combination with OllamaSharp or libraries that build upon OllamaSharp such as [Semantic Kernel or the Microsoft Agent Framework](https://devblogs.microsoft.com/semantic-kernel/semantic-kernel-and-microsoft-agent-framework/).
+```bash
+dotnet add package OllamaSharp.ModelContextProtocol
+```
+
+For the latest guidance, we also highly recommend the [official C# MCP SDK](https://github.com/modelcontextprotocol/csharp-sdk) in combination with OllamaSharp, or frameworks that build upon OllamaSharp such as [Semantic Kernel or the Microsoft Agent Framework](https://devblogs.microsoft.com/semantic-kernel/semantic-kernel-and-microsoft-agent-framework/).
 
 The community made some samples how to combine the MCP SDK with OllamaSharp
 - [Invoke MCP tool from local LLM using OllamaSharp](https://www.youtube.com/watch?v=NBlIZ2TlHsU)

@@ -19,6 +19,18 @@ OllamaSharp provides .NET bindings for the [Ollama API](https://github.com/jmorg
 - **Multi modality:** Support for [vision models](https://ollama.com/blog/vision-models).
 - **Native AOT support:** [Opt-in support for Native AOT](https://awaescher.github.io/OllamaSharp/docs/native-aot-support.html) for improved performance.
 
+## 📖 Documentation
+
+| Topic | Description |
+|---|---|
+| [Getting started](https://awaescher.github.io/OllamaSharp/docs/getting-started.html) | Installation, client setup and first steps |
+| [Chat and Generate](https://awaescher.github.io/OllamaSharp/docs/chat-and-generate.html) | `Chat` class, `GenerateAsync`, streaming, images, structured output, thinking models |
+| [Model Management](https://awaescher.github.io/OllamaSharp/docs/model-management.html) | List, pull, push, copy, delete, show, embed |
+| [Tool support](https://awaescher.github.io/OllamaSharp/docs/tool-support.html) | Function calling with source generators |
+| [Advanced Configuration](https://awaescher.github.io/OllamaSharp/docs/advanced-configuration.html) | Configuration options that go beyond the basics |
+| [Native AOT support](https://awaescher.github.io/OllamaSharp/docs/native-aot-support.html) | Ahead-of-Time compilation guidance |
+| [API reference](https://awaescher.github.io/OllamaSharp/api/OllamaSharp.html) | Full auto-generated API docs |
+
 ## Usage
 
 OllamaSharp wraps each Ollama API endpoint in awaitable methods that fully support response streaming.
@@ -35,7 +47,7 @@ var uri = new Uri("http://localhost:11434");
 var ollama = new OllamaApiClient(uri);
 
 // select a model which should be used for further operations
-ollama.SelectedModel = "qwen3:4b";
+ollama.SelectedModel = "qwen3.5:35b-a3b";
 ```
 
 ### Native AOT Support
@@ -47,7 +59,7 @@ For .NET Native AOT scenarios, create a custom JsonSerializerContext with your t
 public partial class MyJsonContext : JsonSerializerContext { }
 
 // Use the static factory method for NativeAOT
-var ollama = new OllamaApiClient(uri, "qwen3:4b", MyJsonContext.Default);
+var ollama = new OllamaApiClient(uri, "qwen3.5:35b-a3b", MyJsonContext.Default);
 ```
 
 See the [Native AOT documentation](./docs/native-aot-support.md) for detailed guidance.
@@ -61,11 +73,13 @@ var models = await ollama.ListLocalModelsAsync();
 ### Pulling a model and reporting progress
 
 ```csharp
-await foreach (var status in ollama.PullModelAsync("qwen3:32b"))
+await foreach (var status in ollama.PullModelAsync("qwen3.5:35b-a3b"))
     Console.WriteLine($"{status.Percent}% {status.Status}");
 ```
 
 ### Generating a completion directly into the console
+
+`GenerateAsync` maps to the `/api/generate` endpoint and is ideal for single-turn, context-free completions.
 
 ```csharp
 await foreach (var stream in ollama.GenerateAsync("How are you today?"))
@@ -73,6 +87,8 @@ await foreach (var stream in ollama.GenerateAsync("How are you today?"))
 ```
 
 ### Building interactive chats
+
+The `Chat` class is the recommended way to build conversational applications. It automatically tracks the full message history (including tool calls and their results) across turns so the model always has full context.
 
 ```csharp
 // messages including their roles and tool calls will automatically be tracked within the chat object
@@ -87,6 +103,8 @@ while (true)
         Console.Write(answerToken);
 }
 ```
+
+You can also set a **system prompt**, send **images** for vision models, request **structured JSON output**, and enable **thinking mode** for reasoning models. See the [Chat and Generate documentation](https://awaescher.github.io/OllamaSharp/docs/chat-and-generate.html) for the full guide.
 
 ## Usage with Microsoft.Extensions.AI
 

@@ -27,7 +27,7 @@ dotnet add package OllamaSharp
 using OllamaSharp;
 
 var uri = new Uri("http://localhost:11434");
-var ollama = new OllamaApiClient(uri, "llama3.2");
+var ollama = new OllamaApiClient(uri, "qwen3.5:35b-a3b");
 
 // messages including their roles and tool calls will automatically
 // be tracked within the chat object and are accessible via the Messages property

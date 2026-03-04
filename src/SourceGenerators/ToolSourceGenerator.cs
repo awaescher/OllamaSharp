@@ -363,5 +363,5 @@ using System.Threading.Tasks;
 
 	private static string Escape(string input) => input.Replace("\\", "\\\\").Replace("\"", "\\\"").Replace("\n", " ").Replace("\r", " ").Replace("  ", " ");
 
-	private static string ToValidIdentifier(string name) => SyntaxFacts.GetKeywordKind(name) != SyntaxKind.None ? "_" + name : name;
+	private static string ToValidIdentifier(string name) => SyntaxFacts.GetKeywordKind(name) != SyntaxKind.None ? "@" + name : name;
 }
