@@ -57,11 +57,6 @@ public abstract class OllamaConsole(IOllamaApiClient ollama)
 	public static string START_NEW_COMMAND { get; } = "/new";
 
 	/// <summary>
-	/// Command to use the MCP server.
-	/// </summary>
-	public static string USE_MCP_SERVER_COMMAND { get; } = "/mcp";
-
-	/// <summary>
 	/// Command to list available tools.
 	/// </summary>
 	public static string LIST_TOOLS_COMMAND { get; } = "/tools";
