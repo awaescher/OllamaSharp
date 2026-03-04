@@ -966,6 +966,67 @@ public class AbstractionMapperTests
 			chatMessage.Role.ShouldBe(Microsoft.Extensions.AI.ChatRole.Assistant);
 			chatMessage.Text.ShouldBe("It seems the sun will be out all day.");
 		}
+
+		/// <summary>
+		/// Verifies that performance metrics from ChatDoneResponseStream (LoadDuration, TotalDuration, etc.) 
+		/// are correctly mapped to the AdditionalProperties dictionary.
+		/// </summary>
+		[Test]
+		public void Maps_Performance_Metrics_To_AdditionalProperties()
+		{
+			// Arrange
+			var ollamaCreated = new DateTimeOffset(2023, 08, 04, 08, 52, 19, 385, 406, TimeSpan.FromHours(-7));
+			var responseId = "test-response-67890";
+
+			var stream = new ChatDoneResponseStream
+			{
+				CreatedAt = ollamaCreated,
+				Done = true,
+				Message = new Message
+				{
+					Role = OllamaSharp.Models.Chat.ChatRole.Assistant,
+					Content = "Hello, world!",
+					Thinking = ""
+				},
+				Model = "qwen3.5:35b-a3b",
+
+				// Performance metrics to be mapped to AdditionalProperties
+				TotalDuration = 1_234_567_890,        // nanoseconds
+				LoadDuration = 123_456_789,           // nanoseconds
+				PromptEvalCount = 42,
+				PromptEvalDuration = 98_765_432,      // nanoseconds
+				EvalCount = 15,
+				EvalDuration = 876_543_210,           // nanoseconds
+				DoneReason = "stop"
+			};
+
+			// Act
+			var streamingChatCompletion = AbstractionMapper.ToChatResponseUpdate(stream, responseId);
+
+			// Assert - AdditionalProperties contains performance metrics
+			const double NANOSECONDS_PER_MILLISECOND = 1_000_000;
+
+			streamingChatCompletion.AdditionalProperties.ShouldNotBeNull();
+			streamingChatCompletion.AdditionalProperties.ShouldContainKey(Application.LoadDuration);
+			streamingChatCompletion.AdditionalProperties[Application.LoadDuration].ShouldBe(TimeSpan.FromMilliseconds(123_456_789 / NANOSECONDS_PER_MILLISECOND));
+
+			streamingChatCompletion.AdditionalProperties.ShouldContainKey(Application.TotalDuration);
+			streamingChatCompletion.AdditionalProperties[Application.TotalDuration].ShouldBe(TimeSpan.FromMilliseconds(1_234_567_890 / NANOSECONDS_PER_MILLISECOND));
+
+			streamingChatCompletion.AdditionalProperties.ShouldContainKey(Application.PromptEvalDuration);
+			streamingChatCompletion.AdditionalProperties[Application.PromptEvalDuration].ShouldBe(TimeSpan.FromMilliseconds(98_765_432 / NANOSECONDS_PER_MILLISECOND));
+
+			streamingChatCompletion.AdditionalProperties.ShouldContainKey(Application.EvalDuration);
+			streamingChatCompletion.AdditionalProperties[Application.EvalDuration].ShouldBe(TimeSpan.FromMilliseconds(876_543_210 / NANOSECONDS_PER_MILLISECOND));
+
+			var usageContent = streamingChatCompletion.Contents.OfType<UsageContent>().SingleOrDefault();
+			usageContent.ShouldNotBeNull();
+			usageContent.Details.ShouldNotBeNull();
+
+			usageContent.Details.InputTokenCount.ShouldBe(42);
+			usageContent.Details.OutputTokenCount.ShouldBe(15);
+			usageContent.Details.TotalTokenCount.ShouldBe(42 + 15);
+		}
 	}
 }
 
