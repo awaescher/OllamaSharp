@@ -351,6 +351,7 @@ internal static class AbstractionMapper
 
 			return new ChatResponseUpdate(ToAbstractionRole(done.Message.Role), contents)
 			{
+				AdditionalProperties = ParseOllamaChatResponseProps(done),
 				CreatedAt = done.CreatedAt,
 				FinishReason = done.DoneReason is null ? null : new ChatFinishReason(done.DoneReason),
 				RawRepresentation = response,
