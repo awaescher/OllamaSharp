@@ -1,0 +1,9 @@
+changelog:
+  exclude:
+    authors:
+      - github-actions
+      - copilot
+  categories:
+    - title: What's Changed
+      labels:
+        - "*"
