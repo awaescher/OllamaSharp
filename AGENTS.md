@@ -5,7 +5,7 @@
 OllamaSharp is a C# .NET library providing bindings for the Ollama API. It targets
 `netstandard2.0`, `netstandard2.1`, `net8.0`, `net9.0`, and `net10.0`. The library
 implements `IChatClient` and `IEmbeddingGenerator` from Microsoft.Extensions.AI. It
-includes a Roslyn source generator (`[OllamaTool]`) and an MCP integration package.
+includes a Roslyn source generator (`[OllamaTool]`).
 
 ## How OllamaSharp Fits in the .NET AI Ecosystem
 
@@ -56,7 +56,6 @@ dotnet test --configuration=Release --filter 'FullyQualifiedName~Tests.ChatTests
 
 # Run a specific test project
 dotnet test test/Tests.csproj --configuration=Release --filter 'FullyQualifiedName!~FunctionalTests'
-dotnet test tests/OllamaSharp.ModelContextProtocol.Tests/ --configuration=Release
 
 # Pack NuGet
 dotnet pack --output nupkgs --configuration=Release
@@ -75,10 +74,8 @@ unless you have a live server.
 
 ```
 src/OllamaSharp/                        # Main library (NuGet package)
-src/OllamaSharp.ModelContextProtocol/   # MCP integration library (net8.0+ only)
 src/SourceGenerators/                   # Roslyn source generator for [OllamaTool] (netstandard2.0)
 test/                                   # Unit tests (NUnit, net10.0 only) for core library
-tests/OllamaSharp.ModelContextProtocol.Tests/  # MCP integration tests
 demo/                                   # Console demo app (Spectre.Console)
 ```
 
@@ -190,7 +187,6 @@ Key dependencies:
 |---|---|
 | Microsoft.Extensions.AI.Abstractions | 10.0.0 |
 | Microsoft.Extensions.AI | 10.0.0 |
-| ModelContextProtocol | 0.2.0-preview.3 |
 | NUnit | 4.4.0 |
 | Shouldly | 4.3.0 |
 | Moq | 4.20.72 |
@@ -229,9 +225,3 @@ The `Tools/` folder implements an extensible tool invocation system:
 - The `[OllamaTool]` source generator (in `src/SourceGenerators/`) auto-generates `Tool` definitions from annotated methods
 
 **Important:** This native tool system is OllamaSharp-specific and ties tool definitions to the Ollama API's `Tool`/`ToolCall` types. For production applications or projects that may use multiple AI providers, prefer the MEAI `FunctionInvokingChatClient` middleware or the Microsoft Agent Framework — see "How OllamaSharp Fits in the .NET AI Ecosystem" above for a detailed comparison.
-
-### MCP Integration (`src/OllamaSharp.ModelContextProtocol/`)
-- Targets **`net8.0`, `net9.0`, `net10.0` only** (no netstandard)
-- `McpClientTool` extends `Tool` and implements `IAsyncInvokableTool`, bridging MCP tools into the OllamaSharp tool system
-- Entry point: `Tools.GetFromMcpServers()` — accepts a config file path or `McpServerConfiguration[]`
-- `McpClientOptions` allows custom `ILoggerFactory`, transport factory, capabilities, and timeout

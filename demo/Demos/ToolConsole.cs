@@ -28,7 +28,6 @@ public class ToolConsole(IOllamaApiClient ollama) : OllamaConsole(ollama)
 		if (!string.IsNullOrEmpty(Ollama.SelectedModel))
 		{
 			var keepChatting = true;
-			var mcpAdded = false;
 			var systemPrompt = ReadInput($"Define a system prompt [{HintTextColor}](optional)[/]");
 
 			do
@@ -39,12 +38,6 @@ public class ToolConsole(IOllamaApiClient ollama) : OllamaConsole(ollama)
 				AnsiConsole.MarkupLine("If any tool is used, the intended usage information is printed.");
 				WriteChatInstructionHint();
 
-				if (!mcpAdded)
-				{
-					AnsiConsole.MarkupLine($"[{HintTextColor}]Enter [{AccentTextColor}]{USE_MCP_SERVER_COMMAND}[/] to use tools from MCP servers. Caution, please install following MCP servers for this demo: [/]");
-					AnsiConsole.MarkupLine($"[{HintTextColor}]npm install -g @modelcontextprotocol/server-filesystem [/]");
-					AnsiConsole.MarkupLine($"[{HintTextColor}]npm install -g @modelcontextprotocol/server-github [/]");
-				}
 				AnsiConsole.MarkupLine($"[{HintTextColor}]Enter [{AccentTextColor}]{LIST_TOOLS_COMMAND}[/] to list all available tools.[/]");
 
 				var chat = new Chat(Ollama, systemPrompt) { Think = Think };
@@ -75,25 +68,6 @@ public class ToolConsole(IOllamaApiClient ollama) : OllamaConsole(ollama)
 					if (message.Equals(START_NEW_COMMAND, StringComparison.OrdinalIgnoreCase))
 					{
 						keepChatting = true;
-						break;
-					}
-
-					if (message.Equals(USE_MCP_SERVER_COMMAND, StringComparison.OrdinalIgnoreCase))
-					{
-						keepChatting = true;
-
-						if (!mcpAdded)
-						{
-							var mcpTools = await GetMcpTools();
-
-							if (mcpTools.Any())
-							{
-								Tools.AddRange(mcpTools);
-								mcpAdded = true;
-							}
-							AnsiConsole.MarkupLine($"[{HintTextColor}]{mcpTools.Count()} tool(s) added.[/]");
-						}
-
 						break;
 					}
 
@@ -158,13 +132,6 @@ public class ToolConsole(IOllamaApiClient ollama) : OllamaConsole(ollama)
 
 			AnsiConsole.MarkupLineInterpolated($"{chatTool.Function?.Name ?? "Unknown"}\t\t[purple]{chatTool.Function?.Description}[/]");
 		}
-	}
-
-	private static async Task<object[]> GetMcpTools()
-	{
-		// expect a config file for the demo app
-		var config = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, "server_config.json");
-		return await OllamaSharp.ModelContextProtocol.Tools.GetFromMcpServers(config);
 	}
 
 	/// <summary>
