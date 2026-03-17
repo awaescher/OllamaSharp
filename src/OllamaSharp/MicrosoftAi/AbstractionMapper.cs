@@ -4,6 +4,7 @@ using Microsoft.Extensions.AI;
 using OllamaSharp.Constants;
 using OllamaSharp.Models;
 using OllamaSharp.Models.Chat;
+
 using ChatRole = OllamaSharp.Models.Chat.ChatRole;
 
 namespace OllamaSharp.MicrosoftAi;
@@ -79,6 +80,18 @@ internal static class AbstractionMapper
 		request.Options.TopP ??= options?.TopP;
 		request.Options.TopK ??= options?.TopK;
 		request.Options.NumPredict = options?.MaxOutputTokens;
+
+		if (options?.Reasoning is { } reasoning)
+		{
+			request.Think ??= reasoning.Effort switch
+			{
+				null => (ThinkValue?)null,
+				ReasoningEffort.None => false,
+				ReasoningEffort.Low => new ThinkValue(ThinkValue.Low),
+				ReasoningEffort.Medium => new ThinkValue(ThinkValue.Medium),
+				_ => new ThinkValue(ThinkValue.High),
+			};
+		}
 
 		request.Messages =
 			request.Messages is null ? mappedMessages :
@@ -176,43 +189,24 @@ internal static class AbstractionMapper
 	}
 
 	/// <summary>
-	/// Converts an <see cref="AIFunctionDeclaration"/> to a <see cref="Tool"/>.
+	/// Converts an <see cref="AIFunctionDeclaration"/> to a JSON tool representation
+	/// compatible with the Ollama API.
 	/// </summary>
 	/// <param name="function">The function to convert.</param>
-	/// <returns>A <see cref="Tool"/> object containing the converted data.</returns>
-	private static Tool ToOllamaSharpTool(AIFunctionDeclaration function)
+	/// <returns>A <see cref="JsonNode"/> representing the tool in Ollama's expected format.</returns>
+	private static JsonNode? ToOllamaSharpTool(AIFunctionDeclaration function)
 	{
 		JsonElement transformedSchema = _schemaTransformCache.GetOrCreateTransformedSchema(function);
-		return new Tool
+		return new JsonObject
 		{
-			Function = new Function
+			["type"] = Application.Function,
+			[Application.Function] = new JsonObject
 			{
-				Description = function.Description,
-				Name = function.Name,
-				Parameters = JsonSerializer.Deserialize<Parameters>(transformedSchema),
-			},
-			Type = Application.Function
+				[Application.Name] = function.Name,
+				["description"] = function.Description,
+				[Application.Parameters] = JsonNode.Parse(transformedSchema.GetRawText()),
+			}
 		};
-	}
-
-	/// <summary>
-	/// Converts parameter schema object to a function type string.
-	/// </summary>
-	/// <param name="schema">The schema object holding schema type information.</param>
-	/// <returns>A collection of strings containing the function types.</returns>
-	private static IEnumerable<string> GetPossibleValues(JsonObject? schema)
-	{
-		return []; // TODO others supported?
-	}
-
-	/// <summary>
-	/// Converts parameter schema object to a function type string.
-	/// </summary>
-	/// <param name="schema">The schema object holding schema type information.</param>
-	/// <returns>A string containing the function type.</returns>
-	private static string ToFunctionTypeString(JsonObject? schema)
-	{
-		return "string"; // TODO others supported?
 	}
 
 	/// <summary>
