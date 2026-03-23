@@ -259,6 +259,30 @@ internal static class AbstractionMapper
 					Role = ChatRole.Tool,
 				};
 			}
+
+			// If the message contains a rejected tool approval response, add it as a "rejected" tool message.
+			// Approved responses are skipped here since the actual FunctionResultContent follows separately.
+			// ToolApprovalRequestContent items are also skipped since they are approval requests for the
+			// human/system and do not represent content to send to the AI model.
+			foreach (var tarc in cm.Contents.OfType<ToolApprovalResponseContent>())
+			{
+				if (tarc.Approved)
+					continue;
+
+				var callId = tarc.ToolCall?.CallId ?? tarc.RequestId;
+				var functionName = (tarc.ToolCall as FunctionCallContent)?.Name ?? Application.NotApplicable;
+				var rejectionResult = JsonSerializer.SerializeToElement($"Tool call '{functionName}' was not approved.");
+
+				yield return new Message
+				{
+					Content = JsonSerializer.Serialize(new OllamaFunctionResultContent
+					{
+						CallId = callId,
+						Result = rejectionResult,
+					}, serializerOptions),
+					Role = ChatRole.Tool,
+				};
+			}
 		}
 	}
 

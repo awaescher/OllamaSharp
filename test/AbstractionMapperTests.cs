@@ -579,6 +579,85 @@ public class AbstractionMapperTests
 		}
 
 		/// <summary>
+		/// Verifies that <see cref="ToolApprovalRequestContent"/> items are ignored when mapping messages,
+		/// since they are approval requests for the human/system and not content for the AI model.
+		/// </summary>
+		[Test]
+		public void Ignores_ToolApprovalRequestContent()
+		{
+			var functionCall = new FunctionCallContent("call_abc", "get_weather", new Dictionary<string, object?> { ["city"] = "NYC" });
+			var aiChatMessages = new List<Microsoft.Extensions.AI.ChatMessage>
+			{
+				new()
+				{
+					Role = Microsoft.Extensions.AI.ChatRole.Assistant,
+					Contents = [
+						new ToolApprovalRequestContent("req_1", functionCall)
+					]
+				}
+			};
+
+			var chatRequest = AbstractionMapper.ToOllamaSharpChatRequest(null, aiChatMessages, new(), stream: true, JsonSerializerOptions.Default);
+			var chatMessages = chatRequest.Messages?.ToList();
+
+			chatMessages.ShouldBeEmpty();
+		}
+
+		/// <summary>
+		/// Verifies that a rejected <see cref="ToolApprovalResponseContent"/> is mapped as a "tool rejected" tool message.
+		/// </summary>
+		[Test]
+		public void Maps_RejectedToolApprovalResponseContent_As_ToolRejectionMessage()
+		{
+			var functionCall = new FunctionCallContent("call_abc", "get_weather", new Dictionary<string, object?> { ["city"] = "NYC" });
+			var aiChatMessages = new List<Microsoft.Extensions.AI.ChatMessage>
+			{
+				new()
+				{
+					Role = Microsoft.Extensions.AI.ChatRole.User,
+					Contents = [
+						new ToolApprovalResponseContent("req_1", approved: false, functionCall)
+					]
+				}
+			};
+
+			var chatRequest = AbstractionMapper.ToOllamaSharpChatRequest(null, aiChatMessages, new(), stream: true, JsonSerializerOptions.Default);
+			var chatMessages = chatRequest.Messages?.ToList();
+
+			chatMessages.Count.ShouldBe(1);
+			var toolMessage = chatMessages[0];
+			toolMessage.Role.ShouldBe(OllamaSharp.Models.Chat.ChatRole.Tool);
+			toolMessage.Content.ShouldContain("\"CallId\":\"call_abc\"");
+			toolMessage.Content.ShouldContain("get_weather");
+			toolMessage.Content.ShouldContain("was not approved");
+		}
+
+		/// <summary>
+		/// Verifies that an approved <see cref="ToolApprovalResponseContent"/> is ignored, since the
+		/// actual function result will follow as a <see cref="FunctionResultContent"/>.
+		/// </summary>
+		[Test]
+		public void Ignores_ApprovedToolApprovalResponseContent()
+		{
+			var functionCall = new FunctionCallContent("call_abc", "get_weather", new Dictionary<string, object?> { ["city"] = "NYC" });
+			var aiChatMessages = new List<Microsoft.Extensions.AI.ChatMessage>
+			{
+				new()
+				{
+					Role = Microsoft.Extensions.AI.ChatRole.User,
+					Contents = [
+						new ToolApprovalResponseContent("req_1", approved: true, functionCall)
+					]
+				}
+			};
+
+			var chatRequest = AbstractionMapper.ToOllamaSharpChatRequest(null, aiChatMessages, new(), stream: true, JsonSerializerOptions.Default);
+			var chatMessages = chatRequest.Messages?.ToList();
+
+			chatMessages.ShouldBeEmpty();
+		}
+
+		/// <summary>
 		/// Verifies mapping of standard chat options.
 		/// </summary>
 		[Test]
