@@ -439,17 +439,17 @@ public class Chat
 		var messageBuilder = new MessageBuilder();
 		await foreach (var answer in Client.ChatAsync(request, cancellationToken).ConfigureAwait(false))
 		{
-			if (answer is null)
+			if (answer?.Message is not { } answerMessageChunk)
 				continue;
 
 			messageBuilder.Append(answer);
 
 			// yield the message content or call the delegate to handle thinking
-			var isThinking = (bool?)Think == true && !string.IsNullOrEmpty(answer.Message.Thinking);
+			var isThinking = (bool?)Think == true && !string.IsNullOrEmpty(answerMessageChunk.Thinking);
 			if (isThinking)
-				OnThink?.Invoke(this, answer.Message.Thinking!);
+				OnThink?.Invoke(this, answerMessageChunk.Thinking!);
 			else
-				yield return answer.Message.Content ?? string.Empty;
+				yield return answerMessageChunk.Content ?? string.Empty;
 		}
 
 		if (messageBuilder.HasValue)
