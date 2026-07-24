@@ -1232,6 +1232,24 @@ public class ToOllamaEmbedRequestMethod : AbstractionMapperTests
 		request.KeepAlive.ShouldBe("60m");
 		request.Truncate.ShouldBe(true);
 	}
+
+	/// <summary>
+	/// Verifies that num_ctx is mapped into the embedding request options.
+	/// </summary>
+	[Test]
+	public void Maps_NumCtx_From_AdditionalProperties()
+	{
+		var options = new EmbeddingGenerationOptions
+		{
+			AdditionalProperties = []
+		};
+		options.AdditionalProperties[Application.NumCtx] = 4096;
+
+		var request = AbstractionMapper.ToOllamaEmbedRequest([], options);
+
+		request.Options.ShouldNotBeNull();
+		request.Options.NumCtx.ShouldBe(4096);
+	}
 }
 
 /// <summary>

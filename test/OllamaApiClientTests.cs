@@ -14,6 +14,7 @@ using Moq.Protected;
 using NUnit.Framework;
 
 using OllamaSharp;
+using OllamaSharp.Constants;
 using OllamaSharp.Models;
 using OllamaSharp.Models.Chat;
 using OllamaSharp.Models.Exceptions;
@@ -727,6 +728,36 @@ public class OllamaApiClientTests
 
 			info.Embeddings[0].Length.ShouldBe(5);
 			info.Embeddings[0][0].ShouldBe(0.567f, tolerance: 0.01f);
+		}
+
+		/// <summary>
+		/// Verifies that MEAI num_ctx options are sent to the Ollama embedding endpoint.
+		/// </summary>
+		[Test, NonParallelizable]
+		public async Task Sends_NumCtx_From_Microsoft_Extensions_AI()
+		{
+			_response = new HttpResponseMessage
+			{
+				StatusCode = HttpStatusCode.OK,
+				Content = new StringContent("""{"embeddings":[[0.5]],"prompt_eval_count":1}""")
+			};
+			var options = new EmbeddingGenerationOptions
+			{
+				AdditionalProperties = [],
+				ModelId = "embedding-model"
+			};
+			options.AdditionalProperties[Application.NumCtx] = 4096;
+			var generator = (IEmbeddingGenerator<string, Embedding<float>>)_client;
+
+			await generator.GenerateAsync(["input"], options, CancellationToken.None);
+
+			_requestContent.ShouldNotBeNull();
+			using var requestJson = JsonDocument.Parse(_requestContent);
+			requestJson.RootElement
+				.GetProperty("options")
+				.GetProperty(Application.NumCtx)
+				.GetInt32()
+				.ShouldBe(4096);
 		}
 	}
 

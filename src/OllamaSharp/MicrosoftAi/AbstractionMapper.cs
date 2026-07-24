@@ -500,6 +500,12 @@ internal static class AbstractionMapper
 
 			if (requestProps.TryGetValue(Application.Truncate, out bool truncate))
 				request.Truncate = truncate;
+
+			if (requestProps.TryGetValue(Application.NumCtx, out int numCtx))
+			{
+				request.Options ??= new RequestOptions();
+				request.Options.NumCtx = numCtx;
+			}
 		}
 
 		return request;
