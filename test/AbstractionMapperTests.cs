@@ -930,6 +930,7 @@ public class AbstractionMapperTests
 			response.CreatedAt.ShouldBe(new DateTimeOffset(2023, 08, 04, 08, 52, 19, 385, 406, TimeSpan.FromHours(-7)));
 			response.FinishReason.ShouldBe(ChatFinishReason.Stop);
 			response.Messages[0].AuthorName.ShouldBeNull();
+			response.Messages[0].MessageId.ShouldBe(ollamaCreatedStamp);
 			response.Messages[0].RawRepresentation.ShouldBe(stream.Message);
 			response.Messages[0].Role.ShouldBe(Microsoft.Extensions.AI.ChatRole.Assistant);
 			response.Messages[0].Text.ShouldBe("Hi.");
@@ -974,6 +975,7 @@ public class AbstractionMapperTests
 			((TextContent)streamingChatCompletion.Contents[0]).Text.ShouldBe("Hi.");
 			streamingChatCompletion.CreatedAt.ShouldBe(new DateTimeOffset(2023, 08, 04, 08, 52, 19, 385, 406, TimeSpan.FromHours(-7)));
 			streamingChatCompletion.FinishReason.ShouldBe(ChatFinishReason.Stop);
+			streamingChatCompletion.MessageId.ShouldBe("12345");
 			streamingChatCompletion.RawRepresentation.ShouldBe(stream);
 			streamingChatCompletion.ResponseId.ShouldBe("12345");
 			streamingChatCompletion.Role.ShouldBe(Microsoft.Extensions.AI.ChatRole.Assistant);
@@ -1004,6 +1006,7 @@ public class AbstractionMapperTests
 			((TextReasoningContent)streamingChatCompletion.Contents[0]).Text.ShouldBe("Beer.");
 			streamingChatCompletion.CreatedAt.ShouldBe(new DateTimeOffset(2023, 08, 04, 08, 52, 19, 385, 406, TimeSpan.FromHours(-7)));
 			streamingChatCompletion.FinishReason.ShouldBe(ChatFinishReason.Stop);
+			streamingChatCompletion.MessageId.ShouldBe("12345");
 			streamingChatCompletion.RawRepresentation.ShouldBe(stream);
 			streamingChatCompletion.ResponseId.ShouldBe("12345");
 			streamingChatCompletion.Role.ShouldBe(Microsoft.Extensions.AI.ChatRole.Assistant);
@@ -1069,6 +1072,58 @@ public class AbstractionMapperTests
 		}
 
 		/// <summary>
+		/// Verifies that MEAI keeps updates from separate provider calls in separate messages.
+		/// </summary>
+		[Test]
+		public void Separates_Updates_With_Different_MessageIds()
+		{
+			var updates = new[]
+			{
+				AbstractionMapper.ToChatResponseUpdate(new ChatResponseStream
+				{
+					Message = new Message { Role = OllamaSharp.Models.Chat.ChatRole.Assistant, Content = "First" }
+				}, "response-1"),
+				AbstractionMapper.ToChatResponseUpdate(new ChatResponseStream
+				{
+					Message = new Message { Role = OllamaSharp.Models.Chat.ChatRole.Assistant, Content = "Second" }
+				}, "response-2")
+			};
+
+			var response = updates.ToChatResponse();
+
+			response.Messages.Count.ShouldBe(2);
+			response.Messages[0].MessageId.ShouldBe("response-1");
+			response.Messages[0].Text.ShouldBe("First");
+			response.Messages[1].MessageId.ShouldBe("response-2");
+			response.Messages[1].Text.ShouldBe("Second");
+		}
+
+		/// <summary>
+		/// Verifies that MEAI combines chunks that belong to the same logical message.
+		/// </summary>
+		[Test]
+		public void Combines_Updates_With_The_Same_MessageId()
+		{
+			var updates = new[]
+			{
+				AbstractionMapper.ToChatResponseUpdate(new ChatResponseStream
+				{
+					Message = new Message { Role = OllamaSharp.Models.Chat.ChatRole.Assistant, Content = "Hel" }
+				}, "response-1"),
+				AbstractionMapper.ToChatResponseUpdate(new ChatResponseStream
+				{
+					Message = new Message { Role = OllamaSharp.Models.Chat.ChatRole.Assistant, Content = "lo" }
+				}, "response-1")
+			};
+
+			var response = updates.ToChatResponse();
+
+			response.Messages.Count.ShouldBe(1);
+			response.Messages[0].MessageId.ShouldBe("response-1");
+			response.Messages[0].Text.ShouldBe("Hello");
+		}
+
+		/// <summary>
 		/// Verifies that performance metrics from ChatDoneResponseStream (LoadDuration, TotalDuration, etc.) 
 		/// are correctly mapped to the AdditionalProperties dictionary.
 		/// </summary>
@@ -1107,6 +1162,7 @@ public class AbstractionMapperTests
 			// Assert - AdditionalProperties contains performance metrics
 			const double NANOSECONDS_PER_MILLISECOND = 1_000_000;
 
+			streamingChatCompletion.MessageId.ShouldBe(responseId);
 			streamingChatCompletion.AdditionalProperties.ShouldNotBeNull();
 			streamingChatCompletion.AdditionalProperties.ShouldContainKey(Application.LoadDuration);
 			streamingChatCompletion.AdditionalProperties[Application.LoadDuration].ShouldBe(TimeSpan.FromMilliseconds(123_456_789 / NANOSECONDS_PER_MILLISECOND));
@@ -1127,6 +1183,13 @@ public class AbstractionMapperTests
 			usageContent.Details.InputTokenCount.ShouldBe(42);
 			usageContent.Details.OutputTokenCount.ShouldBe(15);
 			usageContent.Details.TotalTokenCount.ShouldBe(42 + 15);
+
+			var combinedResponse = new[] { streamingChatCompletion }.ToChatResponse();
+			combinedResponse.Messages.Single().AdditionalProperties.ShouldNotBeNull();
+			combinedResponse.Messages.Single().AdditionalProperties.ShouldContainKey(Application.TotalDuration);
+			combinedResponse.Usage.ShouldNotBeNull();
+			combinedResponse.Usage.InputTokenCount.ShouldBe(42);
+			combinedResponse.Usage.OutputTokenCount.ShouldBe(15);
 		}
 	}
 }
