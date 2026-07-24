@@ -31,8 +31,10 @@ internal static class AbstractionMapper
 		if (stream is null)
 			return null;
 
+		var responseId = stream.CreatedAtString ?? Guid.NewGuid().ToString("N");
 		var chatMessage = ToChatMessage(stream.Message);
 		chatMessage.CreatedAt = stream.CreatedAt;
+		chatMessage.MessageId = responseId;
 
 		return new ChatResponse(chatMessage)
 		{
@@ -41,7 +43,7 @@ internal static class AbstractionMapper
 			CreatedAt = stream.CreatedAt,
 			ModelId = usedModel ?? stream.Model,
 			RawRepresentation = stream,
-			ResponseId = stream.CreatedAtString ?? Guid.NewGuid().ToString("N"),
+			ResponseId = responseId,
 			Usage = ParseOllamaChatResponseUsage(stream)
 		};
 	}
@@ -348,6 +350,7 @@ internal static class AbstractionMapper
 				AdditionalProperties = ParseOllamaChatResponseProps(done),
 				CreatedAt = done.CreatedAt,
 				FinishReason = done.DoneReason is null ? null : new ChatFinishReason(done.DoneReason),
+				MessageId = responseId,
 				RawRepresentation = response,
 				ResponseId = responseId,
 				ModelId = done.Model
@@ -359,6 +362,7 @@ internal static class AbstractionMapper
 			// no need to set "Contents" as we set the text
 			CreatedAt = response?.CreatedAt,
 			FinishReason = response?.Done == true ? ChatFinishReason.Stop : null,
+			MessageId = responseId,
 			RawRepresentation = response,
 			ResponseId = responseId,
 			ModelId = response?.Model
