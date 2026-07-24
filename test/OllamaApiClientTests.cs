@@ -298,6 +298,35 @@ public class OllamaApiClientTests
 	}
 
 	/// <summary>
+	/// Contains tests for the RequestModelUnload extension method.
+	/// </summary>
+	public class RequestModelUnloadMethod : OllamaApiClientTests
+	{
+		/// <summary>
+		/// Verifies that the explicitly requested model is unloaded instead of the selected model.
+		/// </summary>
+		[Test, NonParallelizable]
+		public async Task Uses_Requested_Model()
+		{
+			_client.SelectedModel = "selected-model";
+			_response = new HttpResponseMessage
+			{
+				StatusCode = HttpStatusCode.OK,
+				Content = new StringContent("""{"model":"requested-model","response":"","done":true}""")
+			};
+
+			await _client.RequestModelUnloadAsync("requested-model", CancellationToken.None);
+
+			_requestContent.ShouldNotBeNull();
+			using var requestJson = JsonDocument.Parse(_requestContent);
+			var root = requestJson.RootElement;
+			root.GetProperty("model").GetString().ShouldBe("requested-model");
+			root.GetProperty("stream").GetBoolean().ShouldBeFalse();
+			root.GetProperty("keep_alive").GetString().ShouldBe("0s");
+		}
+	}
+
+	/// <summary>
 	/// Contains tests for the Complete method.
 	/// </summary>
 	public class CompleteMethod : OllamaApiClientTests
