@@ -102,7 +102,7 @@ public static class OllamaApiClientExtensions
 	{
 		var request = new GenerateRequest
 		{
-			Model = client.SelectedModel,
+			Model = model,
 			Stream = false,
 			KeepAlive = "0s"
 		};
