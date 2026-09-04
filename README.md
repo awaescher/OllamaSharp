@@ -143,6 +143,16 @@ client.DefaultRequestHeaders.Add(/* your api key here */);
 var ollama = new OllamaApiClient(client);
 ```
 
+## Using with llmman
+
+[llmman](https://github.com/llmmanorg/llmman) is a local model runner that serves the Ollama API (alongside OpenAI- and Anthropic-compatible ones) on port 17434. OllamaSharp works against it unchanged, only the port differs:
+
+```csharp
+var ollama = new OllamaApiClient("http://localhost:17434", "gemma4");
+```
+
+llmman honours the `LLMMAN_HOST` environment variable (`[host][:port]`) the same way Ollama honours `OLLAMA_HOST`.
+
 ## OllamaSharp vs. Microsoft.Extensions.AI vs. Semantic Kernel
 
 It can be confusing which library to use with AI in C#. The following paragraph should help you decide which library to start with.

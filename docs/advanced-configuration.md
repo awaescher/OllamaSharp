@@ -27,6 +27,16 @@ var ollama = new OllamaApiClient(httpClient, "qwen3.5:35b-a3b");
 > [!NOTE]
 > When you pass your own `HttpClient`, OllamaSharp will **not** dispose it. When OllamaSharp creates its own `HttpClient` internally (URI-based constructors or `Configuration`), it takes ownership and disposes it when you call `Dispose()`.
 
+### Using with llmman
+
+[llmman](https://github.com/llmmanorg/llmman) is a local model runner that serves the Ollama API (alongside OpenAI- and Anthropic-compatible ones) on port 17434. Point the client at that port and everything else stays the same:
+
+```csharp
+var ollama = new OllamaApiClient("http://localhost:17434", "gemma4");
+```
+
+The default bind address is `127.0.0.1:17434` and can be changed with the `LLMMAN_HOST` environment variable (`[host][:port]`), mirroring `OLLAMA_HOST`.
+
 ## Custom HTTP headers
 
 ### Default headers (every request)
