@@ -119,4 +119,19 @@ internal static class Application
 	public const string Height = "height";
 	public const string Steps = "steps";
 	public const string Image = "image";
+	public const string State = "state";
+	public const string Questions = "questions";
+	public const string Instructions = "instructions";
+	public const string Criteria = "criteria";
+	public const string Choice = "choice";
+	public const string Noul = "noul";
+	public const string Score = "score";
+	public const string Probabilities = "probabilities";
+	public const string Confidence = "confidence";
+	public const string Legend = "legend";
+	public const string Answers = "answers";
+	public const string Usage = "usage";
+	public const string InputTokens = "input_tokens";
+	public const string OutputTokens = "output_tokens";
+	public const string Type = "type";
 }

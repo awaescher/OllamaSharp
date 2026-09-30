@@ -238,6 +238,207 @@ public class ModelSerializationTests
 			json.ShouldNotContain("\"message\":");
 		}
 	}
+
+	/// <summary>
+	/// Tests for SystemOneRequest serialization.
+	/// </summary>
+	public class SystemOneRequestTests : ModelSerializationTests
+	{
+		private static SystemOneRequest CreateRequest()
+		{
+			return new SystemOneRequest
+			{
+				Model = "nimble",
+				State = "Our checkout has returned 500 errors since 9am.",
+				Questions = new()
+				{
+					["label"] = new SystemOneChoiceQuestion
+					{
+						Instructions = "Which label fits this ticket?",
+						Criteria = new()
+						{
+							["billing"] = "Payments and refunds",
+							["bug"] = "Software errors",
+							["account"] = "Login and account access"
+						}
+					},
+					["urgent"] = new SystemOneNoulQuestion
+					{
+						Instructions = "Is this urgent?"
+					},
+					["severity"] = new SystemOneScoreQuestion
+					{
+						Instructions = "How severe is this?",
+						Criteria = ["low", "medium", "high"]
+					}
+				}
+			};
+		}
+
+		[Test]
+		public void Serializes_Question_Type_Discriminators()
+		{
+			var json = JsonSerializer.Serialize(CreateRequest());
+
+			json.ShouldContain("\"type\":\"choice\"");
+			json.ShouldContain("\"type\":\"noul\"");
+			json.ShouldContain("\"type\":\"score\"");
+		}
+
+		[Test]
+		public void Serializes_State_And_Model()
+		{
+			var json = JsonSerializer.Serialize(CreateRequest());
+
+			json.ShouldContain("\"model\":\"nimble\"");
+			json.ShouldContain("\"state\":\"Our checkout has returned 500 errors since 9am.\"");
+			json.ShouldContain("\"questions\":");
+		}
+
+		[Test]
+		public void Does_Not_Serialize_The_Type_Property_Twice()
+		{
+			var json = JsonSerializer.Serialize(CreateRequest());
+
+			json.Contains("\"Type\"").ShouldBeFalse();
+		}
+
+		[Test]
+		public void Serializes_Noul_Criteria_Using_False_And_True_Keys()
+		{
+			var request = new SystemOneRequest
+			{
+				Model = "nimble",
+				State = "state",
+				Questions = new()
+				{
+					["q"] = new SystemOneNoulQuestion
+					{
+						Instructions = "Is this urgent?",
+						Criteria = new SystemOneNoulCriteria { No = "Not urgent", Yes = "Urgent" }
+					}
+				}
+			};
+
+			var json = JsonSerializer.Serialize(request);
+
+			json.ShouldContain("\"false\":\"Not urgent\"");
+			json.ShouldContain("\"true\":\"Urgent\"");
+		}
+
+		[Test]
+		public void Omits_KeepAlive_When_Null()
+		{
+			var json = JsonSerializer.Serialize(CreateRequest());
+
+			json.ShouldNotContain("\"keep_alive\"");
+		}
+
+		[Test]
+		public void Deserializes_Questions_Into_Derived_Types()
+		{
+			var json = JsonSerializer.Serialize(CreateRequest());
+
+			var request = JsonSerializer.Deserialize<SystemOneRequest>(json);
+
+			request.ShouldNotBeNull();
+			request.Questions["label"].ShouldBeOfType<SystemOneChoiceQuestion>();
+			request.Questions["urgent"].ShouldBeOfType<SystemOneNoulQuestion>();
+			request.Questions["severity"].ShouldBeOfType<SystemOneScoreQuestion>();
+		}
+
+		[Test]
+		public void RoundTrips_With_Source_Generated_Context()
+		{
+			var request = CreateRequest();
+
+			var json = JsonSerializer.Serialize(request, JsonSourceGenerationContext.Default.SystemOneRequest);
+			var deserialized = JsonSerializer.Deserialize(json, JsonSourceGenerationContext.Default.SystemOneRequest);
+
+			deserialized.ShouldNotBeNull();
+			deserialized.Model.ShouldBe("nimble");
+			deserialized.State.ShouldBeOfType<JsonElement>().GetString().ShouldBe("Our checkout has returned 500 errors since 9am.");
+			deserialized.Questions["label"].ShouldBeOfType<SystemOneChoiceQuestion>();
+			deserialized.Questions["urgent"].ShouldBeOfType<SystemOneNoulQuestion>();
+			deserialized.Questions["severity"].ShouldBeOfType<SystemOneScoreQuestion>();
+		}
+	}
+
+	/// <summary>
+	/// Tests for SystemOneResponse deserialization.
+	/// </summary>
+	public class SystemOneResponseTests : ModelSerializationTests
+	{
+		private const string ResponseJson = """
+		{
+			"model": "nimble",
+			"answers": {
+				"label": {
+					"type": "choice",
+					"choice": "bug",
+					"probabilities": { "billing": 0.0125, "bug": 0.9781, "account": 0.0093 },
+					"confidence": 0.8906
+				},
+				"urgent": {
+					"type": "noul",
+					"noul": 0.87
+				},
+				"severity": {
+					"type": "score",
+					"score": 1.5,
+					"legend": { "0": "low", "1": "medium", "2": "high" },
+					"probabilities": { "0": 0.1, "1": 0.3, "2": 0.6 },
+					"confidence": 0.44
+				}
+			},
+			"usage": { "input_tokens": 174, "output_tokens": 1 }
+		}
+		""";
+
+		[Test]
+		public void Deserializes_Model_And_Usage()
+		{
+			var response = JsonSerializer.Deserialize<SystemOneResponse>(ResponseJson);
+
+			response.ShouldNotBeNull();
+			response.Model.ShouldBe("nimble");
+			response.Usage.InputTokens.ShouldBe(174);
+			response.Usage.OutputTokens.ShouldBe(1);
+		}
+
+		[Test]
+		public void Deserializes_Choice_Answer()
+		{
+			var response = JsonSerializer.Deserialize<SystemOneResponse>(ResponseJson);
+
+			var answer = response.Answers["label"].ShouldBeOfType<SystemOneChoiceAnswer>();
+			answer.Type.ShouldBe("choice");
+			answer.Choice.ShouldBe("bug");
+			answer.Probabilities["bug"].ShouldBe(0.9781);
+			answer.Confidence.ShouldBe(0.8906);
+		}
+
+		[Test]
+		public void Deserializes_Noul_Answer()
+		{
+			var response = JsonSerializer.Deserialize<SystemOneResponse>(ResponseJson);
+
+			var answer = response.Answers["urgent"].ShouldBeOfType<SystemOneNoulAnswer>();
+			answer.Noul.ShouldBe(0.87);
+		}
+
+		[Test]
+		public void Deserializes_Score_Answer()
+		{
+			var response = JsonSerializer.Deserialize<SystemOneResponse>(ResponseJson);
+
+			var answer = response.Answers["severity"].ShouldBeOfType<SystemOneScoreAnswer>();
+			answer.Score.ShouldBe(1.5);
+			answer.Legend["2"].ShouldBe("high");
+			answer.Probabilities["2"].ShouldBe(0.6);
+			answer.Confidence.ShouldBe(0.44);
+		}
+	}
 }
 
 #pragma warning restore CS0618

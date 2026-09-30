@@ -837,6 +837,81 @@ public class OllamaApiClientTests
 			version.ShouldBe("0.6.8-rc1");
 		}
 	}
+
+	/// <summary>
+	/// Contains tests for the SystemOne method.
+	/// </summary>
+	public class SystemOneMethod : OllamaApiClientTests
+	{
+		[Test, NonParallelizable]
+		public async Task Returns_Deserialized_Response()
+		{
+			_response = new HttpResponseMessage
+			{
+				StatusCode = HttpStatusCode.OK,
+				Content = new StringContent("""{"model":"nimble","answers":{"label":{"type":"choice","choice":"bug","probabilities":{"billing":0.0125,"bug":0.9781,"account":0.0093},"confidence":0.8906}},"usage":{"input_tokens":174,"output_tokens":1}}""")
+			};
+
+			var request = new SystemOneRequest
+			{
+				Model = "nimble",
+				State = "Our checkout has returned 500 errors since 9am.",
+				Questions = new()
+				{
+					["label"] = new SystemOneChoiceQuestion
+					{
+						Instructions = "Which label fits this ticket?",
+						Criteria = new() { ["billing"] = "Payments and refunds", ["bug"] = "Software errors" }
+					}
+				}
+			};
+
+			var response = await _client.SystemOneAsync(request, CancellationToken.None);
+
+			_request.RequestUri!.AbsolutePath.ShouldBe("/v1/systemone");
+
+			var answer = response.Answers["label"].ShouldBeOfType<SystemOneChoiceAnswer>();
+			answer.Choice.ShouldBe("bug");
+			answer.Confidence.ShouldBe(0.8906);
+			response.Usage.InputTokens.ShouldBe(174);
+			response.Usage.OutputTokens.ShouldBe(1);
+		}
+
+		[Test, NonParallelizable]
+		public async Task Uses_Selected_Model_When_Request_Model_Is_Empty()
+		{
+			var previousModel = _client.SelectedModel;
+			_client.SelectedModel = "nimble";
+
+			try
+			{
+				_response = new HttpResponseMessage
+				{
+					StatusCode = HttpStatusCode.OK,
+					Content = new StringContent("""{"model":"nimble","answers":{},"usage":{"input_tokens":0,"output_tokens":0}}""")
+				};
+
+				var request = new SystemOneRequest
+				{
+					State = "state",
+					Questions = new()
+					{
+						["q"] = new SystemOneNoulQuestion { Instructions = "?" }
+					}
+				};
+
+				await _client.SystemOneAsync(request, CancellationToken.None);
+
+				_requestContent.ShouldNotBeNull();
+				using var requestJson = JsonDocument.Parse(_requestContent);
+				requestJson.RootElement.GetProperty("model").GetString().ShouldBe("nimble");
+			}
+			finally
+			{
+				_client.SelectedModel = previousModel;
+			}
+		}
+	}
 }
 
 /// <summary>
