@@ -878,6 +878,36 @@ public class OllamaApiClientTests
 		}
 
 		[Test, NonParallelizable]
+		public async Task Deserializes_Answers_With_Type_Discriminator_Not_Being_First()
+		{
+			_response = new HttpResponseMessage
+			{
+				StatusCode = HttpStatusCode.OK,
+				Content = new StringContent("""{"model":"nimble","answers":{"label":{"choice":"bug","probabilities":{"billing":0.1,"bug":0.9},"confidence":0.5,"type":"choice"},"refund":{"noul":0.25,"type":"noul"}},"usage":{"input_tokens":1,"output_tokens":1}}""")
+			};
+
+			var request = new SystemOneRequest
+			{
+				Model = "nimble",
+				State = "state",
+				Questions = new()
+				{
+					["label"] = new SystemOneChoiceQuestion
+					{
+						Instructions = "Which label fits this ticket?",
+						Criteria = new() { ["billing"] = "Payments and refunds", ["bug"] = "Software errors" }
+					},
+					["refund"] = new SystemOneNoulQuestion { Instructions = "Is a refund requested?" }
+				}
+			};
+
+			var response = await _client.SystemOneAsync(request, CancellationToken.None);
+
+			response.Answers["label"].ShouldBeOfType<SystemOneChoiceAnswer>().Choice.ShouldBe("bug");
+			response.Answers["refund"].ShouldBeOfType<SystemOneNoulAnswer>().Noul.ShouldBe(0.25);
+		}
+
+		[Test, NonParallelizable]
 		public async Task Uses_Selected_Model_When_Request_Model_Is_Empty()
 		{
 			var previousModel = _client.SelectedModel;

@@ -108,13 +108,13 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 		{
 			// Use standard serialization without source generation for better compatibility
 			OutgoingJsonSerializerOptions = new JsonSerializerOptions { Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping };
-			IncomingJsonSerializerOptions = new JsonSerializerOptions();
+			IncomingJsonSerializerOptions = new JsonSerializerOptions { AllowOutOfOrderMetadataProperties = true };
 		}
 		else
 		{
 			// Use source generation for NativeAOT scenarios
 			OutgoingJsonSerializerOptions = new JsonSerializerOptions { Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping, TypeInfoResolver = jsonSerializerContext };
-			IncomingJsonSerializerOptions = new JsonSerializerOptions { TypeInfoResolver = jsonSerializerContext };
+			IncomingJsonSerializerOptions = new JsonSerializerOptions { TypeInfoResolver = jsonSerializerContext, AllowOutOfOrderMetadataProperties = true };
 		}
 	}
 
