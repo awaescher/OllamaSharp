@@ -106,6 +106,38 @@ while (true)
 
 You can also set a **system prompt**, send **images** for vision models, request **structured JSON output**, and enable **thinking mode** for reasoning models. See the [Chat and Generate documentation](https://awaescher.github.io/OllamaSharp/docs/chat-and-generate.html) for the full guide.
 
+### Answering typed questions with System One
+
+`SystemOneAsync` maps to the `/v1/systemone` endpoint (Ollama v0.35.0 or later). Instead of generating text, a System One model like [nimble](https://ollama.com/library/nimble) answers choice, yes/no and score questions about a given state and returns probabilities.
+
+```csharp
+var response = await ollama.SystemOneAsync(new SystemOneRequest
+{
+    Model = "nimble",
+    State = "Our checkout has returned 500 errors since 9am.",
+    Questions = new()
+    {
+        ["label"] = new SystemOneChoiceQuestion
+        {
+            Instructions = "Which label fits this ticket?",
+            Criteria = new() { ["billing"] = "Payments and refunds", ["bug"] = "Software errors", ["account"] = "Login and account access" }
+        },
+        ["refund"] = new SystemOneNoulQuestion { Instructions = "Is the customer requesting a refund?" },
+        ["urgency"] = new SystemOneScoreQuestion
+        {
+            Instructions = "How urgently does this ticket need a response?",
+            Criteria = ["Routine", "Soon", "Immediate"]
+        }
+    }
+});
+
+var label = (SystemOneChoiceAnswer)response.Answers["label"];     // label.Choice == "bug"
+var refund = (SystemOneNoulAnswer)response.Answers["refund"];     // refund.Noul == probability of "yes"
+var urgency = (SystemOneScoreAnswer)response.Answers["urgency"];  // urgency.Score from 0 to 2
+```
+
+See the [Ollama decision guide](https://docs.ollama.com/capabilities/decision) for more details.
+
 ## Usage with Microsoft.Extensions.AI
 
 Microsoft built an abstraction library to streamline the usage of different AI providers. This is a really interesting concept if you plan to build apps that might use different providers, like ChatGPT, Claude and local models with Ollama.

@@ -161,8 +161,9 @@ public abstract class OllamaConsole(IOllamaApiClient ollama)
 	/// </summary>
 	/// <param name="prompt">The prompt text displayed to the user.</param>
 	/// <param name="additionalInformation">Optional additional information displayed before the selection.</param>
+	/// <param name="defaultModel">Optional model name that is preselected if it is available locally.</param>
 	/// <returns>The selected model name, or an empty string if the back option is chosen.</returns>
-	protected async Task<string> SelectModel(string prompt, string additionalInformation = "")
+	protected async Task<string> SelectModel(string prompt, string additionalInformation = "", string defaultModel = "")
 	{
 		const string BACK = "..";
 
@@ -179,11 +180,15 @@ public abstract class OllamaConsole(IOllamaApiClient ollama)
 			if (!string.IsNullOrEmpty(additionalInformation))
 				AnsiConsole.MarkupLine(additionalInformation);
 
-			var answer = AnsiConsole.Prompt(
-					new SelectionPrompt<string>()
+			var selectionPrompt = new SelectionPrompt<string>()
 						.PageSize(10)
 						.Title(prompt)
-						.AddChoices(modelsWithBackChoice));
+						.AddChoices(modelsWithBackChoice);
+
+			if (modelsWithBackChoice.Contains(defaultModel))
+				selectionPrompt.DefaultValue(defaultModel);
+
+			var answer = AnsiConsole.Prompt(selectionPrompt);
 
 			return answer == BACK ? "" : answer;
 		}

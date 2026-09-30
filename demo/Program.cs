@@ -55,7 +55,7 @@ do
 				new SelectionPrompt<string>()
 					.PageSize(10)
 					.Title("What demo do you want to run?")
-					.AddChoices("Chat", "Image chat", "Image generation (experimental)", "Tool chat", "Tool chat (Microsoft.Extensions.AI)", "Structured outputs", "Model manager", "Exit"));
+					.AddChoices("Chat", "Image chat", "Image generation (experimental)", "Tool chat", "Tool chat (Microsoft.Extensions.AI)", "Structured outputs", "System One", "Model manager", "Exit"));
 
 	AnsiConsole.Clear();
 
@@ -85,6 +85,10 @@ do
 
 			case "Structured outputs":
 				await new StructuredOutputConsole(ollama!).Run();
+				break;
+
+			case "System One":
+				await new SystemOneConsole(ollama!).Run();
 				break;
 
 			case "Model manager":

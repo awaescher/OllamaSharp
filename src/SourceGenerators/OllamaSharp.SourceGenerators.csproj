@@ -9,7 +9,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" PrivateAssets="all" />
+		<!-- keep the Roslyn version low so the generator also runs on older .NET SDKs (a newer version than the SDK's compiler gets ignored with CS9057) -->
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" VersionOverride="4.14.0" PrivateAssets="all" />
 	</ItemGroup>
 
 </Project>
