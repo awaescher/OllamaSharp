@@ -128,4 +128,10 @@ public class TestOllamaApiClient : IOllamaApiClient
 	{
 		throw new NotImplementedException();
 	}
+
+	/// <inheritdoc/>
+	public Task<SystemOneResponse> SystemOneAsync(SystemOneRequest request, CancellationToken cancellationToken = default)
+	{
+		throw new NotImplementedException();
+	}
 }

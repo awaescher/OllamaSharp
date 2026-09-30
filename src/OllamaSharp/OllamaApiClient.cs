@@ -211,6 +211,15 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 	}
 
 	/// <inheritdoc />
+	public Task<SystemOneResponse> SystemOneAsync(SystemOneRequest request, CancellationToken cancellationToken = default)
+	{
+		if (string.IsNullOrEmpty(request.Model))
+			request.Model = SelectedModel;
+
+		return PostAsync<SystemOneRequest, SystemOneResponse>(Endpoints.SystemOne, request, cancellationToken);
+	}
+
+	/// <inheritdoc />
 	public async Task<bool> IsRunningAsync(CancellationToken cancellationToken = default)
 	{
 		using var requestMessage = new HttpRequestMessage(HttpMethod.Get, string.Empty); // without route returns "Ollama is running"

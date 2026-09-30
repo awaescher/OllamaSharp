@@ -23,4 +23,5 @@ internal static class Endpoints
 	public const string Chat = "api/chat";
 	public const string Version = "api/version";
 	public const string Generate = "api/generate";
+	public const string SystemOne = "v1/systemone";
 }

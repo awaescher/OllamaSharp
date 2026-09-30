@@ -127,6 +127,15 @@ public interface IOllamaApiClient
 	Task<bool> IsRunningAsync(CancellationToken cancellationToken = default);
 
 	/// <summary>
+	/// Sends a request to the /v1/systemone endpoint to answer choice, yes/no and scoring
+	/// questions about a shared state with a local System One model.
+	/// </summary>
+	/// <param name="request">The request containing the state and the questions to answer.</param>
+	/// <param name="cancellationToken">The token to cancel the operation with.</param>
+	/// <returns>A task that represents the asynchronous operation. The task result contains the <see cref="SystemOneResponse"/>.</returns>
+	Task<SystemOneResponse> SystemOneAsync(SystemOneRequest request, CancellationToken cancellationToken = default);
+
+	/// <summary>
 	/// Gets the version of Ollama.
 	/// </summary>
 	/// <param name="cancellationToken">The token to cancel the operation with.</param>

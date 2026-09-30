@@ -39,6 +39,19 @@ namespace OllamaSharp.Models;
 [JsonSerializable(typeof(ChatRequest))]
 [JsonSerializable(typeof(ChatDoneResponseStream))]
 [JsonSerializable(typeof(ChatResponseStream))]
+[JsonSerializable(typeof(SystemOneRequest))]
+[JsonSerializable(typeof(SystemOneResponse))]
+[JsonSerializable(typeof(SystemOneQuestion))]
+[JsonSerializable(typeof(SystemOneChoiceQuestion))]
+[JsonSerializable(typeof(SystemOneNoulQuestion))]
+[JsonSerializable(typeof(SystemOneScoreQuestion))]
+[JsonSerializable(typeof(SystemOneNoulCriteria))]
+[JsonSerializable(typeof(SystemOneAnswer))]
+[JsonSerializable(typeof(SystemOneChoiceAnswer))]
+[JsonSerializable(typeof(SystemOneNoulAnswer))]
+[JsonSerializable(typeof(SystemOneScoreAnswer))]
+[JsonSerializable(typeof(SystemOneUsage))]
+[JsonSerializable(typeof(string))]
 internal partial class JsonSourceGenerationContext : JsonSerializerContext
 {
 }
