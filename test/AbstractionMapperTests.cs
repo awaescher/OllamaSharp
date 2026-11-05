@@ -880,6 +880,39 @@ public class AbstractionMapperTests
 			request.Think.ShouldBe(false);
 		}
 
+		/// <summary>
+		/// Verifies that NumPredict set via RawRepresentationFactory is kept when MaxOutputTokens is not set.
+		/// </summary>
+		[Test]
+		public void Maps_MaxOutputTokens_Does_Not_Clear_RawRepresentation_NumPredict()
+		{
+			var options = new ChatOptions
+			{
+				RawRepresentationFactory = _ => new ChatRequest { Options = new RequestOptions { NumPredict = 128 } },
+			};
+
+			var request = AbstractionMapper.ToOllamaSharpChatRequest(new MockChatClient(), [], options, stream: true, JsonSerializerOptions.Default);
+
+			request.Options.NumPredict.ShouldBe(128);
+		}
+
+		/// <summary>
+		/// Verifies that MaxOutputTokens is used when the RawRepresentationFactory request has no NumPredict.
+		/// </summary>
+		[Test]
+		public void Maps_MaxOutputTokens_When_RawRepresentation_Has_No_NumPredict()
+		{
+			var options = new ChatOptions
+			{
+				MaxOutputTokens = 64,
+				RawRepresentationFactory = _ => new ChatRequest { Options = new RequestOptions { Temperature = 0.2f } },
+			};
+
+			var request = AbstractionMapper.ToOllamaSharpChatRequest(new MockChatClient(), [], options, stream: true, JsonSerializerOptions.Default);
+
+			request.Options.NumPredict.ShouldBe(64);
+		}
+
 		private sealed class MockChatClient : IChatClient
 		{
 			public void Dispose() { }

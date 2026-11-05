@@ -81,7 +81,7 @@ internal static class AbstractionMapper
 		request.Options.Temperature ??= options?.Temperature;
 		request.Options.TopP ??= options?.TopP;
 		request.Options.TopK ??= options?.TopK;
-		request.Options.NumPredict = options?.MaxOutputTokens;
+		request.Options.NumPredict ??= options?.MaxOutputTokens;
 
 		if (options?.Reasoning is { } reasoning)
 		{
