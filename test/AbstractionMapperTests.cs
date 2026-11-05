@@ -881,6 +881,53 @@ public class AbstractionMapperTests
 		}
 
 		/// <summary>
+		/// Verifies that TextReasoningContent is serialized to Thinking
+		/// </summary>
+		[Test]
+		public void Maps_Thinking_Content_On_Outgoing_Messages()
+		{
+			var messages = new List<ChatMessage>
+			{
+				new(Microsoft.Extensions.AI.ChatRole.Assistant, [new TextReasoningContent("Standalone reasoning.")]),
+				new(
+					Microsoft.Extensions.AI.ChatRole.Assistant,
+					[
+						new TextContent(string.Empty),
+						new TextReasoningContent("Step 1. "),
+						new TextReasoningContent("Step 2."),
+						new FunctionCallContent("call_1", "read_file", new Dictionary<string, object?> { ["path"] = "a.txt" })
+					]),
+				new(
+					Microsoft.Extensions.AI.ChatRole.Assistant,
+					[
+						new TextReasoningContent("Thought before answer."),
+						new TextContent("Final answer.")
+					])
+			};
+
+			var request = AbstractionMapper.ToOllamaSharpChatRequest(
+				null,
+				messages,
+				null,
+				stream: false,
+				JsonSerializerOptions.Default);
+
+			var mapped = request.Messages!.ToList();
+			mapped.Count.ShouldBe(3);
+
+			mapped[0].Thinking.ShouldBe("Standalone reasoning.");
+			mapped[0].Content.ShouldBe(string.Empty);
+			mapped[0].ToolCalls.ShouldBeNull();
+
+			mapped[1].Thinking.ShouldBe("Step 1. Step 2.");
+			mapped[1].Content.ShouldBe(string.Empty);
+			mapped[1].ToolCalls!.Count().ShouldBe(1);
+
+			mapped[2].Thinking.ShouldBe("Thought before answer.");
+			mapped[2].Content.ShouldBe("Final answer.");
+		}
+
+		/// <summary>
 		/// Verifies that NumPredict set via RawRepresentationFactory is kept when MaxOutputTokens is not set.
 		/// </summary>
 		[Test]

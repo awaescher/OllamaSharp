@@ -233,13 +233,19 @@ internal static class AbstractionMapper
 		{
 			var images = cm.Contents.OfType<DataContent>().Where(dc => dc.HasTopLevelMediaType("image")).Select(ToOllamaImage).ToArray();
 			var toolCalls = cm.Contents.OfType<FunctionCallContent>().Select(ToOllamaSharpToolCall).ToArray();
+			var thinkingParts = cm.Contents
+				.OfType<TextReasoningContent>()
+				.Select(rc => rc.Text)
+				.Where(t => !string.IsNullOrEmpty(t))
+				.ToList();
 
 			// Only generates a message if there is text/content, images or tool calls
-			if (cm.Text is { Length: > 0 } || images.Length > 0 || toolCalls.Length > 0)
+			if (cm.Text is { Length: > 0 } || images.Length > 0 || toolCalls.Length > 0 || thinkingParts.Count > 0)
 			{
 				yield return new Message
 				{
 					Content = cm.Text,
+					Thinking = thinkingParts.Count > 0 ? string.Concat(thinkingParts) : null,
 					Images = images.Length > 0 ? images : null,
 					Role = ToOllamaSharpRole(cm.Role),
 					ToolCalls = toolCalls.Length > 0 ? toolCalls : null,
