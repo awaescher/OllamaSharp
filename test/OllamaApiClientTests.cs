@@ -264,6 +264,34 @@ public class OllamaApiClientTests
 
 			builder.Length.ShouldBe(0); // assert anything, the test will fail if the expected headers are not available
 		}
+
+#if NET7_0_OR_GREATER
+		[Test]
+		public async Task AbortsImmediately_WhenCancellationTokenFires()
+		{
+			// Arrange: stream that yields headers and 1 status update, then hangs indefinitely
+			using var cts = new CancellationTokenSource();
+			await using var stream = new BlockingTestStream("{\"status\":\"Creating model\"}\n");
+			using var response = new HttpResponseMessage(HttpStatusCode.OK) { Content = new StreamContent(stream) };
+
+			// Act: enumerate first status update then cancel while second read is blocking
+			using var httpClient = new HttpClient(new EchoHandler(response)) { BaseAddress = new Uri("http://empty") };
+			var client = new OllamaApiClient(httpClient, "test-model");
+			var updates = new List<CreateModelResponse?>();
+
+			var act = async () =>
+			{
+				await foreach (var update in client.CreateModelAsync(new CreateModelRequest(), cts.Token))
+				{
+					updates.Add(update);
+					cts.CancelAfter(50);
+				}
+			};
+
+			await act().WaitAsync(TimeSpan.FromSeconds(1)).ShouldNotThrowAsync();
+			updates.Count.ShouldBe(1);
+		}
+#endif
 	}
 
 	/// <summary>
@@ -296,6 +324,34 @@ public class OllamaApiClientTests
 			context.Response.ShouldBe("The sky is blue.");
 			context.Context.ShouldBe([1, 2, 3], ignoreOrder: true);
 		}
+
+#if NET7_0_OR_GREATER
+		[Test]
+		public async Task AbortsImmediately_WhenCancellationTokenFires()
+		{
+			// Arrange: stream that yields headers and 1 token, then hangs indefinitely
+			using var cts = new CancellationTokenSource();
+			await using var stream = new BlockingTestStream("{\"response\":\"The \",\"done\":false}\n");
+			using var response = new HttpResponseMessage(HttpStatusCode.OK) { Content = new StreamContent(stream) };
+
+			// Act: enumerate first token then cancel while second read is blocking
+			using var httpClient = new HttpClient(new EchoHandler(response)) { BaseAddress = new Uri("http://empty") };
+			var client = new OllamaApiClient(httpClient, "test-model");
+			var updates = new List<GenerateResponseStream?>();
+
+			var act = async () =>
+			{
+				await foreach (var update in client.GenerateAsync(new GenerateRequest { Stream = true }, cts.Token))
+				{
+					updates.Add(update);
+					cts.CancelAfter(50);
+				}
+			};
+
+			await act().WaitAsync(TimeSpan.FromSeconds(1)).ShouldNotThrowAsync();
+			updates.Count.ShouldBe(1);
+		}
+#endif
 	}
 
 	/// <summary>
@@ -661,7 +717,78 @@ public class OllamaApiClientTests
 			var act = () => _client.ChatAsync(new ChatRequest(), CancellationToken.None).StreamToEndAsync();
 			await act.ShouldThrowAsync<OllamaException>();
 		}
+
+#if NET7_0_OR_GREATER
+		[Test]
+		public async Task AbortsImmediately_WhenCancellationTokenFires()
+		{
+			// Arrange: stream that yields headers and 1 token, then hangs indefinitely
+			using var cts = new CancellationTokenSource();
+			await using var stream = new BlockingTestStream();
+			using var response = new HttpResponseMessage(HttpStatusCode.OK) { Content = new StreamContent(stream) };
+
+			// Act: enumerate first token then cancel while second read is blocking
+			using var httpClient = new HttpClient(new EchoHandler(response)) { BaseAddress = new Uri("http://empty") };
+			var chatClient = new OllamaApiClient(httpClient, "test-model");
+			var updates = new List<ChatResponseStream?>();
+
+			var act = async () =>
+			{
+				await foreach (var update in chatClient.ChatAsync(new ChatRequest { Stream = true }, cts.Token))
+				{
+					updates.Add(update);
+					cts.CancelAfter(50);
+				}
+			};
+
+			await act().WaitAsync(TimeSpan.FromSeconds(1)).ShouldNotThrowAsync();
+			updates.Count.ShouldBe(1);
+		}
+#endif
 	}
+
+#if NET7_0_OR_GREATER
+	private sealed class EchoHandler(HttpResponseMessage response) : HttpMessageHandler
+	{
+		protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+			=> Task.FromResult(response);
+	}
+
+	private sealed class BlockingTestStream(string firstLine = "{\"message\":{\"role\":\"assistant\",\"content\":\"Hello\"},\"done\":false}\n") : Stream
+	{
+		private readonly byte[] _firstToken = Encoding.UTF8.GetBytes(firstLine);
+		private bool _firstTokenRead;
+
+		public override bool CanRead => true;
+		public override bool CanSeek => false;
+		public override bool CanWrite => false;
+		public override long Length => throw new NotSupportedException();
+		public override long Position
+		{
+			get => throw new NotSupportedException();
+			set => throw new NotSupportedException();
+		}
+
+		public override void Flush() => throw new NotSupportedException();
+		public override int Read(byte[] buffer, int offset, int count) => throw new NotSupportedException();
+		public override long Seek(long offset, SeekOrigin origin) => throw new NotSupportedException();
+		public override void SetLength(long value) => throw new NotSupportedException();
+		public override void Write(byte[] buffer, int offset, int count) => throw new NotSupportedException();
+
+		public override async ValueTask<int> ReadAsync(Memory<byte> buffer, CancellationToken cancellationToken = default)
+		{
+			if (!_firstTokenRead)
+			{
+				_firstTokenRead = true;
+				_firstToken.CopyTo(buffer);
+				return _firstToken.Length;
+			}
+
+			await Task.Delay(Timeout.Infinite, cancellationToken);
+			return 0;
+		}
+	}
+#endif
 
 	/// <summary>
 	/// Contains tests for listing local models.
