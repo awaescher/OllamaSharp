@@ -265,9 +265,8 @@ public class OllamaApiClientTests
 			builder.Length.ShouldBe(0); // assert anything, the test will fail if the expected headers are not available
 		}
 
-#if NET7_0_OR_GREATER
 		[Test]
-		public async Task AbortsImmediately_WhenCancellationTokenFires()
+		public async Task Aborts_Immediately_When_Cancellation_Token_Fires()
 		{
 			// Arrange: stream that yields headers and 1 status update, then hangs indefinitely
 			using var cts = new CancellationTokenSource();
@@ -291,7 +290,6 @@ public class OllamaApiClientTests
 			await act().WaitAsync(TimeSpan.FromSeconds(1)).ShouldNotThrowAsync();
 			updates.Count.ShouldBe(1);
 		}
-#endif
 	}
 
 	/// <summary>
@@ -325,9 +323,8 @@ public class OllamaApiClientTests
 			context.Context.ShouldBe([1, 2, 3], ignoreOrder: true);
 		}
 
-#if NET7_0_OR_GREATER
 		[Test]
-		public async Task AbortsImmediately_WhenCancellationTokenFires()
+		public async Task Aborts_Immediately_When_Cancellation_Token_Fires()
 		{
 			// Arrange: stream that yields headers and 1 token, then hangs indefinitely
 			using var cts = new CancellationTokenSource();
@@ -351,7 +348,6 @@ public class OllamaApiClientTests
 			await act().WaitAsync(TimeSpan.FromSeconds(1)).ShouldNotThrowAsync();
 			updates.Count.ShouldBe(1);
 		}
-#endif
 	}
 
 	/// <summary>
@@ -718,9 +714,8 @@ public class OllamaApiClientTests
 			await act.ShouldThrowAsync<OllamaException>();
 		}
 
-#if NET7_0_OR_GREATER
 		[Test]
-		public async Task AbortsImmediately_WhenCancellationTokenFires()
+		public async Task Aborts_Immediately_When_Cancellation_Token_Fires()
 		{
 			// Arrange: stream that yields headers and 1 token, then hangs indefinitely
 			using var cts = new CancellationTokenSource();
@@ -744,10 +739,8 @@ public class OllamaApiClientTests
 			await act().WaitAsync(TimeSpan.FromSeconds(1)).ShouldNotThrowAsync();
 			updates.Count.ShouldBe(1);
 		}
-#endif
 	}
 
-#if NET7_0_OR_GREATER
 	private sealed class EchoHandler(HttpResponseMessage response) : HttpMessageHandler
 	{
 		protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
@@ -788,7 +781,6 @@ public class OllamaApiClientTests
 			return 0;
 		}
 	}
-#endif
 
 	/// <summary>
 	/// Contains tests for listing local models.
