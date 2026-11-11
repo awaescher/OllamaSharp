@@ -325,12 +325,12 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 
 	private async IAsyncEnumerable<TLine?> ProcessStreamedResponseAsync<TLine>(HttpResponseMessage response, [EnumeratorCancellation] CancellationToken cancellationToken)
 	{
-		var stream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
+		using var stream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
 		using var reader = new StreamReader(stream);
 
 		while (!cancellationToken.IsCancellationRequested)
 		{
-			var line = await reader.ReadLineAsync().ConfigureAwait(false);
+			var line = await ReadLineAsync(reader, cancellationToken).ConfigureAwait(false);
 			if (line == null)
 				break;
 
@@ -353,7 +353,7 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 
 		while (!cancellationToken.IsCancellationRequested)
 		{
-			var line = await reader.ReadLineAsync().ConfigureAwait(false);
+			var line = await ReadLineAsync(reader, cancellationToken).ConfigureAwait(false);
 			if (line == null)
 				break;
 			var streamedResponse = JsonSerializer.Deserialize<GenerateResponseStream>(line, IncomingJsonSerializerOptions);
@@ -371,7 +371,7 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 
 		while (!cancellationToken.IsCancellationRequested)
 		{
-			var line = await reader.ReadLineAsync().ConfigureAwait(false);
+			var line = await ReadLineAsync(reader, cancellationToken).ConfigureAwait(false);
 			if (line == null)
 				break;
 			var streamedResponse = JsonSerializer.Deserialize<ChatResponseStream>(line, IncomingJsonSerializerOptions);
@@ -381,6 +381,23 @@ public class OllamaApiClient : IOllamaApiClient, IChatClient, IEmbeddingGenerato
 				: streamedResponse;
 		}
 	}
+
+#if NET7_0_OR_GREATER
+	private static async ValueTask<string?> ReadLineAsync(StreamReader reader, CancellationToken cancellationToken)
+	{
+		try
+		{
+			return await reader.ReadLineAsync(cancellationToken).ConfigureAwait(false);
+		}
+		catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+		{
+			return null;
+		}
+	}
+#else
+	private static Task<string?> ReadLineAsync(StreamReader reader, CancellationToken _)
+		=> reader.ReadLineAsync();
+#endif
 
 	/// <summary>
 	/// Sends an HTTP request message to the Ollama API.
