@@ -3,7 +3,7 @@
 ## Project Overview
 
 OllamaSharp is a C# .NET library providing bindings for the Ollama API. It targets
-`netstandard2.0`, `netstandard2.1`, `net8.0`, `net9.0`, and `net10.0`. The library
+`netstandard2.0`, `netstandard2.1`, `net8.0`, `net9.0`, `net10.0`, and `net11.0`. The library
 implements `IChatClient` and `IEmbeddingGenerator` from Microsoft.Extensions.AI. It
 includes a Roslyn source generator (`[OllamaTool]`).
 
@@ -75,7 +75,7 @@ unless you have a live server.
 ```
 src/OllamaSharp/                        # Main library (NuGet package)
 src/SourceGenerators/                   # Roslyn source generator for [OllamaTool] (netstandard2.0)
-test/                                   # Unit tests (NUnit, net10.0 only) for core library
+test/                                   # Unit tests (NUnit, net10.0 and net11.0) for core library
 demo/                                   # Console demo app (Spectre.Console)
 ```
 
