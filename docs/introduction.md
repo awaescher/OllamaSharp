@@ -19,7 +19,7 @@
 
 ## Target frameworks
 
-OllamaSharp targets `netstandard2.0`, `netstandard2.1`, `net8.0`, `net9.0` and `net10.0`, so it runs on virtually every modern .NET workload.
+OllamaSharp targets `netstandard2.0`, `netstandard2.1`, `net8.0`, `net9.0`, `net10.0` and `net11.0`, so it runs on virtually every modern .NET workload.
 
 ## Next steps
 
