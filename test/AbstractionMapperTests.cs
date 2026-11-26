@@ -1023,6 +1023,30 @@ public class AbstractionMapperTests
 			response.Usage.InputTokenCount.ShouldBe(411);
 			response.Usage.OutputTokenCount.ShouldBe(111);
 			response.Usage.TotalTokenCount.ShouldBe(111 + 411);
+			response.Usage.CachedInputTokenCount.ShouldBeNull();
+		}
+
+		/// <summary>
+		/// Verifies that the cached prompt token count is mapped to the usage details.
+		/// </summary>
+		[Test]
+		public void Maps_Prompt_Eval_Cached_Count_To_Usage()
+		{
+			var stream = new ChatDoneResponseStream
+			{
+				Done = true,
+				EvalCount = 10,
+				Message = new Message { Role = OllamaSharp.Models.Chat.ChatRole.Assistant, Content = "Hi." },
+				Model = "qwen3.5:35b-a3b",
+				PromptEvalCount = 400,
+				PromptEvalCachedCount = 380
+			};
+
+			var response = AbstractionMapper.ToChatResponse(stream, usedModel: null);
+
+			response.Usage.ShouldNotBeNull();
+			response.Usage.InputTokenCount.ShouldBe(400);
+			response.Usage.CachedInputTokenCount.ShouldBe(380);
 		}
 	}
 

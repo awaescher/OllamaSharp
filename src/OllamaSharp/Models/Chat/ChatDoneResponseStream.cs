@@ -27,6 +27,13 @@ public class ChatDoneResponseStream : ChatResponseStream
 	public int PromptEvalCount { get; set; }
 
 	/// <summary>
+	/// The number of prompt tokens read from the cache, if reported by the server
+	/// </summary>
+	[JsonPropertyName(Application.PromptEvalCachedCount)]
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public int? PromptEvalCachedCount { get; set; }
+
+	/// <summary>
 	/// The time spent in nanoseconds evaluating the prompt
 	/// </summary>
 	[JsonPropertyName(Application.PromptEvalDuration)]

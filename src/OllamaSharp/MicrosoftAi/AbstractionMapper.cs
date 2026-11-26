@@ -480,6 +480,7 @@ internal static class AbstractionMapper
 			return new()
 			{
 				InputTokenCount = response.PromptEvalCount,
+				CachedInputTokenCount = response.PromptEvalCachedCount,
 				OutputTokenCount = response.EvalCount,
 				TotalTokenCount = response.PromptEvalCount + response.EvalCount,
 			};
