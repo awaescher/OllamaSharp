@@ -229,8 +229,16 @@ internal static class AbstractionMapper
 			};
 		}
 
+		var toolNamesByCallId = new Dictionary<string, string>();
+
 		foreach (var cm in messages)
 		{
+			foreach (var fcc in cm.Contents.OfType<FunctionCallContent>())
+			{
+				if (!string.IsNullOrEmpty(fcc.CallId))
+					toolNamesByCallId[fcc.CallId] = fcc.Name;
+			}
+
 			var images = cm.Contents.OfType<DataContent>().Where(dc => dc.HasTopLevelMediaType("image")).Select(ToOllamaImage).ToArray();
 			var toolCalls = cm.Contents.OfType<FunctionCallContent>().Select(ToOllamaSharpToolCall).ToArray();
 			var thinkingParts = cm.Contents
@@ -265,6 +273,8 @@ internal static class AbstractionMapper
 						Result = jsonResult,
 					}, serializerOptions),
 					Role = ChatRole.Tool,
+					ToolCallId = string.IsNullOrEmpty(frc.CallId) ? null : frc.CallId,
+					ToolName = !string.IsNullOrEmpty(frc.CallId) && toolNamesByCallId.TryGetValue(frc.CallId, out var toolName) ? toolName : null,
 				};
 			}
 		}
@@ -289,6 +299,7 @@ internal static class AbstractionMapper
 	{
 		return new Message.ToolCall
 		{
+			Id = string.IsNullOrEmpty(functionCall.CallId) ? null : functionCall.CallId,
 			Function = new Message.Function
 			{
 				Arguments = functionCall.Arguments,
@@ -398,7 +409,7 @@ internal static class AbstractionMapper
 			{
 				if (toolCall.Function is { } function)
 				{
-					var id = Guid.NewGuid().ToString().Substring(0, 8);
+					var id = string.IsNullOrEmpty(toolCall.Id) ? Guid.NewGuid().ToString().Substring(0, 8) : toolCall.Id!;
 					contents.Add(new FunctionCallContent(id, function.Name ?? Application.NotApplicable, function.Arguments) { RawRepresentation = toolCall });
 				}
 			}

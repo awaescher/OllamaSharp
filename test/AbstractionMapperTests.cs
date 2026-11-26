@@ -537,6 +537,48 @@ public class AbstractionMapperTests
 		}
 
 		/// <summary>
+		/// Verifies that tool call ids are sent back on the assistant tool calls and the matching tool results,
+		/// together with the tool name.
+		/// </summary>
+		[Test]
+		public void Maps_ToolCall_Ids_And_Names_On_Outgoing_Tool_Results()
+		{
+			var messages = new List<ChatMessage>
+			{
+				new(Microsoft.Extensions.AI.ChatRole.User, "Weather in Paris and Tokyo?"),
+				new(
+					Microsoft.Extensions.AI.ChatRole.Assistant,
+					[
+						new FunctionCallContent("call_1", "get_weather", new Dictionary<string, object?> { ["city"] = "Paris" }),
+						new FunctionCallContent("call_2", "get_time", new Dictionary<string, object?> { ["city"] = "Tokyo" })
+					]),
+				new(
+					Microsoft.Extensions.AI.ChatRole.Tool,
+					[
+						new FunctionResultContent("call_1", "18C"),
+						new FunctionResultContent("call_2", "09:00"),
+						new FunctionResultContent("unknown_call", "?")
+					])
+			};
+
+			var request = AbstractionMapper.ToOllamaSharpChatRequest(null, messages, null, stream: false, JsonSerializerOptions.Default);
+			var mapped = request.Messages!.ToList();
+
+			mapped.Count.ShouldBe(5);
+			mapped[1].ToolCalls!.Select(tc => tc.Id).ShouldBe(["call_1", "call_2"]);
+
+			mapped[2].Role.ShouldBe(OllamaSharp.Models.Chat.ChatRole.Tool);
+			mapped[2].ToolCallId.ShouldBe("call_1");
+			mapped[2].ToolName.ShouldBe("get_weather");
+
+			mapped[3].ToolCallId.ShouldBe("call_2");
+			mapped[3].ToolName.ShouldBe("get_time");
+
+			mapped[4].ToolCallId.ShouldBe("unknown_call");
+			mapped[4].ToolName.ShouldBeNull();
+		}
+
+		/// <summary>
 		/// Verifies mapping when the original message contains only tool result contents.
 		/// </summary>
 		[Test]
@@ -1091,6 +1133,34 @@ public class AbstractionMapperTests
 			streamingChatCompletion.ResponseId.ShouldBe("12345");
 			streamingChatCompletion.Role.ShouldBe(Microsoft.Extensions.AI.ChatRole.Assistant);
 			streamingChatCompletion.Text.ShouldBeEmpty();
+		}
+
+		/// <summary>
+		/// Verifies that the tool call id sent by Ollama is used as the call id instead of a random one.
+		/// </summary>
+		[Test]
+		public void Maps_ToolCall_Id_From_Response()
+		{
+			var message = new Message
+			{
+				Role = OllamaSharp.Models.Chat.ChatRole.Assistant,
+				Content = "",
+				ToolCalls =
+				[
+					new Message.ToolCall
+					{
+						Id = "call_abc",
+						Function = new Message.Function { Name = "get_weather", Arguments = new Dictionary<string, object?>() }
+					}
+				]
+			};
+
+			var stream = new ChatResponseStream { Done = true, Message = message, Model = "qwen3.5:35b-a3b" };
+
+			var chatMessage = AbstractionMapper.ToChatResponseUpdate(stream, "12345");
+
+			var toolCall = chatMessage.Contents.OfType<FunctionCallContent>().Single();
+			toolCall.CallId.ShouldBe("call_abc");
 		}
 
 		/// <summary>

@@ -86,6 +86,13 @@ public class Message
 	public string? ToolName { get; set; }
 
 	/// <summary>
+	/// Gets or sets the ID of the tool call this tool result answers (see <see cref="ToolCall.Id"/>).
+	/// </summary>
+	[JsonPropertyName("tool_call_id")]
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public string? ToolCallId { get; set; }
+
+	/// <summary>
 	/// Gets or sets a list of tools the model wants to use (for models that support function calls, such as qwen3.5).
 	/// </summary>
 	[JsonPropertyName("tool_calls")]
@@ -107,6 +114,7 @@ public class Message
 		/// Gets or sets the ID of the ToolCall.
 		/// </summary>
 		[JsonPropertyName("id")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string? Id { get; set; }
 	}
 
