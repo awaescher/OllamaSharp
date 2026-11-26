@@ -13,6 +13,7 @@ internal static class Application
 	public const string TotalDuration = "total_duration";
 	public const string PromptEvalDuration = "prompt_eval_duration";
 	public const string PromptEvalCount = "prompt_eval_count";
+	public const string PromptEvalCachedCount = "prompt_eval_cached_count";
 	public const string EvalDuration = "eval_duration";
 	public const string EvalCount = "eval_count";
 	public const string Context = "context";

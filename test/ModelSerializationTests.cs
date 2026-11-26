@@ -144,6 +144,17 @@ public class ModelSerializationTests
 			var response = JsonSerializer.Deserialize<GenerateDoneResponseStream>(json);
 			response.ShouldNotBeNull();
 			response.DoneReason.ShouldBeNull();
+			response.PromptEvalCachedCount.ShouldBeNull();
+		}
+
+		[Test]
+		public void Deserializes_PromptEvalCachedCount_Property()
+		{
+			var json = """{"model":"qwen3.5:35b-a3b","response":"","done":true,"prompt_eval_count":10,"prompt_eval_cached_count":8,"prompt_eval_duration":20,"eval_count":5,"eval_duration":30}""";
+			var response = JsonSerializer.Deserialize<GenerateDoneResponseStream>(json);
+			response.ShouldNotBeNull();
+			response.PromptEvalCount.ShouldBe(10);
+			response.PromptEvalCachedCount.ShouldBe(8);
 		}
 	}
 
