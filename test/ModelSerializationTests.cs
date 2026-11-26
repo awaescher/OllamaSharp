@@ -217,6 +217,16 @@ public class ModelSerializationTests
 			model.ShouldNotBeNull();
 			model.Name.ShouldBe("qwen3.5:35b-a3b:latest");
 			model.ModelName.ShouldBeNull();
+			model.Capabilities.ShouldBeNull();
+		}
+
+		[Test]
+		public void Deserializes_Capabilities_Property()
+		{
+			var json = """{"name":"qwen3.5:35b-a3b:latest","model":"qwen3.5:35b-a3b:latest","modified_at":"2024-05-14T15:33:07Z","size":3791811617,"digest":"abc123","capabilities":["completion","tools","vision"]}""";
+			var model = JsonSerializer.Deserialize<Model>(json);
+			model.ShouldNotBeNull();
+			model.Capabilities.ShouldBe(["completion", "tools", "vision"]);
 		}
 	}
 

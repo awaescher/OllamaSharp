@@ -59,6 +59,13 @@ public class Model
 	/// </summary>
 	[JsonPropertyName(Application.Details)]
 	public Details Details { get; set; } = null!;
+
+	/// <summary>
+	/// Gets or sets the capabilities of the model (e.g. "completion", "tools", "vision"), if reported by the server.
+	/// </summary>
+	[JsonPropertyName(Application.Capabilities)]
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public string[]? Capabilities { get; set; }
 }
 
 /// <summary>
